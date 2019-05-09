@@ -7,10 +7,10 @@ namespace WordDrMario
 {
     internal class WordGrid
     {
-        WordRepository repository = new WordRepository();
+        readonly WordRepository repository = new WordRepository();
         internal string[] Lines;
-        private int Width;
-        private int Height = 6;
+        private readonly int Width;
+        private readonly int Height = 6;
 
         public WordGrid(int width)
         {

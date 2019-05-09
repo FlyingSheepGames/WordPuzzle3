@@ -5,7 +5,7 @@ namespace WordPuzzles
 {
     public class WordLadder
     {
-        WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
         public string Solution { get; }
         public int Size { get; set; }
 

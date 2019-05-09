@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 
 namespace WordPuzzles
@@ -8,9 +7,9 @@ namespace WordPuzzles
 
     public class LettersAndArrowsPuzzle
     {
-        private Random random = new Random();
+        private readonly Random random = new Random();
         public int Size { get; set; }
-        private Dictionary<string, LetterAndArrowCell> grid = new Dictionary<string, LetterAndArrowCell>();
+        private readonly Dictionary<string, LetterAndArrowCell> grid = new Dictionary<string, LetterAndArrowCell>();
         public LettersAndArrowsPuzzle(int size)
         {
             Size = size;

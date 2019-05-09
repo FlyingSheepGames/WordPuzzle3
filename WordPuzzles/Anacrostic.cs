@@ -8,7 +8,7 @@ namespace WordPuzzles
     {
         public Puzzle puzzle = new Puzzle();
         public WordRepository Repository = new WordRepository();
-        private int[] remainingLetters = new int[26];
+        private readonly int[] remainingLetters = new int[26];
 
         public List<string> WordsFoundSoFar = new List<string>();
         private string originalPhrase;
@@ -199,7 +199,7 @@ namespace WordPuzzles
         }
 
         public int lettersAssignedSoFar = 1;
-        private List<string> _ignoredWords = new List<string>();
+        private readonly List<string> _ignoredWords = new List<string>();
 
         public void RemoveWord(string word)
         {
@@ -400,7 +400,7 @@ namespace WordPuzzles
             StringBuilder bottomLine = new StringBuilder();
             bottomLine.AppendLine("<tr>");
 
-            string[] enumeratedCellValues = EncodedPhraseForGoogle.Split(new [] {'\t'});
+            string[] enumeratedCellValues = EncodedPhraseForGoogle.Split('\t');
             foreach(string cellValue in enumeratedCellValues)
             {
                 if (cellValue.Contains("\r\n"))

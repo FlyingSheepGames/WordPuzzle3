@@ -132,7 +132,7 @@ namespace WordPuzzles
             List<int> MissingIndicies = new List<int>();
             int phraseIndex = 0;
             string clueIndiciesToExclude = "";
-            string[] lettersToExcludeIndexByWord = new string []
+            string[] lettersToExcludeIndexByWord = new[]
             {
                 "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                 "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
@@ -295,7 +295,7 @@ namespace WordPuzzles
     public class PuzzleWord
     {
         public List<PuzzleLetter> Letters = new List<PuzzleLetter>();
-        private string originalWord;
+        private readonly string originalWord;
 
         public PuzzleWord(string word, int startingIndex, char wordIndex)
         {

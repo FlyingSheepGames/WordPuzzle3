@@ -10,11 +10,11 @@ namespace WordPuzzles
 {
     public class WebRequestUtility
     {
-        static List<string> FailedRequests = new List<string>();
+        static readonly List<string> FailedRequests = new List<string>();
 
-        static Dictionary<string, string> CachedRequests = new Dictionary<string, string>();
+        static readonly Dictionary<string, string> CachedRequests = new Dictionary<string, string>();
 
-        private static string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
+        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
         private static bool BggTooManyRequests = false;
         public static string ReadHTMLPageFromUrl(string url, bool ignoreCache = false)

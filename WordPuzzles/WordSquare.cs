@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -10,7 +9,7 @@ namespace WordPuzzles
     public class WordSquare
     {
         public WordRepository Repository { get; set; } = new WordRepository();
-        private static string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
+        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
         public string[] Lines ;
         public int Size;

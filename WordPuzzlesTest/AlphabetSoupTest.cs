@@ -9,7 +9,7 @@ namespace WordPuzzlesTest
     [TestFixture]
     public class AlphabetSoupTest
     {
-        static WordRepository repository = new WordRepository() {IgnoreCache = false};
+        static readonly WordRepository repository = new WordRepository() {IgnoreCache = false};
         [TestFixture]
         public class GenerateSingleLine
         {

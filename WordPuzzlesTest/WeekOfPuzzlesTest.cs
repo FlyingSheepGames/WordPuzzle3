@@ -9,7 +9,7 @@ namespace WordPuzzlesTest
     [TestFixture]
     public class WeekOfPuzzlesTest
     {
-        private static string EXPECTED_TEXT = @"<?xml version=""1.0"" encoding=""utf-8""?>
+        private static readonly string EXPECTED_TEXT = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <WeekOfPuzzles xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <MondayWordSquare>
     <Lines>

@@ -46,10 +46,10 @@ namespace WordPuzzlesTest
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
 
-                CollectionAssert.AreEquivalent(new int[] { 1, 2 }, puzzle.GenerateWordBreaks(3));
-                CollectionAssert.AreEquivalent(new int[] {1, 2, 3}, puzzle.GenerateWordBreaks(4));
-                CollectionAssert.AreEquivalent(new int[] { 1, 2, 3, 4 }, puzzle.GenerateWordBreaks(5));
-                CollectionAssert.AreEquivalent(new int[] { 1, 2, 3, 4, 5 }, puzzle.GenerateWordBreaks(6));
+                CollectionAssert.AreEquivalent(new[] { 1, 2 }, puzzle.GenerateWordBreaks(3));
+                CollectionAssert.AreEquivalent(new[] {1, 2, 3}, puzzle.GenerateWordBreaks(4));
+                CollectionAssert.AreEquivalent(new[] { 1, 2, 3, 4 }, puzzle.GenerateWordBreaks(5));
+                CollectionAssert.AreEquivalent(new[] { 1, 2, 3, 4, 5 }, puzzle.GenerateWordBreaks(6));
             }
         }
     }

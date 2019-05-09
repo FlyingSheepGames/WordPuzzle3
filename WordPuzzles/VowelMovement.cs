@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using DateInformationRetriever.Utility;
-using TweetSharp;
 
 namespace WordPuzzles
 {
@@ -92,35 +90,7 @@ namespace WordPuzzles
 
         public string Solution { get; set; }
 
-        public string GoogleSheetRow => string.Join("\t", new[]
-        {
-            "", //difficulty
-            Clue, //puzzle
-            "", //hints
-            Solution, //Solution
-            Theme, //theme
-            "", //date
-            "", //Words Available
-            "", //Words Used
-            InitialConsonant, //initial consonant
-            FinalConsonant, //final consonant
-            "", // short A
-            "", // long A
-            "", // short E
-            "", // long E
-            "", // short I
-            "", // long I
-            "", // short O
-            "", // long O
-            "", // short U
-            "", // long U
-            "", // aw
-            "", // ew
-            "", // oi
-            "", // ow
-            "scheduled", // tweet
-
-        });
+        public string GoogleSheetRow => string.Join("\t", "", Clue, "", Solution, Theme, "", "", "", InitialConsonant, FinalConsonant, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "scheduled");
 
         public string FinalConsonant { get; set; }
 

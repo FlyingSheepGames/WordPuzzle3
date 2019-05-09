@@ -14,7 +14,7 @@ namespace WordPuzzles
 {
     public class WordRepository
     {
-        private static string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
+        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
         [XmlIgnore]
         public List<WordCategory> CategoriesToInclude
@@ -26,14 +26,14 @@ namespace WordPuzzles
         [XmlIgnore]
         public bool ExludeAdvancedWords { get; set; }
 
-        Random randomNumberGenerator = new Random();
+        readonly Random randomNumberGenerator = new Random();
 
-        private List<string> _threeLetterWords = new List<string>();
-        private List<string> _fourLetterWords = new List<string>();
-        private List<string> _fiveLetterWords = new List<string>();
-        private List<string> _sixLetterWords = new List<string>();
+        private readonly List<string> _threeLetterWords = new List<string>();
+        private readonly List<string> _fourLetterWords = new List<string>();
+        private readonly List<string> _fiveLetterWords = new List<string>();
+        private readonly List<string> _sixLetterWords = new List<string>();
         private bool _alreadyLoaded = false;
-        private static Dictionary<string, string> _dictionaryOfClues = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> _dictionaryOfClues = new Dictionary<string, string>();
 
         public bool IgnoreCache = true;
         public void LoadAllWords()
@@ -404,7 +404,7 @@ namespace WordPuzzles
             actualEndConsonant = null;
             char firstCharacter = word[0];
 
-            string[] groupsOfConsonants = word.Split(new char[]
+            string[] groupsOfConsonants = word.Split(new[]
             {
                 'a', 'e', 'i', 'o', 'u'
             }, StringSplitOptions.RemoveEmptyEntries);

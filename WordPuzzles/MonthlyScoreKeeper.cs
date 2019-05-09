@@ -6,7 +6,7 @@ namespace WordPuzzles
 {
     public class MonthlyScoreKeeper
     {
-        GoogleSheet sheet = new GoogleSheet() {
+        readonly GoogleSheet sheet = new GoogleSheet() {
             GoogleSheetKey = "1KiWsFIPCVmst--r57KEjDT-F5yuoeu-Ug9pqesuWyWA" ,
             IgnoreCache = true
 

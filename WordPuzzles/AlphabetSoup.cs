@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Win32.SafeHandles;
 
 namespace WordPuzzles
 {
     public class AlphabetSoup
     {
-        WordRepository repository;
-        static Random random = new Random();
+        readonly WordRepository repository;
+        static readonly Random random = new Random();
 
         public string[] Lines = new String [26];
         public string[] HiddenWords = new String[26];
@@ -248,7 +247,7 @@ namespace WordPuzzles
 
     static class Shuffler
     {
-        private static Random rng = new Random();
+        private static readonly Random rng = new Random();
 
         public static void Shuffle<T>(this IList<T> list)
         {

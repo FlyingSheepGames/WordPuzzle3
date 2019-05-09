@@ -12,7 +12,7 @@ namespace WordPuzzles
         public List<string> WordsToIgnore = new List<string>();
         public string TwitterUrl;
         public long TweetId;
-        private static string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
+        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
         public void Serialize()
         {

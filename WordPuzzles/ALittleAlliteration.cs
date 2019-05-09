@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using DateInformationRetriever.Utility;
-using TweetSharp;
 
 namespace WordPuzzles
 {
     public class ALittleAlliteration
     {
-        private static string A_LITTLE_ALLITERATION_GOOGLE_SHEET = "1J5j8fRBUVT66OjpflMe4K_Q-blicYiYQ2YZ6MbdaLQU";
+        private static readonly string A_LITTLE_ALLITERATION_GOOGLE_SHEET = "1J5j8fRBUVT66OjpflMe4K_Q-blicYiYQ2YZ6MbdaLQU";
         private const int MAX_WORDS_TO_RETURN = 50;
 
-        private static string A_LITTLE_ALLITERATION_SEASON_ONE_GOOGLE_SHEET =
+        private static readonly string A_LITTLE_ALLITERATION_SEASON_ONE_GOOGLE_SHEET =
             "1DKQ4a_H_JIE15NMXpnedW1dNe5ZqJzCMBXjFyk2IZJo";
         public ALittleAlliteration(): this("") { }
 
@@ -73,20 +71,7 @@ namespace WordPuzzles
         public string Solution { get; set; }
 
         public string GoogleSheetRow =>
-            string.Join("\t", new[]
-            {
-                "", //ID
-                Solution, //solution
-                "", //space	
-                "", //% solved	
-                Solution.Substring(0, 3), //first three	
-                "", //illustrated/Guest	
-                Clue, //clue	
-                Theme, //theme	
-                "scheduled", //twitter	
-                "", //Difficulty 0 - 5	
-                "", //Date
-            });
+            string.Join("\t", "", Solution, "", "", Solution.Substring(0, 3), "", Clue, Theme, "scheduled", "", "");
 
         public string Theme { get; set; }
 

@@ -4,7 +4,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WordPuzzles;
 
@@ -12,11 +11,11 @@ namespace WordPuzzleGenerator
 {
     class Program
     {
-        private static string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
-        static WordRepository _wordRepository = new WordRepository() {ExludeAdvancedWords = true};
-        static WordSquareHistory history = new WordSquareHistory(); //Todo: populate
-        static AnagramFinder anagramFinder = new AnagramFinder() {Repository = _wordRepository};
-        static Random random = new Random();
+        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
+        static readonly WordRepository _wordRepository = new WordRepository() {ExludeAdvancedWords = true};
+        static readonly WordSquareHistory history = new WordSquareHistory(); //Todo: populate
+        static readonly AnagramFinder anagramFinder = new AnagramFinder() {Repository = _wordRepository};
+        static readonly Random random = new Random();
         [STAThread]
         static void Main(string[] args)
         {
@@ -725,7 +724,7 @@ Enter 0 for none.");
                                 if (responseForAnagramSelection != "0")
                                 {
                                     foreach (string selectedAnagramIndexAsString in responseForAnagramSelection.Split(
-                                        new string[]  {","},
+                                        new[]  {","},
                                         StringSplitOptions.RemoveEmptyEntries))
                                     {
                                         int selectedAnagramIndex = -1;

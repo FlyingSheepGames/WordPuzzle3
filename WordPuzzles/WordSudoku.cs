@@ -6,7 +6,7 @@ namespace WordPuzzles
 {
     public class WordSudoku
     {
-        private string Solution;
+        private readonly string Solution;
         public string[] Grid;
         public string[] PartialGrid;
         private Random random;

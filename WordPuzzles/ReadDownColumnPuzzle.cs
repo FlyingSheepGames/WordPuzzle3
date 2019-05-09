@@ -9,7 +9,7 @@ namespace WordPuzzles
         private string _solution;
         public List<string> Words = new List<string>();
         public int Size => 6;
-        private Random random = new Random();
+        private readonly Random random = new Random();
         public WordRepository Repository => new WordRepository() {ExludeAdvancedWords = true};
         public int NumberOfWordsToInclude => 3;
 

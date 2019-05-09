@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WordPuzzles;
+// ReSharper disable UnusedMember.Local
+// A lot of methods are only called on an ad-hoc basis. 
+//TODO: Clean this up and offer a menu of actions. 
 
 namespace WeeklyThemeGenerator
 {
     class Program
     {
-        private static WordRepository _wordRepository = new WordRepository();
-        private static string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
-        private static WordSquareHistory history = new WordSquareHistory();
+        private static readonly WordRepository WordRepository = new WordRepository();
+        // ReSharper disable once InconsistentNaming
+        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
+        private static readonly WordSquareHistory History = new WordSquareHistory();
 
-        private static string[] _themes = new[]
-        {
+        // ReSharper disable once UnusedMember.Local
+        private static readonly string[] Themes = {
             "alcohol", "anatomy",   "atari game", "artist", "astronomy", "automobile", "appliance",
             "animal", "animal noise", "animalZoo", "animalFarm", "pet", 
             "berry", "beverage",  "bird", "bodies_of_water", "breakfast_food", "buildingMaterial", "bug", 
@@ -47,53 +48,34 @@ namespace WeeklyThemeGenerator
         [STAThread]
         static void Main()
         {
-            //CreateNewWordSpreadsheet();
-
-            //CreateChameleonGrids();
-            //InteractiveCreateAlphabetSoup("welcometogranitegamesummit");
-
             //CreateTweetsForMonth("April 2019");
 
-            //CreateWordDoughnuts();
-
-            //LoadThemesFromCategories();
             LoadWordSquareHistory();
 
             
 
             Console.WriteLine("Enter a theme.");
             string theme = Console.ReadLine();
-            /*
-            foreach (string theme in _themes)
-            {
-                string relatedWordsRowsForGoogleSheet = InteractiveFindWordsForTheme(theme);
-                if (!string.IsNullOrWhiteSpace(relatedWordsRowsForGoogleSheet))
-                {
-                    Clipboard.SetText(relatedWordsRowsForGoogleSheet);
-                    Console.WriteLine("New rows for related words sheet copied to clipboard. Press any key to continue.");
-                    Console.ReadKey();
-                }
-            }
-            */
 
             if (!string.IsNullOrWhiteSpace(theme))
             {
+                // ReSharper disable once InconsistentNaming
                 string DIRECTORY = $"{ConfigurationManager.AppSettings["BaseDirectory"]}PuzzlesSets\\";
-                string FILE_NAME = DIRECTORY + $"{theme.Replace("#", "")}.xml";
+                string fileName = DIRECTORY + $"{theme.Replace("#", "")}.xml";
                 if (!Directory.Exists(DIRECTORY))
                 {
                     Directory.CreateDirectory(DIRECTORY);
                 }
 
                 WeekOfPuzzles weekOfPuzzles = null;
-                if (File.Exists(FILE_NAME))
+                if (File.Exists(fileName))
                 {
                     Console.WriteLine("A file exists with this theme. Press 'y' to load it.");
                     var userInput = Console.ReadKey();
                     if (userInput.KeyChar == 'y')
                     {
                         weekOfPuzzles = new WeekOfPuzzles();
-                        weekOfPuzzles.Deserialize(FILE_NAME);
+                        weekOfPuzzles.Deserialize(fileName);
                         Console.Clear();
                         Console.WriteLine("Week of puzzles successfully loaded.");
                         if (weekOfPuzzles.MondayOfWeekPosted == DateTime.MinValue)
@@ -147,7 +129,7 @@ namespace WeeklyThemeGenerator
                         }
                     }
                     weekOfPuzzles = GetWeekOfPuzzles(theme, weekOfPuzzles);
-                    weekOfPuzzles.Serialize(FILE_NAME);
+                    weekOfPuzzles.Serialize(fileName);
 
                     Console.WriteLine("Week of puzzles has been selected.");
                     string weekOfWords = string.Join("\t", weekOfPuzzles.SelectedWords);
@@ -203,12 +185,11 @@ namespace WeeklyThemeGenerator
             StringBuilder rowsToAdd = new StringBuilder();
             int wordCount = 0;
             List<string> wordsAdded = new List<string>();
-            foreach (string pattern in new string[] { "___", "____", "_____", "______" })
+            foreach (string pattern in new[] { "___", "____", "_____", "______" })
             {
-                foreach (string word in _wordRepository.WordsMatchingPattern(pattern))
+                foreach (string word in WordRepository.WordsMatchingPattern(pattern))
                 {
-                    bool isAdvanced = false;
-                    var category = _wordRepository.CategorizeWord(word);
+                    var category = WordRepository.CategorizeWord(word);
                     if (category == WordCategory.NotAWord)
                     {
                         Console.WriteLine();
@@ -224,9 +205,8 @@ namespace WeeklyThemeGenerator
                     wordsAdded.Add(word.ToLower());
                     Console.Write(".");
 
-                    string hint = _wordRepository.FindClueFor(word);
-                    string databaseRow = string.Join("\t",
-                        new string[] {word, category.ToString(), word.Length.ToString(), hint});
+                    string hint = WordRepository.FindClueFor(word);
+                    string databaseRow = string.Join("\t", word, category.ToString(), word.Length.ToString(), hint);
                     rowsToAdd.AppendLine(databaseRow);
                     wordCount++;
                 }
@@ -254,7 +234,7 @@ namespace WeeklyThemeGenerator
                 patternBuilder.Append('_');
             }
 
-            foreach (string sixLetterWord in _wordRepository.WordsMatchingPattern(patternBuilder.ToString()))
+            foreach (string sixLetterWord in WordRepository.WordsMatchingPattern(patternBuilder.ToString()))
             {
                 CreateLargeWordHexagon(sixLetterWord);
             }
@@ -596,7 +576,7 @@ namespace WeeklyThemeGenerator
                     if (weekOfPuzzles.MondayWordSquare != null)
                     {
                         //Console.WriteLine($"adding puzzle {weekOfPuzzles.MondayWordSquare}");
-                        history.AddWordSquare(weekOfPuzzles.MondayWordSquare, weekOfPuzzles.MondayOfWeekPosted);
+                        History.AddWordSquare(weekOfPuzzles.MondayWordSquare, weekOfPuzzles.MondayOfWeekPosted);
                     }
                     else
                     {
@@ -1022,172 +1002,6 @@ namespace WeeklyThemeGenerator
 
         }
 
-        private static void CreateChameleonGrids()
-        {
-            foreach (string theme in _themes)
-            {
-                Console.Clear();
-                Console.WriteLine($"Finding words for {theme}");
-                List<string> relatedWords = _wordRepository.GetRelatedWordsForTheme(theme);
-                int relatedWordsCount = relatedWords.Count;
-                Console.WriteLine(relatedWordsCount);
-                if (relatedWordsCount < 16) continue;
-                List<string> selectedWords = new List<string>();
-                while (0 < relatedWords.Count)
-                {
-                    Console.WriteLine();
-                    for (int index = 0; index < 9; index++)
-                    {
-                        if (relatedWords.Count <= index)
-                        {
-                            break;
-                        }
-
-                        string relatedWord = relatedWords[index];
-                        Console.WriteLine($"{index}:{relatedWord}");
-                    }
-                    Console.WriteLine("Enter the number of the first one to skip, or enter 9 to keep them all. Or 'z' to skip to the next theme.");
-                    var userSelectedIndexAsKey = Console.ReadKey();
-                    if (userSelectedIndexAsKey.KeyChar == 'z')
-                    {
-                        break;
-                    }
-                    int userSelectedIndexAsInt;
-                    if (int.TryParse(userSelectedIndexAsKey.KeyChar.ToString(), out userSelectedIndexAsInt))
-                    {
-                        for (int keepIndex = 0; keepIndex < userSelectedIndexAsInt; keepIndex++)
-                        {
-                            if (relatedWords.Count <= keepIndex)
-                            {
-                                break;
-                            }
-                            selectedWords.Add(relatedWords[keepIndex]);
-                        }
-
-                        for (int removeIndex = 0; removeIndex <= userSelectedIndexAsInt; removeIndex++)
-                        {
-                            if (relatedWords.Count <= 0)
-                            {
-                                break;
-                            }
-                            relatedWords.RemoveAt(0);
-                        }
-
-                    }
-                }
-
-                while (16 <= selectedWords.Count)
-                {
-                    selectedWords.Shuffle();
-                    Console.WriteLine();
-                    Console.WriteLine(selectedWords.Count);
-                    Console.WriteLine();
-                    string gridOfSelectedWords = $"{selectedWords[0]}\t{selectedWords[1]}\t{selectedWords[2]}\t{selectedWords[3]}\r\n{selectedWords[4]}\t{selectedWords[5]}\t{selectedWords[6]}\t{selectedWords[7]}\r\n{selectedWords[8]}\t{selectedWords[9]}\t{selectedWords[10]}\t{selectedWords[11]}\r\n{selectedWords[12]}\t{selectedWords[13]}\t{selectedWords[14]}\t{selectedWords[15]}\t";
-                    Console.WriteLine(gridOfSelectedWords);
-                    selectedWords.RemoveRange(0, 12);
-
-                    var userInput = new ConsoleKeyInfo();
-                    while (userInput.Key != ConsoleKey.C)
-                    {
-                        Clipboard.SetText(gridOfSelectedWords);
-
-                        Console.WriteLine("Grid has been copied. Press 'c' to continue, or anything else to copy again.");
-                        userInput = Console.ReadKey();
-                    }
-                }
-            }
-        }
-
-        private static void LoadThemesFromCategories()
-        {
-            TextReader textReader = new StringReader(File.ReadAllText(@"E:\utilities\WordSquare\data\categories.json"));
-            JsonReader reader = new JsonTextReader(textReader);
-            string currentTheme = null;
-            List<string> themesSoFar = new List<string>();
-            StringBuilder newThemes = new StringBuilder();
-            while (reader.Read())
-            {
-                if (reader.Value == null) continue;
-                string currentValue = reader.Value.ToString();
-                if (currentValue.Contains(" "))
-                {
-                    continue;
-                }
-                if (reader.TokenType == JsonToken.PropertyName)
-                {
-                    currentTheme = currentValue.ToString();
-                    themesSoFar.Add(currentTheme);
-                    if (!IsDuplicateTheme(currentTheme, themesSoFar))
-                    {
-                        Console.WriteLine($"New Theme: {currentTheme}");
-                    }
-
-                    continue;
-                }
-
-                if (reader.TokenType == JsonToken.String)
-                {
-                    if (IsDuplicateTheme(currentTheme, themesSoFar))
-                    {
-                        continue;
-                    }
-                    //Console.WriteLine($"{currentTheme}\t{reader.Value}");
-
-                    newThemes.AppendLine($"{currentTheme}\t{currentValue}");
-                }
-            }
-
-            var userInput = new ConsoleKeyInfo();
-            while (userInput.Key != ConsoleKey.C)
-            {
-
-                Clipboard.SetText(newThemes.ToString());
-                Console.WriteLine("Copied to clipboard. Press 'c' to continue, anything else to copy again.");
-                userInput = Console.ReadKey();
-            }
-        }
-
-        private static bool IsDuplicateTheme(string currentTheme, List<string> themesSoFar)
-        {
-            if (currentTheme.StartsWith("animals")) return true;
-            if (new[] {"fishes", "injuries"}.Contains(currentTheme)) return true;
-
-            bool duplicateTheme = false;
-            if (currentTheme.EndsWith("s"))
-            {
-                if (themesSoFar.Contains(currentTheme.Substring(0, currentTheme.Length - 1)))
-                {
-                    duplicateTheme = true;
-                }
-            }
-
-            return duplicateTheme;
-        }
-
-
-        private static string InteractiveFindWordsForTheme(string theme)
-        {
-            StringBuilder rowBuilder = new StringBuilder();
-            //A Little Alliteration
-            List<ALittleAlliteration> matchingClues = ALittleAlliteration.GetCluesForTheme(theme, 1);
-            Console.WriteLine($"Press 'y' if the word is related to {theme}, or any other letter to skip.");
-            foreach (var clue in matchingClues)
-            {
-                foreach (var word in clue.Solution.Split(' '))
-                {
-                    Console.WriteLine(word);
-                    if (Console.ReadKey().KeyChar == 'y')
-                    {
-                        rowBuilder.AppendLine($"{theme}\t{word}");
-                    }
-                    Console.Clear();
-                    Console.WriteLine($"Press 'y' if the word is related to {theme}, or any other letter to skip.");
-                }
-            }
-
-            //TODO: VowelMovements
-            return rowBuilder.ToString();
-        }
 
         private static void CreateMagicWordSquare(string magicWordSquareTopLine)
         {
@@ -1212,35 +1026,9 @@ namespace WeeklyThemeGenerator
             }
         }
 
-        private static void CreateGoogleSheetRowsForThemeWords()
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (string file in Directory.EnumerateFiles(BASE_DIRECTORY + @"themes"))
-            {
-                WordRepository repository = new WordRepository();
-                Console.WriteLine(file);
-                string themeWithFileExtension = file.Substring((BASE_DIRECTORY + @"themes").Length);
-                string theme = themeWithFileExtension.Substring(1, themeWithFileExtension.Length - 5);
-                Console.WriteLine(theme);
-                foreach (string relatedWord in repository.GetRelatedWordsForTheme(theme))
-                {
-                    Console.WriteLine($"\t{relatedWord}");
-                    builder.AppendLine($"{theme}\t{relatedWord}");
-                }
-            }
-            var userInput = new ConsoleKeyInfo();
-            while (userInput.Key != ConsoleKey.C)
-            {
-
-                Clipboard.SetText(builder.ToString());
-                Console.WriteLine("Copied to clipboard. Press 'c' to continue or anything else to copy again.");
-                userInput = Console.ReadKey();
-            }
-        }
-
         private static void GenerateTweetsForSelectedPuzzles(WeekOfPuzzles weekOfPuzzles)
         {
-            var userInput = new ConsoleKeyInfo();
+            ConsoleKeyInfo userInput;
             
             if (weekOfPuzzles.MondayWordSquare == null)
             {
@@ -1359,7 +1147,7 @@ namespace WeeklyThemeGenerator
             List<string> threeLetterCombinationsAlreadyTried = new List<string>();
 
             Console.WriteLine($"Finding words related to {theme}");
-            List<string> relatedWordsForTheme = _wordRepository.GetRelatedWordsForTheme(theme);
+            List<string> relatedWordsForTheme = WordRepository.GetRelatedWordsForTheme(theme);
             int index = 1;
             foreach (string relatedWord in relatedWordsForTheme)
             {
@@ -1385,7 +1173,7 @@ namespace WeeklyThemeGenerator
                     Console.WriteLine($"Starting to create a vowel movement puzzle.");
                     string startConsonant;
                     string endConsonant;
-                    if (_wordRepository.IsSingleSyllable(relatedWord, out startConsonant, out endConsonant))
+                    if (WordRepository.IsSingleSyllable(relatedWord, out startConsonant, out endConsonant))
                     {
                         if (weekOfPuzzles.TuesdayVowelMovement == null)
                         {
@@ -1425,7 +1213,6 @@ namespace WeeklyThemeGenerator
                             if (weekOfPuzzles.WednesdayALittleAlliteration != null)
                             {
                                 weekOfPuzzles.SelectedWords[2] = relatedWord;
-                                continue; // Don't use this for anything else.
                             }
                         }
                         else
@@ -1435,9 +1222,11 @@ namespace WeeklyThemeGenerator
                             if (weekOfPuzzles.FridayALittleAlliteration != null)
                             {
                                 weekOfPuzzles.SelectedWords[4] = relatedWord;
-                                continue; // Don't use this for anything else.
                             }
                         }
+                        // ReSharper disable once RedundantJumpStatement
+                        //Currently redundant, but will be used if another type of puzzle is added later.
+                        continue; // Don't use this for anything else.
                     }
                 }
             }
@@ -1511,28 +1300,24 @@ namespace WeeklyThemeGenerator
                 return null;
             }
 
+            ALittleAlliteration userCreatedPuzzle = new ALittleAlliteration(userResponse)
             {
-                ALittleAlliteration userCreatedPuzzle = new ALittleAlliteration(userResponse)
+                Theme = theme,
+            };
+            bool readyToContinue = false;
+            while (!readyToContinue)
+            {
+                Clipboard.SetText(userCreatedPuzzle.GoogleSheetRow);
+                Console.WriteLine(
+                    "This new A Little Alliteration puzzle has been copied to the clipboard. Please paste it into the Google Sheet, and press 'c' to continue.");
+                var key = Console.ReadKey();
+                if (key.KeyChar == 'c')
                 {
-                    Theme = theme,
-                };
-                bool readyToContinue = false;
-                while (!readyToContinue)
-                {
-                    Clipboard.SetText(userCreatedPuzzle.GoogleSheetRow);
-                    Console.WriteLine(
-                        "This new A Little Alliteration puzzle has been copied to the clipboard. Please paste it into the Google Sheet, and press 'c' to continue.");
-                    var key = Console.ReadKey();
-                    if (key.KeyChar == 'c')
-                    {
-                        readyToContinue = true;
-                    }
+                    readyToContinue = true;
                 }
-
-                return userCreatedPuzzle;
             }
-            Console.WriteLine($"Unable to find A Little Alliteration puzzle for {firstThreeLetters}.");
-            return null;
+
+            return userCreatedPuzzle;
         }
 
         private static VowelMovement InteractiveFindVowelMovementClue(string theme, string relatedWord, string startConsonant, string endConsonant)
@@ -1601,99 +1386,6 @@ namespace WeeklyThemeGenerator
             }
         }
 
-        private static WordSquare InteractiveFindWordSquare_old(string relatedWord)
-        {
-            string fileWithMagicWordSquares = WordSquare.GetFileNameFor(relatedWord);
-            if (!File.Exists(fileWithMagicWordSquares))
-            {
-                GenerateWordSquaresOfAnySize(relatedWord);
-            }
-
-            string[] lines = File.ReadAllLines(fileWithMagicWordSquares);
-            int lineCount = lines.Length;
-            int availableSquareCount = lineCount / 6;
-            WordSquare selectedSquare = null;
-            for (int squareIndex = 0; squareIndex < availableSquareCount; squareIndex++)
-            {
-                Console.WriteLine($"0: accept this square. {squareIndex + 1} / {availableSquareCount}");
-                Console.WriteLine($"Or enter 'z' to skip to the next word.");
-                string firstLine = lines[(squareIndex * 6) + 1];
-                string secondLine = lines[(squareIndex * 6) + 2];
-                string thirdLine = lines[(squareIndex * 6) + 3];
-                string fourthLine = lines[(squareIndex * 6) + 4];
-                string fifthLine = lines[(squareIndex * 6) + 5];
-
-                Console.WriteLine($"{firstLine.ToUpper()}");
-                Console.WriteLine($"{secondLine.ToUpper()}");
-                Console.WriteLine($"{thirdLine.ToUpper()}");
-                Console.WriteLine($"{fourthLine.ToUpper()}");
-                Console.WriteLine($"{fifthLine.ToUpper()}");
-
-                var userReaction = Console.ReadKey();
-                if (userReaction.KeyChar == 'z')
-                {
-                    break;
-                }
-                if (userReaction.KeyChar == '0')
-                {
-                    selectedSquare = new WordSquare("");
-                    selectedSquare.SetFirstLine(firstLine);
-                    selectedSquare.SetSecondLine(secondLine);
-                    selectedSquare.SetThirdLine(thirdLine);
-                    selectedSquare.SetFourthLine(fourthLine);
-                    selectedSquare.SetFifthLine(fifthLine);
-                }
-
-                if (selectedSquare != null)//populate clues
-                {
-                    Console.WriteLine();
-                    string[] currentLines = new[] {firstLine, secondLine, thirdLine, fourthLine, fifthLine};
-                    for(int currentLineIndex = 1; currentLineIndex < 5; currentLineIndex++)
-                    {
-                        string currentLine = currentLines[currentLineIndex];
-                        string previousClue = _wordRepository.FindClueFor(currentLine);
-
-                        Console.WriteLine($"Enter a clue for {currentLine} (or enter 0 to choose another square) [{previousClue}]:");
-                        string suggestedClue = Console.ReadLine();
-                        if (suggestedClue == "0")
-                        {
-                            selectedSquare = null;
-                            break;
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(previousClue))
-                        {
-                            if (string.IsNullOrWhiteSpace(suggestedClue))
-                            {
-                                suggestedClue = previousClue;
-                            }
-                        }
-                        else
-                        {
-                            var userInput = new ConsoleKeyInfo();
-                            while (userInput.Key != ConsoleKey.C)
-                            {
-                                Clipboard.SetText($"{currentLine}\t{currentLine.Length}\t{suggestedClue}");
-                                Console.WriteLine(
-                                    "New clue has been copied to the clipboard. Please paste it into the words spreadsheet and replace the existing row for that word. Then press any key to continue.");
-                                userInput = Console.ReadKey();
-                            }
-
-                            _wordRepository.AddClue(currentLine, suggestedClue);
-                            _wordRepository.SaveClues();
-                        }
-                        selectedSquare.Clues[currentLineIndex] = suggestedClue;
-                    }
-
-                    if (selectedSquare != null)
-                    {
-                        break;
-                    }
-                }
-            }
-            return selectedSquare;
-        }
-
         private static WordSquare InteractiveFindWordSquare(string relatedWord)
         {
             string fileWithMagicWordSquares = WordSquare.GetFileNameFor(relatedWord);
@@ -1704,7 +1396,7 @@ namespace WeeklyThemeGenerator
 
 
             List<WordSquare> availableWordSquares = ReadAllWordSquaresFromFile(fileWithMagicWordSquares);
-            availableWordSquares.Sort( (p,q) => history.CalculateScore(q) - history.CalculateScore(p));
+            availableWordSquares.Sort( (p,q) => History.CalculateScore(q) - History.CalculateScore(p));
             int availableSquareCount = availableWordSquares.Count;
             WordSquare selectedSquare = null;
             int squareIndex = 0;
@@ -1715,7 +1407,7 @@ namespace WeeklyThemeGenerator
                 Console.WriteLine($"Or enter 'z' to skip to the next word.");
 
                 Console.WriteLine(availableWordSquare);
-                Console.WriteLine($"Score: {history.CalculateScore(availableWordSquare)}");
+                Console.WriteLine($"Score: {History.CalculateScore(availableWordSquare)}");
 
                 var userReaction = Console.ReadKey();
                 if (userReaction.KeyChar == 'z')
@@ -1734,7 +1426,7 @@ namespace WeeklyThemeGenerator
                     for (int currentLineIndex = 1; currentLineIndex < 5; currentLineIndex++)
                     {
                         string currentLine = currentLines[currentLineIndex];
-                        string previousClue = _wordRepository.FindClueFor(currentLine);
+                        string previousClue = WordRepository.FindClueFor(currentLine);
 
                         Console.WriteLine($"Enter a clue for {currentLine} (or enter 0 to choose another square) [{previousClue}]:");
                         string suggestedClue = Console.ReadLine();
@@ -1763,8 +1455,8 @@ namespace WeeklyThemeGenerator
                                 userInput = Console.ReadKey();
                             }
 
-                            _wordRepository.AddClue(currentLine, suggestedClue);
-                            _wordRepository.SaveClues();
+                            WordRepository.AddClue(currentLine, suggestedClue);
+                            WordRepository.SaveClues();
                         }
                         selectedSquare.Clues[currentLineIndex] = suggestedClue;
                     }
@@ -1813,7 +1505,7 @@ namespace WeeklyThemeGenerator
         private static void GenerateWordSquaresOfAnySize(string firstWordCandidate)
         {
             WordSquare square = new WordSquare(new string('_', firstWordCandidate.Length));
-            square.Repository = _wordRepository;
+            square.Repository = WordRepository;
             int[] wordsConsiderByLevel = new[] { 0, 0, 0, 0, 0, 0, };
 
             {
@@ -1886,7 +1578,7 @@ namespace WeeklyThemeGenerator
 
     static class Shuffler
     {
-        private static Random rng = new Random();
+        private static readonly Random RandomNumberGenerator = new Random();
 
         public static void Shuffle<T>(this IList<T> list)
         {
@@ -1894,7 +1586,7 @@ namespace WeeklyThemeGenerator
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
+                int k = RandomNumberGenerator.Next(n + 1);
                 T value = list[k];
                 list[k] = list[n];
                 list[n] = value;

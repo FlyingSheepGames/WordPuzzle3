@@ -18,7 +18,7 @@ namespace WordPuzzles
         public DateTime MondayOfWeekPosted { get; set; }
 
         public string[] SelectedWords = new[] { "", "", "", "", "" };
-        private XmlSerializer _xmlSerializer = new XmlSerializer(typeof(WeekOfPuzzles));
+        private readonly XmlSerializer _xmlSerializer = new XmlSerializer(typeof(WeekOfPuzzles));
 
         public void Serialize(string fileName)
         {

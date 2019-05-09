@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -9,7 +8,7 @@ namespace WordPuzzles
 {
     public class WordHexagon
     {
-        WordRepository repository = new WordRepository();
+        readonly WordRepository repository = new WordRepository();
         public List<string> UniqueWords = new List<string>();
         public bool Verbose = true;
         public int Size = 3;
@@ -57,7 +56,7 @@ namespace WordPuzzles
             _xmlSerializer = original._xmlSerializer;
         }
 
-        private XmlSerializer _xmlSerializer = new XmlSerializer(typeof(WordHexagon));
+        private readonly XmlSerializer _xmlSerializer = new XmlSerializer(typeof(WordHexagon));
         public readonly int NumberOfLines;
 
         public void Serialize(string fileName)
