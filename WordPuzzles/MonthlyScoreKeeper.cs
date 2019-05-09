@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using DateInformationRetriever.Utility;
 
 namespace WordPuzzles
 {
     public class MonthlyScoreKeeper
     {
-        readonly GoogleSheet sheet = new GoogleSheet() {
+        readonly GoogleSheet _sheet = new GoogleSheet() {
             GoogleSheetKey = "1KiWsFIPCVmst--r57KEjDT-F5yuoeu-Ug9pqesuWyWA" ,
             IgnoreCache = true
 
@@ -14,7 +13,7 @@ namespace WordPuzzles
         public List<Player> GetPlayers(string month = null)
         {
             var players = new List<Player>();
-            var results = sheet.ExecuteQuery("SELECT *", month);
+            var results = _sheet.ExecuteQuery("SELECT *", month);
             var puzzleTypeIndicies = GetPuzzleTypeIndiciesFromTypeRowInSheet(results[1]);
 
             foreach (var playerRow in results)

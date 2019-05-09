@@ -12,7 +12,7 @@ namespace WordPuzzles
         Random _random;
         public int RandomSeed { get; set; }
 
-        internal WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+        internal WordRepository Repository = new WordRepository() {ExludeAdvancedWords = true};
         Random Random
         {
             get
@@ -36,15 +36,14 @@ namespace WordPuzzles
         {
             List<string> puzzlePhrase = new List<string>();
 
-            bool foundFirstWord = false;
             foreach (int whereToBreakWord in GenerateWordBreaks(wordToHide.Length))
             {
-                foundFirstWord = false;
+                var foundFirstWord = false;
                 var firstPartOfWord = wordToHide.Substring(0, whereToBreakWord);
                 string lastPartOfWord = wordToHide.Substring(whereToBreakWord);
 
                 StringBuilder firstPatternBuilder = new StringBuilder();
-                bool foundSecondWord = false;
+                bool foundSecondWord;
 
                 for (int numberOfBlanksToPrepend = 1;
                     numberOfBlanksToPrepend < 7 - whereToBreakWord;
@@ -61,7 +60,7 @@ namespace WordPuzzles
                     var firstPattern = firstPatternBuilder.ToString();
                     Console.WriteLine(
                         $"Looking for first word match {firstPattern} with {numberOfBlanksToPrepend} blanks.");
-                    var firstMatchingWords = repository.WordsMatchingPattern(firstPattern);
+                    var firstMatchingWords = Repository.WordsMatchingPattern(firstPattern);
                     if (0 == firstMatchingWords.Count)
                     {
                         //skip to next word. 
@@ -96,7 +95,7 @@ namespace WordPuzzles
                     var secondPattern = secondPatternBuilder.ToString();
                     Console.WriteLine(
                         $"Looking for second word using pattern {secondPattern}, adding {numberOfBlanksToAdd} blanks");
-                    var secondMatchingWords = repository.WordsMatchingPattern(secondPattern);
+                    var secondMatchingWords = Repository.WordsMatchingPattern(secondPattern);
                     if (0 == secondMatchingWords.Count)
                     {
                         continue;

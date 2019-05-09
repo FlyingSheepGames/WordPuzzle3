@@ -6,7 +6,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using DateInformationRetriever.Utility;
 using Newtonsoft.Json.Linq;
 using Formatting = System.Xml.Formatting;
 

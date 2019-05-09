@@ -6,12 +6,12 @@ namespace WordPuzzles
 {
     public class Anacrostic
     {
-        public Puzzle puzzle = new Puzzle();
+        public Puzzle Puzzle = new Puzzle();
         public WordRepository Repository = new WordRepository();
-        private readonly int[] remainingLetters = new int[26];
+        private readonly int[] _remainingLetters = new int[26];
 
         public List<string> WordsFoundSoFar = new List<string>();
-        private string originalPhrase;
+        private string _originalPhrase;
         public string EncodedPhrase;
         public Anacrostic(string phrase)
         {
@@ -24,9 +24,9 @@ namespace WordPuzzles
         {
             PreparePuzzle();
             StringBuilder phraseEncodedForGoogle = new StringBuilder();
-            for (var index = 0; index < puzzle.Phrase.Count; index++)
+            for (var index = 0; index < Puzzle.Phrase.Count; index++)
             {
-                var letter = puzzle.Phrase[index];
+                var letter = Puzzle.Phrase[index];
                 phraseEncodedForGoogle.Append(letter);
                 if (index % LineLength == LineLength-1)
                 {
@@ -49,7 +49,7 @@ namespace WordPuzzles
             {
                 //throw new Exception("Phrases of length 57 or more are not supported (line length doesn't fit in the 8 - 14 range without 3 or more black spaces in the final row).");
             }
-            originalPhrase = phrase.ToLower();
+            _originalPhrase = phrase.ToLower();
             foreach (string word in phrase.Split(new [] { " "}, StringSplitOptions.RemoveEmptyEntries))
             {
                 IgnoreWord(word);
@@ -77,7 +77,7 @@ namespace WordPuzzles
 
             for (int i = 0; i < 26; i++)
             {
-                remainingLetters[i] = 0;
+                _remainingLetters[i] = 0;
             }
 
             string lowercasePhrase = phrase.ToLower();
@@ -86,7 +86,7 @@ namespace WordPuzzles
                 var alphabetRank = GetAlphabetRank(letter);
                 if (0 <= alphabetRank && alphabetRank < 26)
                 {
-                    remainingLetters[alphabetRank]++;
+                    _remainingLetters[alphabetRank]++;
                 }
             }
         }
@@ -126,7 +126,7 @@ namespace WordPuzzles
             var alphabetRank = GetAlphabetRank(letter);
             if (0 <= alphabetRank && alphabetRank < 26)
             {
-                return remainingLetters[alphabetRank];
+                return _remainingLetters[alphabetRank];
             }
             else return 0;
         }
@@ -140,6 +140,7 @@ namespace WordPuzzles
                 {
                     List<string> wordsStartingWith = new List<string>();
                     wordsStartingWith.AddRange(Repository.WordsStartingWith(letterToUseNext.ToString(), 6));
+                    // ReSharper disable once RedundantArgumentDefaultValue
                     wordsStartingWith.AddRange(Repository.WordsStartingWith(letterToUseNext.ToString(), 5));
                     wordsStartingWith.AddRange(Repository.WordsStartingWith(letterToUseNext.ToString(), 4));
                     wordsStartingWith.AddRange(Repository.WordsStartingWith(letterToUseNext.ToString(), 3));
@@ -181,12 +182,12 @@ namespace WordPuzzles
             return null;
         }
 
-        private string wordsWithNumberedBlanks = "";
+        private string _wordsWithNumberedBlanks = "";
         public string WordsWithNumberedBlanks()
         {
             HandleLeftoverLetters();
 
-            return wordsWithNumberedBlanks;
+            return _wordsWithNumberedBlanks;
         }
 
         private void HandleLeftoverLetters()
@@ -198,7 +199,7 @@ namespace WordPuzzles
             }
         }
 
-        public int lettersAssignedSoFar = 1;
+        public int LettersAssignedSoFar = 1;
         private readonly List<string> _ignoredWords = new List<string>();
 
         public void RemoveWord(string word)
@@ -209,24 +210,24 @@ namespace WordPuzzles
 
             foreach (char letterInWordCandidate in word)
             {
-                remainingLetters[GetAlphabetRank(letterInWordCandidate)]--;
+                _remainingLetters[GetAlphabetRank(letterInWordCandidate)]--;
             }
-            puzzle.AddWordToClues(word);
+            Puzzle.AddWordToClues(word);
         }
 
         private void UpdateWordsWithNumberedBlanks(string word)
         {
             char wordIndexAsLetter = (char) (WordsFoundSoFar.Count + 64);
-            wordsWithNumberedBlanks += word + " ";
+            _wordsWithNumberedBlanks += word + " ";
             foreach (char letterInWordCandidate in word)
             {
-                string letterCode = wordIndexAsLetter.ToString() + lettersAssignedSoFar++;
+                string letterCode = wordIndexAsLetter.ToString() + LettersAssignedSoFar++;
                 ReplaceFirstLetterWithLetterCodeInPhrase(letterInWordCandidate, letterCode);
 
-                wordsWithNumberedBlanks += letterCode + " ";
+                _wordsWithNumberedBlanks += letterCode + " ";
             }
 
-            wordsWithNumberedBlanks += Environment.NewLine;
+            _wordsWithNumberedBlanks += Environment.NewLine;
         }
 
         private void ReplaceFirstLetterWithLetterCodeInPhrase(char letterInWordCandidate, string letterCode)
@@ -287,7 +288,7 @@ namespace WordPuzzles
             foreach (char letter in LettersInReverseFrequency)
             {
                 for (int numberRemaining = 0;
-                    numberRemaining < remainingLetters[GetAlphabetRank(letter)];
+                    numberRemaining < _remainingLetters[GetAlphabetRank(letter)];
                     numberRemaining++)
                 {
                     builder.Append(letter);
@@ -309,7 +310,7 @@ namespace WordPuzzles
             StringBuilder topLine = new StringBuilder();
             StringBuilder middleLine = new StringBuilder();
             StringBuilder bottomLine = new StringBuilder();
-            foreach (string word in puzzle.Clues)
+            foreach (string word in Puzzle.Clues)
             {
                 //formattedResult.Append($"clue for {word}\t");
                 topLine.Append($"clue for {word}");
@@ -317,13 +318,10 @@ namespace WordPuzzles
                 {
                     topLine.Append("\t");
                     middleLine.Append(letter + "\t");
+                    bottomLine.Append($"{currentLetter}{lettersAssignedSoFar++}\t");
                 }
-                
-                foreach (char letter in word)
-                {
-                    var letterCount = lettersAssignedSoFar++;
-                    bottomLine.Append($"{currentLetter}{letterCount}\t");
-                }
+
+
                 topLine.Append("\t");
                 middleLine.Append("\t");
                 bottomLine.Append("\t");
@@ -354,11 +352,11 @@ namespace WordPuzzles
 
         private void PreparePuzzle()
         {
-            if (string.IsNullOrWhiteSpace(puzzle.PhraseAsString))
+            if (string.IsNullOrWhiteSpace(Puzzle.PhraseAsString))
             {
                 HandleLeftoverLetters();
-                puzzle.PhraseAsString = originalPhrase;
-                puzzle.PlaceLetters();
+                Puzzle.PhraseAsString = _originalPhrase;
+                Puzzle.PlaceLetters();
             }
         }
 
@@ -464,7 +462,7 @@ namespace WordPuzzles
 
             char currentLetter = 'A';
             int lettersAssignedSoFar = 1;
-            foreach (string word in puzzle.Clues)
+            foreach (string word in Puzzle.Clues)
             {
                 topLine.AppendLine($@"    <td colspan=""{word.Length}"">Clue for {word}</td>");
                 foreach (char letter in word.ToUpper())
@@ -494,9 +492,9 @@ namespace WordPuzzles
                 }
                 else
                 {
-                    topLine.AppendLine($@"    <td> </td>"); //space between words.
-                    middleLine.AppendLine($@"    <td> </td>"); //space between words.
-                    bottomLine.AppendLine($@"    <td> </td>"); //space between words.
+                    topLine.AppendLine(@"    <td> </td>"); //space between words.
+                    middleLine.AppendLine(@"    <td> </td>"); //space between words.
+                    bottomLine.AppendLine(@"    <td> </td>"); //space between words.
                 }
             }
 

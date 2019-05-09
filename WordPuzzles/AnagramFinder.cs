@@ -22,10 +22,10 @@ namespace WordPuzzles
         internal List<string> ParseResponse(string response)
         {
             var list = new List<string>();
-            int indexOfDisplayingAll = response.IndexOf(@"Displaying all");
+            int indexOfDisplayingAll = response.IndexOf(@"Displaying all", StringComparison.Ordinal);
             if (indexOfDisplayingAll < 0) return list;
             string remainingResponse = response.Substring(indexOfDisplayingAll + @"Displaying all".Length + 1);
-            int indexOfScript = remainingResponse.IndexOf(@"<script>");
+            int indexOfScript = remainingResponse.IndexOf(@"<script>", StringComparison.Ordinal);
             remainingResponse = remainingResponse.Substring(0, indexOfScript);
             foreach (string line in remainingResponse.Split( new[] {"<br>"}, StringSplitOptions.RemoveEmptyEntries))
             {

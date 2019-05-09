@@ -74,16 +74,16 @@ namespace WordPuzzles
             }
         }
 
-        private int FindMatchingLetterIndex(PuzzleLetter letterToMatch, int letterIndex)
+        private void FindMatchingLetterIndex(PuzzleLetter letterToMatch, int letterIndex)
         {
             if (IndexMap != null)
             {
                 if (IndexMap.ContainsKey(letterIndex))
                 {
-                    return IndexMap[letterIndex];
+                    return;
                 }
             }
-            int matchingLetterIndex = 0;
+
             int puzzleLength = Puzzle.PhraseAsString.Length;
             int puzzleLengthWithoutBlanks = puzzleLength;
             int currentOffset = 0;
@@ -105,7 +105,7 @@ namespace WordPuzzles
 
             }
 
-            matchingLetterIndex = puzzleLengthWithoutBlanks + offsetOfMatch;
+            var matchingLetterIndex = puzzleLengthWithoutBlanks + offsetOfMatch;
             if (IndexMap == null)
             {
                 IndexMap = new Dictionary<int, int>(matchingLetterIndex*2);
@@ -113,8 +113,6 @@ namespace WordPuzzles
 
             IndexMap[letterIndex] = matchingLetterIndex;
             IndexMap[matchingLetterIndex] = letterIndex;
-
-            return matchingLetterIndex;
         }
 
         public string CreateIndexMapDefinition()
@@ -159,7 +157,7 @@ namespace WordPuzzles
             builder.AppendLine();
             builder.AppendLine("\t<td>");
             builder.Append("\t");
-            foreach (var letter in puzzleClue.Letters)
+            foreach (var unused in puzzleClue.Letters)
             {
                 builder.AppendLine($@"<input type=""text"" size=""1"" maxlength=""1"" id=""letter{startingIndex}"" onFocus=""colorMeAndMyMatch({startingIndex},'yellow');"" onBlur=""colorMeAndMyMatch({startingIndex},'white');""");
                 startingIndex++;

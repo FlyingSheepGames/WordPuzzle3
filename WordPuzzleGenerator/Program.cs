@@ -762,7 +762,7 @@ Enter 0 for none.");
             wordsAlreadyUsed.AddRange(anacrostic.WordsFoundSoFar);
 
 
-            foreach (PuzzleWord clue in anacrostic.puzzle.Clues)
+            foreach (PuzzleWord clue in anacrostic.Puzzle.Clues)
             {
                 string clueAsString = clue;
                 string previouslyUsedClue = WordRepository.FindClueFor(clueAsString);
@@ -786,7 +786,7 @@ Enter 0 for none.");
             //Generate Html File
             HtmlGenerator generator = new HtmlGenerator
             {
-                Puzzle = anacrostic.puzzle,
+                Puzzle = anacrostic.Puzzle,
                 TwitterUrl = parameterSet.TwitterUrl
             };
 

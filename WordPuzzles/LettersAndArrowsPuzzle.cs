@@ -7,9 +7,9 @@ namespace WordPuzzles
 
     public class LettersAndArrowsPuzzle
     {
-        private readonly Random random = new Random();
+        internal readonly Random RandomNumberGenerator = new Random();
         public int Size { get; set; }
-        private readonly Dictionary<string, LetterAndArrowCell> grid = new Dictionary<string, LetterAndArrowCell>();
+        private readonly Dictionary<string, LetterAndArrowCell> _grid = new Dictionary<string, LetterAndArrowCell>();
         public LettersAndArrowsPuzzle(int size)
         {
             Size = size;
@@ -24,7 +24,7 @@ namespace WordPuzzles
             {
                 for (int columnIndex = 0; columnIndex < Size; columnIndex++)
                 {
-                    grid.Add(string.Concat(rowIndex, columnIndex), LetterAndArrowCell.EmptyCell);
+                    _grid.Add(string.Concat(rowIndex, columnIndex), LetterAndArrowCell.EmptyCell);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace WordPuzzles
 
         public LetterAndArrowCell GetCellAtCoordinates(int row, int column)
         {
-            return grid[string.Concat(row, column)];
+            return _grid[string.Concat(row, column)];
         }
 
         public List<int> GetAvailableHorizontalCells(int row, int column, char letterToInsert = '_')
@@ -176,23 +176,20 @@ namespace WordPuzzles
 
         public void SetCellAtCoordinates(int row, int column, LetterAndArrowCell cell)
         {
-            grid[string.Concat(row, column)] = cell;
+            _grid[string.Concat(row, column)] = cell;
         }
 
         public void PlaceSolution(string solution)
         {
             int currentRow = 0;
             int currentColumn = 0;
-            int nextRowOffset = 0;
-            int nextColumnOffset = 0;
-            Direction nextDirection = Direction.Undefined;
 
             var solutionLength = solution.Length;
             for (var index = 0; index < solutionLength; index++)
             {
-                nextRowOffset = 0;
-                nextColumnOffset = 0;
-                nextDirection = Direction.Undefined;
+                var nextRowOffset = 0;
+                var nextColumnOffset = 0;
+                var nextDirection = Direction.Undefined;
                 char letter = solution.ToUpper()[index];
                 char nextLetter = '_';
                 if (solution.Length > index + 1)
@@ -218,7 +215,7 @@ namespace WordPuzzles
                     }
                     if (verticalOptionsCount < horizontalOptionsCount) //go horizontal, unless there are more vertical options.
                     {
-                        nextColumnOffset = horizontalOptions[random.Next(horizontalOptionsCount)];
+                        nextColumnOffset = horizontalOptions[RandomNumberGenerator.Next(horizontalOptionsCount)];
                         if (0 < nextColumnOffset)
                         {
                             nextDirection = Direction.Right;
@@ -230,7 +227,7 @@ namespace WordPuzzles
                     }
                     else
                     {
-                        nextRowOffset = verticalOptions[random.Next(verticalOptionsCount)];
+                        nextRowOffset = verticalOptions[RandomNumberGenerator.Next(verticalOptionsCount)];
                         if (0 < nextRowOffset)
                         {
                             nextDirection = Direction.Down;
@@ -286,7 +283,7 @@ namespace WordPuzzles
                 {
                     for (int randomIndex = 0; randomIndex < Size; randomIndex++)
                     {
-                        wordForRow[randomIndex] = (char)random.Next((int)'A', (int)'Z');
+                        wordForRow[randomIndex] = (char)RandomNumberGenerator.Next('A', 'Z');
                     }
                 }
                 else
@@ -310,7 +307,7 @@ namespace WordPuzzles
                         Console.WriteLine($"No words match {pattern} in row {row}.");
                         Console.WriteLine(FormatHtmlForGoogle());
                     }
-                    string wordForRowAsString = wordsMatchingPattern[random.Next(wordsMatchingPattern.Count)];
+                    string wordForRowAsString = wordsMatchingPattern[RandomNumberGenerator.Next(wordsMatchingPattern.Count)];
                     wordForRow = wordForRowAsString.ToUpper().ToCharArray();
                 }
 
@@ -326,54 +323,54 @@ namespace WordPuzzles
 
                         Direction randomDirection = Direction.Undefined;
                         int randomNumber = 0;
-                        switch (random.Next(4))
+                        switch (RandomNumberGenerator.Next(4))
                         {
                             case 0: //go down if you can, otherwise go up.
                                 if (0 < spacesBelowMe)
                                 {
                                     randomDirection = Direction.Down;
-                                    randomNumber = random.Next(1, spacesBelowMe);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesBelowMe);
                                 }
                                 else
                                 {
                                     randomDirection = Direction.Up;
-                                    randomNumber = random.Next(1, spacesAboveMe);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesAboveMe);
                                 }
                                 break;
                             case 1: //go up if you can, otherwise go down.
                                 if (0 < spacesAboveMe)
                                 {
                                     randomDirection = Direction.Up;
-                                    randomNumber = random.Next(1, spacesAboveMe);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesAboveMe);
                                 }
                                 else
                                 {
                                     randomDirection = Direction.Down;
-                                    randomNumber = random.Next(1, spacesBelowMe);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesBelowMe);
                                 }
                                 break;
                             case 2: //go right if you can, otherwise go left.
                                 if (0 < spacesToTheRight)
                                 {
                                     randomDirection = Direction.Right;
-                                    randomNumber = random.Next(1, spacesToTheRight);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesToTheRight);
                                 }
                                 else
                                 {
                                     randomDirection = Direction.Left;
-                                    randomNumber = random.Next(1, spacesToTheLeft);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesToTheLeft);
                                 }
                                 break;
                             case 3: //go left if you can, otherwise go right.
                                 if (0 < spacesToTheLeft)
                                 {
                                     randomDirection = Direction.Left;
-                                    randomNumber = random.Next(1, spacesToTheLeft);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesToTheLeft);
                                 }
                                 else
                                 {
                                     randomDirection = Direction.Right;
-                                    randomNumber = random.Next(1, spacesToTheRight);
+                                    randomNumber = RandomNumberGenerator.Next(1, spacesToTheRight);
                                 }
                                 break;
                         }
@@ -402,10 +399,23 @@ namespace WordPuzzles
         {
             LetterAndArrowCell cell = obj as LetterAndArrowCell;
             if (cell is null) return false;
-            if (cell.Letter != Letter) return false;
-            if (cell.Number != Number) return false;
-            if (cell.Direction != Direction) return false;
-            return true;
+            return Equals(cell);
+        }
+
+        protected bool Equals(LetterAndArrowCell other)
+        {
+            return Letter == other.Letter && Number == other.Number && Direction == other.Direction;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = Letter.GetHashCode();
+                hashCode = (hashCode * 397) ^ Number;
+                hashCode = (hashCode * 397) ^ (int) Direction;
+                return hashCode;
+            }
         }
 
         public override string ToString()

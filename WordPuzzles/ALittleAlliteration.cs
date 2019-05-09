@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using DateInformationRetriever.Utility;
 
 namespace WordPuzzles
 {
@@ -31,6 +31,7 @@ namespace WordPuzzles
             Clue = userResponse.Substring(indexOfEqualsSign +1).Trim();
         }
 
+        [SuppressMessage("ReSharper", "InconsistentNaming")]
         private ALittleAlliteration(Dictionary<int, string> dictionary, int season = 0)
         {
             Solution = dictionary[1];
@@ -137,13 +138,12 @@ namespace WordPuzzles
         public List<string> FindWordsThatStartWith(string initialLetters, out int totalWordsFound)
         {
             totalWordsFound = 0;
-            List<string> wordsFound = null;
 
             string content = WebRequestUtility.ReadHTMLPageFromUrl(string.Format(
                 @"http://www.morewords.com/most-common-starting-with/{0}/",
                 initialLetters));
 
-            wordsFound = ParseContent(content, out totalWordsFound);
+            var wordsFound = ParseContent(content, out totalWordsFound);
             wordsFound?.Sort();
             return wordsFound;
         }
@@ -153,13 +153,13 @@ namespace WordPuzzles
             wordCount = 0;
             if (string.IsNullOrEmpty(content)) return null;
             if (content.Contains(@"No words starting with")) return null;
-            int startOfUncommonWords = content.IndexOf(@"less common words");
+            int startOfUncommonWords = content.IndexOf(@"less common words", StringComparison.Ordinal);
             if (-1 < startOfUncommonWords)
             {
                 content = content.Substring(0, startOfUncommonWords);
             }
 
-            int startOfList = content.IndexOf(@"per million words</p>");
+            int startOfList = content.IndexOf(@"per million words</p>", StringComparison.Ordinal);
             if (-1 < startOfList)
             {
                 content = content.Substring(startOfList + @"per million words</p>".Length);
