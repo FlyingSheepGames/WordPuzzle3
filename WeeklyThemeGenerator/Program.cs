@@ -1506,7 +1506,7 @@ namespace WeeklyThemeGenerator
         {
             WordSquare square = new WordSquare(new string('_', firstWordCandidate.Length));
             square.Repository = WordRepository;
-            int[] wordsConsiderByLevel = new[] { 0, 0, 0, 0, 0, 0, };
+            int[] wordsConsiderByLevel = { 0, 0, 0, 0, 0, 0, };
 
             {
                 using (StreamWriter writer = new StreamWriter(

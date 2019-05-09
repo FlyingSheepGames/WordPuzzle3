@@ -558,7 +558,7 @@ namespace WordPuzzleGenerator
             WordSquare square = new WordSquare(new string('_', firstWordCandidate.Length) );
             square.Repository = _wordRepository;
 
-            int[] wordsConsiderByLevel = new[] { 0, 0, 0, 0, 0, 0, };
+            int[] wordsConsiderByLevel = { 0, 0, 0, 0, 0, 0, };
             int secondWordsConsidered = 0;
             int thirdWordsConsidered = 0;
             int fourthWordsConsidered = 0;

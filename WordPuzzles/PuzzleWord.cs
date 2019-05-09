@@ -132,8 +132,7 @@ namespace WordPuzzles
             List<int> MissingIndicies = new List<int>();
             int phraseIndex = 0;
             string clueIndiciesToExclude = "";
-            string[] lettersToExcludeIndexByWord = new[]
-            {
+            string[] lettersToExcludeIndexByWord = {
                 "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
                 "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
 

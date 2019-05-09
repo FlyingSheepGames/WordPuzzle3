@@ -17,7 +17,7 @@ namespace WordPuzzles
         [XmlElement(DataType = "date")]
         public DateTime MondayOfWeekPosted { get; set; }
 
-        public string[] SelectedWords = new[] { "", "", "", "", "" };
+        public string[] SelectedWords = { "", "", "", "", "" };
         private readonly XmlSerializer _xmlSerializer = new XmlSerializer(typeof(WeekOfPuzzles));
 
         public void Serialize(string fileName)

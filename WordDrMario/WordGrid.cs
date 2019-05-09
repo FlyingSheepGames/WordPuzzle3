@@ -7,18 +7,18 @@ namespace WordDrMario
 {
     internal class WordGrid
     {
-        readonly WordRepository repository = new WordRepository();
+        readonly WordRepository _repository = new WordRepository();
         internal string[] Lines;
-        private readonly int Width;
-        private readonly int Height = 6;
+        private readonly int _width;
+        private readonly int _height = 6;
 
         public WordGrid(int width)
         {
-            Width = width;
-            Lines = new string[Height];
-            for (int i = 0; i < Height; i++)
+            _width = width;
+            Lines = new string[_height];
+            for (int i = 0; i < _height; i++)
             {
-                Lines[i] = new string(' ', Width);
+                Lines[i] = new string(' ', _width);
             }
 
             FoundWords = new List<WordLocation>();
@@ -49,9 +49,9 @@ namespace WordDrMario
 
         public bool DropLetter(char letter, int columnIndex)
         {
-            int rowToPlaceLetter = Height - 1; //assume it goes to the bottom.
+            int rowToPlaceLetter = _height - 1; //assume it goes to the bottom.
 
-            for (int rowIndex = 0; rowIndex < Height; rowIndex++)
+            for (int rowIndex = 0; rowIndex < _height; rowIndex++)
             {
                 if (Lines[rowIndex][columnIndex] != ' ')
                 {
@@ -79,14 +79,14 @@ namespace WordDrMario
         public bool FindHorizontalWords()
         {
             bool foundAtLeastOneWord = false;
-            for (int row = 0; row < Height; row++)
+            for (int row = 0; row < _height; row++)
             {
-                for (int column = 0; column <= Width - 3; column++)
+                for (int column = 0; column <= _width - 3; column++)
                 {
-                    for (int length = Width - column; 3 <= length; length--)
+                    for (int length = _width - column; 3 <= length; length--)
                     {
                         var wordCandidate = Lines[row].Substring(column, length).ToLower();
-                        if (repository.IsAWord(wordCandidate))
+                        if (_repository.IsAWord(wordCandidate))
                         {
                             if (Verbose)
                             {
@@ -139,8 +139,8 @@ namespace WordDrMario
 
         public void WriteToConsole(int scoringAnimationFrame = 0)
         {
-            string[] INSTRUCTIONS = new[]
-            {
+            // ReSharper disable once InconsistentNaming
+            string[] INSTRUCTIONS = {
                 "CONTROLS",
                 "^ Up arrow     : Rotate letter pair.",
                 "<- Left arrow  : Move letter pair left.",
@@ -149,10 +149,10 @@ namespace WordDrMario
                 "S Score        : Green (1 pt), Dark green (3 pt)"
             };
 
-            for (int row = 0; row < Height; row++)
+            for (int row = 0; row < _height; row++)
             {
                 Console.Write("|");
-                for (int column = 0; column < Width; column++)
+                for (int column = 0; column < _width; column++)
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
                     bool isPartOfHorizontalWord = false;
@@ -221,7 +221,7 @@ namespace WordDrMario
                 Console.WriteLine();
             }
 
-            for (int column = 0; column < Width + 2; column++)
+            for (int column = 0; column < _width + 2; column++)
             {
                 Console.Write('-');
             }
@@ -231,9 +231,9 @@ namespace WordDrMario
         public int CalculateScore()
         {
             int score = 0;
-            for (int row = 0; row < Height; row++)
+            for (int row = 0; row < _height; row++)
             {
-                for (int column = 0; column < Width; column++)
+                for (int column = 0; column < _width; column++)
                 {
                     bool isPartOfHorizontalWord = false;
                     bool isPartOfVericalWord = false;
@@ -283,10 +283,10 @@ namespace WordDrMario
         public bool? FindVerticalWords()
         {
             bool foundAtLeastOneWord = false;
-            for (int columnIndex = 0; columnIndex < Width; columnIndex++)
+            for (int columnIndex = 0; columnIndex < _width; columnIndex++)
             {
                 StringBuilder columnBuilder = new StringBuilder();
-                for (int row = 0; row < Height; row++)
+                for (int row = 0; row < _height; row++)
                 {
                     columnBuilder.Append(Lines[row][columnIndex]);
                 }
@@ -295,11 +295,11 @@ namespace WordDrMario
                 //Does this string contains a word? 
                 for (int length = 6; 3 <= length; length--)
                 {
-                    for (int row = 0; row <= Height - 3; row++)
+                    for (int row = 0; row <= _height - 3; row++)
                     {
                         if (6 < row + length) break;
                         string wordCandidate = column.Substring(row, length);
-                        if (repository.IsAWord(wordCandidate))
+                        if (_repository.IsAWord(wordCandidate))
                         {
                             WordLocation locationToAdd = new WordLocation()
                             {
@@ -333,24 +333,24 @@ namespace WordDrMario
 
         public void DropAllLetters()
         {
-            string[] LettersToDrop = new string[Width];
-            for (int columnIndex = 0; columnIndex < Width; columnIndex++)
+            string[] lettersToDrop = new string[_width];
+            for (int columnIndex = 0; columnIndex < _width; columnIndex++)
             {
                 //start from the bottom. 
-                List<char> LettersToDropList = new List<char>();
+                List<char> lettersToDropList = new List<char>();
 
-                for (int rowIndex = Height - 1; 0 <= rowIndex; rowIndex--)
+                for (int rowIndex = _height - 1; 0 <= rowIndex; rowIndex--)
                 {
-                    LettersToDropList.Add(Lines[rowIndex][columnIndex]);
+                    lettersToDropList.Add(Lines[rowIndex][columnIndex]);
                 }
 
-                LettersToDrop[columnIndex] = string.Join("", LettersToDropList);
+                lettersToDrop[columnIndex] = string.Join("", lettersToDropList);
             }
 
             Clear();
-            for (int columnIndex = 0; columnIndex < Width; columnIndex++)
+            for (int columnIndex = 0; columnIndex < _width; columnIndex++)
             {
-                foreach (char letter in LettersToDrop[columnIndex])
+                foreach (char letter in lettersToDrop[columnIndex])
                 {
                     if (letter == ' ') continue;
                     DropLetter(letter, columnIndex);
@@ -363,7 +363,7 @@ namespace WordDrMario
         {
             for (var index = 0; index < Lines.Length; index++)
             {
-                Lines[index] = new string(' ', Width);
+                Lines[index] = new string(' ', _width);
             }
 
             FoundWords = new List<WordLocation>();
@@ -371,9 +371,9 @@ namespace WordDrMario
 
         public void DeleteFoundWords()
         {
-            for (int row = 0; row < Height; row++)
+            for (int row = 0; row < _height; row++)
             {
-                for (int column = 0; column < Width; column++)
+                for (int column = 0; column < _width; column++)
                 {
                     bool isPartOfHorizontalWord = false;
                     bool isPartOfVericalWord = false;

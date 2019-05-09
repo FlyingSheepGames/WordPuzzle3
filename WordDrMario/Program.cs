@@ -5,7 +5,7 @@ namespace WordDrMario
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             const int BOARD_WIDTH = 6;
             Console.CursorVisible = false;
@@ -48,7 +48,7 @@ namespace WordDrMario
                             readyForNextStep = true;
                             break;
                         case ConsoleKey.RightArrow:
-                            int rightLimit = BOARD_WIDTH;
+                            int rightLimit;
                             if (nextLetterPairHorizontal)
                             {
                                 rightLimit = BOARD_WIDTH - 2;
@@ -152,8 +152,8 @@ namespace WordDrMario
         private static string GenerateNextLetterPair()
         {
             Random random = new Random();
-            string[] LetterPairs = new[] {"ET", "AN", "TH", "HE", "AN", "IN", "ER", "ND", "RE", "ED", "ES", "OU", "TO"};
-            return LetterPairs[random.Next(LetterPairs.Length)];
+            string[] letterPairs = {"ET", "AN", "TH", "HE", "AN", "IN", "ER", "ND", "RE", "ED", "ES", "OU", "TO"};
+            return letterPairs[random.Next(letterPairs.Length)];
         }
 
         private static void DisplayScreen(WordGrid grid, string nextLetterPair, int nextLetterPairIndex, bool nextLetterPairHorizontal, bool stillAlive, int score, int scoringAnimationFrame = 0)
