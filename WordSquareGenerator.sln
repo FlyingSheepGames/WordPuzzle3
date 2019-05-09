@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzlesTest", "WordPuzzlesTest\WordPuzzlesTest.csproj", "{08947F41-4049-4D7D-90D2-A446002DDF8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeeklyThemeGenerator", "WeeklyThemeGenerator\WeeklyThemeGenerator.csproj", "{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzles", "WordPuzzles\WordPuzzles.csproj", "{F1AE5059-7E91-4553-9C57-647CBFB4FB51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordDrMario", "WordDrMario\WordDrMario.csproj", "{E526A677-485F-4FBB-A506-D13C343671DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordDrMarioTest", "WordDrMarioTest\WordDrMarioTest.csproj", "{A4C7F967-36A6-417E-94D4-604B442463F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPuzzleGenerator", "WordPuzzleGenerator\WordPuzzleGenerator.csproj", "{209D9FD3-C72E-4458-B140-B34D6991EB18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1AE5059-7E91-4553-9C57-647CBFB4FB51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1AE5059-7E91-4553-9C57-647CBFB4FB51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1AE5059-7E91-4553-9C57-647CBFB4FB51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1AE5059-7E91-4553-9C57-647CBFB4FB51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E526A677-485F-4FBB-A506-D13C343671DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E526A677-485F-4FBB-A506-D13C343671DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E526A677-485F-4FBB-A506-D13C343671DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E526A677-485F-4FBB-A506-D13C343671DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C7F967-36A6-417E-94D4-604B442463F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C7F967-36A6-417E-94D4-604B442463F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C7F967-36A6-417E-94D4-604B442463F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C7F967-36A6-417E-94D4-604B442463F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {275D63BF-AF80-4586-B7DA-C68A7980BFE9}
+	EndGlobalSection
+EndGlobal
