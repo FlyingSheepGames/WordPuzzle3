@@ -11,16 +11,16 @@ namespace WordPuzzleGenerator
 {
     class Program
     {
+        // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
-        static readonly WordRepository _wordRepository = new WordRepository() {ExludeAdvancedWords = true};
-        static readonly WordSquareHistory history = new WordSquareHistory(); //Todo: populate
-        static readonly AnagramFinder anagramFinder = new AnagramFinder() {Repository = _wordRepository};
-        static readonly Random random = new Random();
+        static readonly WordRepository WordRepository = new WordRepository() {ExludeAdvancedWords = true};
+        static readonly WordSquareHistory History = new WordSquareHistory(); //Todo: populate
+        static readonly AnagramFinder AnagramFinder = new AnagramFinder() {Repository = WordRepository};
+        static readonly Random RandomNumberGenerator = new Random();
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
-
-            //CreateApril2019BonusPuzzle();
+            //TODO: Add this to the menu. Get words that match pattern.
             //GetWordsForReadDownColumnPuzzle();
 
             Console.WriteLine("Enter the word or phrase you'd like to create a puzzle for.");
@@ -204,10 +204,12 @@ namespace WordPuzzleGenerator
             }
         }
 
+        // ReSharper disable once UnusedMember.Local
+        //TODO: Add "get words that match pattern to main menu.
         private static void GetWordsForReadDownColumnPuzzle()
         {
             int counter = 0;
-            foreach (string word in _wordRepository.WordsMatchingPattern("__o___"))
+            foreach (string word in WordRepository.WordsMatchingPattern("__o___"))
             {
                 Console.WriteLine(word);
                 if (counter++ % 20 == 0) Console.ReadKey();
@@ -238,23 +240,23 @@ namespace WordPuzzleGenerator
                 bool foundSentence = false;
                 while (!foundSentence)
                 {
-                    int blanksToAdd = random.Next(2, 5);
+                    int blanksToAdd = RandomNumberGenerator.Next(2, 5);
                     if (letter == 'q') //must be at least 4 letters long.
                     {
-                        blanksToAdd = random.Next(3, 5);
+                        blanksToAdd = RandomNumberGenerator.Next(3, 5);
                     }
 
                     StringBuilder patternBuilder = new StringBuilder();
                     patternBuilder.Append(letter);
                     patternBuilder.Append('_', blanksToAdd);
                     var pattern = patternBuilder.ToString();
-                    var hiddenWordCandidates = _wordRepository.WordsMatchingPattern(pattern);
+                    var hiddenWordCandidates = WordRepository.WordsMatchingPattern(pattern);
                     if (0 == hiddenWordCandidates.Count)
                     {
                         throw new Exception($"No words found for pattern {pattern}");
                     }
 
-                    string hiddenWordCandidate = hiddenWordCandidates[random.Next(hiddenWordCandidates.Count)];
+                    string hiddenWordCandidate = hiddenWordCandidates[RandomNumberGenerator.Next(hiddenWordCandidates.Count)];
                     var phrase = puzzle.HideWord(hiddenWordCandidate);
                     if (phrase.Count == 2)
                     {
@@ -305,33 +307,6 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static void CreateApril2019BonusPuzzle()
-        {
-            foreach (string state in new[] { "Alaska",})
-            {
-
-                LettersAndArrowsPuzzle puzzle;
-
-                try
-                {
-                    puzzle = new LettersAndArrowsPuzzle(state, true, 4);
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine($"Exception {exception.Message} thrown when trying to create a puzzle for {state}");
-                    continue;
-                }
-
-                var formatHtmlForGoogle = puzzle.FormatHtmlForGoogle();
-
-                Clipboard.SetData(DataFormats.Html, formatHtmlForGoogle);
-
-                Console.WriteLine(formatHtmlForGoogle);
-                Console.WriteLine($"Puzzle for {state} copied to clipboard. Press any key to continue.");
-                Console.ReadKey();
-
-            }
-        }
 
         private static void InteractiveFindLettersAndArrowsPuzzle(string solution)
         {
@@ -351,6 +326,10 @@ namespace WordPuzzleGenerator
         {
             Console.WriteLine($"Enter a clue for {solution.ToUpper()}, or press 'z' to skip.");
             string initialClue = Console.ReadLine();
+            if (initialClue == null)
+            {
+                return;
+            }
             if ("z" == initialClue.ToLower())
             {
                 return;
@@ -361,7 +340,7 @@ namespace WordPuzzleGenerator
             while ('c' == lastKeyPressed)
             {
                 int candidateIndex = 0;
-                var indexToReplace = random.Next(0, ladder.Size);
+                var indexToReplace = RandomNumberGenerator.Next(0, ladder.Size);
                 int wordsAddedSoFar = ladder.Chain.Count;
                 List<string> nextWordCandidates = new List<string>();
 
@@ -439,7 +418,7 @@ namespace WordPuzzleGenerator
                 return;
             }
 
-            string formatForGoogle = sudoku.FormatForGoogle(true);
+            string formatForGoogle = sudoku.FormatForGoogle();
 
             Console.WriteLine(formatForGoogle);
 
@@ -456,7 +435,7 @@ namespace WordPuzzleGenerator
 
         }
 
-        private static WordSquare InteractiveFindWordSquare(string relatedWord)
+        private static void InteractiveFindWordSquare(string relatedWord)
         {
             string fileWithMagicWordSquares = WordSquare.GetFileNameFor(relatedWord);
             if (!File.Exists(fileWithMagicWordSquares))
@@ -466,7 +445,7 @@ namespace WordPuzzleGenerator
 
 
             List<WordSquare> availableWordSquares = WordSquare.ReadAllWordSquaresFromFile(fileWithMagicWordSquares, relatedWord.Length);
-            availableWordSquares.Sort((p, q) => history.CalculateScore(q) - history.CalculateScore(p));
+            availableWordSquares.Sort((p, q) => History.CalculateScore(q) - History.CalculateScore(p));
             int availableSquareCount = availableWordSquares.Count;
             WordSquare selectedSquare = null;
             int squareIndex = 0;
@@ -477,7 +456,7 @@ namespace WordPuzzleGenerator
                 Console.WriteLine($"Or enter 'z' to skip to the next word.");
 
                 Console.WriteLine(availableWordSquare);
-                Console.WriteLine($"Score: {history.CalculateScore(availableWordSquare)}");
+                Console.WriteLine($"Score: {History.CalculateScore(availableWordSquare)}");
 
                 var userReaction = Console.ReadKey();
                 if (userReaction.KeyChar == 'z')
@@ -496,7 +475,7 @@ namespace WordPuzzleGenerator
                     for (int currentLineIndex = 0; currentLineIndex < selectedSquare.Size; currentLineIndex++)
                     {
                         string currentLine = currentLines[currentLineIndex];
-                        string previousClue = _wordRepository.FindClueFor(currentLine);
+                        string previousClue = WordRepository.FindClueFor(currentLine);
 
                         Console.WriteLine($"Enter a clue for {currentLine} (or enter 0 to choose another square) [{previousClue}]:");
                         string suggestedClue = Console.ReadLine();
@@ -525,8 +504,8 @@ namespace WordPuzzleGenerator
                                 userInput = Console.ReadKey();
                             }
 
-                            _wordRepository.AddClue(currentLine, suggestedClue);
-                            _wordRepository.SaveClues();
+                            WordRepository.AddClue(currentLine, suggestedClue);
+                            WordRepository.SaveClues();
                         }
                         selectedSquare.Clues[currentLineIndex] = suggestedClue;
                     }
@@ -550,19 +529,14 @@ namespace WordPuzzleGenerator
 
                 }
             }
-            return selectedSquare;
         }
 
         private static void GenerateWordSquaresOfAnySize(string firstWordCandidate)
         {
             WordSquare square = new WordSquare(new string('_', firstWordCandidate.Length) );
-            square.Repository = _wordRepository;
+            square.Repository = WordRepository;
 
             int[] wordsConsiderByLevel = { 0, 0, 0, 0, 0, 0, };
-            int secondWordsConsidered = 0;
-            int thirdWordsConsidered = 0;
-            int fourthWordsConsidered = 0;
-            int fifthWordsConsidered = 0;
 
             if (!Directory.Exists(BASE_DIRECTORY + $@"wordsquares\"))
             {
@@ -645,7 +619,7 @@ namespace WordPuzzleGenerator
             List<string> wordsAlreadyUsed = new List<string>();
             bool boolAddedAtLeastOneClue = false;
 
-            int selectedIndex = Int32.MinValue;
+            int selectedIndex;
             bool readyToProceed = false;
             Anacrostic anacrostic = null;
 
@@ -656,6 +630,11 @@ namespace WordPuzzleGenerator
                 Console.WriteLine(@"Which words should we remove? 
 Press 0 to continue to the next step.");
                 string commaDelimitedResponse = Console.ReadLine();
+                if (commaDelimitedResponse == null)
+                {
+                    Console.WriteLine($"I don't know what you mean.");
+                    continue;
+                }
                 foreach (string response in commaDelimitedResponse.Split( new[] { ","}, StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (int.TryParse(response, out selectedIndex))
@@ -708,7 +687,7 @@ Press 0 to continue to the next step.");
                             string wordToAnagram = anacrostic.WordsFoundSoFar[selectedIndex];
                             string remainingLetters = anacrostic.RemainingLetters();
                             Console.WriteLine($"Generating anagrams using {wordToAnagram} + {remainingLetters} ");
-                            var anagrams = anagramFinder.FindAnagram(wordToAnagram + remainingLetters);
+                            var anagrams = AnagramFinder.FindAnagram(wordToAnagram + remainingLetters);
                             int anagramIndex = 1;
                             if (0 < anagrams.Count)
                             {
@@ -721,13 +700,19 @@ Press 0 to continue to the next step.");
                                 Console.Write(@"Which anagram(s) should we use? 
 Enter 0 for none.");
                                 string responseForAnagramSelection = Console.ReadLine();
+                                if (responseForAnagramSelection == null)
+                                {
+                                    responseForAnagramSelection = "0";
+                                }
                                 if (responseForAnagramSelection != "0")
                                 {
-                                    foreach (string selectedAnagramIndexAsString in responseForAnagramSelection.Split(
+                                    var selectedAnagramIndexAsStrings = responseForAnagramSelection.Split(
                                         new[]  {","},
-                                        StringSplitOptions.RemoveEmptyEntries))
+                                        StringSplitOptions.RemoveEmptyEntries);
+
+                                    foreach (string selectedAnagramIndexAsString in selectedAnagramIndexAsStrings)
                                     {
-                                        int selectedAnagramIndex = -1;
+                                        int selectedAnagramIndex;
                                         if (int.TryParse(selectedAnagramIndexAsString, out selectedAnagramIndex))
                                         {
                                             if (parameterSet.WordsToUse.Contains(wordToAnagram))
@@ -749,9 +734,6 @@ Enter 0 for none.");
                             {
                                 Console.Write(@"No anagrams found.");
                             }
-
-
-                            readyToProceed = false;
                         }
                     }
 
@@ -759,7 +741,6 @@ Enter 0 for none.");
                 else
                 {
                     Console.WriteLine($"I don't know what you mean by {response} .");
-                    readyToProceed = false;
                 }
             }
 
@@ -783,8 +764,8 @@ Enter 0 for none.");
 
             foreach (PuzzleWord clue in anacrostic.puzzle.Clues)
             {
-                string clueAsString = (string)clue;
-                string previouslyUsedClue = _wordRepository.FindClueFor(clueAsString);
+                string clueAsString = clue;
+                string previouslyUsedClue = WordRepository.FindClueFor(clueAsString);
                 if (string.IsNullOrWhiteSpace(previouslyUsedClue))
                 {
                     Console.WriteLine($"Enter customized clue for {clueAsString}:");
@@ -792,7 +773,7 @@ Enter 0 for none.");
                     if (!string.IsNullOrWhiteSpace(userEnteredHint))
                     {
                         clue.CustomizedClue = userEnteredHint;
-                        _wordRepository.AddClue(clueAsString, userEnteredHint);
+                        WordRepository.AddClue(clueAsString, userEnteredHint);
                         boolAddedAtLeastOneClue = true;
                     }
                 }
@@ -813,14 +794,14 @@ Enter 0 for none.");
 
             if (boolAddedAtLeastOneClue)
             {
-                _wordRepository.SaveClues();
+                WordRepository.SaveClues();
             }
         }
 
         private static Anacrostic CreateAnacrosticFromPuzzleSet(AnacrosticParameterSet parameterSet, List<string> wordsAlreadyUsed)
         {
             Anacrostic anacrostic = new Anacrostic(parameterSet.Phrase);
-            anacrostic.Repository = _wordRepository;
+            anacrostic.Repository = WordRepository;
             anacrostic.IgnoreWord("zeroes");
             anacrostic.IgnoreWord("zeros");
             foreach (string wordAlreadyUsed in wordsAlreadyUsed)
