@@ -193,11 +193,11 @@ What color was the emergency vehicle that was unexpectedly attacked?
         public class FindWordsThatStartWith
         {
             [Test]
-            public void NoWords_ReturnsNull()
+            public void NoWords_ReturnsEmptySet()
             {
                 ALittleAlliteration alliteration = new ALittleAlliteration();
                 int totalWordsFound;
-                Assert.IsNull(alliteration.FindWordsThatStartWith("aaa", out totalWordsFound));
+                Assert.AreEqual(0, alliteration.FindWordsThatStartWith("aaa", out totalWordsFound).Count);
             }
 
             [Test]

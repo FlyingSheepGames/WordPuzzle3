@@ -143,12 +143,16 @@ namespace WordPuzzles
                 @"http://www.morewords.com/most-common-starting-with/{0}/",
                 initialLetters));
 
-            var wordsFound = ParseContent(content, out totalWordsFound);
+            var wordsFound = ParseContentOldFormat(content, out totalWordsFound);
+            if (wordsFound == null || totalWordsFound == 0)
+            {
+                wordsFound = ParseContentNewFormat(content, out totalWordsFound);
+            }
             wordsFound?.Sort();
             return wordsFound;
         }
 
-        public List<string> ParseContent(string content, out int wordCount)
+        public List<string> ParseContentOldFormat(string content, out int wordCount)
         {
             wordCount = 0;
             if (string.IsNullOrEmpty(content)) return null;
@@ -159,10 +163,17 @@ namespace WordPuzzles
                 content = content.Substring(0, startOfUncommonWords);
             }
 
-            int startOfList = content.IndexOf(@"per million words</p>", StringComparison.Ordinal);
+            string lastTextBeforeList = @"per million words</p>";
+            int startOfList = content.IndexOf(lastTextBeforeList, StringComparison.Ordinal);
+            if (startOfList <= -1)
+            {
+                lastTextBeforeList = @"The words occuring most frequently are shown first.</p>";
+                startOfList = content.IndexOf(lastTextBeforeList,
+                    StringComparison.CurrentCulture); //Try to parse the new format of the page.
+            }
             if (-1 < startOfList)
             {
-                content = content.Substring(startOfList + @"per million words</p>".Length);
+                content = content.Substring(startOfList + lastTextBeforeList.Length);
             }
             List<string> wordsFound = new List<string>();
             var lines = content.Split(new[] { @"<br />" }, StringSplitOptions.RemoveEmptyEntries);
@@ -172,6 +183,45 @@ namespace WordPuzzles
                 {
                     var lineWithoutOpeningAnchorTag = line.Substring(@"<a href=""/word/".Length);
                     int endOfWord = lineWithoutOpeningAnchorTag.IndexOf('/');
+                    string word = lineWithoutOpeningAnchorTag.Substring(0, endOfWord);
+                    //Console.WriteLine(word);
+                    if (wordCount < MAX_WORDS_TO_RETURN)
+                    {
+                        AddIfDistinct(word, wordsFound);
+                    }
+                    wordCount++;
+
+                }
+            }
+            return wordsFound;
+        }
+
+        public List<string> ParseContentNewFormat(string content, out int wordCount)
+        {
+            wordCount = 0;
+            if (string.IsNullOrEmpty(content)) return null;
+            if (content.Contains(@"No words starting with")) return null;
+            int startOfUncommonWords = content.IndexOf(@"less common words", StringComparison.Ordinal);
+            if (-1 < startOfUncommonWords)
+            {
+                content = content.Substring(0, startOfUncommonWords);
+            }
+
+            string lastTextBeforeList = @"The words occuring most frequently are shown first.</p>";
+            int startOfList = content.IndexOf(lastTextBeforeList, StringComparison.Ordinal);
+            if (-1 < startOfList)
+            {
+                content = content.Substring(startOfList + lastTextBeforeList.Length);
+            }
+            List<string> wordsFound = new List<string>();
+            var lines = content.Split(new[] { @"<p>" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                var trimmedLine = line.Trim();
+                if (trimmedLine.StartsWith(@"<a href=""https://www.morewords.com/word/"))
+                {
+                    var lineWithoutOpeningAnchorTag = trimmedLine.Substring(@"<a href=""https://www.morewords.com/word/".Length);
+                    int endOfWord = lineWithoutOpeningAnchorTag.IndexOf('"');
                     string word = lineWithoutOpeningAnchorTag.Substring(0, endOfWord);
                     //Console.WriteLine(word);
                     if (wordCount < MAX_WORDS_TO_RETURN)
