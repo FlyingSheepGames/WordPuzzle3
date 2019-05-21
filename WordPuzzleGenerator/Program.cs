@@ -310,7 +310,7 @@ namespace WordPuzzleGenerator
 
         private static void InteractiveFindLettersAndArrowsPuzzle(string solution)
         {
-            LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution);
+            LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution, true);
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {

@@ -1,0 +1,115 @@
+<html>
+<head>
+<style> 
+input {
+    width: 20;
+}
+</style>
+
+<script>
+
+window.addEventListener('input', function (e) {
+
+var currentIndex = Number(e.target.id.substring(6))
+var nextIndex = currentIndex + 1;
+var uppercaseLetter =  e.target.value.toUpperCase();
+e.target.value = uppercaseLetter;
+
+var matchingLetterElementId = "letter" + indexMap[currentIndex];
+var matchingLetterElement = document.getElementById(matchingLetterElementId);
+if (matchingLetterElement)
+	{
+	matchingLetterElement.value=uppercaseLetter;
+	}
+
+var nextIndexElementId = "letter" + nextIndex;
+
+var nextElement = document.getElementById(nextIndexElementId);
+if (nextElement)
+	{
+	nextElement.focus();
+    nextElement.setSelectionRange(0,1);
+	}
+else {
+e.target.blur();
+}
+}, false);
+
+function colorMeAndMyMatch(currentIndex, color) {
+
+    var letterElementId = "letter" + currentIndex;
+    var letterElement = document.getElementById(letterElementId);
+    letterElement.style.backgroundColor = color;
+
+    var matchingLetterElementId = "letter" + indexMap[currentIndex];
+    var matchingLetterElement = document.getElementById(matchingLetterElementId);
+    matchingLetterElement.style.backgroundColor = color;
+
+}
+</script>
+
+<script>
+/*
+E 0 <-> 12
+X 1 <-> 9
+A 2 <-> 8
+M 3 <-> 7
+P 4 <-> 10
+L 5 <-> 13
+E 6 <-> 11
+
+-----
+M 7 <-> 3
+A 8 <-> 2
+X 9 <-> 1
+ 
+P 10 <-> 4
+E 11 <-> 6
+E 12 <-> 0
+L 13 <-> 5
+*/
+var indexMap = [12, 9, 8, 7, 10, 13, 11, 3, 2, 1, 4, 6, 0, 5];
+
+</script>
+
+</head>
+
+<body>
+<form>
+
+<table border="0">
+<tr>
+	<td>
+	Clue for example:
+	</td>
+
+	<td>
+	<input type="text" size="1" maxlength="1" id="letter0" onFocus="colorMeAndMyMatch(0,'yellow');" onBlur="colorMeAndMyMatch(0,'white');"
+	/><input type="text" size="1" maxlength="1" id="letter1" onFocus="colorMeAndMyMatch(1,'yellow');" onBlur="colorMeAndMyMatch(1,'white');"
+	/><input type="text" size="1" maxlength="1" id="letter2" onFocus="colorMeAndMyMatch(2,'yellow');" onBlur="colorMeAndMyMatch(2,'white');"
+	/><input type="text" size="1" maxlength="1" id="letter3" onFocus="colorMeAndMyMatch(3,'yellow');" onBlur="colorMeAndMyMatch(3,'white');"
+	/><input type="text" size="1" maxlength="1" id="letter4" onFocus="colorMeAndMyMatch(4,'yellow');" onBlur="colorMeAndMyMatch(4,'white');"
+	/><input type="text" size="1" maxlength="1" id="letter5" onFocus="colorMeAndMyMatch(5,'yellow');" onBlur="colorMeAndMyMatch(5,'white');"
+	/><input type="text" size="1" maxlength="1" id="letter6" onFocus="colorMeAndMyMatch(6,'yellow');" onBlur="colorMeAndMyMatch(6,'white');"
+	/>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+	<input type="text" size="1" maxlength="1" id="letter7" onFocus="colorMeAndMyMatch(7,'yellow');" onBlur="colorMeAndMyMatch(7,'white');" 
+	/><input type="text" size="1" maxlength="1" id="letter8" onFocus="colorMeAndMyMatch(8,'yellow');" onBlur="colorMeAndMyMatch(8,'white');" 
+	/><input type="text" size="1" maxlength="1" id="letter9" onFocus="colorMeAndMyMatch(9,'yellow');" onBlur="colorMeAndMyMatch(9,'white');" 
+	/>
+	&nbsp;
+	&nbsp;
+	<input type="text" size="1" maxlength="1" id="letter10" onFocus="colorMeAndMyMatch(10,'yellow');" onBlur="colorMeAndMyMatch(10,'white');" 
+	/><input type="text" size="1" maxlength="1" id="letter11" onFocus="colorMeAndMyMatch(11,'yellow');" onBlur="colorMeAndMyMatch(11,'white');" 
+	/><input type="text" size="1" maxlength="1" id="letter12" onFocus="colorMeAndMyMatch(12,'yellow');" onBlur="colorMeAndMyMatch(12,'white');" 
+	/><input type="text" size="1" maxlength="1" id="letter13" onFocus="colorMeAndMyMatch(13,'yellow');" onBlur="colorMeAndMyMatch(13,'white');" 
+	/>
+	</td>
+</tr>
+</table>
+</form>
+</body>
+</html>

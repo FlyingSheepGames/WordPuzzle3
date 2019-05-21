@@ -7,7 +7,7 @@ namespace WordPuzzles
 
     public class LettersAndArrowsPuzzle
     {
-        internal readonly Random RandomNumberGenerator = new Random();
+        internal Random _randomNumberGenerator;
         public int Size { get; set; }
         private readonly Dictionary<string, LetterAndArrowCell> _grid = new Dictionary<string, LetterAndArrowCell>();
         public LettersAndArrowsPuzzle(int size)
@@ -53,6 +53,26 @@ namespace WordPuzzles
         }
 
         public bool RowsMustFormWords { get; set; }
+        public int RandomSeed { get; set; }
+
+        internal Random RandomNumberGenerator
+        {
+            get
+            {
+                if (_randomNumberGenerator == null)
+                {
+                    if (RandomSeed == 0)
+                    {
+                        _randomNumberGenerator = new Random();
+                    }
+                    else
+                    {
+                        _randomNumberGenerator = new Random(RandomSeed);
+                    }
+                }
+                return _randomNumberGenerator;
+            }
+        }
 
         private int CalculateSizeBasedOnSolutionLength(int solutionLength)
         {
@@ -177,6 +197,10 @@ namespace WordPuzzles
         public void SetCellAtCoordinates(int row, int column, LetterAndArrowCell cell)
         {
             _grid[string.Concat(row, column)] = cell;
+            if (!RowsVisited.Contains(row))
+            {
+                RowsVisited.Add(row);
+            }
         }
 
         public void PlaceSolution(string solution)
@@ -213,7 +237,7 @@ namespace WordPuzzles
                         Console.WriteLine("About to hit exception.");
                         Console.WriteLine(FormatHtmlForGoogle());
                     }
-                    if (verticalOptionsCount < horizontalOptionsCount) //go horizontal, unless there are more vertical options.
+                    if (verticalOptionsCount < horizontalOptionsCount) //only go horizontal if there are fewer vertical options.
                     {
                         nextColumnOffset = horizontalOptions[RandomNumberGenerator.Next(horizontalOptionsCount)];
                         if (0 < nextColumnOffset)
@@ -227,7 +251,8 @@ namespace WordPuzzles
                     }
                     else
                     {
-                        nextRowOffset = verticalOptions[RandomNumberGenerator.Next(verticalOptionsCount)];
+                        int selectedVerticalOption = SelectVerticalOptionToMaximizeRowsVisited(verticalOptions, currentRow);
+                        nextRowOffset = verticalOptions[selectedVerticalOption];
                         if (0 < nextRowOffset)
                         {
                             nextDirection = Direction.Down;
@@ -248,6 +273,36 @@ namespace WordPuzzles
                 currentColumn += nextColumnOffset;
             }
         }
+
+        private int SelectVerticalOptionToMaximizeRowsVisited(List<int> verticalOptions, int currentRow)
+        {
+            List<int> offsetIndiciesThatVisitANewRow = new List<int>();
+            for (var index = 0; index < verticalOptions.Count; index++)
+            {
+                int offset = verticalOptions[index];
+                if (!HaveAlreadyVisitedRow(currentRow + offset))
+                {
+                    offsetIndiciesThatVisitANewRow.Add(index);
+                }
+            }
+
+            if (offsetIndiciesThatVisitANewRow.Count == 0) //none of the options will increase the number of rows visited. Pick a random one.
+            {
+                return RandomNumberGenerator.Next(verticalOptions.Count);
+            }
+            else
+            {
+                //randomly select amoung the ones that will visit a new row.
+                return offsetIndiciesThatVisitANewRow[RandomNumberGenerator.Next(offsetIndiciesThatVisitANewRow.Count)]; 
+            }
+        }
+
+        private bool HaveAlreadyVisitedRow(int row)
+        {
+            return RowsVisited.Contains(row);
+        }
+
+        public List<int> RowsVisited = new List<int>();
 
         public string FormatHtmlForGoogle()
         {

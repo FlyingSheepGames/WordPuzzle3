@@ -250,6 +250,17 @@ namespace WordPuzzlesTest
                 Assert.AreEqual(0, actualD.Number);
                 Assert.AreEqual(Direction.Undefined, actualD.Direction);
             }
+
+            [Test]
+            public void FiveLetters_VisitsAllRows()
+            {
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(3);
+                puzzle.RandomSeed = 1;
+                puzzle.PlaceSolution("12345");
+                Console.WriteLine(puzzle.FormatHtmlForGoogle());
+                //The third box (in the center) should go down, not up. 
+                Assert.AreEqual(Direction.Down, puzzle.GetCellAtCoordinates(1, 1).Direction);
+            }
         }
 
         [TestFixture]
