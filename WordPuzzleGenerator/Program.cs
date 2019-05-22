@@ -39,7 +39,7 @@ namespace WordPuzzleGenerator
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"Which type of puzzle would you like to create for '{solution}'?");
-                Console.WriteLine("0. None. Quit.");
+                Console.WriteLine("0. None. Quit to word patterns.");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
                 Console.WriteLine("1. Word Square");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
@@ -202,6 +202,26 @@ namespace WordPuzzleGenerator
                         break;
                 }
             }
+
+            string wordPattern = "test";
+            while (!string.IsNullOrWhiteSpace(wordPattern))
+            {
+                Console.Clear();
+
+                int counter = 0;
+                foreach (string word in WordRepository.WordsMatchingPattern(wordPattern))
+                {
+                    if (counter++ % 5 == 0)
+                    {
+                        Console.WriteLine();
+                    }
+                    Console.Write(word);
+                    Console.Write('\t');
+                }
+                Console.WriteLine();
+                Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
+                wordPattern = Console.ReadLine();
+            }
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -226,7 +246,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.Anacrostic, (7 < solutionLength && solutionLength < 57));
             availablePuzzleTypes.Add(WordPuzzleType.WordLadder, (2 < solutionLength && solutionLength < 7));
             availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (3 < solutionLength && solutionLength < 30));
-            availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30));
+            availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
             availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
 
             return availablePuzzleTypes;
