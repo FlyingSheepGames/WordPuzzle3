@@ -26,7 +26,7 @@ namespace WordPuzzles
                 url += $"&sheet={EncodeQuery(sheetName)}";
             }
 
-            string response = WebRequestUtility.ReadHTMLPageFromUrl(url, IgnoreCache);
+            string response = WebRequestUtility.ReadHtmlPageFromUrl(url, IgnoreCache);
 
             var results = ReadGenericDictionaryFromResponse(response);
 

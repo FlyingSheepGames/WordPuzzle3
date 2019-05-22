@@ -13,6 +13,7 @@ namespace WordPuzzles
 {
     public class WordRepository
     {
+        // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
         [XmlIgnore]
@@ -25,14 +26,14 @@ namespace WordPuzzles
         [XmlIgnore]
         public bool ExludeAdvancedWords { get; set; }
 
-        readonly Random randomNumberGenerator = new Random();
+        readonly Random _randomNumberGenerator = new Random();
 
         private readonly List<string> _threeLetterWords = new List<string>();
         private readonly List<string> _fourLetterWords = new List<string>();
         private readonly List<string> _fiveLetterWords = new List<string>();
         private readonly List<string> _sixLetterWords = new List<string>();
-        private bool _alreadyLoaded = false;
-        private static readonly Dictionary<string, string> _dictionaryOfClues = new Dictionary<string, string>();
+        private bool _alreadyLoaded;
+        private static readonly Dictionary<string, string> DictionaryOfClues = new Dictionary<string, string>();
 
         public bool IgnoreCache = true;
         public void LoadAllWords()
@@ -78,9 +79,9 @@ namespace WordPuzzles
                     string hintForCurrentWord = result[2];
                     if (!string.IsNullOrWhiteSpace(hintForCurrentWord))
                     {
-                        if (!_dictionaryOfClues.ContainsKey(currentWord))
+                        if (!DictionaryOfClues.ContainsKey(currentWord))
                         {
-                            _dictionaryOfClues.Add(currentWord, hintForCurrentWord);
+                            DictionaryOfClues.Add(currentWord, hintForCurrentWord);
                         }
                     }
                 }
@@ -143,9 +144,9 @@ namespace WordPuzzles
                     string hintForCurrentWord = result[HINT_INDEX];
                     if (!string.IsNullOrWhiteSpace(hintForCurrentWord))
                     {
-                        if (!_dictionaryOfClues.ContainsKey(currentWord))
+                        if (!DictionaryOfClues.ContainsKey(currentWord))
                         {
-                            _dictionaryOfClues.Add(currentWord, hintForCurrentWord);
+                            DictionaryOfClues.Add(currentWord, hintForCurrentWord);
                         }
                     }
                 }
@@ -302,7 +303,7 @@ namespace WordPuzzles
                 listOfWords = _fourLetterWords;
             }
             int wordCount = listOfWords.Count;
-            int randomIndex = randomNumberGenerator.Next(wordCount);
+            int randomIndex = _randomNumberGenerator.Next(wordCount);
             return listOfWords[randomIndex];
         }
 
@@ -313,9 +314,9 @@ namespace WordPuzzles
                 LoadAllWords();
             }
 
-            if (_dictionaryOfClues.ContainsKey(clueAsString))
+            if (DictionaryOfClues.ContainsKey(clueAsString))
             {
-                return _dictionaryOfClues[clueAsString];
+                return DictionaryOfClues[clueAsString];
             }
 
             return null;
@@ -326,7 +327,7 @@ namespace WordPuzzles
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                fileName = BASE_DIRECTORY + $@"clues.xml";
+                fileName = BASE_DIRECTORY + @"clues.xml";
             }
             XmlSerializer serializer = new XmlSerializer(typeof(List<Clue>));
             using (var fileWriter = new XmlTextWriter(fileName, Encoding.ASCII))
@@ -339,9 +340,9 @@ namespace WordPuzzles
 
         public void AddClue(string clueAsString, string userEnteredHint)
         {
-            if (!_dictionaryOfClues.ContainsKey(clueAsString))
+            if (!DictionaryOfClues.ContainsKey(clueAsString))
             {
-                _dictionaryOfClues.Add(clueAsString, userEnteredHint);
+                DictionaryOfClues.Add(clueAsString, userEnteredHint);
             }
             SaveClues();
         }
@@ -349,9 +350,9 @@ namespace WordPuzzles
         public void SaveClues()
         {
             List<Clue> cluesToSave = new List<Clue>();
-            foreach (string key in _dictionaryOfClues.Keys)
+            foreach (string key in DictionaryOfClues.Keys)
             {
-                cluesToSave.Add(new Clue() {Word = key, Hint = _dictionaryOfClues[key]});
+                cluesToSave.Add(new Clue() {Word = key, Hint = DictionaryOfClues[key]});
             }
             WriteToDisk(cluesToSave);
         }
@@ -391,9 +392,7 @@ namespace WordPuzzles
 
         public bool IsSingleSyllable(string word)
         {
-            string start;
-            string end;
-            return IsSingleSyllable(word, out start, out end);
+            return IsSingleSyllable(word, out _, out _);
         }
 
         public bool IsSingleSyllable(string word, out string actualStartConsonant, out string actualEndConsonant)
@@ -457,9 +456,9 @@ namespace WordPuzzles
                 LoadAllWords();
             }
 
-            foreach (string key in _dictionaryOfClues.Keys)
+            foreach (string key in DictionaryOfClues.Keys)
             {
-                googleRowsBuilder.AppendLine($"{key}\t{key.Length}\t{_dictionaryOfClues[key]}");
+                googleRowsBuilder.AppendLine($"{key}\t{key.Length}\t{DictionaryOfClues[key]}");
             }
 
 
@@ -540,7 +539,7 @@ namespace WordPuzzles
 
         public WordCategory CategorizeWord(string word)
         {
-            string html = WebRequestUtility.ReadHTMLPageFromUrl($"https://kids.wordsmyth.net/we/?ent={word}");
+            string html = WebRequestUtility.ReadHtmlPageFromUrl($"https://kids.wordsmyth.net/we/?ent={word}");
             if (html.Contains("<span class=\"dictionary\">Advanced Dictionary</span>"))
             {
                 return WordCategory.AdvancedWord;

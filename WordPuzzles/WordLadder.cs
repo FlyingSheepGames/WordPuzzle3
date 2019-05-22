@@ -5,7 +5,7 @@ namespace WordPuzzles
 {
     public class WordLadder
     {
-        readonly WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
         public string Solution { get; }
         public int Size { get; set; }
 
@@ -22,7 +22,7 @@ namespace WordPuzzles
         {
             string patternToMatch = previousWord.Substring(0, indexToReplace) + "_" + previousWord.Substring(indexToReplace+1);
 
-            List<string> wordsMatchingPattern = repository.WordsMatchingPattern(patternToMatch);
+            List<string> wordsMatchingPattern = _repository.WordsMatchingPattern(patternToMatch);
             wordsMatchingPattern.Remove(previousWord);
             return wordsMatchingPattern;
         }
@@ -55,7 +55,7 @@ namespace WordPuzzles
                 builder.AppendLine($"\t\t<td>{entry.Clue}</td>");
                 for (int i = 0; i < Size; i++)
                 {
-                    builder.AppendLine($"\t\t<td> </td>");
+                    builder.AppendLine("\t\t<td> </td>");
                 }
                 builder.AppendLine("\t</tr>");
             }

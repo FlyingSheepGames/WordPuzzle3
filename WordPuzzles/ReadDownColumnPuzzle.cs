@@ -9,22 +9,21 @@ namespace WordPuzzles
         private string _solution;
         public List<string> Words = new List<string>();
         public int Size => 6;
-        private readonly Random random = new Random();
+        private readonly Random _random = new Random();
         public WordRepository Repository => new WordRepository() {ExludeAdvancedWords = true};
         public int NumberOfWordsToInclude => 3;
 
         public string Solution
         {
-            get { return _solution; }
-            set { _solution = value.ToLower(); }
+            get => _solution;
+            set => _solution = value.ToLower();
         }
 
         public void PopulateWords()
         {
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < Solution.Length; i++)
+            foreach (var letterToPlace in Solution)
             {
-                char letterToPlace = Solution[i];
                 if (!char.IsLetter(letterToPlace))
                 {
                     continue;
@@ -38,7 +37,7 @@ namespace WordPuzzles
                 StringBuilder selectedWordCanidates = new StringBuilder();
                 for (int includedWordCount = 0; includedWordCount < NumberOfWordsToInclude; includedWordCount++)
                 {
-                    selectedWordCanidates.Append(wordCandidates[random.Next(wordCandidates.Count)]);
+                    selectedWordCanidates.Append(wordCandidates[_random.Next(wordCandidates.Count)]);
                     if (includedWordCount != (NumberOfWordsToInclude - 1))
                     {
                         selectedWordCanidates.Append(", ");

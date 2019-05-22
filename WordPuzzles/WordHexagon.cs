@@ -8,10 +8,10 @@ namespace WordPuzzles
 {
     public class WordHexagon
     {
-        readonly WordRepository repository = new WordRepository();
+        readonly WordRepository _repository = new WordRepository();
         public List<string> UniqueWords = new List<string>();
         public bool Verbose = true;
-        public int Size = 3;
+        public int Size;
 
         public WordHexagon() : this(3)
         {
@@ -52,7 +52,7 @@ namespace WordPuzzles
                 Lines[index] = original.Lines[index];
             }
 
-            repository = original.repository;
+            _repository = original._repository;
             _xmlSerializer = original._xmlSerializer;
         }
 
@@ -247,7 +247,7 @@ namespace WordPuzzles
             if (!string.IsNullOrWhiteSpace(missingWordPattern))
             {
                 List<string> findDiagonalLineAtIndex = new List<string>();
-                foreach (string word in repository.WordsMatchingPattern(missingWordPattern))
+                foreach (string word in _repository.WordsMatchingPattern(missingWordPattern))
                 {
                     var wordInLowercase = word.ToLower();
                     if (UniqueWords.Contains(wordInLowercase)) continue;
@@ -429,6 +429,10 @@ namespace WordPuzzles
             {
                 if (index == 3) //three letters before *
                 {
+                    if (wordPattern is null)
+                    {
+                        throw new Exception($"Null word pattern at index {index} .");
+                    }
                     wordPattern = wordPattern.Substring(0, 3);
                 }
 
@@ -562,7 +566,7 @@ namespace WordPuzzles
             switch (patternToCheck.Split(new[] {'_'}, StringSplitOptions.None).Length)
             {
                 case 1:
-                    if (!repository.IsAWord(patternToCheck))
+                    if (!_repository.IsAWord(patternToCheck))
                     {
                         if (Verbose)
                         {
@@ -576,7 +580,7 @@ namespace WordPuzzles
                     }
                     break;
                 case 2:
-                    if (0 == repository.WordsMatchingPattern(patternToCheck).Count)
+                    if (0 == _repository.WordsMatchingPattern(patternToCheck).Count)
                     {
                         if (Verbose)
                         {

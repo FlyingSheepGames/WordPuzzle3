@@ -12,12 +12,11 @@ namespace WordPuzzles
     {
         static readonly List<string> FailedRequests = new List<string>();
 
-        static readonly Dictionary<string, string> CachedRequests = new Dictionary<string, string>();
-
+        // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
-        private static bool BggTooManyRequests = false;
-        public static string ReadHTMLPageFromUrl(string url, bool ignoreCache = false)
+        private static bool _bggTooManyRequests;
+        public static string ReadHtmlPageFromUrl(string url, bool ignoreCache = false)
         {
             if (FailedRequests.Contains(url))
             {
@@ -32,15 +31,9 @@ namespace WordPuzzles
                 }
             }
 
-            if (CachedRequests.ContainsKey(url))
-            {
-                Debug.WriteLine("Using cached content.");
-                return CachedRequests[url];
-            }
-
             if (url.ToLower().Contains("/boardgamegeek.com/"))
             {
-                if (BggTooManyRequests)
+                if (_bggTooManyRequests)
                 {
                     return null;
                 }
@@ -51,10 +44,13 @@ namespace WordPuzzles
             {
                 var response = request.GetResponse();
                 Stream responseStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(responseStream);
-                string htmlPage = reader.ReadToEnd();
-                CacheSuccessfulRequest(url, htmlPage);
-                return htmlPage;
+                if (responseStream != null)
+                {
+                    StreamReader reader = new StreamReader(responseStream);
+                    string htmlPage = reader.ReadToEnd();
+                    CacheSuccessfulRequest(url, htmlPage);
+                    return htmlPage;
+                }
             }
             catch (WebException exception)
             {
@@ -62,7 +58,7 @@ namespace WordPuzzles
                 {
                     if (url.ToLower().Contains("/boardgamegeek.com/"))
                     {
-                        BggTooManyRequests = true;
+                        _bggTooManyRequests = true;
                     }
 
                     if (!FailedRequests.Contains(url))
@@ -121,7 +117,7 @@ namespace WordPuzzles
             builder = builder.Replace("*", "");
             builder = builder.Replace("~", "");
 
-            return BASE_DIRECTORY + @"CachedRequests\" + builder.ToString();
+            return BASE_DIRECTORY + @"CachedRequests\" + builder;
         }
 
         public static string DownloadBggImage(string imageUrl, int bggId)

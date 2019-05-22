@@ -46,10 +46,8 @@ namespace WordPuzzles
                             case PuzzleType.VOWEL_MOVEMENT:
                                 VowelMovementScore += currentPuzzleScore;
                                 break;
-                            default: //Todo - throw unexpected case.
+                            default: 
                                 throw new Exception($"Unexpected case {puzzleType} at column {columnIndex}.");
-                                break;
-                                
                         }
                     }
                 }

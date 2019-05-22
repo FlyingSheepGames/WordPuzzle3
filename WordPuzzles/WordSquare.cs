@@ -9,6 +9,7 @@ namespace WordPuzzles
     public class WordSquare
     {
         public WordRepository Repository { get; set; } = new WordRepository();
+        // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
         public string[] Lines ;
@@ -55,29 +56,11 @@ namespace WordPuzzles
         public void SetFirstLine(string firstLineWord)
         {
             SetWordAtIndex(firstLineWord, 0);
-            return;
-            /*
-            lines[0] = firstLineWord;
-            lines[1] = firstLineWord[1] + lines[1].Substring(1);
-
-            lines[2] = firstLineWord[2] + lines[2].Substring(1);
-
-            lines[3] = firstLineWord[3] + lines[3].Substring(1);
-            
-            lines[4] = firstLineWord[4] + lines[4].Substring(1);
-            */
         }
 
         public void SetSecondLine(string secondLineWord)
         {
             SetWordAtIndex(secondLineWord, 1);
-            return;
-            /*
-            lines[1] = secondLineWord;
-            lines[2] = string.Concat(lines[2][0], secondLineWord[2], lines[2].Substring(2));
-            lines[3] = string.Concat(lines[3][0], secondLineWord[3], lines[3].Substring(2));
-            lines[4] = string.Concat(lines[4][0], secondLineWord[4], lines[4].Substring(2));
-            */
         }
 
         public void SetThirdLine(string thirdLineWord)
@@ -101,11 +84,6 @@ namespace WordPuzzles
         public void SetFourthLine(string fourthLineWord)
         {
             SetWordAtIndex(fourthLineWord, 3);
-            return;
-            /*
-            lines[3] = fourthLineWord;
-            lines[4] = string.Concat(lines[4].Substring(0, 3), fourthLineWord[4], lines[4].Substring(4));
-            */
         }
 
         public List<string> GetFirstWordCandidates()
@@ -141,8 +119,6 @@ namespace WordPuzzles
         public void SetFifthLine(string fifthWordCandidate)
         {
             SetWordAtIndex(fifthWordCandidate, 4);
-            return;
-            //lines[4] = fifthWordCandidate;
         }
 
         public bool IsLastLineAWord()
@@ -175,12 +151,8 @@ namespace WordPuzzles
             tweetBuilder.AppendLine("Top word is part of this week's theme!");
             tweetBuilder.AppendLine("Remaining (unordered) clues:");
 
-            List<string> listOfClues = new List<string>();
+            List<string> listOfClues = new List<string> {Clues[1], Clues[2], Clues[3], Clues[4]};
             //skip top clue [0]
-            listOfClues.Add(Clues[1]);
-            listOfClues.Add(Clues[2]);
-            listOfClues.Add(Clues[3]);
-            listOfClues.Add(Clues[4]);
 
             listOfClues.Sort();
 
@@ -247,7 +219,7 @@ namespace WordPuzzles
                 builder.AppendLine($"\t\t<td>{clue}</td>");
                 for (int i = 0; i < Size; i++)
                 {
-                    builder.AppendLine($"\t\t<td> </td>");
+                    builder.AppendLine("\t\t<td> </td>");
                 }
                 builder.AppendLine("\t</tr>");
             }

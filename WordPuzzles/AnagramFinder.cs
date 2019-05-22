@@ -15,7 +15,7 @@ namespace WordPuzzles
         {
             string url = string.Format($@"https://new.wordsmith.org/anagram/anagram.cgi?anagram={letters}&t=500&a=n");
 
-            string response = WebRequestUtility.ReadHTMLPageFromUrl(url);
+            string response = WebRequestUtility.ReadHtmlPageFromUrl(url);
             return ParseResponse(response);
         }
 

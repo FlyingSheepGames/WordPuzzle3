@@ -18,9 +18,9 @@ namespace WordPuzzles
         public void Serialize()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(AnacrosticParameterSet));
-            if (!Directory.Exists(BASE_DIRECTORY + $@"anacrostics"))
+            if (!Directory.Exists(BASE_DIRECTORY + @"anacrostics"))
             {
-                Directory.CreateDirectory(BASE_DIRECTORY + $@"anacrostics");
+                Directory.CreateDirectory(BASE_DIRECTORY + @"anacrostics");
             }
             using (FileStream stream = File.OpenWrite(BASE_DIRECTORY + $@"anacrostics\parameter_set_{TweetId}.xml"))
             {
@@ -36,9 +36,11 @@ namespace WordPuzzles
             using (FileStream stream = File.OpenRead(filePath))
             {
                 AnacrosticParameterSet setReadFromDisk = serializer.Deserialize(stream) as AnacrosticParameterSet;
-                WordsToIgnore = setReadFromDisk.WordsToIgnore;
-                WordsToUse = setReadFromDisk.WordsToUse;
-
+                if (setReadFromDisk != null)
+                {
+                    WordsToIgnore = setReadFromDisk.WordsToIgnore;
+                    WordsToUse = setReadFromDisk.WordsToUse;
+                }
             }
         }
     }

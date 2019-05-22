@@ -6,10 +6,10 @@ namespace WordPuzzles
 {
     public class WordSudoku
     {
-        private readonly string Solution;
+        public readonly string Solution;
         public string[] Grid;
         public string[] PartialGrid;
-        private Random random;
+        private Random _random;
 
         public WordSudoku(string solution, int seed = 0)
         {
@@ -25,25 +25,25 @@ namespace WordPuzzles
             RefreshPartialGrid();
         }
 
-        public int RandomSeed = 0;
+        public int RandomSeed;
         public Random Random1
         {
             get
             {
-                if (random == null)
+                if (_random == null)
                 {
                     if (RandomSeed != 0)
                     {
-                        random = new Random();
+                        _random = new Random();
                     }
                     else
                     {
-                        random = new Random(RandomSeed);
+                        _random = new Random(RandomSeed);
                     }
                 }
-                return random;
+                return _random;
             }
-            set { random = value; }
+            set => _random = value;
         }
 
         internal void RefreshPartialGrid()
@@ -247,12 +247,12 @@ namespace WordPuzzles
         private List<int> CalculateAvailableNumbersForRowAndColumn(int column, int length, string lineSoFar,
             string[] gridInProgress)
         {
-            bool[] IsAvailable = new bool[length];
+            bool[] isAvailable = new bool[length];
             
             //start with everything available. 
             for (int i = 0; i < length; i++)
             {
-                IsAvailable[i] = true;
+                isAvailable[i] = true;
             }
 
             //eliminate already placed in row. 
@@ -261,7 +261,7 @@ namespace WordPuzzles
                 int ineligibleNumber;
                 if (int.TryParse(character.ToString(), out ineligibleNumber))
                 {
-                    IsAvailable[ineligibleNumber] = false;
+                    isAvailable[ineligibleNumber] = false;
                 }
             }
             //eliminate already placed in column.
@@ -271,13 +271,13 @@ namespace WordPuzzles
                 int ineligibleNumber;
                 if (int.TryParse(characterInColumn.ToString(), out ineligibleNumber))
                 {
-                    IsAvailable[ineligibleNumber] = false;
+                    isAvailable[ineligibleNumber] = false;
                 }
             }
             List<int> availableNumbers = new List<int>();
             for (int i = 0; i < length; i++)
             {
-                if (IsAvailable[i])
+                if (isAvailable[i])
                 {
                     availableNumbers.Add(i);
                 }

@@ -30,12 +30,12 @@ namespace WordPuzzles
             }
             if (dictionary.ContainsKey(24))
             {
-                this.TwitterUrl = dictionary[24];
+                TwitterUrl = dictionary[24];
             }
 
             if (dictionary.ContainsKey(5))
             {
-                this.DatePosted = dictionary[5];
+                DatePosted = dictionary[5];
             }
         }
 

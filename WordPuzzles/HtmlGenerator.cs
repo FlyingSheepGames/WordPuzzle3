@@ -146,12 +146,9 @@ namespace WordPuzzles
             string puzzleClueCustomizedClue = puzzleClue.CustomizedClue;
             if (string.IsNullOrWhiteSpace(puzzleClueCustomizedClue))
             {
-                builder.AppendLine($"\tClue for {(string) puzzleClue}:");
+                puzzleClueCustomizedClue = $"Clue for {(string) puzzleClue}";
             }
-            else
-            {
-                builder.AppendLine($"\t{puzzleClueCustomizedClue}:");
-            }
+            builder.AppendLine($"\t{puzzleClueCustomizedClue}:");
 
             builder.AppendLine("\t</td>");
             builder.AppendLine();

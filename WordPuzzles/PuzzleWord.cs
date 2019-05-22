@@ -10,9 +10,9 @@ namespace WordPuzzles
         public List<PuzzleWord> Clues = new List<PuzzleWord>();
         public List<PuzzleLetter> Phrase = new List<PuzzleLetter>();
         public string PhraseAsString;
-        int wordCount = 1;
-        int letterCount = 1;
-        private int _lettersInPhrase = 0;
+        int _wordCount = 1;
+        int _letterCount = 1;
+        private int _lettersInPhrase;
 
         public int LettersInPhrase
         {
@@ -43,9 +43,9 @@ namespace WordPuzzles
 
         public void AddWordToClues(string word)
         {
-            Clues.Add(new PuzzleWord(word, letterCount, (char) ('A' + wordCount - 1)));
-            wordCount++;
-            letterCount += word.Length;
+            Clues.Add(new PuzzleWord(word, _letterCount, (char) ('A' + _wordCount - 1)));
+            _wordCount++;
+            _letterCount += word.Length;
         }
 
         public void PlaceUniqueLetters()
@@ -119,17 +119,17 @@ namespace WordPuzzles
 
         public List<PuzzleLetter> CalculateOptions(int phraseIndex, string clueIndiciesToExclude = "")
         {
-            char LetterToFind = PhraseAsString[phraseIndex];
+            char letterToFind = PhraseAsString[phraseIndex];
 
-            return FindMatchingLetters(LetterToFind, clueIndiciesToExclude);
+            return FindMatchingLetters(letterToFind, clueIndiciesToExclude);
         }
 
         public bool PlaceForcedLetters(out int maxNumberOfOptions, int thresholdForNumberOfOptions = 1)
         {
             maxNumberOfOptions = 0;
             bool placedAtLeastOneLetter = false;
-            Dictionary<int, string> MissingLetters = new Dictionary<int, string>(); //int = index in phrase that's missing; string = Alphabetic Index of clue words already used.
-            List<int> MissingIndicies = new List<int>();
+            Dictionary<int, string> missingLetters = new Dictionary<int, string>(); //int = index in phrase that's missing; string = Alphabetic Index of clue words already used.
+            List<int> missingIndicies = new List<int>();
             int phraseIndex = 0;
             string clueIndiciesToExclude = "";
             string[] lettersToExcludeIndexByWord = {
@@ -142,16 +142,16 @@ namespace WordPuzzles
             {
                 if (currentLetter is null)
                 {
-                    MissingLetters.Add(phraseIndex, "");
-                    MissingIndicies.Add(phraseIndex);
+                    missingLetters.Add(phraseIndex, "");
+                    missingIndicies.Add(phraseIndex);
                 }
                 else
                 {
                     if (currentLetter.ActualLetter == ' ') //reached the end of the word.
                     {
-                        foreach (int missingIndex in MissingIndicies)
+                        foreach (int missingIndex in missingIndicies)
                         {
-                            MissingLetters[missingIndex] = clueIndiciesToExclude;
+                            missingLetters[missingIndex] = clueIndiciesToExclude;
                         }
 
                         if (lettersToExcludeIndexByWord.Length <= currentWordIndex)
@@ -160,7 +160,7 @@ namespace WordPuzzles
                         }
                         lettersToExcludeIndexByWord[currentWordIndex] = clueIndiciesToExclude;
                         //reset for next word.
-                        MissingIndicies.Clear();
+                        missingIndicies.Clear();
                         clueIndiciesToExclude = "";
                         currentWordIndex++;
                     }
@@ -171,13 +171,13 @@ namespace WordPuzzles
                 }
                 phraseIndex++;
             }
-            foreach (int missingIndex in MissingIndicies)
+            foreach (int missingIndex in missingIndicies)
             {
-                MissingLetters[missingIndex] = clueIndiciesToExclude;
+                missingLetters[missingIndex] = clueIndiciesToExclude;
             }
             lettersToExcludeIndexByWord[currentWordIndex] = clueIndiciesToExclude;
 
-            foreach (int missingIndex in MissingLetters.Keys)
+            foreach (int missingIndex in missingLetters.Keys)
             {
                 int wordIndexForLetterIndex = CalculateWordIndexFromLetterIndex(missingIndex);
                 if (missingIndex == 1)
@@ -185,7 +185,7 @@ namespace WordPuzzles
                     Console.WriteLine($"index {missingIndex}, skip letters {lettersToExcludeIndexByWord[wordIndexForLetterIndex]}");
                 }
 
-                if (lettersToExcludeIndexByWord[wordIndexForLetterIndex] != MissingLetters[missingIndex])
+                if (lettersToExcludeIndexByWord[wordIndexForLetterIndex] != missingLetters[missingIndex])
                 {
                     //Console.WriteLine($"Uh oh. {lettersToExcludeIndexByWord[wordIndexForLetterIndex]} != {MissingLetters[missingIndex]}");
                 }
@@ -232,13 +232,7 @@ namespace WordPuzzles
             const int STACK_LIMIT = 20;
             for (int loopCounter = 0; loopCounter < STACK_LIMIT; loopCounter++)
             {
-                int countOfRemainingNulls = 0;
-                foreach (var letter in Phrase)
-                {
-                    if (letter is null) countOfRemainingNulls++;
-                }
-                //Console.WriteLine(countOfRemainingNulls);
-                int maxNumberOfOptions= 0;
+                int maxNumberOfOptions;
                 if (!PlaceForcedLetters(out maxNumberOfOptions))
                 {
                     //Console.WriteLine(countOfRemainingNulls);
@@ -294,11 +288,11 @@ namespace WordPuzzles
     public class PuzzleWord
     {
         public List<PuzzleLetter> Letters = new List<PuzzleLetter>();
-        private readonly string originalWord;
+        private readonly string _originalWord;
 
         public PuzzleWord(string word, int startingIndex, char wordIndex)
         {
-            originalWord = word;
+            _originalWord = word;
             foreach (char character in word)
             {
                 Letters.Add(
@@ -311,7 +305,7 @@ namespace WordPuzzles
             }
         }
 
-        public static implicit operator string(PuzzleWord v) { return v.originalWord; }
+        public static implicit operator string(PuzzleWord v) { return v._originalWord; }
 
         public string CustomizedClue { get; set; }
     }
@@ -323,7 +317,7 @@ namespace WordPuzzles
         public char ActualLetter;
 
         public static PuzzleLetter BlankSpace => new PuzzleLetter() {ActualLetter = ' ', AlphabeticIndex = ' ', AlreadyPlaced = true};
-        public bool AlreadyPlaced = false;
+        public bool AlreadyPlaced;
 
         public override string ToString()
         {
