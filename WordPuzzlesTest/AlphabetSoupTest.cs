@@ -9,7 +9,7 @@ namespace WordPuzzlesTest
     [TestFixture]
     public class AlphabetSoupTest
     {
-        static readonly WordRepository repository = new WordRepository() {IgnoreCache = false};
+        static readonly WordRepository Repository = new WordRepository() {IgnoreCache = false};
         [TestFixture]
         public class GenerateSingleLine
         {
@@ -17,7 +17,7 @@ namespace WordPuzzlesTest
             [Test]
             public void Output_FitsExpectedFormat()
             {
-                AlphabetSoup puzzle = new AlphabetSoup(repository);
+                AlphabetSoup puzzle = new AlphabetSoup(Repository);
                 string line = puzzle.GenerateSingleLine('a', 'b');
                 Assert.AreEqual(7, line.Length, "Expected 7 letters.");
 
@@ -33,7 +33,7 @@ namespace WordPuzzlesTest
             [Ignore("Takes too long")]
             public void CreatesExpectedPuzzle()
             {
-                AlphabetSoup puzzle = new AlphabetSoup(repository);
+                AlphabetSoup puzzle = new AlphabetSoup(Repository);
                 const string SOLUTION = "greenredyellowpurpleorange";
                 List<string> lines = puzzle.GeneratePuzzle(SOLUTION);
                 Assert.AreEqual(26, lines.Count);
@@ -66,7 +66,7 @@ namespace WordPuzzlesTest
             [Ignore("Takes too long to run.")]
             public void SimpleTest_PutsWordInExpectedPosition()
             {
-                AlphabetSoup puzzle = new AlphabetSoup(repository);
+                AlphabetSoup puzzle = new AlphabetSoup(Repository);
                 string line = puzzle.HideWordInLine("stuck", StartPosition.FirstPosition);
                 Assert.AreEqual(7, line.Length, "Expected 7 letters.");
                 Assert.AreEqual("stuck", line.Substring(0, 5), "Expected word in first position");
@@ -90,7 +90,7 @@ namespace WordPuzzlesTest
             [TestCase(StartPosition.ThirdPosition)]
             public void CallTwice_GeneratesDifferentLines(StartPosition selectedPosition)
             {
-                AlphabetSoup puzzle = new AlphabetSoup(repository);
+                AlphabetSoup puzzle = new AlphabetSoup(Repository);
                 string firstLine = puzzle.HideWordInLine("stuck", selectedPosition);
                 Assert.AreEqual(7, firstLine.Length, "Expected 7 letters.");
                 AssertExactlyOneSubstringIsAWord(firstLine);
@@ -105,14 +105,14 @@ namespace WordPuzzlesTest
 
         private static string AssertExactlyOneSubstringIsAWord(string line)
         {
-            string hiddenWord = null;
+            string hiddenWord;
             var firstPositionSubstring = line.Substring(0, 5);
             var secondPositionSubstring = line.Substring(1, 5);
             var thirdPositionSubstring = line.Substring(2, 5);
 
-            var isThereAWordInFirstPosition = repository.IsAWord(firstPositionSubstring);
-            var isThereAWordInSecondPosition = repository.IsAWord(secondPositionSubstring);
-            var isThereAWordInThirdPosition = repository.IsAWord(thirdPositionSubstring);
+            var isThereAWordInFirstPosition = Repository.IsAWord(firstPositionSubstring);
+            var isThereAWordInSecondPosition = Repository.IsAWord(secondPositionSubstring);
+            var isThereAWordInThirdPosition = Repository.IsAWord(thirdPositionSubstring);
             //Expect exactly one of these to be true. 
             if (isThereAWordInFirstPosition)
             {
@@ -139,10 +139,10 @@ namespace WordPuzzlesTest
             //Also expect no 6 or 7 letter words. 
             string firstPositionSixLetterString = line.Substring(0, 6);
             string secondPositionSixLetterString = line.Substring(1, 6);
-            Assert.IsFalse(repository.IsAWord(firstPositionSixLetterString), $"{firstPositionSixLetterString} is a 6-letter word starting at the first letter, and shouldn't be.");
-            Assert.IsFalse(repository.IsAWord(secondPositionSixLetterString), $"{secondPositionSixLetterString} is a 6-letter word starting at the second letter, and shouldn't be.");
+            Assert.IsFalse(Repository.IsAWord(firstPositionSixLetterString), $"{firstPositionSixLetterString} is a 6-letter word starting at the first letter, and shouldn't be.");
+            Assert.IsFalse(Repository.IsAWord(secondPositionSixLetterString), $"{secondPositionSixLetterString} is a 6-letter word starting at the second letter, and shouldn't be.");
 
-            Assert.IsFalse(repository.IsAWord(line), $"The entire line {line} is a seven letter word, and shouldn't be. ");
+            Assert.IsFalse(Repository.IsAWord(line), $"The entire line {line} is a seven letter word, and shouldn't be. ");
 
             return hiddenWord;
         }

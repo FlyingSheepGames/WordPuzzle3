@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture()]
     public class AnagramFinderTest
@@ -31,8 +31,7 @@ namespace WordSquareGeneratorTest
             [Test]
             public void Example_ReturnsListSortedByLength()
             {
-                AnagramFinder finder = new AnagramFinder();
-                finder.MinimumWordLength = 2;
+                AnagramFinder finder = new AnagramFinder {MinimumWordLength = 2};
                 List<string> results = finder.FindAnagram("teen nine");
 
                 Assert.AreEqual(12, results.Count);

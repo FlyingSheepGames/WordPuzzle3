@@ -6,7 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class WordRepositoryTest
@@ -56,15 +56,15 @@ namespace WordSquareGeneratorTest
             {
                 WordRepository repository = new WordRepository();
                 List<string> words = repository.WordsStartingWith("on", 3);
-                bool foundONE = false;
+                bool foundOne = false;
                 foreach (var word in words)
                 {
                     if (word == "one")
                     {
-                        foundONE = true;
+                        foundOne = true;
                     }
                 }
-                Assert.IsTrue(foundONE, "expected to fine 'one' as a word.");
+                Assert.IsTrue(foundOne, "expected to fine 'one' as a word.");
             }
         }
 
@@ -263,7 +263,7 @@ third
             {
                 WordRepository wordRepository = new WordRepository();
                 wordRepository.LoadAllWordsReplacement();
-                Assert.IsTrue(wordRepository.IsAWord("zooms")); //TODO: IsAWord only checks 5 letter words!
+                Assert.IsTrue(wordRepository.IsAWord("zooms")); 
             }
 
             [Test]

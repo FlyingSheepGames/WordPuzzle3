@@ -3,7 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class AnacrosticParameterSetTest
@@ -15,8 +15,7 @@ namespace WordSquareGeneratorTest
             [Test]
             public void NewObject_GeneratesExpectedFile()
             {
-                AnacrosticParameterSet set = new AnacrosticParameterSet();
-                set.TweetId = 0;
+                AnacrosticParameterSet set = new AnacrosticParameterSet {TweetId = 0};
                 set.Serialize();
 
                 const string EXPECTED_FILE_PATH = @"E:\utilities\WordSquare\data\anacrostics\parameter_set_0.xml";
@@ -38,8 +37,7 @@ namespace WordSquareGeneratorTest
             [Test]
             public void SetsExpectedFields()
             {
-                AnacrosticParameterSet setWithFields = new AnacrosticParameterSet();
-                setWithFields.TweetId = 1;
+                AnacrosticParameterSet setWithFields = new AnacrosticParameterSet {TweetId = 1};
                 setWithFields.WordsToUse.Add("wordToUse");
                 setWithFields.WordsToIgnore.Add("wordToIgnore");
 

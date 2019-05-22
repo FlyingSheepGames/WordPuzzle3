@@ -1,4 +1,4 @@
-﻿namespace WordSquareGeneratorTest
+﻿namespace WordPuzzlesTest
 {
     public class Program
     {

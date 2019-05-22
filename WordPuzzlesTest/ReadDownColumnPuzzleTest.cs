@@ -14,8 +14,7 @@ namespace WordPuzzlesTest
             [Test]
             public void CreatesExpectedPuzzle()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
-                puzzle.Solution = "cat";
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "cat"};
 
                 puzzle.PopulateWords();
 
@@ -31,8 +30,7 @@ namespace WordPuzzlesTest
             [Test]
             public void SpacesInPhrase_CreatesExpectedPuzzle()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
-                puzzle.Solution = "cats and dogs";
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "cats and dogs"};
                 var puzzleSolution = "catsanddogs";
 
                 puzzle.PopulateWords();
@@ -53,9 +51,11 @@ namespace WordPuzzlesTest
             [Test]
             public void CAT_ReturnsExpectedResult()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
-                puzzle.Solution = "cat";
-                puzzle.Words = new List<string>() {"pacing", "shaved", "metric"};
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle
+                {
+                    Solution = "cat",
+                    Words = new List<string>() {"pacing", "shaved", "metric"}
+                };
 
                 const string EXPECTED_HTML =
 @"<html>
@@ -104,8 +104,7 @@ Solution: _ _ _
             [Test]
             public void XRAY_ReturnsExpectedResult()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
-                puzzle.Solution = "x-ray";
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "x-ray"};
                 puzzle.PopulateWords();
                 puzzle.Words = new List<string>() { "boxing", "parent", "frayed", "joyful" };
 

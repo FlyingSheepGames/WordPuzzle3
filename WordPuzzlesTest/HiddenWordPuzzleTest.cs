@@ -14,8 +14,7 @@ namespace WordPuzzlesTest
             [Test]
             public void TEST_GeneratesExpectedWords()
             {
-                HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
-                puzzle.RandomSeed = 1;
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle {RandomSeed = 1};
 
                 List<string> words = puzzle.HideWord("test");
                 Console.WriteLine(string.Join(',', words));

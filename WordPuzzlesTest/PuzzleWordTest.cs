@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class PuzzleWordTest
@@ -95,8 +95,7 @@ namespace WordSquareGeneratorTest
             [Test]
             public void HandlesPunctuation()
             {
-                Puzzle puzzleWithPunctuation = new Puzzle();
-                puzzleWithPunctuation.PhraseAsString = "i'm x";
+                Puzzle puzzleWithPunctuation = new Puzzle {PhraseAsString = "i'm x"};
 
                 puzzleWithPunctuation.AddWordToClues("mix");
 
@@ -176,8 +175,7 @@ namespace WordSquareGeneratorTest
                 puzzle.PhraseAsString = "as is";
                 puzzle.PlaceUniqueLetters();
 
-                var maxNumberOfOptions = 1;
-                puzzle.PlaceForcedLetters(out maxNumberOfOptions);
+                puzzle.PlaceForcedLetters(out _);
 
                 Assert.AreEqual('a', puzzle.Phrase[0].ActualLetter);
                 Assert.AreEqual('s', puzzle.Phrase[1].ActualLetter);
@@ -251,8 +249,7 @@ namespace WordSquareGeneratorTest
             [Test]
             public void ExampleWithPunctuation()
             {
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "i'm x.";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();

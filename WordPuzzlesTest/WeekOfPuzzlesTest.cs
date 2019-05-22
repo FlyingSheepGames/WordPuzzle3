@@ -9,7 +9,7 @@ namespace WordPuzzlesTest
     [TestFixture]
     public class WeekOfPuzzlesTest
     {
-        private static readonly string EXPECTED_TEXT = @"<?xml version=""1.0"" encoding=""utf-8""?>
+        private static readonly string ExpectedText = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <WeekOfPuzzles xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <MondayWordSquare>
     <Lines>
@@ -62,14 +62,14 @@ namespace WordPuzzlesTest
             public void EmptyObject_CreatesExpectedFile()
             {
                 WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
-                string FILE_NAME = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
-                if (File.Exists(FILE_NAME))
+                string fileName = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
+                if (File.Exists(fileName))
                 {
-                    File.Delete(FILE_NAME);
+                    File.Delete(fileName);
                 }
-                weekOfPuzzles.Serialize(FILE_NAME);
+                weekOfPuzzles.Serialize(fileName);
 
-                var actualText = File.ReadAllText(FILE_NAME);
+                var actualText = File.ReadAllText(fileName);
 
                 Assert.AreEqual(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <WeekOfPuzzles xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -88,16 +88,15 @@ namespace WordPuzzlesTest
             [Test]
             public void EmptyObject_WithDate_CreatesExpectedFile()
             {
-                WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
-                weekOfPuzzles.MondayOfWeekPosted = new DateTime(2019, 2, 25);
-                string FILE_NAME = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
-                if (File.Exists(FILE_NAME))
+                WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles {MondayOfWeekPosted = new DateTime(2019, 2, 25)};
+                string fileName = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
+                if (File.Exists(fileName))
                 {
-                    File.Delete(FILE_NAME);
+                    File.Delete(fileName);
                 }
-                weekOfPuzzles.Serialize(FILE_NAME);
+                weekOfPuzzles.Serialize(fileName);
 
-                var actualText = File.ReadAllText(FILE_NAME);
+                var actualText = File.ReadAllText(fileName);
 
                 Assert.AreEqual(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <WeekOfPuzzles xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -117,8 +116,7 @@ namespace WordPuzzlesTest
             [Test]
             public void PopulatedObject_CreatesExpectedFile()
             {
-                WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
-                weekOfPuzzles.Theme = "WeeklyTheme";
+                WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles {Theme = "WeeklyTheme"};
                 WordSquare mondayWordSquare = new WordSquare("_____")
                 {
                     Clues = new []{"first clue", "second clue", "third clue", "fourth clue", "fifth clue"}, 
@@ -151,16 +149,16 @@ namespace WordPuzzlesTest
                 weekOfPuzzles.WednesdayALittleAlliteration = wednesdayAlliterationPuzzle;
 
 
-                string FILE_NAME = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
-                if (File.Exists(FILE_NAME))
+                string fileName = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
+                if (File.Exists(fileName))
                 {
-                    File.Delete(FILE_NAME);
+                    File.Delete(fileName);
                 }
-                weekOfPuzzles.Serialize(FILE_NAME);
+                weekOfPuzzles.Serialize(fileName);
 
-                var actualText = File.ReadAllText(FILE_NAME);
+                var actualText = File.ReadAllText(fileName);
                 Console.WriteLine(actualText);
-                Assert.AreEqual(EXPECTED_TEXT,actualText);
+                Assert.AreEqual(ExpectedText,actualText);
 
             }
         }
@@ -171,13 +169,13 @@ namespace WordPuzzlesTest
             [Test]
             public void ReturnsExpectedObject()
             {
-                string FILE_NAME = $"testcase_{Process.GetCurrentProcess().Id}.xml";
-                if (!File.Exists(FILE_NAME))
+                string fileName = $"testcase_{Process.GetCurrentProcess().Id}.xml";
+                if (!File.Exists(fileName))
                 {
-                    File.WriteAllText(FILE_NAME, EXPECTED_TEXT);
+                    File.WriteAllText(fileName, ExpectedText);
                 }
                 WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
-                weekOfPuzzles.Deserialize(FILE_NAME);
+                weekOfPuzzles.Deserialize(fileName);
 
                 Assert.IsNotNull(weekOfPuzzles.MondayWordSquare);
                 Assert.IsNotNull(weekOfPuzzles.TuesdayVowelMovement);
@@ -188,13 +186,13 @@ namespace WordPuzzlesTest
             [Test]
             public void WithoutDate_SetsMondayToMinValue()
             {
-                string FILE_NAME = $"testcase_{Process.GetCurrentProcess().Id}.xml";
-                if (!File.Exists(FILE_NAME))
+                string fileName = $"testcase_{Process.GetCurrentProcess().Id}.xml";
+                if (!File.Exists(fileName))
                 {
-                    File.WriteAllText(FILE_NAME, EXPECTED_TEXT);
+                    File.WriteAllText(fileName, ExpectedText);
                 }
                 WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
-                weekOfPuzzles.Deserialize(FILE_NAME);
+                weekOfPuzzles.Deserialize(fileName);
 
                 Assert.AreEqual(DateTime.MinValue, weekOfPuzzles.MondayOfWeekPosted);
             }
@@ -214,15 +212,15 @@ namespace WordPuzzlesTest
   </SelectedWords>
   <MondayOfWeekPosted>2019-02-25</MondayOfWeekPosted>
 </WeekOfPuzzles>";
-                string FILE_NAME = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
-                if (File.Exists(FILE_NAME))
+                string fileName = $"EmptyObject_example_{Process.GetCurrentProcess().Id}.xml";
+                if (File.Exists(fileName))
                 {
-                    File.Delete(FILE_NAME);
+                    File.Delete(fileName);
                 }
-                File.WriteAllText(FILE_NAME, EMPTY_OBJECT_WITH_DATE);
+                File.WriteAllText(fileName, EMPTY_OBJECT_WITH_DATE);
 
                 WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
-                weekOfPuzzles.Deserialize(FILE_NAME);
+                weekOfPuzzles.Deserialize(fileName);
         
                 Assert.AreEqual(new DateTime(2019, 2, 25), weekOfPuzzles.MondayOfWeekPosted);
 

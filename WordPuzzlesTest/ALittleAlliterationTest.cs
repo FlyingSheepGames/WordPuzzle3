@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class ALittleAlliterationTest
@@ -196,16 +196,14 @@ What color was the emergency vehicle that was unexpectedly attacked?
             public void NoWords_ReturnsEmptySet()
             {
                 ALittleAlliteration alliteration = new ALittleAlliteration();
-                int totalWordsFound;
-                Assert.AreEqual(0, alliteration.FindWordsThatStartWith("aaa", out totalWordsFound).Count);
+                Assert.AreEqual(0, alliteration.FindWordsThatStartWith("aaa", out _).Count);
             }
 
             [Test]
             public void ART_ReturnsARTICLE()
             {
                 ALittleAlliteration alliteration = new ALittleAlliteration();
-                int totalWordsFound;
-                var words = alliteration.FindWordsThatStartWith("art", out totalWordsFound);
+                var words = alliteration.FindWordsThatStartWith("art", out _);
                 Assert.Contains("article", words);
                 foreach (string word in words)
                 {
@@ -218,8 +216,7 @@ What color was the emergency vehicle that was unexpectedly attacked?
             public void CHI_ReturnsExpectedResults()
             {
                 ALittleAlliteration alliteration = new ALittleAlliteration();
-                int totalWordsFound;
-                var words = alliteration.FindWordsThatStartWith("chi", out totalWordsFound);
+                var words = alliteration.FindWordsThatStartWith("chi", out _);
                 Console.WriteLine("--------------");
                 foreach (string word in words)
                 {
@@ -299,7 +296,7 @@ What color was the emergency vehicle that was unexpectedly attacked?
             }
 
             [Test]
-            public void RemovesFUL()
+            public void Removes_Ful_Ending()
             {
                 const string ROOT_WORD = "art";
                 const string DERRIVED_WORD = "artful";

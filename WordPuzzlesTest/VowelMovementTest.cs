@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class VowelMovementTest
@@ -283,8 +283,10 @@ namespace WordSquareGeneratorTest
             [Test]
             public void Example_ReturnsExpectedString()
             {
-                VowelMovement puzzle = new VowelMovement();
-                puzzle.Clue = "Each morning I have * * muffins with a cup of weak * because it's good for my *.";
+                VowelMovement puzzle = new VowelMovement
+                {
+                    Clue = "Each morning I have * * muffins with a cup of weak * because it's good for my *."
+                };
                 const string EXPECTED_TWEET =
                     @"Each morning I have * * muffins with a cup of weak * because it's good for my *.
 
@@ -296,9 +298,11 @@ namespace WordSquareGeneratorTest
             [Test]
             public void HashtagTheme_ReturnsExpectedString()
             {
-                VowelMovement puzzle = new VowelMovement();
-                puzzle.Clue = "Each morning I have * * muffins with a cup of weak * because it's good for my *.";
-                puzzle.Theme = "#ThemeWeek";
+                VowelMovement puzzle = new VowelMovement
+                {
+                    Clue = "Each morning I have * * muffins with a cup of weak * because it's good for my *.",
+                    Theme = "#ThemeWeek"
+                };
                 const string EXPECTED_TWEET =
                     @"#ThemeWeek
 Each morning I have * * muffins with a cup of weak * because it's good for my *.
@@ -311,9 +315,11 @@ Each morning I have * * muffins with a cup of weak * because it's good for my *.
             [Test]
             public void NoHashtagTheme_ReturnsExpectedString()
             {
-                VowelMovement puzzle = new VowelMovement();
-                puzzle.Clue = "Each morning I have * * muffins with a cup of weak * because it's good for my *.";
-                puzzle.Theme = "NoHashtag";
+                VowelMovement puzzle = new VowelMovement
+                {
+                    Clue = "Each morning I have * * muffins with a cup of weak * because it's good for my *.",
+                    Theme = "NoHashtag"
+                };
                 const string EXPECTED_TWEET =
                     @"Each morning I have * * muffins with a cup of weak * because it's good for my *.
 

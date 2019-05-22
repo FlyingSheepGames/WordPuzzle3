@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class WordSquareTest
@@ -307,7 +307,7 @@ Thing that hangs above your throat
             [Test]
             public void CanReadSize5File()
             {
-                var results = WordSquare.ReadAllWordSquaresFromFile(@"data\magic.txt", 5);
+                var results = WordSquare.ReadAllWordSquaresFromFile(@"data\magic.txt");
                 Assert.AreEqual(5, results.Count, "Expected to read 5 word squares.");
             }
 

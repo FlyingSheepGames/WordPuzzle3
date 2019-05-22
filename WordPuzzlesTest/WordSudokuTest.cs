@@ -14,6 +14,8 @@ namespace WordPuzzlesTest
             [Test]
             public void WithDuplicateLetters_Throws()
             {
+                // ReSharper disable once ObjectCreationAsStatement
+                //TODO: Throwing an exception as part of the constructor isn't the best. 
                 Assert.Throws<Exception>(() => new WordSudoku("aaa"));
             }
 
@@ -21,7 +23,7 @@ namespace WordPuzzlesTest
             public void GeneratesGrid()
             {
                 WordSudoku sudoku = new WordSudoku("shoe");
-                List<string> UniqueLines = new List<string>();
+                List<string> uniqueLines = new List<string>();
                 foreach (string line in sudoku.Grid)
                 {
                     for (int i = 0; i < 4; i++)
@@ -29,8 +31,8 @@ namespace WordPuzzlesTest
                         StringAssert.Contains(i.ToString(), line); //expect to see each number in each line exactly once.
                     }
                     Assert.IsFalse(WordSudoku.ContainsDuplicateLetters(line));
-                    Assert.IsFalse(UniqueLines.Contains(line), "Expected each line to be unique.");
-                    UniqueLines.Add(line);
+                    Assert.IsFalse(uniqueLines.Contains(line), "Expected each line to be unique.");
+                    uniqueLines.Add(line);
                 }
             }
 
@@ -42,11 +44,16 @@ namespace WordPuzzlesTest
             [Test]
             public void Full_ReturnsExpectedString()
             {
-                WordSudoku sudoku = new WordSudoku("shoe");
-                sudoku.Grid[0] = "0123";
-                sudoku.Grid[1] = "3012";
-                sudoku.Grid[2] = "2301";
-                sudoku.Grid[3] = "1230";
+                WordSudoku sudoku = new WordSudoku("shoe")
+                {
+                    Grid =
+                    {
+                        [0] = "0123",
+                        [1] = "3012",
+                        [2] = "2301",
+                        [3] = "1230"
+                    }
+                };
 
                 const string EXPECTED_TEXT = 
 @"S	H	O	E
@@ -60,11 +67,16 @@ H	O	E	S
             [Test]
             public void Partial_ReturnsExpectedString()
             {
-                WordSudoku sudoku = new WordSudoku("shoe");
-                sudoku.Grid[0] = "0123";
-                sudoku.Grid[1] = "3012";
-                sudoku.Grid[2] = "2301";
-                sudoku.Grid[3] = "1230";
+                WordSudoku sudoku = new WordSudoku("shoe")
+                {
+                    Grid =
+                    {
+                        [0] = "0123",
+                        [1] = "3012",
+                        [2] = "2301",
+                        [3] = "1230"
+                    }
+                };
 
                 sudoku.RefreshPartialGrid();
 
@@ -92,11 +104,16 @@ E	 	H
             [Test]
             public void Full_ReturnsExpectedString()
             {
-                WordSudoku sudoku = new WordSudoku("shoe");
-                sudoku.Grid[0] = "0123";
-                sudoku.Grid[1] = "3012";
-                sudoku.Grid[2] = "2301";
-                sudoku.Grid[3] = "1230";
+                WordSudoku sudoku = new WordSudoku("shoe")
+                {
+                    Grid =
+                    {
+                        [0] = "0123",
+                        [1] = "3012",
+                        [2] = "2301",
+                        [3] = "1230"
+                    }
+                };
 
                 const string EXPECTED_HTML =
                     @"<html>
@@ -138,11 +155,16 @@ E	 	H
             [Test]
             public void Partial_ReturnsExpectedString()
             {
-                WordSudoku sudoku = new WordSudoku("shoe");
-                sudoku.Grid[0] = "0123";
-                sudoku.Grid[1] = "3012";
-                sudoku.Grid[2] = "2301";
-                sudoku.Grid[3] = "1230";
+                WordSudoku sudoku = new WordSudoku("shoe")
+                {
+                    Grid =
+                    {
+                        [0] = "0123",
+                        [1] = "3012",
+                        [2] = "2301",
+                        [3] = "1230"
+                    }
+                };
 
                 sudoku.RefreshPartialGrid();
 
@@ -198,11 +220,16 @@ E	 	H
             [Test]
             public void Example_BottomLeftCell_IsNotUniquelyDetermined()
             {
-                WordSudoku sudoku = new WordSudoku("shoe");
-                sudoku.Grid[0] = "0123";
-                sudoku.Grid[1] = "3012";
-                sudoku.Grid[2] = "2301";
-                sudoku.Grid[3] = "1230";
+                WordSudoku sudoku = new WordSudoku("shoe")
+                {
+                    Grid =
+                    {
+                        [0] = "0123",
+                        [1] = "3012",
+                        [2] = "2301",
+                        [3] = "1230"
+                    }
+                };
 
                 sudoku.RefreshPartialGrid();
 
@@ -222,11 +249,16 @@ E	 	H
             [Test]
             public void Example_BottomLeftCell_IsNotUniquelyDetermined()
             {
-                WordSudoku sudoku = new WordSudoku("shoe");
-                sudoku.Grid[0] = "0123";
-                sudoku.Grid[1] = "3012";
-                sudoku.Grid[2] = "2301";
-                sudoku.Grid[3] = "1230";
+                WordSudoku sudoku = new WordSudoku("shoe")
+                {
+                    Grid =
+                    {
+                        [0] = "0123",
+                        [1] = "3012",
+                        [2] = "2301",
+                        [3] = "1230"
+                    }
+                };
 
                 sudoku.RefreshPartialGrid();
 
@@ -256,6 +288,7 @@ E	 	H
                     var substring = "abcdefghij".Substring(i);
                     Console.WriteLine($"Creating puzzle of length {substring.Length}");
                     var puzzle =  new WordSudoku(substring, 1);
+                    Assert.IsNotNull(puzzle);
                 }
             }
         }

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class HtmlGeneratorTest
@@ -14,13 +14,12 @@ namespace WordSquareGeneratorTest
             public void GeneratesExpectedComment()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "max peel";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
 
-                string EXPECTED_COMMENT =
+                string expectedComment =
 @"/*
 E 0 <-> 12
 X 1 <-> 9
@@ -41,7 +40,7 @@ E 12 <-> 0
 L 13 <-> 5
 */
 ";
-                Assert.AreEqual(EXPECTED_COMMENT, generator.CreateComment());
+                Assert.AreEqual(expectedComment, generator.CreateComment());
 
             }
         }
@@ -53,8 +52,7 @@ L 13 <-> 5
             public void ReturnsExpectedString()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "max peel";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -68,14 +66,12 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "i'm x.";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
 
-                HtmlGenerator htmlGenerator = new HtmlGenerator();
-                htmlGenerator.Puzzle = puzzle;
+                HtmlGenerator htmlGenerator = new HtmlGenerator {Puzzle = puzzle};
                 const string EXPECTED_STRING =
                     @"var indexMap = [4, 3, 5, 1, 0, 2];";
 
@@ -91,8 +87,7 @@ L 13 <-> 5
             public void ReturnsExpectedResult()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "max peel";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -121,14 +116,12 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "i'm x.";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
 
-                HtmlGenerator htmlGenerator = new HtmlGenerator();
-                htmlGenerator.Puzzle = puzzle;
+                HtmlGenerator htmlGenerator = new HtmlGenerator {Puzzle = puzzle};
                 const string EXPECTED_HTML =
                     @"<tr>
 	<td>
@@ -149,14 +142,12 @@ L 13 <-> 5
             [Test]
             public void WithCustomClue_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "i'm x.";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
                 puzzle.Clues[0].CustomizedClue = "Customized Clue";
                 puzzle.PlaceLetters();
 
-                HtmlGenerator htmlGenerator = new HtmlGenerator();
-                htmlGenerator.Puzzle = puzzle;
+                HtmlGenerator htmlGenerator = new HtmlGenerator {Puzzle = puzzle};
                 const string EXPECTED_HTML =
                     @"<tr>
 	<td>
@@ -183,8 +174,7 @@ L 13 <-> 5
             public void ReturnsExpectedResult()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "max peel";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -213,14 +203,12 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "i'm x.";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
 
-                HtmlGenerator htmlGenerator = new HtmlGenerator();
-                htmlGenerator.Puzzle = puzzle;
+                HtmlGenerator htmlGenerator = new HtmlGenerator {Puzzle = puzzle};
                 const string EXPECTED_HTML =
                     @"<tr>
 	<td colspan=""2"">
@@ -250,8 +238,7 @@ L 13 <-> 5
             public void CreatedExpectedFile()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "max peel";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -269,8 +256,7 @@ L 13 <-> 5
             public void WithoutKey_CreatedExpectedFile()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle();
-                puzzle.PhraseAsString = "max peel";
+                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;

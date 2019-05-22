@@ -3,7 +3,7 @@ using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
 
-namespace WordSquareGeneratorTest
+namespace WordPuzzlesTest
 {
     [TestFixture]
     public class AnacrosticTest
@@ -85,7 +85,7 @@ namespace WordSquareGeneratorTest
             }
 
             [Test]
-            public void FindsLINT()
+            public void FindsLint()
             {
                 Anacrostic anacrostic = new Anacrostic("lin t");
                 Assert.AreEqual("lint", anacrostic.FindNextWord());

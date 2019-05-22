@@ -65,7 +65,7 @@ namespace WordPuzzlesTest
             public void OHIO_RowsAsWords_CreatesWords()
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("ohio", true);
-                WordRepository repository = new WordRepository() {};
+                WordRepository repository = new WordRepository();
                 Assert.AreEqual(5, puzzle.Size);
                 StringBuilder builder = new StringBuilder();
                 for (int row = 0; row < 5; row++)
@@ -170,8 +170,6 @@ namespace WordPuzzlesTest
             {
                 const int SIZE = 3;
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(SIZE);
-                int rowOfSecondLetter = 0;
-                int columnOfSecondLetter = 0;
 
                 puzzle.PlaceSolution("ab");
 
@@ -194,10 +192,8 @@ namespace WordPuzzlesTest
                         break;
                     case Direction.Up:  
                         throw new Exception("Starting at 0, 0, the next direction should not be up.");
-                        break;
                     case Direction.Left:
                         throw new Exception("Starting at 0, 0, next direction should not be left.");
-                        break;
                 }
 
                 for (int row = 0; row < SIZE; row++)
@@ -254,8 +250,7 @@ namespace WordPuzzlesTest
             [Test]
             public void FiveLetters_VisitsAllRows()
             {
-                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(3);
-                puzzle.RandomSeed = 1;
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(3) {RandomSeed = 1};
                 puzzle.PlaceSolution("12345");
                 Console.WriteLine(puzzle.FormatHtmlForGoogle());
                 //The third box (in the center) should go down, not up. 

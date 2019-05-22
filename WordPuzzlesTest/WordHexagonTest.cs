@@ -36,19 +36,21 @@ namespace WordPuzzlesTest
                 hexagon.SetHorizontalLineAtIndex(4, "pen");
 
                 Console.WriteLine(hexagon);
-                List<string> ExpectedWords = new List<string>();
-                ExpectedWords.Add("war");
-                ExpectedWords.Add("taco");
-                ExpectedWords.Add("night");
-                ExpectedWords.Add("aloe");
-                ExpectedWords.Add("pen");
+                List<string> expectedWords = new List<string>
+                {
+                    "war",
+                    "taco",
+                    "night",
+                    "aloe",
+                    "pen",
+                    "wagon",
+                    "tile",
+                    "rot",
+                    "ache",
+                    "nap"
+                };
 
-                ExpectedWords.Add("wagon");
-                ExpectedWords.Add("tile");
-                ExpectedWords.Add("rot");
-                ExpectedWords.Add("ache");
-                ExpectedWords.Add("nap");
-                CollectionAssert.AreEquivalent(ExpectedWords, hexagon.UniqueWords);
+                CollectionAssert.AreEquivalent(expectedWords, hexagon.UniqueWords);
             }
         }
 
@@ -152,19 +154,21 @@ namespace WordPuzzlesTest
                 hexagon.SetDiagonalLineAtIndex(4, "net");
 
                 Console.WriteLine(hexagon);
-                List<string> ExpectedWords = new List<string>();
-                ExpectedWords.Add("ban");
-                ExpectedWords.Add("vice");
-                ExpectedWords.Add("night");
-                ExpectedWords.Add("isle");
-                ExpectedWords.Add("bay");
+                List<string> expectedWords = new List<string>
+                {
+                    "ban",
+                    "vice",
+                    "night",
+                    "isle",
+                    "bay",
+                    "nib",
+                    "visa",
+                    "bigly",
+                    "ache",
+                    "net"
+                };
 
-                ExpectedWords.Add("nib");
-                ExpectedWords.Add("visa");
-                ExpectedWords.Add("bigly");
-                ExpectedWords.Add("ache");
-                ExpectedWords.Add("net");
-                CollectionAssert.AreEquivalent(ExpectedWords, hexagon.UniqueWords);
+                CollectionAssert.AreEquivalent(expectedWords, hexagon.UniqueWords);
             }
 
         }
@@ -234,12 +238,12 @@ Unique words: night, angel, ante
                 hexagon.SetHorizontalLineAtIndex(3, "isle");
                 hexagon.SetHorizontalLineAtIndex(4, "bay");
 
-                const string fileName = "test.xml";
-                if (File.Exists(fileName))
+                const string FILE_NAME = "test.xml";
+                if (File.Exists(FILE_NAME))
                 {
-                    File.Delete(fileName);
+                    File.Delete(FILE_NAME);
                 }
-                hexagon.Serialize(fileName);
+                hexagon.Serialize(FILE_NAME);
             }
         }
         [TestFixture]
@@ -248,12 +252,17 @@ Unique words: night, angel, ante
             [Test]
             public void ReturnsExpectedResults()
             {
-                WordHexagon hexagon = new WordHexagon();
-                hexagon.Lines[0] = "abc";
-                hexagon.Lines[1] = "defg";
-                hexagon.Lines[2] = "hijkl";
-                hexagon.Lines[3] = "mnop";
-                hexagon.Lines[4] = "qrs";
+                WordHexagon hexagon = new WordHexagon
+                {
+                    Lines =
+                    {
+                        [0] = "abc",
+                        [1] = "defg",
+                        [2] = "hijkl",
+                        [3] = "mnop",
+                        [4] = "qrs"
+                    }
+                };
 
                 Assert.AreEqual("hmq", hexagon.CalculateDiagonalWordPattern(0));
                 Assert.AreEqual("dinr", hexagon.CalculateDiagonalWordPattern(1));
@@ -363,33 +372,6 @@ Unique words: night, angel, ante
             }
 
 
-            /* TODO: Revisit when we have a fully populated example.
-            [Test]
-            public void CreatesExpectedUniqueWords()
-            {
-                WordHexagon hexagon = new WordHexagon();
-                hexagon.SetHorizontalLineAtIndex(0, "war");
-                hexagon.SetHorizontalLineAtIndex(1, "taco");
-                hexagon.SetHorizontalLineAtIndex(2, "night");
-                hexagon.SetHorizontalLineAtIndex(3, "aloe");
-                hexagon.SetHorizontalLineAtIndex(4, "pen");
-
-                Console.WriteLine(hexagon);
-                List<string> ExpectedWords = new List<string>();
-                ExpectedWords.Add("war");
-                ExpectedWords.Add("taco");
-                ExpectedWords.Add("night");
-                ExpectedWords.Add("aloe");
-                ExpectedWords.Add("pen");
-
-                ExpectedWords.Add("wagon");
-                ExpectedWords.Add("tile");
-                ExpectedWords.Add("rot");
-                ExpectedWords.Add("ache");
-                ExpectedWords.Add("nap");
-                CollectionAssert.AreEquivalent(ExpectedWords, hexagon.UniqueWords);
-            }
-            */
         }
 
         [TestFixture]
@@ -590,33 +572,6 @@ Unique words: night, angel, ante
 
             }
 
-            /* TODO: Get full example.
-            [Test]
-            public void CreatesExpectedUniqueWords()
-            {
-                WordHexagon hexagon = new WordHexagon();
-                hexagon.SetDiagonalLineAtIndex(0, "nib");
-                hexagon.SetDiagonalLineAtIndex(1, "visa");
-                hexagon.SetDiagonalLineAtIndex(2, "bigly");
-                hexagon.SetDiagonalLineAtIndex(3, "ache");
-                hexagon.SetDiagonalLineAtIndex(4, "net");
-
-                Console.WriteLine(hexagon);
-                List<string> ExpectedWords = new List<string>();
-                ExpectedWords.Add("ban");
-                ExpectedWords.Add("vice");
-                ExpectedWords.Add("night");
-                ExpectedWords.Add("isle");
-                ExpectedWords.Add("bay");
-
-                ExpectedWords.Add("nib");
-                ExpectedWords.Add("visa");
-                ExpectedWords.Add("bigly");
-                ExpectedWords.Add("ache");
-                ExpectedWords.Add("net");
-                CollectionAssert.AreEquivalent(ExpectedWords, hexagon.UniqueWords);
-            }
-            */
         }
 
         [TestFixture]
@@ -733,12 +688,12 @@ Unique words: knight, kaboo, ashed
                 hexagon.SetHorizontalLineAtIndex(3, "isle");
                 hexagon.SetHorizontalLineAtIndex(4, "bay");
 
-                const string fileName = "test.xml";
-                if (File.Exists(fileName))
+                const string FILE_NAME = "test.xml";
+                if (File.Exists(FILE_NAME))
                 {
-                    File.Delete(fileName);
+                    File.Delete(FILE_NAME);
                 }
-                hexagon.Serialize(fileName);
+                hexagon.Serialize(FILE_NAME);
             }
         }
         [TestFixture]
@@ -747,14 +702,19 @@ Unique words: knight, kaboo, ashed
             [Test]
             public void ReturnsExpectedResults()
             {
-                WordHexagon hexagon = new WordHexagon(4);
-                hexagon.Lines[0] = "abcd";
-                hexagon.Lines[1] = "efghi";
-                hexagon.Lines[2] = "jklmno";
-                hexagon.Lines[3] = "p9q*rst";
-                hexagon.Lines[4] = "uvwxyz";
-                hexagon.Lines[5] = "01234";
-                hexagon.Lines[6] = "5678";
+                WordHexagon hexagon = new WordHexagon(4)
+                {
+                    Lines =
+                    {
+                        [0] = "abcd",
+                        [1] = "efghi",
+                        [2] = "jklmno",
+                        [3] = "p9q*rst",
+                        [4] = "uvwxyz",
+                        [5] = "01234",
+                        [6] = "5678"
+                    }
+                };
 
                 Assert.AreEqual("pu05", hexagon.CalculateDiagonalWordPattern(0));
                 Assert.AreEqual("j9v16", hexagon.CalculateDiagonalWordPattern(1));
