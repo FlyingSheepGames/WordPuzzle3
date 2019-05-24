@@ -321,6 +321,46 @@ third
                 WordRepository repository = new WordRepository();
                 Assert.IsTrue(repository.IsAWord("net"));
             }
+
+            [Test]
+            public void OnlySingleLetterWordsAreAandI()
+            {
+                WordRepository repository = new WordRepository();
+                Assert.IsTrue(repository.IsAWord("a"));
+                for (char letter = 'b'; letter <= 'z'; letter++)
+                {
+                    if (letter == 'i')
+                    {
+                        Assert.IsTrue(repository.IsAWord(letter.ToString()));
+                    }
+                    else
+                    {
+                        Assert.IsFalse(repository.IsAWord(letter.ToString()));
+                    }
+                }
+            }
+
+            [Test]
+            public void TO_IsAWord()
+            {
+                WordRepository repository = new WordRepository();
+                Assert.IsTrue(repository.IsAWord("to"));
+            }
+
+            [Test]
+            public void OT_IsNotAWord()
+            {
+                WordRepository repository = new WordRepository();
+                Assert.IsFalse(repository.IsAWord("ot"));
+            }
+
+            [Test]
+            public void SISTER_IsAWord()
+            {
+                WordRepository repository = new WordRepository() {ExludeAdvancedWords = false};
+                Assert.IsTrue(repository.IsAWord("sister"));
+            }
+
         }
 
         [TestFixture]

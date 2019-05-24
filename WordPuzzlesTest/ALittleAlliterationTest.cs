@@ -150,6 +150,16 @@ What color was the emergency vehicle that was unexpectedly attacked?
                 ALittleAlliteration puzzle = new ALittleAlliteration("Solution  =  Clue");
                 Assert.AreEqual("Solution", puzzle.Solution);
                 Assert.AreEqual("Clue", puzzle.Clue);
+
+                Assert.AreEqual(@"	Solution			Sol		Clue		scheduled		", puzzle.GoogleSheetRow);
+            }
+
+            [Test]
+            public void Parse_NullString_ReturnsDefaultObject()
+            {
+                ALittleAlliteration puzzle = new ALittleAlliteration(null);
+                Assert.IsNull(puzzle.Solution);
+                Assert.IsNull(puzzle.Clue);
             }
         }
 

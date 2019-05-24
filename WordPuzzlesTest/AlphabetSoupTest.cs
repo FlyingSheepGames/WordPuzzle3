@@ -24,6 +24,15 @@ namespace WordPuzzlesTest
                 AssertExactlyOneSubstringIsAWord(line);
             }
 
+            [Test]
+            public void ExampleThatStartsInSecondPosition()
+            {
+                AlphabetSoup puzzle = new AlphabetSoup(Repository);
+                puzzle.RandomSeed = 1;
+                Assert.AreEqual("algaeam", puzzle.GenerateSingleLine('a', 'a'));
+                Assert.AreEqual("alabuts", puzzle.GenerateSingleLine('a', 'b'));
+            }
+
         }
 
         [TestFixture]
@@ -63,7 +72,6 @@ namespace WordPuzzlesTest
         public class HideWordInLine
         {
             [Test]
-            [Ignore("Takes too long to run.")]
             public void SimpleTest_PutsWordInExpectedPosition()
             {
                 AlphabetSoup puzzle = new AlphabetSoup(Repository);
@@ -142,10 +150,23 @@ namespace WordPuzzlesTest
             Assert.IsFalse(Repository.IsAWord(firstPositionSixLetterString), $"{firstPositionSixLetterString} is a 6-letter word starting at the first letter, and shouldn't be.");
             Assert.IsFalse(Repository.IsAWord(secondPositionSixLetterString), $"{secondPositionSixLetterString} is a 6-letter word starting at the second letter, and shouldn't be.");
 
-            Assert.IsFalse(Repository.IsAWord(line), $"The entire line {line} is a seven letter word, and shouldn't be. ");
+            if (line.Length < 7) //We don't support words of length 7 or more yet.
+            {
+                Assert.IsFalse(Repository.IsAWord(line), $"The entire line {line} is a seven letter word, and shouldn't be. ");
+            }
 
             return hiddenWord;
         }
+    }
 
+    [TestFixture]
+    public class Constructor
+    {
+        [Test]
+        public void Default_UsesDefaultRepository()
+        {
+            AlphabetSoup puzzle = new AlphabetSoup();
+            Assert.IsNotNull(puzzle);
+        }
     }
 }

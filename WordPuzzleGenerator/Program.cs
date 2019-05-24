@@ -113,7 +113,7 @@ namespace WordPuzzleGenerator
                             InteractiveGenerateAnacrostic(new AnacrosticParameterSet
                             {
                                 Phrase = solution,
-                                WordsToUse = new List<string>() { "dr", "nor"}
+                                WordsToUse = new List<string>() { }
                             });
                             Console.WriteLine("Done. Press a key to continue.");
                             Console.ReadKey();
@@ -260,11 +260,14 @@ namespace WordPuzzleGenerator
                 bool foundSentence = false;
                 while (!foundSentence)
                 {
+                    Console.Clear();
                     int blanksToAdd = RandomNumberGenerator.Next(2, 5);
                     if (letter == 'q') //must be at least 4 letters long.
                     {
                         blanksToAdd = RandomNumberGenerator.Next(3, 5);
                     }
+
+                    //blanksToAdd = 5;//Let's just try hiding the longest words. 
 
                     StringBuilder patternBuilder = new StringBuilder();
                     patternBuilder.Append(letter);
@@ -277,21 +280,39 @@ namespace WordPuzzleGenerator
                     }
 
                     string hiddenWordCandidate = hiddenWordCandidates[RandomNumberGenerator.Next(hiddenWordCandidates.Count)];
-                    var phrase = puzzle.HideWord(hiddenWordCandidate);
-                    if (phrase.Count == 2)
+                    foreach (string splitableString in puzzle.GenerateAllSplitableStrings(hiddenWordCandidate))
                     {
-                        Console.WriteLine(
-                            $"Write a sentence that hides '{string.Join(",", phrase)}' and '{hiddenWordCandidate}'. Or just hit enter to create another one for this letter.");
-                        string sentence = Console.ReadLine();
-                        if (!string.IsNullOrEmpty(sentence))
-                        {
-                            foundSentence = true;
-                            puzzle.Sentences.Add(sentence);
-                        }
+                        List<string> phraseHidingWord =
+                            puzzle.CreateSpecificExampleFromSplitableString(splitableString);
+                        Console.WriteLine($"({splitableString}) : {string.Join(" ", phraseHidingWord)}      {hiddenWordCandidate.ToUpper()}.");
                     }
-                    else
+                    Console.WriteLine("Or just hit enter to create another one for this letter.");
+                    string sentence = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(sentence))
                     {
-                        Console.WriteLine($"Unable to hide word {hiddenWordCandidate}");
+                        foundSentence = true;
+                        puzzle.Sentences.Add(sentence);
+                    }
+
+                    if (false) //TODO: Delete me.
+                    {
+                        var phrase = puzzle.HideWord(hiddenWordCandidate);
+                        if (phrase.Count == 0)
+                        {
+                            Console.WriteLine($"Unable to hide word {hiddenWordCandidate}");
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"Write a sentence that hides '{string.Join(",", phrase)}' and '{hiddenWordCandidate}'. Or just hit enter to create another one for this letter.");
+
+                            sentence = Console.ReadLine();
+                            if (!string.IsNullOrEmpty(sentence))
+                            {
+                                foundSentence = true;
+                                puzzle.Sentences.Add(sentence);
+                            }
+                        }
                     }
                 }
             }
@@ -647,7 +668,9 @@ namespace WordPuzzleGenerator
             {
                 anacrostic = CreateAnacrosticFromPuzzleSet(parameterSet, wordsAlreadyUsed);
 
-                Console.WriteLine(@"Which words should we remove? 
+                Console.WriteLine(@"
+To remove a word from the list, enter its number.
+To add a new word, type it below. (use commas for multiples)
 Press 0 to continue to the next step.");
                 string commaDelimitedResponse = Console.ReadLine();
                 if (commaDelimitedResponse == null)
@@ -679,7 +702,7 @@ Press 0 to continue to the next step.");
                     }
                     else
                     {
-                        Console.WriteLine($"I don't know what you mean by {response} .");
+                        parameterSet.WordsToUse.Add(response);
                         readyToProceed = false;
                     }
                 }

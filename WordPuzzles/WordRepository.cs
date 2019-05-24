@@ -28,6 +28,41 @@ namespace WordPuzzles
 
         readonly Random _randomNumberGenerator = new Random();
 
+        private readonly List<string> _oneLetterWords = new List<string>() {"a", "i"};
+        private readonly List<string> _twoLetterWords = new List<string>()
+        {
+            "ad",
+            "am",
+            "an",
+            "as",
+            "at",
+            "ax",
+            "be",
+            "by",
+            "do",
+            "go",
+            "he",
+            "hi",
+            "if",
+            "in",
+            "is",
+            "it",
+            "me",
+            "my",
+            "no",
+            "of",
+            "OK",
+            "on",
+            "or",
+            "ox",
+            "so",
+            "to",
+            "up",
+            "us",
+            "we",
+
+        };
+
         private readonly List<string> _threeLetterWords = new List<string>();
         private readonly List<string> _fourLetterWords = new List<string>();
         private readonly List<string> _fiveLetterWords = new List<string>();
@@ -183,25 +218,9 @@ namespace WordPuzzles
             List<string> matchingWords = new List<string>();
             List<string> wordsToSearch = null;
 
-            if (wordLength == 3)
-            {
-                wordsToSearch = _threeLetterWords;
-            }
 
-            if (wordLength == 4)
-            {
-                wordsToSearch = _fourLetterWords;
-            }
-            if (wordLength == 5)
-            {
-                wordsToSearch = _fiveLetterWords;
-            }
-            if (wordLength == 6)
-            {
-                wordsToSearch = _sixLetterWords;
-            }
+            wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
 
-            
 
             if (wordsToSearch == null)
                 throw new ArgumentException($"We don't support {wordLength} letter words yet.", nameof(wordLength));
@@ -227,24 +246,7 @@ namespace WordPuzzles
             List<string> matchingWords = new List<string>();
             List<string> wordsToSearch = null;
 
-            if (wordLength == 3)
-            {
-                wordsToSearch = _threeLetterWords;
-            }
-
-            if (wordLength == 4)
-            {
-                wordsToSearch = _fourLetterWords;
-            }
-            if (wordLength == 5)
-            {
-                wordsToSearch = _fiveLetterWords;
-            }
-            if (wordLength == 6)
-            {
-                wordsToSearch = _sixLetterWords;
-            }
-
+            wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
 
 
             if (wordsToSearch == null)
@@ -270,19 +272,8 @@ namespace WordPuzzles
             }
             int wordLength = wordCandidate.Length;
 
-            switch (wordLength)
-            {
-                case 3:
-                    return _threeLetterWords.Contains(wordCandidate);
-                case 4:
-                    return _fourLetterWords.Contains(wordCandidate);
-                case 5:
-                    return _fiveLetterWords.Contains(wordCandidate);
-                case 6:
-                    return _sixLetterWords.Contains(wordCandidate);
-            }
-
-            return false;
+            var wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
+            return wordsToSearch.Contains(wordCandidate);
         }
 
         public string GetRandomWord(int wordLength = 5)
@@ -461,6 +452,10 @@ namespace WordPuzzles
                 googleRowsBuilder.AppendLine($"{key}\t{key.Length}\t{DictionaryOfClues[key]}");
             }
 
+            foreach (string word in _oneLetterWords)
+            {
+                googleRowsBuilder.AppendLine($"{word}\t{word.Length}");
+            }
 
             foreach (string word in _threeLetterWords)
             {
@@ -492,24 +487,7 @@ namespace WordPuzzles
             List<string> wordsToSearch = null;
             int wordLength = pattern.Length;
 
-            if (wordLength == 3)
-            {
-                wordsToSearch = _threeLetterWords;
-            }
-
-            if (wordLength == 4)
-            {
-                wordsToSearch = _fourLetterWords;
-            }
-            if (wordLength == 5)
-            {
-                wordsToSearch = _fiveLetterWords;
-            }
-            if (wordLength == 6)
-            {
-                wordsToSearch = _sixLetterWords;
-            }
-
+            wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
 
 
             if (wordsToSearch == null)
@@ -535,6 +513,36 @@ namespace WordPuzzles
             }
 
             return matchingWords;
+        }
+
+        private List<string> GetWordsToSearchBaseOnLength(int wordLength)
+        {
+            List<string> wordsToSearch = new List<string>();
+            switch (wordLength)
+            {
+                case 1:
+                    wordsToSearch = _oneLetterWords;
+                    break;
+                case 2:
+                    wordsToSearch = _twoLetterWords;
+                    break;
+                case 3:
+                    wordsToSearch = _threeLetterWords;
+                    break;
+                case 4:
+                    wordsToSearch = _fourLetterWords;
+                    break;
+                case 5:
+                    wordsToSearch = _fiveLetterWords;
+                    break;
+                case 6:
+                    wordsToSearch = _sixLetterWords;
+                    break;
+                default:
+                    throw new Exception($"Words of length {wordLength} are not supported yet.");
+            }
+
+            return wordsToSearch;
         }
 
         public WordCategory CategorizeWord(string word)

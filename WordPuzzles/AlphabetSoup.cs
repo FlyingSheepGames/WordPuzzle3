@@ -7,7 +7,7 @@ namespace WordPuzzles
     public class AlphabetSoup
     {
         readonly WordRepository _repository;
-        static readonly Random RandomNumberGenerator = new Random();
+        Random _randomNumberGenerator;
 
         public string[] Lines = new string [26];
         public string[] HiddenWords = new string[26];
@@ -18,9 +18,29 @@ namespace WordPuzzles
             _repository = repositoryToUse;
         }
 
-        public AlphabetSoup()
+        public AlphabetSoup() : this (new WordRepository())
         {
-            _repository = new WordRepository();
+        }
+
+        public int RandomSeed = 0;
+
+        public  Random RandomNumberGenerator
+        {
+            get
+            {
+                if (_randomNumberGenerator == null)
+                {
+                    if (RandomSeed == 0)
+                    {
+                        _randomNumberGenerator = new Random();
+                    }
+                    else
+                    {
+                        _randomNumberGenerator = new Random(RandomSeed);
+                    }
+                }
+                return _randomNumberGenerator;
+            }
         }
 
         public string GenerateSingleLine(char firstLetter, char middleLetter)
@@ -31,42 +51,57 @@ namespace WordPuzzles
         public string GenerateSingleLine(char firstLetter, char middleLetter, out string hiddenWord)
         {
             StartPosition selectedPosition = StartPosition.FirstPosition;
-            List<string> possibleWords = new List<string>();
+
             switch (RandomNumberGenerator.Next(3))
             {
                 case 0: selectedPosition = StartPosition.FirstPosition;
-                    foreach (string word in _repository.WordsWithCharacterAtIndex(middleLetter, 3, 5))
-                    {
-                        if (word[0] == firstLetter)
-                        {
-                            possibleWords.Add(word);
-                        }
-                    }
-
-                    if (0 < possibleWords.Count)
-                    {
-                        break;
-                    }
-                    //otherwise, let's use second position instead.
-                    goto case 1;
+                    break;
                 case 1:
                     selectedPosition = StartPosition.SecondPosition;
-                    possibleWords = _repository.WordsWithCharacterAtIndex(middleLetter, 2, 5);
                     break;
                 case 2:
                     selectedPosition = StartPosition.ThirdPosition;
-                    possibleWords = _repository.WordsWithCharacterAtIndex(middleLetter, 1, 5);
                     break;
             }
 
+            return GenerateSingleLine(firstLetter, middleLetter, out hiddenWord, selectedPosition);
+        }
+
+        private string GenerateSingleLine(char firstLetter, char middleLetter, out string hiddenWord,
+            StartPosition selectedPosition)
+        {
+            StringBuilder patternBuilder = new StringBuilder();
+            List<string> possibleWords;
+            switch (selectedPosition)
+            {
+                case StartPosition.FirstPosition:
+                    patternBuilder.Append(firstLetter);
+                    patternBuilder.Append("__");
+                    patternBuilder.Append(middleLetter);
+                    patternBuilder.Append("_");
+                    break;
+                case StartPosition.SecondPosition:
+                    patternBuilder.Append("__");
+                    patternBuilder.Append(middleLetter);
+                    patternBuilder.Append("__");
+                    break;
+                case StartPosition.ThirdPosition:
+                    patternBuilder.Append("_");
+                    patternBuilder.Append(middleLetter);
+                    patternBuilder.Append("___");
+                    break;
+            }
+
+            possibleWords = _repository.WordsMatchingPattern(patternBuilder.ToString());
             if (possibleWords.Count <= 0)
             {
-                throw new Exception($"There are no words that start with {firstLetter} and have the letter {middleLetter} at position {selectedPosition}");
+                throw new Exception(
+                    $"There are no words that start with {firstLetter} and have the letter {middleLetter} at position {selectedPosition}");
                 //Todo: try a different position.
             }
-            hiddenWord = possibleWords[RandomNumberGenerator.Next(possibleWords.Count)];
 
-            return HideWordInLine(hiddenWord, selectedPosition, firstLetter); 
+            hiddenWord = possibleWords[RandomNumberGenerator.Next(possibleWords.Count)];
+            return HideWordInLine(hiddenWord, selectedPosition, firstLetter);
         }
 
         internal string HideWordInLine(string hiddenWord, StartPosition selectedPosition, char firstCharacter = ' ')
@@ -120,10 +155,10 @@ namespace WordPuzzles
                         }
                         break;
                 }
-                //Disallow 6 letter words. Also, the entire line cannot be a 7 letter word.
+                //Disallow 6 letter words. 
+                //TODO: Also, the entire line cannot be a 7 letter word, but the repository doesn't support 7 letter words yet. 
                 if (_repository.IsAWord(line.Substring(0, 6)) ||
-                    _repository.IsAWord(line.Substring(1, 6)) ||
-                    _repository.IsAWord(line))
+                    _repository.IsAWord(line.Substring(1, 6)) )
                 {
                     tryAgain = true;
                 }
@@ -241,6 +276,7 @@ namespace WordPuzzles
         FirstPosition = 0,  //STUCK**
         SecondPosition = 1, //*STUCK*
         ThirdPosition = 2,  //**STUCK
+        Undefined
     }
 
     static class Shuffler //TODO: Join multiple shuffler classes.

@@ -315,26 +315,5 @@ namespace WordPuzzles
 
         }
 
-        public static string StripCommonEndings(string wordToAdd)
-        {
-            foreach (string commonEnding in new[] { "ed", "ment", "ments", "ly", "ing", })
-            {
-                if (wordToAdd.EndsWith(commonEnding))
-                {
-                    wordToAdd = wordToAdd.Substring(0, wordToAdd.Length - commonEnding.Length);
-                }
-            }
-
-            foreach (string commonEnding in new[] { "es", })
-            {
-                if (wordToAdd.EndsWith(commonEnding))
-                {
-                    wordToAdd = wordToAdd.Substring(0, wordToAdd.Length - (commonEnding.Length - 1));
-                }
-            }
-
-            return wordToAdd;
-        }
-
     }
 }
