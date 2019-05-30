@@ -45,34 +45,35 @@ namespace WordPuzzles
             //foreach (KeyValuePair<string, JToken> node in responseAsObject)
 
             JToken table = responseAsObject["table"];
-            if (table == null)
+            if (table != null)
             {
-                return entries;
-            }
-            foreach (var row in table["rows"])
-            {
-                Dictionary<int, string> currentDictionary = new Dictionary<int, string>();
-                //Console.WriteLine(row);
-                //Console.WriteLine(row["c"]);
-                //Console.WriteLine(row["c"][3]);
-                //Console.WriteLine(row["c"][3]["v"]);
-               
-                /*
-                if (row["c"][0]["v"].ToString() == "Type")
+                foreach (var row in table["rows"])
                 {
-                    Console.WriteLine(row);
-                }
-                */
-                int index = 0;
-                foreach (var item in row["c"])
-                {
-                    if (item.HasValues)
+                    Dictionary<int, string> currentDictionary = new Dictionary<int, string>();
+                    //Console.WriteLine(row);
+                    //Console.WriteLine(row["c"]);
+                    //Console.WriteLine(row["c"][3]);
+                    //Console.WriteLine(row["c"][3]["v"]);
+
+                    /*
+                    if (row["c"][0]["v"].ToString() == "Type")
                     {
-                        currentDictionary.Add(index, (string) item["v"]);
+                        Console.WriteLine(row);
                     }
-                    index++;
+                    */
+                    int index = 0;
+                    foreach (var item in row["c"])
+                    {
+                        if (item.HasValues)
+                        {
+                            currentDictionary.Add(index, (string) item["v"]);
+                        }
+
+                        index++;
+                    }
+
+                    entries.Add(currentDictionary);
                 }
-                entries.Add(currentDictionary);
             }
 
             return entries;

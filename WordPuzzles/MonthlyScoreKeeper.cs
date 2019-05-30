@@ -51,9 +51,6 @@ namespace WordPuzzles
             {
                 return (PuzzleType) puzzleTypeAsInt;
             }
-            if (puzzleTypeAsString == "VM") return PuzzleType.VOWEL_MOVEMENT;
-            if (puzzleTypeAsString == "ALA") return PuzzleType.A_LITTLE_ALLITERATION;
-            if (puzzleTypeAsString == "MWS") return PuzzleType.MAGIC_WORD_SQUARE;
 
             throw new ArgumentException($"Unexpected puzzle type {puzzleTypeAsString}", nameof(puzzleTypeAsString));
         }

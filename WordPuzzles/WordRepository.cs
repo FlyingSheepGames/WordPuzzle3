@@ -67,7 +67,7 @@ namespace WordPuzzles
         private readonly List<string> _fourLetterWords = new List<string>();
         private readonly List<string> _fiveLetterWords = new List<string>();
         private readonly List<string> _sixLetterWords = new List<string>();
-        private bool _alreadyLoaded;
+        internal bool _alreadyLoaded;
         private static readonly Dictionary<string, string> DictionaryOfClues = new Dictionary<string, string>();
 
         public bool IgnoreCache = true;
@@ -78,53 +78,11 @@ namespace WordPuzzles
             {
                 CategoriesToInclude.Add(WordCategory.AdvancedWord);
             }
-            LoadAllWordsReplacement2();
+            LoadAllWordsWithCategories();
         }
 
-        public void LoadAllWordsReplacement()
-        {
-            GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = "1CvAFsE6wIY75gy8OJYP5RS04twD2nBvVB2o6Sm3PnPU", IgnoreCache = IgnoreCache };
-            var results = sheet.ExecuteQuery("SELECT *");
-            foreach (var result in results)
-            {
-                if (!result.ContainsKey(0))
-                {
-                    continue;
-                }
-                string currentWord = result[0];
 
-                switch (currentWord.Length)
-                {
-                    case 3: _threeLetterWords.Add(currentWord);
-                        break;
-                    case 4:
-                        _fourLetterWords.Add(currentWord);
-                        break;
-                    case 5:
-                        _fiveLetterWords.Add(currentWord);
-                        break;
-                    case 6:
-                        _sixLetterWords.Add(currentWord);
-                        break;
-
-                }
-
-                if (result.ContainsKey(2))
-                {
-                    string hintForCurrentWord = result[2];
-                    if (!string.IsNullOrWhiteSpace(hintForCurrentWord))
-                    {
-                        if (!DictionaryOfClues.ContainsKey(currentWord))
-                        {
-                            DictionaryOfClues.Add(currentWord, hintForCurrentWord);
-                        }
-                    }
-                }
-            }
-            _alreadyLoaded = true;
-        }
-
-        public void LoadAllWordsReplacement2()
+        public void LoadAllWordsWithCategories()
         {
             const int WORD_INDEX = 0;
             const int CATEGORY_INDEX = 1;
@@ -313,7 +271,8 @@ namespace WordPuzzles
             return null;
         }
 
-
+        //TODO: Currently there's a mix of storing clues in the google spreadsheet 
+        //and storing them on disk as XML.  Neither approach is really perfect.
         internal static void WriteToDisk(List<Clue> clues, string fileName = null)
         {
             if (string.IsNullOrWhiteSpace(fileName))
@@ -365,20 +324,6 @@ namespace WordPuzzles
             }
 
             return wordsForTheme;
-            /*
-            var relatedWordsForTheme = new List<string>();
-            string filePath = BASE_DIRECTORY + $@"themes\{theme}.txt";
-            if (File.Exists(filePath))
-            {
-                foreach (string word in File.ReadAllLines(filePath))
-                {
-                    if (!string.IsNullOrWhiteSpace(word))
-                    relatedWordsForTheme.Add(word);
-                }
-
-            }
-            return relatedWordsForTheme;
-            */
         }
 
         public bool IsSingleSyllable(string word)
@@ -572,16 +517,5 @@ namespace WordPuzzles
     {
         public string Word { get; set; }
         public string Hint { get; set; }
-    }
-
-    internal class WordObject
-    {
-        public string Word;
-    }
-
-    internal class WordCollectionObject
-    {
-        public string Description;
-        public JContainer Data;
     }
 }

@@ -234,6 +234,7 @@ namespace WordPuzzles
                     var horizontalOptionsCount = horizontalOptions.Count;
                     if (verticalOptionsCount + horizontalOptionsCount == 0)
                     {
+                        //TODO Come up with a cleaner solution to this, or prevent it from occurring completely.
                         Console.WriteLine("About to hit exception.");
                         Console.WriteLine(FormatHtmlForGoogle());
                     }
@@ -359,6 +360,7 @@ namespace WordPuzzles
                     var wordsMatchingPattern = Repository.WordsMatchingPattern(pattern);
                     if (wordsMatchingPattern.Count == 0)
                     {
+                        //This should not happen
                         Console.WriteLine($"No words match {pattern} in row {row}.");
                         Console.WriteLine(FormatHtmlForGoogle());
                     }

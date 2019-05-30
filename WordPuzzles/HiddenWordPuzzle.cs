@@ -35,11 +35,6 @@ namespace WordPuzzles
         public List<string> HideWord(string wordToHide)
         {
             return HideWordReplacement(wordToHide);
-            List<string> puzzlePhrase = new List<string>();
-
-            HideWordAcrossTwoWords(wordToHide, puzzlePhrase);
-
-            return puzzlePhrase;
         }
 
         public List<string> HideWordReplacement(string wordToHide)
@@ -114,85 +109,6 @@ namespace WordPuzzles
                 allWordsThatEndWith.AddRange(Repository.WordsMatchingPattern(patternBuilder.ToString()));
             }
             return allWordsThatEndWith;
-        }
-
-        private void HideWordAcrossTwoWords(string wordToHide, List<string> puzzlePhrase)
-        {
-            foreach (int whereToBreakWord in GenerateWordBreaks(wordToHide.Length))
-            {
-                var foundFirstWord = false;
-                var firstPartOfWord = wordToHide.Substring(0, whereToBreakWord);
-                string lastPartOfWord = wordToHide.Substring(whereToBreakWord);
-
-                StringBuilder firstPatternBuilder = new StringBuilder();
-                bool foundSecondWord;
-
-                for (int numberOfBlanksToPrepend = 1;
-                    numberOfBlanksToPrepend < 7 - whereToBreakWord;
-                    numberOfBlanksToPrepend++)
-                {
-                    if (numberOfBlanksToPrepend + whereToBreakWord < 3)
-                    {
-                        continue;
-                    }
-
-                    firstPatternBuilder.Clear();
-                    firstPatternBuilder.Append('_', numberOfBlanksToPrepend);
-                    firstPatternBuilder.Append(firstPartOfWord);
-                    var firstPattern = firstPatternBuilder.ToString();
-                    //Console.WriteLine($"Looking for first word match {firstPattern} with {numberOfBlanksToPrepend} blanks.");
-                    var firstMatchingWords = Repository.WordsMatchingPattern(firstPattern);
-                    if (0 == firstMatchingWords.Count)
-                    {
-                        //skip to next word. 
-                        continue;
-                    }
-
-                    puzzlePhrase.Add(firstMatchingWords[Random.Next(firstMatchingWords.Count)]);
-                    foundFirstWord = true;
-                    break;
-                }
-
-                if (!foundFirstWord)
-                {
-                    continue;
-                }
-
-                foundSecondWord = false;
-                var minimumNumberOfBlanks = 3 - lastPartOfWord.Length;
-                if (minimumNumberOfBlanks < 1)
-                {
-                    minimumNumberOfBlanks = 1;
-                }
-
-                for (int numberOfBlanksToAdd = minimumNumberOfBlanks;
-                    numberOfBlanksToAdd < 7 - (lastPartOfWord.Length);
-                    numberOfBlanksToAdd++)
-                {
-                    StringBuilder secondPatternBuilder = new StringBuilder();
-                    secondPatternBuilder.Append(lastPartOfWord);
-
-                    secondPatternBuilder.Append('_', numberOfBlanksToAdd);
-                    var secondPattern = secondPatternBuilder.ToString();
-                    //Console.WriteLine($"Looking for second word using pattern {secondPattern}, adding {numberOfBlanksToAdd} blanks");
-                    var secondMatchingWords = Repository.WordsMatchingPattern(secondPattern);
-                    if (0 == secondMatchingWords.Count)
-                    {
-                        continue;
-                    }
-
-                    puzzlePhrase.Add(secondMatchingWords[Random.Next(secondMatchingWords.Count)]);
-                    foundSecondWord = true;
-                    break;
-                }
-
-                if (foundSecondWord)
-                {
-                    break;
-                }
-
-                puzzlePhrase.Clear();
-            }
         }
 
         internal IEnumerable<int> GenerateWordBreaks(int length)

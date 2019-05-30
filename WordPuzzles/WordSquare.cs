@@ -44,31 +44,11 @@ namespace WordPuzzles
             Repository = source.Repository;
         }
 
-        public string LastLine => Lines[Size - 1];
-
         public override string ToString()
         {
             return String.Join(Environment.NewLine, Lines); 
         }
 
-
-
-        public void SetFirstLine(string firstLineWord)
-        {
-            SetWordAtIndex(firstLineWord, 0);
-        }
-
-        public void SetSecondLine(string secondLineWord)
-        {
-            SetWordAtIndex(secondLineWord, 1);
-        }
-
-        public void SetThirdLine(string thirdLineWord)
-        {
-            int indexToSet = 2;
-
-            SetWordAtIndex(thirdLineWord, indexToSet);
-        }
 
         public void SetWordAtIndex(string wordToSet, int indexToSet)
         {
@@ -81,11 +61,6 @@ namespace WordPuzzles
             Lines[indexToSet] = wordToSet;
         }
 
-        public void SetFourthLine(string fourthLineWord)
-        {
-            SetWordAtIndex(fourthLineWord, 3);
-        }
-
         public List<string> GetFirstWordCandidates()
         {
             return GetWordCandidates(0);
@@ -96,30 +71,6 @@ namespace WordPuzzles
             return Repository.WordsStartingWith(Lines[index].Trim('_'), Size);
         }
 
-        public IEnumerable<string> GetSecondWordCandidates()
-        {
-            return GetWordCandidates(1);
-        }
-
-        public IEnumerable<string> GetThirdWordCandidates()
-        {
-            return GetWordCandidates(2);
-        }
-
-        public IEnumerable<string> GetFourthWordCandidates()
-        {
-            return GetWordCandidates(3);
-        }
-
-        public IEnumerable<string> GetFifthWordCandidates()
-        {
-            return GetWordCandidates(4);
-        }
-
-        public void SetFifthLine(string fifthWordCandidate)
-        {
-            SetWordAtIndex(fifthWordCandidate, 4);
-        }
 
         public bool IsLastLineAWord()
         {

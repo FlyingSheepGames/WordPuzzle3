@@ -26,7 +26,7 @@ namespace WordPuzzles
         }
 
         public int RandomSeed;
-        public Random Random1
+        public Random RandomNumberGenerator
         {
             get
             {
@@ -43,7 +43,6 @@ namespace WordPuzzles
                 }
                 return _random;
             }
-            set => _random = value;
         }
 
         internal void RefreshPartialGrid()
@@ -62,8 +61,8 @@ namespace WordPuzzles
             //randomly block out some letters. 
             for (int randomCounter = 0; randomCounter < 12; randomCounter++)
             {
-                int row = Random1.Next(1, Solution.Length);
-                int column = Random1.Next(0, Solution.Length);
+                int row = RandomNumberGenerator.Next(1, Solution.Length);
+                int column = RandomNumberGenerator.Next(0, Solution.Length);
                 var isUniquelyDetermined = IsUniquelyDetermined(row, column, partialGridInProgress);
 
                 if (isUniquelyDetermined)
@@ -112,89 +111,7 @@ namespace WordPuzzles
 
             if (5 < stackDepth)//hardcoded example
             {
-                if (2 == length)
-                {
-                    return new[]
-                    {
-                        "01",
-                        "10",
-                    };
-                }
-
-                if (3 == length)
-                {
-                    return new[]
-                    {
-                        "012",
-                        "120",
-                        "201",
-                    };
-                }
-
-                if (4 == length)
-                {
-                    return new[]
-                    {
-                        "0123",
-                        "1302",
-                        "3210",
-                        "2013"
-                    }; 
-                }
-                if (5 == length)
-                {
-                    return new[]
-                    {
-                        "01234",
-                        "10423",
-                        "34012",
-                        "42301",
-                        "23140",
-                    };
-                }
-
-                if (6 == length)
-                {
-                    return new[]
-                    {
-                        "012345",
-                        "431052",
-                        "105234",
-                        "240513",
-                        "523401",
-                        "354120",
-                    };
-                }
-
-                if (7 == length)
-                {
-                    return new[]
-                    {
-                        "0123456",
-                        "2365140",
-                        "3041625",
-                        "6452013",
-                        "4530261",
-                        "5216304",
-                        "1604532"
-                    };
-                }
-
-                if (8 == length)
-                {
-                    return new[]
-                    {
-                        "01234567",
-                        "23467105",
-                        "16705243",
-                        "47013652",
-                        "70352416",
-                        "65170324",
-                        "52641730",
-                        "34526071"
-                    };
-                }
-
+                return ReturnCannedGridForLength(length);
             }
 
             string[] gridInProgress = new string[length];
@@ -235,13 +152,102 @@ namespace WordPuzzles
                         }
                     }
 
-                    int nextNumber = availableNumbers[Random1.Next(availableNumbers.Count)];
+                    int nextNumber = availableNumbers[RandomNumberGenerator.Next(availableNumbers.Count)];
                     currentLine.Append(nextNumber);
                 }
                 gridInProgress[row] = currentLine.ToString();
             }
 
             return gridInProgress;
+        }
+
+        internal static string[] ReturnCannedGridForLength(int length)
+        {
+            if (2 == length)
+            {
+                return new[]
+                {
+                    "01",
+                    "10",
+                };
+            }
+
+            if (3 == length)
+            {
+                return new[]
+                {
+                    "012",
+                    "120",
+                    "201",
+                };
+            }
+
+            if (4 == length)
+            {
+                return new[]
+                {
+                    "0123",
+                    "1302",
+                    "3210",
+                    "2013"
+                };
+            }
+
+            if (5 == length)
+            {
+                return new[]
+                {
+                    "01234",
+                    "10423",
+                    "34012",
+                    "42301",
+                    "23140",
+                };
+            }
+
+            if (6 == length)
+            {
+                return new[]
+                {
+                    "012345",
+                    "431052",
+                    "105234",
+                    "240513",
+                    "523401",
+                    "354120",
+                };
+            }
+
+            if (7 == length)
+            {
+                return new[]
+                {
+                    "0123456",
+                    "2365140",
+                    "3041625",
+                    "6452013",
+                    "4530261",
+                    "5216304",
+                    "1604532"
+                };
+            }
+
+            if (8 == length)
+            {
+                return new[]
+                {
+                    "01234567",
+                    "23467105",
+                    "16705243",
+                    "47013652",
+                    "70352416",
+                    "65170324",
+                    "52641730",
+                    "34526071"
+                };
+            }
+
+            return null;
         }
 
         private List<int> CalculateAvailableNumbersForRowAndColumn(int column, int length, string lineSoFar,

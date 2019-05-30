@@ -591,7 +591,7 @@ namespace WordPuzzleGenerator
                 {
                     wordsConsiderByLevel[0]++;
                     WordSquare alpha = new WordSquare(square);
-                    alpha.SetFirstLine(firstWordCandidate);
+                    alpha.SetWordAtIndex(firstWordCandidate, 0);
                     FindNextLine(alpha, 1, writer, wordsConsiderByLevel);
                     writer.Flush();
 

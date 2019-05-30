@@ -30,6 +30,12 @@ namespace WordPuzzlesTest
             }
 
             [Test]
+            public void TooLong_ThrowsException()
+            {
+                Assert.Throws<ArgumentException>(()=> new LettersAndArrowsPuzzle("abcdefghijklmnopqrstuvwxyz123456"));
+            }
+
+            [Test]
             [TestCase("abc")]
             [TestCase("abcdef")]
             [TestCase("abcdefg")]
@@ -83,6 +89,13 @@ namespace WordPuzzlesTest
 
                 Console.WriteLine(puzzle.FormatHtmlForGoogle());
 
+            }
+
+            [Test]
+            public void OverwriteSize_HasThatSize()
+            {
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("ohio", false, 8);
+                Assert.AreEqual(8, puzzle.Size);
             }
         }
 

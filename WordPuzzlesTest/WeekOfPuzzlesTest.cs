@@ -122,11 +122,13 @@ namespace WordPuzzlesTest
                     Clues = new []{"first clue", "second clue", "third clue", "fourth clue", "fifth clue"}, 
                     Theme = "Theme"
                 };
-                mondayWordSquare.SetFirstLine("acorn");
-                mondayWordSquare.SetSecondLine("curio");
-                mondayWordSquare.SetThirdLine("orals");
-                mondayWordSquare.SetFourthLine("rille");
-                mondayWordSquare.SetFifthLine("nosed");
+                mondayWordSquare.SetWordAtIndex("acorn", 0);
+                mondayWordSquare.SetWordAtIndex("curio", 1);
+                int indexToSet = 2;
+
+                mondayWordSquare.SetWordAtIndex("orals", indexToSet);
+                mondayWordSquare.SetWordAtIndex("rille", 3);
+                mondayWordSquare.SetWordAtIndex("nosed", 4);
 
                 weekOfPuzzles.MondayWordSquare = mondayWordSquare;
 

@@ -341,6 +341,16 @@ Each morning I have * * muffins with a cup of weak * because it's good for my *.
             }
         }
 
+        [TestFixture]
+        public class GoogleSheetRow
+        {
+            [Test]
+            public void NewObject_ReturnsExpectedString()
+            {
+                VowelMovement puzzle = new VowelMovement();
+                Assert.AreEqual("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tscheduled", puzzle.GoogleSheetRow);
+            }
+        }
 
     }
 

@@ -82,6 +82,30 @@ namespace WordPuzzlesTest
 ";
                 Assert.AreEqual(EXPECTED_HTML, ladder.FormatHtmlForGoogle());
             }
+
+        }
+
+        [TestFixture]
+        public class DisplayChain
+        {
+            [Test]
+            public void ReturnsExpectedResult()
+            {
+                WordLadder ladder = new WordLadder("a", "First Clue");
+                Assert.AreEqual("First Clue = a\r\n", ladder.DisplayChain());
+            }
+        }
+
+        [TestFixture]
+        public class AlreadyContains
+        {
+            [Test]
+            public void RepeatWord_ReturnsTrue()
+            {
+                WordLadder ladder = new WordLadder("a", "First Clue");
+                Assert.IsTrue(ladder.AlreadyContains("a"));
+                Assert.IsFalse(ladder.AlreadyContains("b"));
+            }
         }
     }
 }

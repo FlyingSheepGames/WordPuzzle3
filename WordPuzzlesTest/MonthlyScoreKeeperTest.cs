@@ -25,7 +25,7 @@ namespace WordPuzzlesTest
                 Assert.AreEqual(9, firstPlayer.ALittleAlliterationScore);
                 Assert.AreEqual(5, firstPlayer.MagicWordSquareScore);
                 Assert.AreEqual(11, firstPlayer.VowelMovementScore);
-
+                Assert.AreEqual(false, firstPlayer.AlreadyMentioned);
                 players.Sort(Player.SortByTotalScore);
                 int previousScore = int.MaxValue;
                 foreach (var player in players)

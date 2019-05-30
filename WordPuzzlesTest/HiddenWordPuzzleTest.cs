@@ -131,5 +131,35 @@ namespace WordPuzzlesTest
                 Assert.IsTrue(puzzle.VerifySplitableStringCandidate("o.a.sis")); //Initially false because no words start with 'sis'. 
             }
         }
+
+        [TestFixture]
+        public class CreateSpecificExampleFromSplitableString
+        {
+            [Test]
+            public void ThreeDots_ReturnsExpectedValue()
+            {
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {RandomSeed =  1};
+                Assert.AreEqual(new List<string> {"halo", "a", "sister"}, puzzle.CreateSpecificExampleFromSplitableString("o.a.sis"));
+            }
+        }
+
+        [TestFixture]
+        public class FormatPuzzleAsText
+        {
+            [Test]
+            public void SingleSentence_ReturnsExpectedString()
+            {
+                const string EXPECTED_TEXT =
+@"One word in each sentence below is hidden elsewhere in the sentence.
+Find the word, and then write the first letter of that word into the blanks below.
+1. Example Sentence
+Solution: _ _ .
+";
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {RandomSeed = 1};
+                puzzle.Solution = "ca.";
+                puzzle.Sentences.Add("Example Sentence");
+                Assert.AreEqual(EXPECTED_TEXT, puzzle.FormatPuzzleAsText());
+            }
+        }
     }
 }

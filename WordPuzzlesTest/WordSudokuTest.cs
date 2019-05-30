@@ -8,6 +8,22 @@ namespace WordPuzzlesTest
     [TestFixture]
     public class WordSudokuTest
     {
+        private static void AssertFollowsSudokuConstructionRules(string[] sudokuGrid, int size = 4)
+        {
+            List<string> uniqueLines = new List<string>();
+            foreach (string line in sudokuGrid)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    StringAssert.Contains(i.ToString(), line); //expect to see each number in each line exactly once.
+                }
+
+                Assert.IsFalse(WordSudoku.ContainsDuplicateLetters(line));
+                Assert.IsFalse(uniqueLines.Contains(line), "Expected each line to be unique.");
+                uniqueLines.Add(line);
+            }
+        }
+
         [TestFixture]
         public class Constructor
         {
@@ -23,19 +39,26 @@ namespace WordPuzzlesTest
             public void GeneratesGrid()
             {
                 WordSudoku sudoku = new WordSudoku("shoe");
-                List<string> uniqueLines = new List<string>();
-                foreach (string line in sudoku.Grid)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        StringAssert.Contains(i.ToString(), line); //expect to see each number in each line exactly once.
-                    }
-                    Assert.IsFalse(WordSudoku.ContainsDuplicateLetters(line));
-                    Assert.IsFalse(uniqueLines.Contains(line), "Expected each line to be unique.");
-                    uniqueLines.Add(line);
-                }
+                AssertFollowsSudokuConstructionRules(sudoku.Grid);
             }
 
+        }
+
+        [TestFixture]
+        public class ReturnCannedGridForLength
+        {
+            [Test]
+            [TestCase(2)]
+            [TestCase(3)]
+            [TestCase(4)]
+            [TestCase(5)]
+            [TestCase(6)]
+            [TestCase(7)]
+            [TestCase(8)]
+            public void SupportedNumber_ReturnsCorrectlyConstructedSudokuPuzzle(int size)
+            {
+                AssertFollowsSudokuConstructionRules(WordSudoku.ReturnCannedGridForLength(size), size);
+            }
         }
 
         [TestFixture]

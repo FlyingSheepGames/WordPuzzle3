@@ -24,7 +24,7 @@ namespace WordPuzzlesTest
                 {
                     Console.WriteLine(words[i]);
                 }
-                Assert.LessOrEqual(57, words.Count);
+                Assert.LessOrEqual(50, words.Count);
             }
 
             [Test]
@@ -136,7 +136,7 @@ namespace WordPuzzlesTest
             public void Alcohol_ReturnsExpectedList()
             {
                 WordRepository repository = new WordRepository() {IgnoreCache = false};
-                List<string> relatedWords = repository.GetRelatedWordsForTheme("alcohol");
+                List<string> relatedWords = repository.GetRelatedWordsForTheme("#AlcoholWeek");
                 Assert.LessOrEqual(27, relatedWords.Count, "Should be at least 27 items.");
                 Assert.AreEqual("absinthe", relatedWords[0]);
             }
@@ -256,13 +256,13 @@ third
         }
 
         [TestFixture]
-        public class LoadAllWordsReplacement
+        public class LoadAllWords
         {
             [Test]
             public void PopulatesExpectedLists()
             {
                 WordRepository wordRepository = new WordRepository();
-                wordRepository.LoadAllWordsReplacement();
+                wordRepository.LoadAllWords();
                 Assert.IsTrue(wordRepository.IsAWord("zooms")); 
             }
 
@@ -270,7 +270,7 @@ third
             public void PopulatesClues()
             {
                 WordRepository wordRepository = new WordRepository();
-                wordRepository.LoadAllWordsReplacement();
+                wordRepository.LoadAllWords();
                 Assert.AreEqual("Rising agent", wordRepository.FindClueFor("yeast")); 
             }
 
@@ -411,6 +411,19 @@ third
                 };
                 Assert.IsFalse(repository.IsAWord("asp"));
 
+            }
+        }
+
+        [TestFixture]
+        public class FindClueFor
+        {
+            [Test]
+            public void LoadsWordsFirst()
+            {
+                WordRepository repository = new  WordRepository();
+                Assert.IsFalse(repository._alreadyLoaded);
+                repository.FindClueFor("ask");
+                Assert.IsTrue(repository._alreadyLoaded);
             }
         }
     }

@@ -169,4 +169,47 @@ namespace WordPuzzlesTest
             Assert.IsNotNull(puzzle);
         }
     }
+
+    [TestFixture]
+    public class GenerateLineAtIndex
+    {
+        [Test]
+        public void PopulatesExpectedLine()
+        {
+            AlphabetSoup puzzle = new AlphabetSoup();
+            puzzle.Solution = "abcdefghijklmnopqrstuvwxyz";
+            puzzle.GenerateLineAtIndex(0);
+            Assert.AreEqual('a', puzzle.Lines[0][3], "Fourth character of this line should be 'a'");
+        }
+    }
+
+    [TestFixture]
+    public class ScrambleLines
+    {
+        [Test]
+        public void MovesSingleLine()
+        {
+            AlphabetSoup puzzle = new AlphabetSoup();
+            puzzle.Solution = "abcdefghijklmnopqrstuvwxyz";
+            puzzle.GenerateLineAtIndex(0);
+            puzzle.ScrambleLines();
+            bool foundSingleNonNullLine = false;
+            foreach (string line in puzzle.Lines)
+            {
+                Console.WriteLine(line);
+                if (foundSingleNonNullLine) //All other lines should be null.
+                {
+                    Assert.IsNull(line);
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        foundSingleNonNullLine = true;
+                    }
+                }
+            }
+        }
+    }
+
 }

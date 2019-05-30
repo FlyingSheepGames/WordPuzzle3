@@ -1489,11 +1489,11 @@ namespace WeeklyThemeGenerator
 
                 {
                     squareToAdd = new WordSquare("");
-                    squareToAdd.SetFirstLine(firstLine);
-                    squareToAdd.SetSecondLine(secondLine);
-                    squareToAdd.SetThirdLine(thirdLine);
-                    squareToAdd.SetFourthLine(fourthLine);
-                    squareToAdd.SetFifthLine(fifthLine);
+                    squareToAdd.SetWordAtIndex(firstLine, 0);
+                    squareToAdd.SetWordAtIndex(secondLine, 1);
+                    squareToAdd.SetWordAtIndex(thirdLine, 2);
+                    squareToAdd.SetWordAtIndex(fourthLine, 3);
+                    squareToAdd.SetWordAtIndex(fifthLine, 4);
                 }
                 allWordSquaresFromFile.Add(squareToAdd);
             }
@@ -1514,7 +1514,7 @@ namespace WeeklyThemeGenerator
                 {
                     wordsConsiderByLevel[0]++;
                     WordSquare alpha = new WordSquare(square);
-                    alpha.SetFirstLine(firstWordCandidate);
+                    alpha.SetWordAtIndex(firstWordCandidate, 0);
                     FindNextLine(alpha, 1, writer, wordsConsiderByLevel);
                     writer.Flush();
 
@@ -1576,23 +1576,5 @@ namespace WeeklyThemeGenerator
     }
 
 
-    static class Shuffler
-    {
-        private static readonly Random RandomNumberGenerator = new Random();
-
-        public static void Shuffle<T>(this IList<T> list)
-        {
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = RandomNumberGenerator.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-        }
-
-    }
 
 }
