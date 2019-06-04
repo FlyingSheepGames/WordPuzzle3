@@ -365,17 +365,24 @@ namespace WordPuzzleGenerator
 
         private static void InteractiveFindWordLadder(string solution)
         {
-            Console.WriteLine($"Enter a clue for {solution.ToUpper()}, or press 'z' to skip.");
+            string suggestedWord = WordRepository.GetRandomWord();
+
+            Console.WriteLine($"Enter a first word, or hit enter to use {suggestedWord}.");
+            string initialWord = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(initialWord))
+            {
+                initialWord = suggestedWord;
+            }
+
+            Console.WriteLine($"Enter a clue for {initialWord}.");
             string initialClue = Console.ReadLine();
             if (initialClue == null)
             {
                 return;
             }
-            if ("z" == initialClue.ToLower())
-            {
-                return;
-            }
-            WordLadder ladder = new WordLadder(solution, initialClue);
+
+            WordLadder ladder = new WordLadder(solution);
+            ladder.AddToChain(initialWord, initialClue);
 
             char lastKeyPressed = 'c';
             while ('c' == lastKeyPressed)
@@ -406,6 +413,15 @@ namespace WordPuzzleGenerator
                     candidateIndex++;
                     if (8 < candidateIndex) break;
                 }
+
+                if (ladder.AllLettersPlaced)
+                {
+                    Console.WriteLine("All letters have been placed.");
+                }
+                else
+                {
+                    Console.WriteLine($"You still need to place letters: {ladder.RemainingUnplacedLetters}.");
+                }
                 Console.WriteLine($"Select the next word in the chain, or {candidateIndex} to exit.");
                 char selectedWordIndexAsChar = Console.ReadKey().KeyChar;
                 int selectedWordIndex;
@@ -416,9 +432,7 @@ namespace WordPuzzleGenerator
                         string selectedWord = nextWordCandidates[selectedWordIndex];
                         Console.WriteLine($"Enter a clue for {selectedWord.ToUpper()}.");
                         string clue = Console.ReadLine();
-                        ladder.Chain.Add(new WordAndClue() {Word = selectedWord, Clue = clue});
-                        Console.WriteLine("Press 'c' to add another word to the chain, or any other letter to wrap up. ");
-                        lastKeyPressed = Console.ReadKey().KeyChar;
+                        ladder.AddToChain(selectedWord, clue);
                     }
                     else
                     {

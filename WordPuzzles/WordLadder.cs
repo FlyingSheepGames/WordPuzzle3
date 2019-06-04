@@ -9,13 +9,40 @@ namespace WordPuzzles
         public string Solution { get; }
         public int Size { get; set; }
 
-        public List<WordAndClue> Chain = new List<WordAndClue>();
+        public bool AllLettersPlaced
+        {
+            get
+            {
+                foreach (bool currentLetterPlaced in SolutionLettersAlreadyPlaced)
+                {
+                    if (!currentLetterPlaced) return false;
+                }
+                return true;
+            }
+        }
 
-        public WordLadder(string solution, string clue)
+        public string RemainingUnplacedLetters
+        {
+            get
+            {
+                StringBuilder builder = new StringBuilder();
+                for (int index = 0; index < Solution.Length; index++)
+                {
+                    if (SolutionLettersAlreadyPlaced[index]) continue;
+                    builder.Append(Solution[index]);
+                }
+                return builder.ToString();
+            }
+        }
+
+        public List<WordAndClue> Chain = new List<WordAndClue>();
+        private bool[] SolutionLettersAlreadyPlaced;
+
+        public WordLadder(string solution)
         {
             Solution = solution;
             Size = solution.Length;
-            Chain.Add(new WordAndClue() {Word = solution, Clue = clue});
+            SolutionLettersAlreadyPlaced = new bool[Size];
         }
 
         public List<string> FindNextWordsInChain(string previousWord, int indexToReplace)
@@ -46,22 +73,45 @@ namespace WordPuzzles
             Chain.Reverse();
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("<html>");
-            builder.AppendLine("<body>");
-            builder.AppendLine("<table>");
+            builder.AppendLine(@"<body>");
             builder.AppendLine("<!--StartFragment-->");
+            builder.AppendLine(@"<table border=""1"">");
             foreach (var entry in Chain)
             {
                 builder.AppendLine("\t<tr>");
                 builder.AppendLine($"\t\t<td>{entry.Clue}</td>");
-                for (int i = 0; i < Size; i++)
+                for (int indexInWord = 0; indexInWord < entry.Word.Length; indexInWord++)
                 {
-                    builder.AppendLine("\t\t<td> </td>");
+                    if (indexInWord != entry.SolutionLetterIndexInWord)
+                    {
+                        builder.AppendLine("\t\t<td> </td>");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"\t\t<td>{entry.SolutionLetterIndexInSolution +1}</td>");
+                    }
                 }
                 builder.AppendLine("\t</tr>");
             }
 
-            builder.AppendLine("<!--EndFragment-->");
             builder.AppendLine("</table>");
+            builder.AppendLine(@"<table border=""1"">");
+            builder.AppendLine("\t<tr>");
+            builder.AppendLine($"\t\t<td>Solution</td>");
+            for (int i = 0; i < Solution.Length; i++)
+            {
+                builder.AppendLine($"\t\t<td> </td>");
+            }
+            builder.AppendLine("\t</tr>");
+            builder.AppendLine("\t<tr>");
+            builder.AppendLine($"\t\t<td> </td>");
+            for (int i = 0; i < Solution.Length; i++)
+            {
+                builder.AppendLine($"\t\t<td>{i+1}</td>");
+            }
+            builder.AppendLine("\t</tr>");
+            builder.AppendLine("</table>");
+            builder.AppendLine("<!--EndFragment-->");
             builder.AppendLine("</body>");
             builder.AppendLine("</html>");
 
@@ -82,11 +132,35 @@ namespace WordPuzzles
 
             return false;
         }
+
+        public void AddToChain(string word, string clue)
+        {
+            var wordAndClue = new WordAndClue() {Word = word, Clue = clue};
+            for (var indexOfLetterInSolution = 0; indexOfLetterInSolution < Solution.Length; indexOfLetterInSolution++)
+            {
+                char letter = Solution[indexOfLetterInSolution];
+                if (SolutionLettersAlreadyPlaced[indexOfLetterInSolution]) continue;
+                int indexOfLetterInWord = word.IndexOf(letter);
+                if (indexOfLetterInWord < 0) continue;
+
+                wordAndClue.SolutionLetter = letter;
+                wordAndClue.SolutionLetterIndexInWord = indexOfLetterInWord;
+                wordAndClue.SolutionLetterIndexInSolution = indexOfLetterInSolution;
+                SolutionLettersAlreadyPlaced[indexOfLetterInSolution] = true;
+                break; //Only place one letter.
+            }
+
+            Chain.Add(wordAndClue);
+        }
     }
 
     public class WordAndClue
     {
         public string Word;
         public string Clue;
+        public char SolutionLetter = char.MinValue;
+
+        public int SolutionLetterIndexInWord = -1;
+        public int SolutionLetterIndexInSolution = -1;
     }
 }
