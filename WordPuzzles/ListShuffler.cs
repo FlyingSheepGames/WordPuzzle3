@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WordPuzzles
 {
-    static class ListShuffler 
+    public static class ListShuffler 
     {
         private static readonly Random RandomNumberGenerator = new Random();
 

@@ -48,7 +48,13 @@ namespace WeeklyThemeGenerator
         [STAThread]
         static void Main()
         {
-            //CreateTweetsForMonth("April 2019");
+            string monthToScore = "May 2019";
+            Console.WriteLine("Enter a month (e.g. May 2019) to generate scoring tweets for that month. Or just hit enter to continue.");
+            monthToScore = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(monthToScore))
+            {
+                CreateTweetsForMonth(monthToScore);
+            }
 
             LoadWordSquareHistory();
 
@@ -61,7 +67,8 @@ namespace WeeklyThemeGenerator
             {
                 // ReSharper disable once InconsistentNaming
                 string DIRECTORY = $"{ConfigurationManager.AppSettings["BaseDirectory"]}PuzzlesSets\\";
-                string fileName = DIRECTORY + $"{theme.Replace("#", "")}.xml";
+
+                var fileName = CalculateFileNameForTheme(theme);
                 if (!Directory.Exists(DIRECTORY))
                 {
                     Directory.CreateDirectory(DIRECTORY);
@@ -158,6 +165,13 @@ namespace WeeklyThemeGenerator
 
                 GenerateTweetsForSelectedPuzzles(weekOfPuzzles);
             }
+        }
+
+        private static string CalculateFileNameForTheme(string theme) //TODO: Probably move this to WeekOfPuzzles class.
+        {
+            string DIRECTORY = $"{ConfigurationManager.AppSettings["BaseDirectory"]}PuzzlesSets\\";
+            string fileName = DIRECTORY + $"{theme.Replace("#", "")}.xml";
+            return fileName;
         }
 
         private static ALittleAlliteration PromptForWednesdayPuzzle(string theme)
@@ -1146,8 +1160,29 @@ namespace WeeklyThemeGenerator
             }
             List<string> threeLetterCombinationsAlreadyTried = new List<string>();
 
-            Console.WriteLine($"Finding words related to {theme}");
-            List<string> relatedWordsForTheme = WordRepository.GetRelatedWordsForTheme(theme);
+            string themeWithoutTrailingDigit = RemoveTrailingDigit(theme); //support for #VegetableWeek2, for example.
+            Console.WriteLine($"Finding words related to {themeWithoutTrailingDigit}");
+            List<string> relatedWordsForTheme = WordRepository.GetRelatedWordsForTheme(themeWithoutTrailingDigit);
+            if (!string.Equals(themeWithoutTrailingDigit, theme))
+            {
+                //TODO: Generalize to support 3, 4, etc.
+                WeekOfPuzzles previousWeekOfPuzzles = new WeekOfPuzzles();
+                string previousWeekFile = CalculateFileNameForTheme(themeWithoutTrailingDigit);
+                if (File.Exists(previousWeekFile))
+                {
+                    previousWeekOfPuzzles.Deserialize(previousWeekFile);
+                    foreach (string previouslyUsedWord in previousWeekOfPuzzles.SelectedWords)
+                    {
+                        Console.WriteLine($"Removing previously used word {previouslyUsedWord}.");
+                        relatedWordsForTheme.Remove(previouslyUsedWord);
+                    }
+                    Console.WriteLine("Press any key to continue.");
+                    Console.ReadKey();
+                }
+
+            }
+
+            relatedWordsForTheme.Shuffle();
             int index = 1;
             foreach (string relatedWord in relatedWordsForTheme)
             {
@@ -1232,6 +1267,18 @@ namespace WeeklyThemeGenerator
             }
 
             return weekOfPuzzles;
+        }
+
+        private static string RemoveTrailingDigit(string theme)
+        {
+            if (char.IsDigit(theme[theme.Length - 1]))
+            {
+                return theme.Substring(0, theme.Length - 1);
+            }
+            else
+            {
+                return theme;
+            }
         }
 
         private static ALittleAlliteration InteractiveFindALittleAlliteration(string theme, string relatedWord, string firstThreeLetters)

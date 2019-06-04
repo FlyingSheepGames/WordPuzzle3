@@ -316,10 +316,13 @@ namespace WordPuzzles
             List<Dictionary<int, string>> findRelatedWords = sheet.ExecuteQuery(string.Format($@"SELECT * WHERE A = '{theme}'"));
             foreach (var dictionary in findRelatedWords)
             {
-                string wordToAdd = dictionary[1];
-                if (!wordsForTheme.Contains(wordToAdd)) //skip any duplicates
+                if (dictionary.ContainsKey(1))
                 {
-                    wordsForTheme.Add(wordToAdd);
+                    string wordToAdd = dictionary[1];
+                    if (!wordsForTheme.Contains(wordToAdd)) //skip any duplicates
+                    {
+                        wordsForTheme.Add(wordToAdd);
+                    }
                 }
             }
 

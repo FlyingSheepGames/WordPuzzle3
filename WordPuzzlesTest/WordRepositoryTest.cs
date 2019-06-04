@@ -138,8 +138,15 @@ namespace WordPuzzlesTest
                 WordRepository repository = new WordRepository() {IgnoreCache = false};
                 List<string> relatedWords = repository.GetRelatedWordsForTheme("#AlcoholWeek");
                 Assert.LessOrEqual(27, relatedWords.Count, "Should be at least 27 items.");
-                Assert.AreEqual("absinthe", relatedWords[0]);
             }
+
+            [Test]
+            public void MissingWord_DoesNotThrow()
+            {
+                WordRepository wordRepository = new WordRepository() ;
+                wordRepository.GetRelatedWordsForTheme("#VegetableWeek");
+            }
+
         }
 
         [TestFixture]
