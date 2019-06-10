@@ -72,12 +72,14 @@ namespace WordPuzzlesTest
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("ohio", true);
                 WordRepository repository = new WordRepository();
-                Assert.AreEqual(5, puzzle.Size);
+                const int EXPECTED_SIZE = 4;
+
+                Assert.AreEqual(EXPECTED_SIZE, puzzle.Size);
                 StringBuilder builder = new StringBuilder();
-                for (int row = 0; row < 5; row++)
+                for (int row = 0; row < EXPECTED_SIZE; row++)
                 {
                     builder.Clear();
-                    for (int column = 0; column < 5; column++)
+                    for (int column = 0; column < EXPECTED_SIZE; column++)
                     {
                         builder.Append(puzzle.GetCellAtCoordinates(row, column).Letter);
                     }
@@ -283,17 +285,21 @@ namespace WordPuzzlesTest
 @"<html>
 <body>
 <!--StartFragment-->
+Fill in the words below (one letter per box) based on the clues. 
 Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. 
 <table border=""1"">
 <tr>
-    <td> </td>
-    <td> </td>
+    <td>Clue for   </td>
+    <td></td>
+    <td></td>
 </tr>
 <tr>
-    <td> </td>
-    <td> </td>
+    <td>Clue for   </td>
+    <td></td>
+    <td></td>
 </tr>
 </table>
+Solution: 
 <!--EndFragment-->
 </body>
 </html>
@@ -311,17 +317,21 @@ Starting in the top left box, follow the direction (e.g. three spaces to the rig
                     @"<html>
 <body>
 <!--StartFragment-->
+Fill in the words below (one letter per box) based on the clues. 
 Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. 
 <table border=""1"">
 <tr>
-    <td>A</td>
-    <td> </td>
+    <td>Clue for A </td>
+    <td></td>
+    <td></td>
 </tr>
 <tr>
-    <td> </td>
-    <td> </td>
+    <td>Clue for   </td>
+    <td></td>
+    <td></td>
 </tr>
 </table>
+Solution: _ 
 <!--EndFragment-->
 </body>
 </html>
@@ -339,17 +349,21 @@ Starting in the top left box, follow the direction (e.g. three spaces to the rig
                     @"<html>
 <body>
 <!--StartFragment-->
+Fill in the words below (one letter per box) based on the clues. 
 Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. 
 <table border=""1"">
 <tr>
-    <td>A 1↓</td>
-    <td>D</td>
+    <td>Clue for AD</td>
+    <td> 1↓</td>
+    <td></td>
 </tr>
 <tr>
-    <td>B 1→</td>
-    <td>C 1↑</td>
+    <td>Clue for BC</td>
+    <td> 1→</td>
+    <td> 1↑</td>
 </tr>
 </table>
+Solution: _ _ _ _ 
 <!--EndFragment-->
 </body>
 </html>

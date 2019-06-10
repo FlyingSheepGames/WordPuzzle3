@@ -51,6 +51,7 @@ namespace WordPuzzlesTest
                     @"<html>
 <body>
 <!--StartFragment-->
+Change one letter in each word to get the next word.
 <table border=""1"">
 	<tr>
 		<td>Not very many</td>
@@ -77,6 +78,7 @@ namespace WordPuzzlesTest
 		<td> </td>
 	</tr>
 </table>
+Copy the letters into the solution below, using the numbers as a guide.
 <table border=""1"">
 	<tr>
 		<td>Solution</td>

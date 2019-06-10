@@ -75,6 +75,7 @@ namespace WordPuzzles
             builder.AppendLine("<html>");
             builder.AppendLine(@"<body>");
             builder.AppendLine("<!--StartFragment-->");
+            builder.AppendLine(@"Change one letter in each word to get the next word.");
             builder.AppendLine(@"<table border=""1"">");
             foreach (var entry in Chain)
             {
@@ -95,6 +96,7 @@ namespace WordPuzzles
             }
 
             builder.AppendLine("</table>");
+            builder.AppendLine(@"Copy the letters into the solution below, using the numbers as a guide.");
             builder.AppendLine(@"<table border=""1"">");
             builder.AppendLine("\t<tr>");
             builder.AppendLine($"\t\t<td>Solution</td>");

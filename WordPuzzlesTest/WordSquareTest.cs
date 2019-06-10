@@ -358,7 +358,8 @@ Thing that hangs above your throat
                 @"<html>
 <body>
 <!--StartFragment-->
-Fill in the grid using the letters provided so that no letter appears twice in the same row or column.
+Use the clues below to fill in the grid. Each horizontal word also appears vertically (in the same order).
+Then read the solution to the puzzle from the highlighted squares.
 <table border=""1"">
 	<tr>
 		<td>Something you wear on your foot.</td>

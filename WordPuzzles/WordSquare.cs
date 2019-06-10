@@ -162,7 +162,9 @@ namespace WordPuzzles
             builder.AppendLine("<body>");
             builder.AppendLine("<!--StartFragment-->");
             builder.AppendLine(
-                @"Fill in the grid using the letters provided so that no letter appears twice in the same row or column.");
+                @"Use the clues below to fill in the grid. Each horizontal word also appears vertically (in the same order).");
+            builder.AppendLine(
+                @"Then read the solution to the puzzle from the highlighted squares.");
             builder.AppendLine(@"<table border=""1"">");
             foreach (var clue in Clues)
             {

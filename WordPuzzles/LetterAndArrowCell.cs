@@ -39,7 +39,7 @@ namespace WordPuzzles
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(Letter);
+            //builder.Append(Letter);
             if (0 != Number)
             {
                 builder.Append(" ");

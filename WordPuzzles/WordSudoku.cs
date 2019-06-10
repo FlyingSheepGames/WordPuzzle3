@@ -349,8 +349,12 @@ namespace WordPuzzles
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("<html>");
             builder.AppendLine("<body>");
-            builder.AppendLine("<table>");
             builder.AppendLine("<!--StartFragment-->");
+            builder.AppendLine(
+                @"Fill in each row and column using the letters below so that the same letter does not appear twice in any row or column.");
+            builder.AppendLine(
+                @"Then read the solution to the puzzle from the highlighted squares.");
+            builder.AppendLine(@"<table border=""1"">");
             string[] gridToUse = Grid;
             if (usePartialGrid)
             {

@@ -20,8 +20,14 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
-            //TODO: Add this to the menu. Get words that match pattern.
-            //GetWordsForReadDownColumnPuzzle();
+            //InteractiveHideTheseWords(new List<string>() { "zero", "one", "two", "three",  "five", "seven", "eight", "nine"}); //missing "four" and "six"
+            //ListWordsThatCanBeShifted();
+            /*
+            ListWordsThatCanPrependALetter("a");
+            Console.ReadKey();
+            ListWordsThatCanPrependALetter("i");
+            Console.ReadKey();
+            */
 
             Console.WriteLine("Enter the word or phrase you'd like to create a puzzle for.");
             string solution = Console.ReadLine();
@@ -224,6 +230,63 @@ namespace WordPuzzleGenerator
             }
         }
 
+
+        private static void ListWordsThatCanBeShifted()
+        {
+            WordRepository repository = new WordRepository() {ExludeAdvancedWords = false};
+            StringBuilder completeList = new StringBuilder();
+            foreach (string pattern in new[] {"___", "____", "_____", "______"})
+            {
+                foreach (string word in repository.WordsMatchingPattern(pattern))
+                {
+                    bool reachedShiftLimit = false;
+                    for (int shift = 1; shift < 26; shift++)
+                    {
+                        StringBuilder shiftedWord = new StringBuilder();
+                        foreach (char letter in word)
+                        {
+                            char shiftedLetter = (char) (letter + shift);
+                            if ('z' < shiftedLetter)
+                            {
+                                reachedShiftLimit = true;
+                                break;
+                            }
+
+                            shiftedWord.Append(shiftedLetter);
+                        }
+
+                        if (reachedShiftLimit) break;
+                        if (repository.IsAWord(shiftedWord.ToString()))
+                        {
+                            Console.WriteLine($"{word}\t{shift}\t{shiftedWord}");
+                            completeList.AppendLine($"{word}\t{shift}\t{shiftedWord}");
+                        }
+                    }
+                }
+            }
+
+            Clipboard.SetText(completeList.ToString());
+        }
+
+        private static void ListWordsThatCanPrependALetter(string initialLetter)
+        {
+            WordRepository repositoryWithAdvancedWords = new WordRepository() {ExludeAdvancedWords = false};
+            for (int length = 3; length < 7; length++)
+            {
+                StringBuilder patternBuilder = new StringBuilder();
+                patternBuilder.Append(initialLetter);
+                patternBuilder.Append('_', length - 1);
+                foreach (string word in repositoryWithAdvancedWords.WordsMatchingPattern(patternBuilder.ToString()))
+                {
+                    string subword = word.Substring(1);
+                    if (repositoryWithAdvancedWords.IsAWord(subword))
+                    {
+                        Console.WriteLine(subword);
+                    }
+                }
+            }
+        }
+
         // ReSharper disable once UnusedMember.Local
         //TODO: Add "get words that match pattern to main menu.
         private static void GetWordsForReadDownColumnPuzzle()
@@ -314,6 +377,48 @@ namespace WordPuzzleGenerator
                             }
                         }
                     }
+                }
+            }
+            Console.Clear();
+            Console.WriteLine("Created hidden word puzzle!");
+            char lastKeyPressed = 'z';
+            while (lastKeyPressed != 'c')
+            {
+                string puzzleAsString = puzzle.FormatPuzzleAsText();
+                Console.WriteLine(puzzleAsString);
+                Clipboard.SetText(puzzleAsString);
+
+                Console.WriteLine(
+                    "Puzzle copied to clipboard. Press 'c' to continue, or anything else to copy it again.");
+                lastKeyPressed = Console.ReadKey().KeyChar;
+            }
+
+        }
+
+        private static void InteractiveHideTheseWords(List<string> wordsToHide)
+        {
+            wordsToHide.Shuffle();
+            HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {  };
+            foreach (string hiddenWordCandidate in wordsToHide)
+            {
+                bool foundSentence = false;
+                while (!foundSentence)
+                {
+
+                    foreach (string splitableString in puzzle.GenerateAllSplitableStrings(hiddenWordCandidate))
+                    {
+                        List<string> phraseHidingWord =
+                            puzzle.CreateSpecificExampleFromSplitableString(splitableString);
+                        Console.WriteLine($"({splitableString}) : {string.Join(" ", phraseHidingWord)}      {hiddenWordCandidate.ToUpper()}.");
+                    }
+                    Console.WriteLine("Or just hit enter to create another one for this letter.");
+                    string sentence = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(sentence))
+                    {
+                        foundSentence = true;
+                        puzzle.Sentences.Add(sentence);
+                    }
+
                 }
             }
             Console.Clear();
@@ -483,7 +588,7 @@ namespace WordPuzzleGenerator
 
                 Console.WriteLine(
                     "Sudoku has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
-                Clipboard.SetText(formatForGoogle);
+                //Clipboard.SetText(formatForGoogle);
                 Clipboard.SetData(DataFormats.Html, sudoku.FormatHtmlForGoogle());
                 userInput = Console.ReadKey();
             }

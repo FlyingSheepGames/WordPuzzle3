@@ -141,8 +141,10 @@ E	 	H
                 const string EXPECTED_HTML =
                     @"<html>
 <body>
-<table>
 <!--StartFragment-->
+Fill in each row and column using the letters below so that the same letter does not appear twice in any row or column.
+Then read the solution to the puzzle from the highlighted squares.
+<table border=""1"">
 	<tr>
 		<td>S</td>
 		<td>H</td>
@@ -200,8 +202,10 @@ E	 	H
                 const string EXPECTED_HTML =
                     @"<html>
 <body>
-<table>
 <!--StartFragment-->
+Fill in each row and column using the letters below so that the same letter does not appear twice in any row or column.
+Then read the solution to the puzzle from the highlighted squares.
+<table border=""1"">
 	<tr>
 		<td> </td>
 		<td> </td>

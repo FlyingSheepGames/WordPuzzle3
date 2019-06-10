@@ -34,7 +34,7 @@ namespace WordPuzzles
             RowsMustFormWords = rowsMustFormWords;
             if (RowsMustFormWords)
             {
-                Size = 5;
+                Size = 4;
                 Repository = new WordRepository() { ExludeAdvancedWords = true };
             }
             else
@@ -205,6 +205,7 @@ namespace WordPuzzles
 
         public void PlaceSolution(string solution)
         {
+            Solution = solution;
             int currentRow = 0;
             int currentColumn = 0;
 
@@ -304,6 +305,7 @@ namespace WordPuzzles
         }
 
         public List<int> RowsVisited = new List<int>();
+        private string Solution = "";
 
         public string FormatHtmlForGoogle()
         {
@@ -311,11 +313,19 @@ namespace WordPuzzles
             builder.AppendLine("<html>");
             builder.AppendLine("<body>");
             builder.AppendLine("<!--StartFragment-->");
+            builder.AppendLine(@"Fill in the words below (one letter per box) based on the clues. ");
             builder.AppendLine("Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. ");
             builder.AppendLine(@"<table border=""1"">");
             for (int row = 0; row < Size; row++)
             {
                 builder.AppendLine("<tr>");
+                StringBuilder wordRow = new StringBuilder();
+                for (int column = 0; column < Size; column++)
+                {
+                    wordRow.Append(GetCellAtCoordinates(row, column).Letter);
+                }
+                builder.AppendLine($"    <td>Clue for {wordRow}</td>");
+
                 for (int column = 0; column < Size; column++)
                 {
                     builder.AppendLine($"    <td>{GetCellAtCoordinates(row, column)}</td>");
@@ -323,6 +333,13 @@ namespace WordPuzzles
                 builder.AppendLine("</tr>");
             }
             builder.AppendLine("</table>");
+            builder.Append("Solution: ");
+            for (var index = 0; index < Solution.Length; index++)
+            {
+                builder.Append("_ ");
+            }
+
+            builder.AppendLine();
             builder.AppendLine("<!--EndFragment-->");
             builder.AppendLine("</body>");
 
