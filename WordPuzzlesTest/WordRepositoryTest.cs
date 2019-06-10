@@ -433,6 +433,20 @@ third
                 Assert.IsTrue(repository._alreadyLoaded);
             }
         }
+
+        [TestFixture]
+        public class FindThemesForWord
+        {
+            [Test]
+            public void BLUE_ReturnsExpectedResults()
+            {
+                WordRepository repository = new WordRepository();
+                List<string> results = repository.FindThemesForWord("blue");
+                Console.WriteLine(string.Join(Environment.NewLine, results));
+                Assert.AreEqual(2, results.Count);
+            }
+        }
+
     }
 }
 

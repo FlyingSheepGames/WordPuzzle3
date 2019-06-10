@@ -11,6 +11,7 @@
         ReadDownColumn,
         HiddenWords,
         BuildingBlocks,
+        RelatedWords,
         MAX_VALUE
 
     }

@@ -36,6 +36,9 @@ namespace WordPuzzleGenerator
                 return;
             }
             int solutionLength = solution.Length;
+
+            List<string> solutionThemes = InteractiveFindThemesForWord(solution);
+            
             WordPuzzleType userPuzzleSelection = WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
 
             Dictionary<WordPuzzleType, bool> availablePuzzleTypes = CalculateAvailablePuzzleTypes(solution);
@@ -60,8 +63,10 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("6. Read Down Column");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
                 Console.WriteLine("7. Hidden Words");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
                 Console.WriteLine("8. Building Blocks");
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.WriteLine("9. Related Words");
 
                 var userPuzzleSelectionInput = Console.ReadKey();
                 if (Enum.TryParse(userPuzzleSelectionInput.KeyChar.ToString(), out userPuzzleSelection))
@@ -227,6 +232,24 @@ namespace WordPuzzleGenerator
 
                         break;
 
+                    case WordPuzzleType.RelatedWords:
+                        if (!solution.Contains(' '))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Creating a Related Words puzzle for you.");
+                            InteractiveCreateRelatedWordsPuzzle(solution, solutionThemes);
+                            Console.WriteLine("Done. Press a key to continue.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine(
+                                $"{solution} contains a space, so I can't create a related words puzzle. Press anything to continue.");
+                            Console.ReadKey();
+                        }
+                        break;
+
                 }
             }
 
@@ -249,6 +272,98 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
                 wordPattern = Console.ReadLine();
             }
+        }
+
+        private static void InteractiveCreateRelatedWordsPuzzle(string solution, List<string> solutionThemes)
+        {
+            Console.WriteLine($"Select a theme for {solution.ToUpper()}");
+            int counter = 0;
+            foreach (string theme in solutionThemes)
+            {
+                Console.WriteLine($"{counter++}. {theme}");
+            }
+            Console.WriteLine($"Or enter {counter} to exit.");
+
+            string userInput = Console.ReadLine();
+            int selectedIndex;
+            if (!int.TryParse(userInput, out selectedIndex)) return;
+            if (solutionThemes.Count <= selectedIndex) return;
+            string selectedTheme = solutionThemes[selectedIndex];
+
+            RelatedWordsPuzzle puzzle = new RelatedWordsPuzzle();
+            puzzle.PlaceSolution(selectedTheme, solution);
+
+            char lastKeyPressed = 'z';
+            while (lastKeyPressed != 'c')
+            {
+                string puzzleAsHtml = puzzle.FormatHtmlForGoogle();
+                foreach (string word in puzzle.Words)
+                {
+                    Console.WriteLine(word);
+                }
+                Clipboard.SetData(DataFormats.Html, puzzleAsHtml);
+
+                Console.WriteLine(
+                    "Puzzle copied to clipboard. Press 'c' to continue, or anything else to copy it again.");
+                lastKeyPressed = Console.ReadKey().KeyChar;
+            }
+
+        }
+
+        private static List<string> InteractiveFindThemesForWord(string word)
+        {
+            List<string> themes = new List<string>();
+
+            Console.WriteLine($"Loading themes for {word} ");
+            //Find existing themes
+            themes.AddRange(WordRepository.FindThemesForWord(word));
+            Console.WriteLine($"Found pre-existing themes: {string.Join(", ", themes )} ");
+
+
+
+            //Find new ones.
+            Console.WriteLine($"Finding new themes for {word} ");
+            WordnikUtility utility = new WordnikUtility();
+            int counter = 0;
+            bool readyToProceed = false;
+            var potentialThemes = utility.FindPotentialThemes(word);
+            while (!readyToProceed)
+            {
+                foreach (var potentialTheme in potentialThemes)
+                {
+                    Console.WriteLine($"{counter++} {potentialTheme.Name} ({potentialTheme.Count} entries)");
+                    readyToProceed = false;
+                }
+
+                Console.WriteLine("Which potential theme do you want to explore?");
+                string userSelection = Console.ReadLine();
+                int userSelectedIndex;
+                StringBuilder rowsToCopy = new StringBuilder();
+                if (int.TryParse(userSelection, out userSelectedIndex))
+                {
+                    var selectedTheme = potentialThemes[userSelectedIndex];
+                    string selectedThemeName = selectedTheme.Name;
+                    List<string> words = utility.FindWordsInList(selectedThemeName);
+                    Console.WriteLine($"Words in {selectedThemeName}:");
+                    foreach (string wordInNewTheme in words)
+                    {
+                        Console.WriteLine($"{wordInNewTheme}");
+                        rowsToCopy.AppendLine($"{selectedThemeName}\t{wordInNewTheme}\t{wordInNewTheme.Length}");
+                    }
+                    Clipboard.SetText(rowsToCopy.ToString());
+                    Console.WriteLine("New theme copied to clipboard. Paste into Google sheet.");
+                    themes.Add(selectedThemeName);
+                }
+
+                Console.WriteLine("Press 'p' to proceed to the next step, or anything else to do this again.");
+                var userKey = Console.ReadKey();
+                if (userKey.Key == ConsoleKey.P)
+                {
+                    readyToProceed = true;
+                }
+            }
+
+            return themes;
         }
 
         private static void InteractiveCreateBuildingBlocksPuzzle(string solution)
@@ -355,6 +470,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
             availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
             availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
+            availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (!solution.Contains(' ')));//Require that the word has at least one theme.
 
             return availablePuzzleTypes;
         }

@@ -309,7 +309,6 @@ namespace WordPuzzles
 
         public List<string> GetRelatedWordsForTheme(string theme)
         {
-            
             GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA" };
             List<string> wordsForTheme = new List<string>();
 
@@ -513,7 +512,30 @@ namespace WordPuzzles
 
             return WordCategory.AdvancedWord;
         }
+
+        public List<string> FindThemesForWord(string word)
+        {
+            GoogleSheet sheet = new GoogleSheet() { GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA" };
+            List<string> themes = new List<string>();
+
+            List<Dictionary<int, string>> findRelatedWords = sheet.ExecuteQuery(string.Format($@"SELECT * WHERE B = '{word}'"));
+            foreach (var dictionary in findRelatedWords)
+            {
+                const int INDEX_OF_THEME = 0;
+                if (dictionary.ContainsKey(INDEX_OF_THEME))
+                {
+                    string wordToAdd = dictionary[INDEX_OF_THEME];
+                    if (!themes.Contains(wordToAdd)) //skip any duplicates
+                    {
+                        themes.Add(wordToAdd);
+                    }
+                }
+            }
+
+            return themes;
+        }
     }
+
 
     [Serializable]
     public class Clue
