@@ -10,7 +10,7 @@ namespace WordPuzzles
             List<PotentialTheme> themes = new List<PotentialTheme>();
             string html = WebRequestUtility.ReadHtmlPageFromUrl($"https://www.wordnik.com/fragments/lists/{word}");
             int indexOfStartOfOtherLists = html.IndexOf(@"<ul class=""other_lists"">");
-            if (indexOfStartOfOtherLists < 0) return null;
+            if (indexOfStartOfOtherLists < 0) return themes;
             string remainingHtml = html.Substring(indexOfStartOfOtherLists);
             foreach (string listFragment in remainingHtml.Split(new string[] { @"<a href=""/lists/" }, StringSplitOptions.RemoveEmptyEntries))
             {

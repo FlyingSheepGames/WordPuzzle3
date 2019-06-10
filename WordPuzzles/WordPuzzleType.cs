@@ -12,6 +12,7 @@
         HiddenWords,
         BuildingBlocks,
         RelatedWords,
+        MissingLetters,
         MAX_VALUE
 
     }

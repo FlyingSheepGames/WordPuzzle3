@@ -36,9 +36,9 @@ namespace WordPuzzlesTest
 <!--StartFragment-->
 Construct a word that fits in the same category as the words below by taking one letter from each word, in order.<br>
 AMBER<br>
-GOLD<br>
-MAUVE<br>
-RED<br>
+BLACK<br>
+BURGUNDY<br>
+BEIGE<br>
 Solution: _ _ _ _ 
 <!--EndFragment-->
 </body>

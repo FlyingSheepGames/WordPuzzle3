@@ -67,9 +67,16 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("8. Building Blocks");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
                 Console.WriteLine("9. Related Words");
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.WriteLine("Q. Missing Letters");
 
                 var userPuzzleSelectionInput = Console.ReadKey();
-                if (Enum.TryParse(userPuzzleSelectionInput.KeyChar.ToString(), out userPuzzleSelection))
+                var userPuzzleSelectionString = userPuzzleSelectionInput.KeyChar.ToString();
+                if (userPuzzleSelectionString == "q")
+                {
+                    userPuzzleSelectionString = "10";
+                }
+                if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
                 {
 
                 }
@@ -250,6 +257,15 @@ namespace WordPuzzleGenerator
                         }
                         break;
 
+                    case WordPuzzleType.MissingLetters:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Creating a Missing Letters puzzle for you.");
+                            InteractiveCreateMissingLettersPuzzle(solution);
+                            Console.WriteLine("Done. Press a key to continue.");
+                            Console.ReadKey();
+                        }
+                        break;
                 }
             }
 
@@ -272,6 +288,28 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
                 wordPattern = Console.ReadLine();
             }
+        }
+
+        private static void InteractiveCreateMissingLettersPuzzle(string solution)
+        {
+            MissingLettersPuzzle puzzle = new MissingLettersPuzzle();
+            puzzle.PlaceSolution(solution);
+            char lastKeyPressed = 'z';
+            while (lastKeyPressed != 'c')
+            {
+                string puzzleAsHtml = puzzle.FormatHtmlForGoogle();
+                foreach (string word in puzzle.Words)
+                {
+                    Console.WriteLine(word);
+                }
+                Clipboard.SetData(DataFormats.Html, puzzleAsHtml);
+
+                Console.WriteLine(
+                    "Puzzle copied to clipboard. Press 'c' to continue, or anything else to copy it again.");
+                lastKeyPressed = Console.ReadKey().KeyChar;
+            }
+
+
         }
 
         private static void InteractiveCreateRelatedWordsPuzzle(string solution, List<string> solutionThemes)
@@ -462,6 +500,8 @@ namespace WordPuzzleGenerator
             int solutionLength = solution.Length;
             var availablePuzzleTypes = new Dictionary<WordPuzzleType, bool>();
 
+            MissingLettersPuzzle puzzle = new MissingLettersPuzzle();
+
             availablePuzzleTypes.Add(WordPuzzleType.WordSquare, (3 < solutionLength && solutionLength < 7));
             availablePuzzleTypes.Add(WordPuzzleType.Sudoku, !WordSudoku.ContainsDuplicateLetters(solution));
             availablePuzzleTypes.Add(WordPuzzleType.Anacrostic, (7 < solutionLength && solutionLength < 57));
@@ -471,6 +511,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
             availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
             availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (!solution.Contains(' ')));//Require that the word has at least one theme.
+            availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, ( 10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
 
             return availablePuzzleTypes;
         }
@@ -658,9 +699,9 @@ namespace WordPuzzleGenerator
                 int wordsAddedSoFar = ladder.Chain.Count;
                 List<string> nextWordCandidates = new List<string>();
 
-                for (int offset = 0; offset < ladder.Size; offset++)
+                for (int offset = 0; offset < initialWord.Length; offset++)
                 {
-                    indexToReplace = (indexToReplace + offset) % ladder.Size;
+                    indexToReplace = (indexToReplace + offset) % initialWord.Length;
                     var findNextWordsInChain = ladder.FindNextWordsInChain(ladder.Chain[wordsAddedSoFar - 1].Word,
                         indexToReplace);
                     foreach (string foundWord in findNextWordsInChain)
