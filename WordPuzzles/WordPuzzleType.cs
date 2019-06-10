@@ -10,6 +10,7 @@
         LettersAndArrows,
         ReadDownColumn,
         HiddenWords,
+        BuildingBlocks,
         MAX_VALUE
 
     }

@@ -20,7 +20,7 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
-            //InteractiveHideTheseWords(new List<string>() { "zero", "one", "two", "three",  "five", "seven", "eight", "nine"}); //missing "four" and "six"
+            //InteractiveHideTheseWords(new List<string>() {"four", "one", "two"});
             //ListWordsThatCanBeShifted();
             /*
             ListWordsThatCanPrependALetter("a");
@@ -60,6 +60,8 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("6. Read Down Column");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
                 Console.WriteLine("7. Hidden Words");
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.WriteLine("8. Building Blocks");
 
                 var userPuzzleSelectionInput = Console.ReadKey();
                 if (Enum.TryParse(userPuzzleSelectionInput.KeyChar.ToString(), out userPuzzleSelection))
@@ -206,6 +208,25 @@ namespace WordPuzzleGenerator
                         }
 
                         break;
+                    case WordPuzzleType.BuildingBlocks:
+                        if (!solution.Contains(' '))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Creating a Building Blocks puzzle for you.");
+                            InteractiveCreateBuildingBlocksPuzzle(solution);
+                            Console.WriteLine("Done. Press a key to continue.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine(
+                                $"{solution} contains a space, so I can't create a building blocks puzzle. Press anything to continue.");
+                            Console.ReadKey();
+                        }
+
+                        break;
+
                 }
             }
 
@@ -227,6 +248,28 @@ namespace WordPuzzleGenerator
                 Console.WriteLine();
                 Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
                 wordPattern = Console.ReadLine();
+            }
+        }
+
+        private static void InteractiveCreateBuildingBlocksPuzzle(string solution)
+        {
+            BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();
+            puzzle.PlaceSolution(solution);
+
+            char lastKeyPressed = 'z';
+            while (lastKeyPressed != 'c')
+            {
+                string puzzleAsHtml = puzzle.FormatHtmlForGoogle();
+                Console.WriteLine("Solution includes these words:");
+                foreach (string word in puzzle.Words)
+                {
+                    Console.WriteLine(word);
+                }
+                Clipboard.SetData(DataFormats.Html, puzzleAsHtml);
+
+                Console.WriteLine(
+                    "Puzzle copied to clipboard. Press 'c' to continue, or anything else to copy it again.");
+                lastKeyPressed = Console.ReadKey().KeyChar;
             }
         }
 
@@ -311,6 +354,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (3 < solutionLength && solutionLength < 30));
             availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
             availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
+            availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
 
             return availablePuzzleTypes;
         }
@@ -399,6 +443,7 @@ namespace WordPuzzleGenerator
         {
             wordsToHide.Shuffle();
             HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {  };
+            puzzle.Solution = "";
             foreach (string hiddenWordCandidate in wordsToHide)
             {
                 bool foundSentence = false;
