@@ -370,11 +370,11 @@ namespace WordPuzzleGenerator
             //Find new ones.
             Console.WriteLine($"Finding new themes for {word} ");
             WordnikUtility utility = new WordnikUtility();
-            int counter = 0;
             bool readyToProceed = false;
             var potentialThemes = utility.FindPotentialThemes(word);
             while (!readyToProceed)
             {
+                int counter = 0;
                 if (potentialThemes.Count == 0)
                 {
                     Console.WriteLine("No potential themes found.");
@@ -779,7 +779,7 @@ namespace WordPuzzleGenerator
 
                     if (8 < nextWordCandidates.Count) break;
                 }
-                nextWordCandidates.Shuffle();
+                //nextWordCandidates.Shuffle();// only if we can shuffle the notes at the same time. 
 
                 for (var index = 0; index < nextWordCandidates.Count; index++)
                 {
