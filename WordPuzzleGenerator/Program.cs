@@ -11,6 +11,8 @@ namespace WordPuzzleGenerator
 {
     class Program
     {
+        private const ConsoleColor CONSOLE_COLOR_ERROR = ConsoleColor.DarkRed;
+
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
         static readonly WordRepository WordRepository = new WordRepository() {ExludeAdvancedWords = true};
@@ -41,7 +43,7 @@ namespace WordPuzzleGenerator
             
             WordPuzzleType userPuzzleSelection = WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
 
-            Dictionary<WordPuzzleType, bool> availablePuzzleTypes = CalculateAvailablePuzzleTypes(solution);
+            Dictionary<WordPuzzleType, bool> availablePuzzleTypes = CalculateAvailablePuzzleTypes(solution, solutionThemes);
 
             while (userPuzzleSelection != 0)
             {
@@ -49,26 +51,27 @@ namespace WordPuzzleGenerator
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"Which type of puzzle would you like to create for '{solution}'?");
                 Console.WriteLine("0. None. Quit to word patterns.");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("1. Word Square");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("2. Sudoku");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("3. Anacrostic");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("4. Word Ladder");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("5. Letters and Arrows");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("6. Read Down Column");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("7. Hidden Words");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("8. Building Blocks");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("9. Related Words");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("Q. Missing Letters");
+                Console.ForegroundColor = ConsoleColor.Gray;
 
                 var userPuzzleSelectionInput = Console.ReadKey();
                 var userPuzzleSelectionString = userPuzzleSelectionInput.KeyChar.ToString();
@@ -240,7 +243,7 @@ namespace WordPuzzleGenerator
                         break;
 
                     case WordPuzzleType.RelatedWords:
-                        if (!solution.Contains(' '))
+                        if (0 < solutionThemes.Count)
                         {
                             Console.Clear();
                             Console.WriteLine("Creating a Related Words puzzle for you.");
@@ -252,7 +255,7 @@ namespace WordPuzzleGenerator
                         {
                             Console.Clear();
                             Console.WriteLine(
-                                $"{solution} contains a space, so I can't create a related words puzzle. Press anything to continue.");
+                                $"{solution} doesn't have any themes, so I can't create a related words puzzle. Press anything to continue.");
                             Console.ReadKey();
                         }
                         break;
@@ -314,19 +317,24 @@ namespace WordPuzzleGenerator
 
         private static void InteractiveCreateRelatedWordsPuzzle(string solution, List<string> solutionThemes)
         {
-            Console.WriteLine($"Select a theme for {solution.ToUpper()}");
-            int counter = 0;
-            foreach (string theme in solutionThemes)
+            string selectedTheme = solutionThemes[0];
+            if (1 < solutionThemes.Count)
             {
-                Console.WriteLine($"{counter++}. {theme}");
-            }
-            Console.WriteLine($"Or enter {counter} to exit.");
+                Console.WriteLine($"Select a theme for {solution.ToUpper()}");
+                int counter = 0;
+                foreach (string theme in solutionThemes)
+                {
+                    Console.WriteLine($"{counter++}. {theme}");
+                }
 
-            string userInput = Console.ReadLine();
-            int selectedIndex;
-            if (!int.TryParse(userInput, out selectedIndex)) return;
-            if (solutionThemes.Count <= selectedIndex) return;
-            string selectedTheme = solutionThemes[selectedIndex];
+                Console.WriteLine($"Or enter {counter} to exit.");
+
+                string userInput = Console.ReadLine();
+                int selectedIndex;
+                if (!int.TryParse(userInput, out selectedIndex)) return;
+                if (solutionThemes.Count <= selectedIndex) return;
+                selectedTheme = solutionThemes[selectedIndex];
+            }
 
             RelatedWordsPuzzle puzzle = new RelatedWordsPuzzle();
             puzzle.PlaceSolution(selectedTheme, solution);
@@ -367,6 +375,11 @@ namespace WordPuzzleGenerator
             var potentialThemes = utility.FindPotentialThemes(word);
             while (!readyToProceed)
             {
+                if (potentialThemes.Count == 0)
+                {
+                    Console.WriteLine("No potential themes found.");
+                    break;
+                }
                 foreach (var potentialTheme in potentialThemes)
                 {
                     Console.WriteLine($"{counter++} {potentialTheme.Name} ({potentialTheme.Count} entries)");
@@ -388,11 +401,15 @@ namespace WordPuzzleGenerator
                         Console.WriteLine($"{wordInNewTheme}");
                         rowsToCopy.AppendLine($"{selectedThemeName}\t{wordInNewTheme}\t{wordInNewTheme.Length}");
                     }
+
                     Clipboard.SetText(rowsToCopy.ToString());
                     Console.WriteLine("New theme copied to clipboard. Paste into Google sheet.");
                     themes.Add(selectedThemeName);
                 }
-
+                else
+                {
+                    break;
+                }
                 Console.WriteLine("Press 'p' to proceed to the next step, or anything else to do this again.");
                 var userKey = Console.ReadKey();
                 if (userKey.Key == ConsoleKey.P)
@@ -495,7 +512,8 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static Dictionary<WordPuzzleType, bool> CalculateAvailablePuzzleTypes(string solution)
+        private static Dictionary<WordPuzzleType, bool> CalculateAvailablePuzzleTypes(string solution,
+            List<string> solutionThemes)
         {
             int solutionLength = solution.Length;
             var availablePuzzleTypes = new Dictionary<WordPuzzleType, bool>();
@@ -510,7 +528,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
             availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
             availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
-            availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (!solution.Contains(' ')));//Require that the word has at least one theme.
+            availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
             availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, ( 10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
 
             return availablePuzzleTypes;
@@ -658,11 +676,26 @@ namespace WordPuzzleGenerator
 
         private static void InteractiveFindLettersAndArrowsPuzzle(string solution)
         {
-            LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution, true);
+            string formatHtmlForGoogle = null;
+            for (int size = 4; size < 7; size++)
+            {
+                try
+                {
+                    LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution, true, size);
+                    formatHtmlForGoogle = puzzle.FormatHtmlForGoogle();
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Unable to create a puzzle of size {size} ({e.Message}). Will increase size and try again. ");
+                }
+            }
+
+            if (formatHtmlForGoogle == null) return;
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
-                Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
+                Clipboard.SetData(DataFormats.Html, formatHtmlForGoogle);
                 Console.WriteLine(
                     "Letters and Arrows puzzle has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
                 lastKeyPressed = Console.ReadKey().KeyChar;
@@ -695,28 +728,63 @@ namespace WordPuzzleGenerator
             while ('c' == lastKeyPressed)
             {
                 int candidateIndex = 0;
-                var indexToReplace = RandomNumberGenerator.Next(0, ladder.Size);
                 int wordsAddedSoFar = ladder.Chain.Count;
                 List<string> nextWordCandidates = new List<string>();
+                List<string> candidateNotes = new List<string>();
 
-                for (int offset = 0; offset < initialWord.Length; offset++)
+                for (int indexToReplace = 0; indexToReplace < initialWord.Length; indexToReplace++)
                 {
-                    indexToReplace = (indexToReplace + offset) % initialWord.Length;
                     var findNextWordsInChain = ladder.FindNextWordsInChain(ladder.Chain[wordsAddedSoFar - 1].Word,
                         indexToReplace);
                     foreach (string foundWord in findNextWordsInChain)
                     {
-                        if (!ladder.AlreadyContains(foundWord))
+                        if (ladder.AlreadyContains(foundWord)) continue;
+                        if (nextWordCandidates.Contains(foundWord)) continue;
+                        if (ladder.AllLettersPlaced)
                         {
                             nextWordCandidates.Add(foundWord);
+                            candidateNotes.Add("(all letters placed)");
+                            continue;
                         }
+
+                        bool foundWordContainsUnplacedLetter = false;
+                        bool foundWordCanTakeUnplacedLetter = false;
+                        foreach(char letter in ladder.RemainingUnplacedLetters)
+                        {
+                            if (foundWord.Contains(letter.ToString()))
+                            {
+                                foundWordContainsUnplacedLetter = true;
+                                candidateNotes.Add($"(contains {letter.ToString().ToUpperInvariant()})");
+                                break;
+                            }
+
+                            for (int index = 0; index < foundWord.Length; index++)
+                            {
+                                string futureWord = ReplaceCharacterAtIndex(foundWord, index, letter);
+                                if (WordRepository.IsAWord(futureWord))
+                                {
+                                    foundWordCanTakeUnplacedLetter = true; //This word doesn't help place a missing letter, but the next word might.
+                                    candidateNotes.Add($"--> {futureWord}");
+                                }
+                            }
+                        }
+
+                        if (foundWordContainsUnplacedLetter || foundWordCanTakeUnplacedLetter)
+                        {
+                            nextWordCandidates.Add(foundWord);
+                            continue;
+                        }
+
                     }
+
                     if (8 < nextWordCandidates.Count) break;
                 }
+                nextWordCandidates.Shuffle();
 
-                foreach (string nextWordCandidate in nextWordCandidates)
+                for (var index = 0; index < nextWordCandidates.Count; index++)
                 {
-                    Console.WriteLine($"{candidateIndex} {nextWordCandidate}");
+                    string nextWordCandidate = nextWordCandidates[index];
+                    Console.WriteLine($"{candidateIndex} {nextWordCandidate} {candidateNotes[index]}");
                     candidateIndex++;
                     if (8 < candidateIndex) break;
                 }
@@ -763,6 +831,24 @@ namespace WordPuzzleGenerator
                 Clipboard.SetData(DataFormats.Html, ladder.FormatHtmlForGoogle());
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
+        }
+
+        private static string ReplaceCharacterAtIndex(string word, int indexToReplace, char letter) //TODO: I feel like we have this method somewhere already.
+        {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (i == indexToReplace)
+                {
+                    builder.Append(letter);
+                }
+                else
+                {
+                    builder.Append(word[i]);
+                }
+            }
+
+            return builder.ToString();
         }
 
         private static void InteractiveGenerateWordSudoku(string solution)

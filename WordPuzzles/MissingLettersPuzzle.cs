@@ -50,6 +50,9 @@ namespace WordPuzzles
 
             foreach (string candidate in decoyCandidates)
             {
+                if (candidate == Solution) continue;
+                if (DecoyWords.Contains(candidate)) continue;
+
                 var wordsContainingLettersForCandidate = FindWordsContainingLetters(candidate);
                 if (2 < wordsContainingLettersForCandidate.Count)
                 {
