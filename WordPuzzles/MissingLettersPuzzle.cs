@@ -83,7 +83,7 @@ namespace WordPuzzles
             builder.AppendLine(@"<html>");
 builder.AppendLine(@"<body>");
             builder.AppendLine(@"<!--StartFragment-->");
-            builder.AppendLine(@"Fill in the blanks below with 2 letter words. The word that you use three times is the solution to the puzzle.<br>");
+            builder.AppendLine($@"Fill in the blanks below with {Solution.Length} letter words. The word that you use three times is the solution to the puzzle.<br>");
             string emptyPattern = new string('_', Solution.Length);
             foreach (string word in Words)
             {
