@@ -22,7 +22,7 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
-            //InteractiveHideTheseWords(new List<string>() {"four", "one", "two"});
+            //InteractiveHideTheseWords(new List<string>() {"domain"});
             //ListWordsThatCanBeShifted();
             /*
             ListWordsThatCanPrependALetter("a");

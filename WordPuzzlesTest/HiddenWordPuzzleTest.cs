@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
 
@@ -95,6 +96,21 @@ namespace WordPuzzlesTest
                 CollectionAssert.AreEquivalent(expectedStrings, results);
             }
 
+
+            [Test]
+            public void DOMAIN_ReturnsExpectedSplitableStrings()
+            {
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
+                List<string> results = puzzle.GenerateAllSplitableStrings("domain");
+                List<string> expectedStrings = new List<string>
+                {
+                    "do.main",  //one dot
+                    "dom.a.in", //two dots
+                    "dom.a.i.n"//three dots
+                };
+                CollectionAssert.AreEquivalent(expectedStrings, results);
+            }
+
             [Test]
             public void SOCK_NoWordsStartWithCK_ReturnsExpectedResults()
             {
@@ -159,6 +175,36 @@ Solution: _ _ .
                 puzzle.Solution = "ca.";
                 puzzle.Sentences.Add("Example Sentence");
                 Assert.AreEqual(EXPECTED_TEXT, puzzle.FormatPuzzleAsText());
+            }
+        }
+
+        [TestFixture]
+        public class FindWordsAtTheStartOfThisString
+        {
+
+
+            [Test]
+            public void AIN_IncludesA()
+            {
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
+                puzzle.Solution = "domain";
+                var results = puzzle.FindWordsAtTheStartOfThisString("ain");
+                CollectionAssert.Contains(results, "a");
+            }
+        }
+
+        [TestFixture]
+        public class ProcessRemainingLetters
+        {
+            [Test]
+            public void DOMAIN_ReturnsExpectedResult()
+            {
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
+                puzzle.Solution = "domain";
+                var splitableStrings = new List<string>();
+                puzzle.ProcessRemainingLetters("domain", "ain", new StringBuilder("dom."), 3, splitableStrings);
+                CollectionAssert.Contains(splitableStrings, "dom.a.i.n")
+                ;
             }
         }
     }

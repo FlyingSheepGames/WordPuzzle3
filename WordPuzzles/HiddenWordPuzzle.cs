@@ -226,26 +226,33 @@ namespace WordPuzzles
             return lastTokenValid;
         }
 
-        private void ProcessRemainingLetters(string wordToSplit, string remainingLetters, StringBuilder splitableStringBuilder,
-            int lengthOfFirstToken, List<string> splitableStrings)
+        internal void ProcessRemainingLetters(string wordToSplit, string remainingLetters, StringBuilder splitableStringBuilder,
+            int lengthOfAllPreviousTokens, List<string> splitableStrings)
         {
+            //Console.WriteLine($"Called with {wordToSplit}, {remainingLetters}, {splitableStringBuilder.ToString()}, {lengthOfAllPreviousTokens}, {string.Join( " - ", splitableStrings)}");
             foreach (string word in FindWordsAtTheStartOfThisString(remainingLetters))
             {
                 StringBuilder builder = new StringBuilder(splitableStringBuilder.ToString());
                 builder.Append(word);
                 builder.Append(".");
-                var remainingLettersAfterWordRemoved = wordToSplit.Substring(lengthOfFirstToken + word.Length);
-                builder.Append(remainingLettersAfterWordRemoved); 
-                ProcessRemainingLetters(wordToSplit, remainingLettersAfterWordRemoved, splitableStringBuilder, lengthOfFirstToken, splitableStrings);
-                string splitableStringCandidate = builder.ToString();
-                if (VerifySplitableStringCandidate(splitableStringCandidate))
+                lengthOfAllPreviousTokens = builder.ToString().Replace(".", "").Length;
+                if (lengthOfAllPreviousTokens < wordToSplit.Length)
                 {
-                    splitableStrings.Add(splitableStringCandidate);
+                    var remainingLettersAfterWordRemoved = wordToSplit.Substring(lengthOfAllPreviousTokens);
+                    ProcessRemainingLetters(wordToSplit, remainingLettersAfterWordRemoved, builder,
+                        lengthOfAllPreviousTokens, splitableStrings);
+
+                    builder.Append(remainingLettersAfterWordRemoved);
+                    string splitableStringCandidate = builder.ToString();
+                    if (VerifySplitableStringCandidate(splitableStringCandidate))
+                    {
+                        splitableStrings.Add(splitableStringCandidate);
+                    }
                 }
             }
         }
 
-        private IEnumerable<string> FindWordsAtTheStartOfThisString(string remainingLetters)
+        internal IEnumerable<string> FindWordsAtTheStartOfThisString(string remainingLetters)
         {
             List<string> prefixWords = new List<string>();
             for (int lengthOfWord = 1; lengthOfWord < remainingLetters.Length; lengthOfWord++)
