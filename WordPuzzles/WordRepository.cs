@@ -67,6 +67,9 @@ namespace WordPuzzles
         private readonly List<string> _fourLetterWords = new List<string>();
         private readonly List<string> _fiveLetterWords = new List<string>();
         private readonly List<string> _sixLetterWords = new List<string>();
+        private readonly List<string> _sevenLetterWords = new List<string>();
+        private readonly List<string> _eightLetterWords = new List<string>();
+        private readonly List<string> _tenLetterWords = new List<string>();
         internal bool _alreadyLoaded;
         private static readonly Dictionary<string, string> DictionaryOfClues = new Dictionary<string, string>();
 
@@ -129,7 +132,15 @@ namespace WordPuzzles
                     case 6:
                         _sixLetterWords.Add(currentWord);
                         break;
-
+                    case 7:
+                        _sevenLetterWords.Add(currentWord);
+                        break;
+                    case 8:
+                        _eightLetterWords.Add(currentWord);
+                        break;
+                    case 10:
+                        _tenLetterWords.Add(currentWord);
+                        break;
                 }
 
                 if (result.ContainsKey(HINT_INDEX))
@@ -484,6 +495,15 @@ namespace WordPuzzles
                     break;
                 case 6:
                     wordsToSearch = _sixLetterWords;
+                    break;
+                case 7:
+                    wordsToSearch = _sevenLetterWords;
+                    break;
+                case 8:
+                    wordsToSearch = _eightLetterWords;
+                    break;
+                case 10:
+                    wordsToSearch = _tenLetterWords;
                     break;
                 default:
                     throw new Exception($"Words of length {wordLength} are not supported yet.");

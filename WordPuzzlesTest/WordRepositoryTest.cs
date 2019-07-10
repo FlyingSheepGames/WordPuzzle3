@@ -368,6 +368,27 @@ third
                 Assert.IsTrue(repository.IsAWord("sister"));
             }
 
+            [Test]
+            public void ZESTFUL_IsAWord()
+            {
+                WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+                Assert.IsTrue(repository.IsAWord("zestful"));
+            }
+
+            [Test]
+            public void OUTBREAK_IsAWord()
+            {
+                WordRepository repository = new WordRepository() { ExludeAdvancedWords = true, IgnoreCache = true};
+                Assert.IsTrue(repository.IsAWord("outbreak"));
+            }
+
+            [Test]
+            public void TRAMPOLINE_IsAWord()
+            {
+                WordRepository repository = new WordRepository() { ExludeAdvancedWords = true };
+                Assert.IsTrue(repository.IsAWord("trampoline"));
+            }
+
         }
 
         [TestFixture]
