@@ -316,8 +316,16 @@ namespace WordPuzzleGenerator
 
         private static void FindWordsThatMakeDigits()
         {
-            Console.WriteLine("Words that fit into the pattern of the digit 0:");   
-            Console.WriteLine("Seven letters not supported yet.");
+            Console.WriteLine("Words that fit into the pattern of the digit 0:");
+            for (char repeatedLetter = 'a'; repeatedLetter <= 'z'; repeatedLetter++)
+            {
+                string pattern = $"{repeatedLetter}_____{repeatedLetter}";
+                Console.WriteLine(pattern);
+                foreach (string word in WordRepository.WordsMatchingPattern(pattern))
+                {
+                    Console.WriteLine(word);
+                }
+            }
             Console.WriteLine();
 
 
@@ -332,7 +340,14 @@ namespace WordPuzzleGenerator
             Console.WriteLine();
 
             Console.WriteLine("Words that fit into the pattern of the digit 3:");
-            Console.WriteLine("Seven letters not supported yet.");
+            for (char repeatedLetter = 'a'; repeatedLetter <= 'z'; repeatedLetter++)
+            {
+                string pattern = $"__{repeatedLetter}_{repeatedLetter}__";
+                foreach (string word in WordRepository.WordsMatchingPattern(pattern))
+                {
+                    Console.WriteLine(word);
+                }
+            }
             Console.WriteLine();
 
             Console.WriteLine("Words that fit into the pattern of the digit 4:");
@@ -344,15 +359,21 @@ namespace WordPuzzleGenerator
                 }
             }
             Console.WriteLine("none");
-            Console.ReadLine();
-
+ 
 
             Console.WriteLine("Words that fit into the pattern of the digit 5:");
             Console.WriteLine("Any six letter word.");
             Console.WriteLine();
 
             Console.WriteLine("Words that fit into the pattern of the digit 6:");
-            Console.WriteLine("Seven letters not supported yet.");
+            for (char repeatedLetter = 'a'; repeatedLetter <= 'z'; repeatedLetter++)
+            {
+                string pattern = $"__{repeatedLetter}___{repeatedLetter}";
+                foreach (string word in WordRepository.WordsMatchingPattern(pattern))
+                {
+                    Console.WriteLine(word);
+                }
+            }
 
             Console.WriteLine("Words that fit into the pattern of the digit 7:");
             Console.WriteLine("Any four letter word.");
@@ -362,8 +383,16 @@ namespace WordPuzzleGenerator
             Console.WriteLine("Nine letters not supported yet.");
 
             Console.WriteLine("Words that fit into the pattern of the digit 9:");
-            Console.WriteLine("Seven letters not supported yet.");
+            for (char repeatedLetter = 'a'; repeatedLetter <= 'z'; repeatedLetter++)
+            {
+                string pattern = $"___{repeatedLetter}_{repeatedLetter}_";
+                foreach (string word in WordRepository.WordsMatchingPattern(pattern))
+                {
+                    Console.WriteLine(word);
+                }
+            }
 
+            Console.ReadKey();
         }
 
         private static void InteractiveCreateMissingLettersPuzzle(string solution)
