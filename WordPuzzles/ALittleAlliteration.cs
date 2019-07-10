@@ -140,7 +140,7 @@ namespace WordPuzzles
             totalWordsFound = 0;
 
             string content = WebRequestUtility.ReadHtmlPageFromUrl(string.Format(
-                @"http://www.morewords.com/most-common-starting-with/{0}/",
+                @"https://www.morewords.com/most-common-starting-with/{0}",
                 initialLetters));
 
             var wordsFound = ParseContentOldFormat(content, out totalWordsFound);

@@ -209,18 +209,7 @@ What color was the emergency vehicle that was unexpectedly attacked?
                 Assert.AreEqual(0, alliteration.FindWordsThatStartWith("aaa", out _).Count);
             }
 
-            [Test]
-            public void ART_ReturnsARTICLE()
-            {
-                ALittleAlliteration alliteration = new ALittleAlliteration();
-                var words = alliteration.FindWordsThatStartWith("art", out _);
-                Assert.Contains("article", words);
-                foreach (string word in words)
-                {
-                    Console.WriteLine(word);
-                }
-                Assert.IsFalse(words.Contains("arterial"), "Expected 'arterial' to be excluded as a copy of artery.");
-            }
+
 
             [Test]
             public void CHI_ReturnsExpectedResults()

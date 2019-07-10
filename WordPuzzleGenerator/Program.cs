@@ -22,7 +22,10 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
-            //InteractiveHideTheseWords(new List<string>() {"domain"});
+            //LoadSevenLetterWords();
+            //FindWordsThatMakeDigits();
+
+            //InteractiveHideTheseWords(new List<string>() {"winter", "spring", "fall", "autumn"});
             //ListWordsThatCanBeShifted();
             /*
             ListWordsThatCanPrependALetter("a");
@@ -291,6 +294,76 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
                 wordPattern = Console.ReadLine();
             }
+        }
+
+        private static void LoadSevenLetterWords()
+        {
+            StringBuilder rowsToAdd = new StringBuilder();
+            foreach (string word in File.ReadAllLines(@"C:\Users\cbeauvai\source\repos\WordPuzzle3\WordPuzzlesTest\data\10LetterWords.txt"))
+            {
+                if (word.Length == 10)
+                {
+                    var category = WordRepository.CategorizeWord(word);
+                    string newWordRow = $"{word}\t{category}\t{word.Length}";
+                    rowsToAdd.AppendLine(newWordRow);
+                    Console.WriteLine(newWordRow);
+                }
+            }
+            Clipboard.SetText(rowsToAdd.ToString());
+            Console.WriteLine("Results copied to clipboard. Press a key to continue.");
+            Console.ReadKey();
+        }
+
+        private static void FindWordsThatMakeDigits()
+        {
+            Console.WriteLine("Words that fit into the pattern of the digit 0:");   
+            Console.WriteLine("Seven letters not supported yet.");
+            Console.WriteLine();
+
+
+            Console.WriteLine("Words that fit into the pattern of the digit 1:");
+            Console.WriteLine("Any three letter word.");
+            Console.WriteLine();
+
+
+
+            Console.WriteLine("Words that fit into the pattern of the digit 2:");
+            Console.WriteLine("Any six letter word.");
+            Console.WriteLine();
+
+            Console.WriteLine("Words that fit into the pattern of the digit 3:");
+            Console.WriteLine("Seven letters not supported yet.");
+            Console.WriteLine();
+
+            Console.WriteLine("Words that fit into the pattern of the digit 4:");
+            foreach (string sixLetterWord in WordRepository.WordsMatchingPattern("______"))
+            {
+                if (sixLetterWord[2] == sixLetterWord[4])
+                {
+                    Console.WriteLine(sixLetterWord);
+                }
+            }
+            Console.WriteLine("none");
+            Console.ReadLine();
+
+
+            Console.WriteLine("Words that fit into the pattern of the digit 5:");
+            Console.WriteLine("Any six letter word.");
+            Console.WriteLine();
+
+            Console.WriteLine("Words that fit into the pattern of the digit 6:");
+            Console.WriteLine("Seven letters not supported yet.");
+
+            Console.WriteLine("Words that fit into the pattern of the digit 7:");
+            Console.WriteLine("Any four letter word.");
+            Console.WriteLine();
+
+            Console.WriteLine("Words that fit into the pattern of the digit 8:");
+            Console.WriteLine("Nine letters not supported yet.");
+
+            Console.WriteLine("Words that fit into the pattern of the digit 9:");
+            Console.WriteLine("Seven letters not supported yet.");
+
         }
 
         private static void InteractiveCreateMissingLettersPuzzle(string solution)
@@ -662,10 +735,13 @@ namespace WordPuzzleGenerator
             ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
             puzzle.Solution = solution;
             puzzle.PopulateWords();
-
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
+                foreach (string word in puzzle.Words)
+                {
+                    Console.WriteLine(word);
+                }
                 Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
                 Console.WriteLine(
                     "Read Down Column puzzle has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");

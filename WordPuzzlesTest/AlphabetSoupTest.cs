@@ -29,8 +29,8 @@ namespace WordPuzzlesTest
             {
                 AlphabetSoup puzzle = new AlphabetSoup(Repository);
                 puzzle.RandomSeed = 1;
-                Assert.AreEqual("algaeam", puzzle.GenerateSingleLine('a', 'a'));
-                Assert.AreEqual("alabuts", puzzle.GenerateSingleLine('a', 'b'));
+                Assert.AreEqual("allayam", puzzle.GenerateSingleLine('a', 'a'));
+                Assert.AreEqual("alabout", puzzle.GenerateSingleLine('a', 'b'));
             }
 
         }
