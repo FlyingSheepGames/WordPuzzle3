@@ -11,6 +11,7 @@
 *.userprefs
 
 # Build results
+bin/
 [Dd]ebugPublic/
 [Rr]eleases/
 x64/
@@ -256,5 +257,3 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-WordPuzzleGenerator/bin/
-WordPuzzlesTest.NetFramework/bin/
