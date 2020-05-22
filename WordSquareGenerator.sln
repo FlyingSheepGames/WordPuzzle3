@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzlesTest", "WordPuzzlesTest\WordPuzzlesTest.csproj", "{08947F41-4049-4D7D-90D2-A446002DDF8E}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordDrMarioTest", "WordDrMarioTest\WordDrMarioTest.csproj", "{A4C7F967-36A6-417E-94D4-604B442463F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPuzzleGenerator", "WordPuzzleGenerator\WordPuzzleGenerator.csproj", "{209D9FD3-C72E-4458-B140-B34D6991EB18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPuzzlesTest.NetFramework", "WordPuzzlesTest.NetFramework\WordPuzzlesTest.NetFramework.csproj", "{6A7D629F-370E-45F8-AB2C-599A700DBF27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{209D9FD3-C72E-4458-B140-B34D6991EB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A7D629F-370E-45F8-AB2C-599A700DBF27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A7D629F-370E-45F8-AB2C-599A700DBF27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A7D629F-370E-45F8-AB2C-599A700DBF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A7D629F-370E-45F8-AB2C-599A700DBF27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
