@@ -295,7 +295,7 @@ namespace WordPuzzles
             }
             else
             {
-                //randomly select amoung the ones that will visit a new row.
+                //randomly select among the ones that will visit a new row.
                 return offsetIndiciesThatVisitANewRow[RandomNumberGenerator.Next(offsetIndiciesThatVisitANewRow.Count)]; 
             }
         }
@@ -325,20 +325,22 @@ namespace WordPuzzles
                 {
                     wordRow.Append(GetCellAtCoordinates(row, column).Letter);
                 }
-                builder.AppendLine($"    <td>Clue for {wordRow}</td>");
+                builder.AppendLine($@"    <td width=""250"">Clue for {wordRow}</td>");
 
                 for (int column = 0; column < Size; column++)
                 {
-                    builder.AppendLine($"    <td>{GetCellAtCoordinates(row, column)}</td>");
+                    builder.AppendLine($@"    <td width=""20""><sup>{GetCellAtCoordinates(row, column)}</sup><br/>&nbsp;</td>");
                 }
                 builder.AppendLine("</tr>");
             }
             builder.AppendLine("</table>");
+            builder.Append("<h2>");
             builder.Append("Solution: ");
             for (var index = 0; index < Solution.Length; index++)
             {
                 builder.Append("_ ");
             }
+            builder.Append("</h2>");
 
             builder.AppendLine();
             builder.AppendLine("<!--EndFragment-->");
