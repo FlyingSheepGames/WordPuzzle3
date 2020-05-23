@@ -1,0 +1,34 @@
+Include clues in puzzle. 
+Need a clue repository. Could be...
+	From local files
+	From Google Sheet (hard to update)
+
+Generate solution as HTML
+
+Already have an example for "Puzzle" - 
+
+Rename "Puzzle" to a more descriptive name. 
+Serialize/Deserialize all puzzles to JSON
+
+Create a general puzzle object. 
+
+Add new puzzle types.
+
+List of tests that occassionally time out
+EndingWith_D_FindsAtLeastOnePuzzle
+
+List of tests that occassionally fail. 
+
+--- DONE
+Add test to generate HTML for Letters and Arrows Puzzle.
+Render a puzzle as HTML that can be imported into Google Docs seamlessly. 
+    <td width="250">Clue for ONES</td>
+    <td width="20"> <sup>3↓</sup><br/>&nbsp;</td>
+	Make solution underscore spaces bold. Or h2.  
+
+How to test generated HTML (that can change often?)
+	1. Generate HTML
+	2. Compare to known file. 
+	3. If they are different, generate a new file with the  new results. 
+	4. Create *something* (a test?) that will replace the old known file with the new results (Prompt - Are you sure?)
+
