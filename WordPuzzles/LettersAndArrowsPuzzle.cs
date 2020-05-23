@@ -29,8 +29,9 @@ namespace WordPuzzles
             }
         }
 
-        public LettersAndArrowsPuzzle(string solution, bool rowsMustFormWords = false, int sizeOverride = 0)
+        public LettersAndArrowsPuzzle(string solution, bool rowsMustFormWords = false, int sizeOverride = 0, int randomSeed = 0)
         {
+            RandomSeed = randomSeed;
             RowsMustFormWords = rowsMustFormWords;
             if (RowsMustFormWords)
             {

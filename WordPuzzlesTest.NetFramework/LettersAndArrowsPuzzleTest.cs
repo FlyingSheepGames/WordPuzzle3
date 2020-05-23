@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
@@ -276,105 +277,47 @@ namespace WordPuzzlesTest
         [TestFixture]
         public class FormatHtmlForGoogle
         {
-            [Test]
-            public void Empty2x2_ReturnsExpectedString()
-            {
-                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(2);
-
-                const string EXPECTED_HTML =
-@"<html>
-<body>
-<!--StartFragment-->
-Fill in the words below (one letter per box) based on the clues. 
-Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. 
-<table border=""1"">
-<tr>
-    <td>Clue for   </td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>Clue for   </td>
-    <td></td>
-    <td></td>
-</tr>
-</table>
-Solution: 
-<!--EndFragment-->
-</body>
-</html>
-";
-                string actualHtml = puzzle.FormatHtmlForGoogle();
-                Assert.AreEqual(EXPECTED_HTML, actualHtml);
-            }
 
             [Test]
-            public void SingleLetter_ReturnsExpectedString()
+            public void OHIO_CreatesExpectedFile()
             {
-                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(2);
-                puzzle.PlaceSolution("a");
-                const string EXPECTED_HTML =
-                    @"<html>
-<body>
-<!--StartFragment-->
-Fill in the words below (one letter per box) based on the clues. 
-Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. 
-<table border=""1"">
-<tr>
-    <td>Clue for A </td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>Clue for   </td>
-    <td></td>
-    <td></td>
-</tr>
-</table>
-Solution: _ 
-<!--EndFragment-->
-</body>
-</html>
-";
-                string actualHtml = puzzle.FormatHtmlForGoogle();
-                Assert.AreEqual(EXPECTED_HTML, actualHtml);
+                const string HTML_DIRECTORY = @"html\LettersAndArrows\";
+                const string SOURCE_DIRECTORY =
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\LettersAndArrows";
+
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("ohio", true, 4, 42);
+                puzzle.FillEmptyCells();
+                string generateHtml = puzzle.FormatHtmlForGoogle();
+
+                File.WriteAllText(HTML_DIRECTORY + "actualExample1.html",  generateHtml);
+                //FileAssert.AreEqual(HTML_DIRECTORY + "expectedExample1.html", HTML_DIRECTORY + "actualExample1.html");
+                var expectedLines = File.ReadAllLines(HTML_DIRECTORY + "expectedExample1.html");
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + "actualExample1.html");
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (expectedLine != actualLine)
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + @"\expectedExample1.html", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
             }
-
-            [Test]
-            public void FourLetters_ReturnsExpectedString()
-            {
-                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(2);
-                puzzle.PlaceSolution("abcd");
-                const string EXPECTED_HTML_OPTION_ONE =
-                    @"<html>
-<body>
-<!--StartFragment-->
-Fill in the words below (one letter per box) based on the clues. 
-Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. 
-<table border=""1"">
-<tr>
-    <td>Clue for AD</td>
-    <td> 1↓</td>
-    <td></td>
-</tr>
-<tr>
-    <td>Clue for BC</td>
-    <td> 1→</td>
-    <td> 1↑</td>
-</tr>
-</table>
-Solution: _ _ _ _ 
-<!--EndFragment-->
-</body>
-</html>
-";
-
-                string actualHtml = puzzle.FormatHtmlForGoogle();
-
-                Assert.AreEqual(EXPECTED_HTML_OPTION_ONE, actualHtml);
-
-            }
-
         }
 
         [TestFixture]
