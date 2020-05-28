@@ -1,7 +1,17 @@
+All tests are passing, let's check in!
+
 Include clues in puzzle. 
-Need a clue repository. Could be...
-	From local files
-	From Google Sheet (hard to update)
+	Clues should have a type enum to indicate their source. 
+	Refactor clues from strings to objects. 
+	Found that I already have a "Clue" object, with serialization (to XML)
+	Creating a NewClue object instead. Will have to merge them later. 
+
+Create a PUZ parser (quick nuget search = no parsers commonly available (proprietary format))
+
+Write a program to parse files from a directory. 
+Write a program to populate the directory from different sources.
+
+Merge NewClue/Clue
 
 Generate solution as HTML
 
@@ -15,11 +25,17 @@ Create a general puzzle object.
 Add new puzzle types.
 
 List of tests that occassionally time out
-EndingWith_D_FindsAtLeastOnePuzzle
-
+	EndingWith_D_FindsAtLeastOnePuzzle
+	SimpleTest_PutsWordInExpectedPosition
 List of tests that occassionally fail. 
+	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
---- DONE
+--- DONE (most recent on top)
+
+Need a clue repository. Could be...
+	From local files
+	From Google Sheet (hard to update)
+
 Add test to generate HTML for Letters and Arrows Puzzle.
 Render a puzzle as HTML that can be imported into Google Docs seamlessly. 
     <td width="250">Clue for ONES</td>

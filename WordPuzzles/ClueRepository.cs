@@ -7,14 +7,14 @@ namespace WordPuzzles
 {
     public class ClueRepository
     {
-        public int ClueCount => Clues.Count;
+        public int CountOfWordWithClues => Clues.Count;
 
-        private Dictionary<string, List<string>> Clues = new Dictionary<string, List<string>>();
+        private Dictionary<string, List<NewClue>> Clues = new Dictionary<string, List<NewClue>>();
 
-        public void AddClue(string word, string clue)
+        public void AddClue(string word, string clue, ClueSource source=ClueSource.CLUE_SOURCE_UNKNOWN)
         {
             string canonicalWord = word.ToUpperInvariant();
-            List<string> currentCluesForWord = null;
+            List<NewClue> currentCluesForWord = null;
             if (Clues.ContainsKey(canonicalWord))
             {
                 currentCluesForWord = Clues[canonicalWord];
@@ -22,25 +22,42 @@ namespace WordPuzzles
 
             if (currentCluesForWord == null)
             {
-                currentCluesForWord = new List<string>();
+                currentCluesForWord = new List<NewClue>();
             }
 
-            if (!currentCluesForWord.Contains(clue))
+            if (! AlreadyContainsClue(currentCluesForWord, clue))
             {
-                currentCluesForWord.Add(clue);
+                currentCluesForWord.Add( new NewClue()
+                {
+                    ClueText =  clue, 
+                    ClueSource = source,
+                });
             }
 
             Clues[canonicalWord] = currentCluesForWord;
         }
 
-        public List<string> GetCluesForWord(string word)
+        private bool AlreadyContainsClue(List<NewClue> existingClues, string clueToAdd)
+        {
+            foreach (var clue in existingClues)
+            {
+                if (clue.ClueText.ToUpperInvariant() == clueToAdd.ToUpperInvariant())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public List<NewClue> GetCluesForWord(string word)
         {
             string canonicalWord = word.ToUpperInvariant();
             if (Clues.ContainsKey(canonicalWord))
             {
                 return Clues[canonicalWord];
             }
-            return new List<string>();
+            return new List<NewClue>();
         }
 
         public void WriteToDisk(string fileLocation)
@@ -50,7 +67,20 @@ namespace WordPuzzles
 
         public void ReadFromDisk(string fileLocation)
         {
-            Clues = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(fileLocation));
+            Clues = JsonConvert.DeserializeObject<Dictionary<string, List<NewClue>>>(File.ReadAllText(fileLocation));
         }
+    }
+
+    public class NewClue
+    {
+        public string ClueText { get; set; }
+        public ClueSource ClueSource { get; set; }
+    }
+
+    public enum ClueSource
+    {
+        CLUE_SOURCE_UNKNOWN = 0,
+        CLUE_SOURCE_CHIP = 1,
+        CLUE_SOURCE_CROSSWORD = 2,
     }
 }

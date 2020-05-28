@@ -15,21 +15,21 @@ namespace WordPuzzlesTest
             public void IncrementsClueCount()
             {
                 ClueRepository repository = new ClueRepository();
-                Assert.AreEqual(0, repository.ClueCount, "Repository should start out empty");
+                Assert.AreEqual(0, repository.CountOfWordWithClues, "Repository should start out empty");
                 repository.AddClue("ONES", "Singletons");
 
-                Assert.AreEqual(1, repository.ClueCount, "Repository should have one clue now.");
+                Assert.AreEqual(1, repository.CountOfWordWithClues, "Repository should have one clue now.");
             }
 
             [Test]
             public void SupportsMultipleClues()
             {
                 ClueRepository repository = new ClueRepository();
-                Assert.AreEqual(0, repository.ClueCount, "Repository should start out empty");
+                Assert.AreEqual(0, repository.CountOfWordWithClues, "Repository should start out empty");
                 repository.AddClue("ONES", "Singletons");
                 repository.AddClue("ONES", "Smallest denomination of folding money.");
 
-                Assert.AreEqual(1, repository.ClueCount, "Repository should have one clue now.");
+                Assert.AreEqual(1, repository.CountOfWordWithClues, "Repository should have one clue now.");
             }
 
         }
@@ -41,7 +41,7 @@ namespace WordPuzzlesTest
             public void NoClues_ReturnsEmptyList()
             {
                 ClueRepository repository = new ClueRepository();
-                List<string> clues=  repository.GetCluesForWord("Clueless"); 
+                List<NewClue> clues=  repository.GetCluesForWord("Clueless"); 
                 Assert.AreEqual(0, clues.Count);
             }
 
@@ -49,10 +49,10 @@ namespace WordPuzzlesTest
             public void SupportsMultipleClues()
             {
                 ClueRepository repository = new ClueRepository();
-                Assert.AreEqual(0, repository.ClueCount, "Repository should start out empty");
+                Assert.AreEqual(0, repository.CountOfWordWithClues, "Repository should start out empty");
                 repository.AddClue("ONES", "Singletons");
                 repository.AddClue("ONES", "Smallest denomination of folding money.");
-                List<string> clues = repository.GetCluesForWord("ONES");
+                List<NewClue> clues = repository.GetCluesForWord("ONES");
                 Assert.AreEqual(2, clues.Count);
             }
 
@@ -60,10 +60,10 @@ namespace WordPuzzlesTest
             public void IsCaseInsensitive()
             {
                 ClueRepository repository = new ClueRepository();
-                Assert.AreEqual(0, repository.ClueCount, "Repository should start out empty");
+                Assert.AreEqual(0, repository.CountOfWordWithClues, "Repository should start out empty");
                 repository.AddClue("ones", "Singletons");
                 repository.AddClue("OnEs", "Smallest denomination of folding money.");
-                List<string> clues = repository.GetCluesForWord("Ones");
+                List<NewClue> clues = repository.GetCluesForWord("Ones");
                 Assert.AreEqual(2, clues.Count);
             }
 
@@ -94,7 +94,7 @@ namespace WordPuzzlesTest
                 repository.AddClue("ONES", "Singletons");
                 repository.AddClue("ONES", "Smallest denomination of folding money.");
 
-                repository.AddClue("Lego", "A small colorful brick.");
+                repository.AddClue("Lego", "A small colorful brick.", ClueSource.CLUE_SOURCE_CHIP);
 
                 repository.WriteToDisk(@"data\actual_nonempty_clue_repository.json");
 
@@ -113,18 +113,19 @@ namespace WordPuzzlesTest
         public class ReadFromDisk
         {
             [Test]
-            public void MultipleClues_PopulatesClueDictionry()
+            public void MultipleClues_PopulatesClueDictionary()
             {
                 ClueRepository repository = new ClueRepository();
 
                 repository.ReadFromDisk(@"data\expected_nonempty_clue_repository.json");
 
-                Assert.AreEqual(2, repository.ClueCount);
-                List<string> clues = repository.GetCluesForWord("ONES");
+                Assert.AreEqual(2, repository.CountOfWordWithClues);
+                List<NewClue> clues = repository.GetCluesForWord("ONES");
                 Assert.AreEqual(2, clues.Count);
-                List<string> cluesForLego = repository.GetCluesForWord("Lego");
+                List<NewClue> cluesForLego = repository.GetCluesForWord("Lego");
                 Assert.AreEqual(1, cluesForLego.Count);
-
+                Assert.AreEqual("A small colorful brick.", cluesForLego[0].ClueText);
+                Assert.AreEqual(ClueSource.CLUE_SOURCE_CHIP, cluesForLego[0].ClueSource);
             }
         }
     }
