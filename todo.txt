@@ -1,17 +1,18 @@
-All tests are passing, let's check in!
+Next source of clues: Dictionary definitions
+Next source of clues: Antonyms (Opposite of)
+Next source of clues: Synonyms (maybe 3?)
+Next source of clues: Idioms ("raining cats and ___")
+Next source of clues: Songs (Beatles hit "Across the ____")
+Next source of clues: Movies (80s film "Adventures in ____")
+Next source of clues: Games (Days of Wonder hit by Alan Moon: "____ To Ride")
+Next source of clues: Books (Dante's classic "____ Lost")
 
-Include clues in puzzle. 
-	Clues should have a type enum to indicate their source. 
-	Refactor clues from strings to objects. 
-	Found that I already have a "Clue" object, with serialization (to XML)
-	Creating a NewClue object instead. Will have to merge them later. 
 
-Create a PUZ parser (quick nuget search = no parsers commonly available (proprietary format))
+
 
 Write a program to parse files from a directory. 
-Write a program to populate the directory from different sources.
 
-Merge NewClue/Clue
+Merge NewClue/Clue objects (replace Clue with NewClue)
 
 Generate solution as HTML
 
@@ -31,6 +32,17 @@ List of tests that occassionally fail.
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
 --- DONE (most recent on top)
+Include clues in puzzle. 
+	Clues should have a type enum to indicate their source. 
+	Refactor clues from strings to objects. 
+	Found that I already have a "Clue" object, with serialization (to XML)
+	Creating a NewClue object instead. Will have to merge them later. 
+
+Write a program (bunch of tests) to populate the directory from different sources.
+GatherPuzFiles
+
+
+Create a PUZ parser (quick nuget search = no parsers commonly available (proprietary format))
 
 Need a clue repository. Could be...
 	From local files

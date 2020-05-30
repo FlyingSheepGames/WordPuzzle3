@@ -67,7 +67,15 @@ namespace WordPuzzles
 
         public void ReadFromDisk(string fileLocation)
         {
-            Clues = JsonConvert.DeserializeObject<Dictionary<string, List<NewClue>>>(File.ReadAllText(fileLocation));
+            var CluesToAdd = JsonConvert.DeserializeObject<Dictionary<string, List<NewClue>>>(File.ReadAllText(fileLocation));
+            foreach (var clueKey in CluesToAdd.Keys)
+            {
+                var newClues = CluesToAdd[clueKey];
+                foreach (var clue in newClues)
+                {
+                    AddClue(clueKey, clue.ClueText, clue.ClueSource);
+                }
+            }
         }
     }
 

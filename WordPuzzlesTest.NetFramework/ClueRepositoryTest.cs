@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles;
@@ -65,6 +66,28 @@ namespace WordPuzzlesTest
                 repository.AddClue("OnEs", "Smallest denomination of folding money.");
                 List<NewClue> clues = repository.GetCluesForWord("Ones");
                 Assert.AreEqual(2, clues.Count);
+            }
+
+            [Test]
+            [TestCase("ones")]
+            [TestCase("ions")]
+            [TestCase("hope")]
+            //[TestCase("fawn")]
+            public void AllWords_ContainsSpecificWords(string word)
+            {
+                const string ALL_WORDS_FILE =
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json";
+                ClueRepository clues = new ClueRepository();
+                clues.ReadFromDisk(ALL_WORDS_FILE);
+                var cluesForWord = clues.GetCluesForWord(word);
+                foreach (var clueForWord in cluesForWord)
+                {
+                    Console.WriteLine($"{word.ToUpperInvariant()}: {clueForWord.ClueText}");
+                }
+
+                Assert.Less(0, clues.GetCluesForWord(word).Count,
+                    $"Expected at least one clue for {word.ToUpperInvariant()}");
+
             }
 
         }

@@ -411,15 +411,7 @@ Then read the solution to the puzzle from the highlighted squares.
         }
     }
 
-    [TestFixture]
-    public class GetFileNameFor
-    {
-        [Test]
-        public void Example_ReturnsExpectedString()
-        {
-            Assert.AreEqual("wordsquares\\example.txt", WordSquare.GetFileNameFor("example"));
-        }
-    }
+
 }
 
 

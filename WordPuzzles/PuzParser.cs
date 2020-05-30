@@ -18,7 +18,8 @@ namespace WordPuzzles
             string gridAsString;
 
             var tokensSplitByNilCharacters = allText.Split(new char[] {(char) 0}, StringSplitOptions.RemoveEmptyEntries);
-            gridAsString = ExtractGridAsStringFromTokens(tokensSplitByNilCharacters);
+            int indexOfGrid = 0;
+            gridAsString = ExtractGridAsStringFromTokens(tokensSplitByNilCharacters, out indexOfGrid);
 
             List<string> clues = new List<string>();
             for (var index = 0;
@@ -27,7 +28,7 @@ namespace WordPuzzles
             {
                 string token = tokensSplitByNilCharacters[index];
                 //Console.WriteLine($"{tokenCount++}: {token}");
-                if (3 < token.Length)
+                //if (3 < token.Length)
                 {
                     bool isAWord = true;
                     bool isAClue = true;
@@ -51,12 +52,12 @@ namespace WordPuzzles
 
                     if (!hasAtLeastOneLetter)
                     {
-                        isAClue = false;
+                        //isAClue = false;
                     }
 
                     if (isAWord)
                     {
-                        isAClue = false;
+                        //isAClue = false;
                         newClues.AddClue(token, "");
                         //Console.WriteLine($"Adding '{token}' as a word");
                     }
@@ -64,7 +65,7 @@ namespace WordPuzzles
                     if (isAClue)
                     {
                         //Console.WriteLine($"'{token}' is a clue.");
-                        if (8 < index)
+                        if (indexOfGrid + 3 < index)
                         {
                             clues.Add(token);
                         }
@@ -81,6 +82,10 @@ namespace WordPuzzles
                 {
                     clueText = clues[index];
                 }
+                else
+                {
+                    throw new Exception("No more clues");
+                }
                 newClues.AddClue(clue.Word, clueText, ClueSource.CLUE_SOURCE_CROSSWORD);
                 Console.WriteLine($"{clue.Word}: {clueText}");
             }
@@ -88,15 +93,43 @@ namespace WordPuzzles
             return newClues;
         }
 
-        private static string ExtractGridAsStringFromTokens(string[] tokensSplitByNilCharacters)
+        private static string ExtractGridAsStringFromTokens(string[] tokensSplitByNilCharacters, out int indexOfGrid)
         {
-            string gridAsString;
-            gridAsString = tokensSplitByNilCharacters[6];
-            int indexOfDash = gridAsString.IndexOf('-');
-            if (0 < indexOfDash)
+            string gridAsString = null;
+            bool isGrid = false; 
+            int indexToTry = 12;
+            while (!isGrid)
             {
-                gridAsString = gridAsString.Substring(0, indexOfDash);
+                gridAsString = tokensSplitByNilCharacters[indexToTry];
+                int indexOfDash = gridAsString.IndexOf('-');
+                if (0 < indexOfDash)
+                {
+                    gridAsString = gridAsString.Substring(0, indexOfDash);
+                }
+
+                isGrid = true;
+                foreach (char letter in gridAsString)
+                {
+                    if (letter == '.') continue;
+                    if (letter == '-') continue;
+                    if (char.IsUpper(letter)) continue;
+                    isGrid = false;
+                    break;
+                }
+
+                if (gridAsString.Length < 25)
+                {
+                    isGrid = false;
+                }
+                indexToTry--;
+                if (indexToTry < 0)
+                {
+                    throw new Exception("Unable to find grid. Sorry.");
+                }
+
             }
+
+            indexOfGrid = indexToTry;
             return gridAsString;
         }
 
