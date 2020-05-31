@@ -72,7 +72,7 @@ namespace WordPuzzlesTest
             [TestCase("ones")]
             [TestCase("ions")]
             [TestCase("hope")]
-            //[TestCase("fawn")]
+            [TestCase("fawn")]
             public void AllWords_ContainsSpecificWords(string word)
             {
                 const string ALL_WORDS_FILE =

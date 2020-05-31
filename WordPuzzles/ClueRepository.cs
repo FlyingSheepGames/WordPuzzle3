@@ -77,6 +77,20 @@ namespace WordPuzzles
                 }
             }
         }
+        public void ImportStackOverflowFormatFile(string fileLocation)
+        {
+            DataFromStackOverflowParser parser = new DataFromStackOverflowParser();
+            var CluesToAdd = parser.ReadCluesFromFile(fileLocation);
+            foreach (var clueKey in CluesToAdd.Keys)
+            {
+                var newClues = CluesToAdd[clueKey];
+                foreach (var clue in newClues)
+                {
+                    AddClue(clueKey, clue.ClueText, clue.ClueSource);
+                }
+            }
+        }
+
     }
 
     public class NewClue
@@ -90,5 +104,7 @@ namespace WordPuzzles
         CLUE_SOURCE_UNKNOWN = 0,
         CLUE_SOURCE_CHIP = 1,
         CLUE_SOURCE_CROSSWORD = 2,
+        CLUE_SOURCE_STACKOVERFLOW_MEANING = 3,
+        CLUE_SOURCE_STACKOVERFLOW_ANTONYM
     }
 }

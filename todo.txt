@@ -1,16 +1,4 @@
-Next source of clues: Dictionary definitions
-Next source of clues: Antonyms (Opposite of)
-Next source of clues: Synonyms (maybe 3?)
-Next source of clues: Idioms ("raining cats and ___")
-Next source of clues: Songs (Beatles hit "Across the ____")
-Next source of clues: Movies (80s film "Adventures in ____")
-Next source of clues: Games (Days of Wonder hit by Alan Moon: "____ To Ride")
-Next source of clues: Books (Dante's classic "____ Lost")
-
-
-
-
-Write a program to parse files from a directory. 
+Update Letters and Arrows to include Clue Repository
 
 Merge NewClue/Clue objects (replace Clue with NewClue)
 
@@ -24,6 +12,16 @@ Serialize/Deserialize all puzzles to JSON
 Create a general puzzle object. 
 
 Add new puzzle types.
+NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
+	e.g. (Adding A): "Don't try to carry everything without a platter: _ _ A _" Solution: TRAY (anagram try)
+
+Next source of clues: Idioms ("raining cats and ___")
+Next source of clues: Songs (Beatles hit "Across the ____")
+Next source of clues: Movies (80s film "Adventures in ____")
+Next source of clues: Games (Days of Wonder hit by Alan Moon: "____ To Ride")
+Next source of clues: Books (Dante's classic "____ Lost")
+
+Replace Tests with .NetFrameworkTests
 
 List of tests that occassionally time out
 	EndingWith_D_FindsAtLeastOnePuzzle
@@ -32,6 +30,18 @@ List of tests that occassionally fail.
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
 --- DONE (most recent on top)
+Next source of clues: Dictionary definitions
+
+Next source of clues: Antonyms (Opposite of)
+Next source of clues: Synonyms (maybe 3?)
+
+The dictionary is arranged in this format- {WORD: {'MEANINGS':{} , 'ANTONYMS':[...] , 'SYNONYMS':[...]}}
+
+and the 'MEANINGS' dict is arranged as 'MEANINGS':{sense_num_1:[TYPE_1, MEANING_1, CONTEXT_1, EXAMPLES], 
+sense_num_2:[TYPE_2, MEANING_2, CONTEXT_2, EXAMPLES] and so on...}
+
+Write a program to parse files from a directory. 
+
 Include clues in puzzle. 
 	Clues should have a type enum to indicate their source. 
 	Refactor clues from strings to objects. 

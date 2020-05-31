@@ -299,18 +299,40 @@ namespace WordPuzzlesTest
         [Ignore("Run Manually")]
         public void CollectAllTheClues_NoAssertions()
         {
-            PuzParser parser = new PuzParser();
-            ClueRepository clues = new ClueRepository();
             const string DIRECTORY_WITH_PUZ_FILES =
                 @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ";
+
+            PuzParser parser = new PuzParser();
+            ClueRepository clues = new ClueRepository();
+            clues.ReadFromDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
             foreach (string file in Directory.EnumerateFiles(DIRECTORY_WITH_PUZ_FILES, "*.json"))
             {
                 Console.WriteLine($"Adding {file}, words so far {clues.CountOfWordWithClues}.");
                 clues.ReadFromDisk(file);
             }
-
             clues.WriteToDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
-
         }
+
+        [Test]
+        [Timeout(6000000)]
+        //[Ignore("Run Manually")]
+        public void ImportAllStackOverflowFiles_NoAssertions()
+        {
+            const string DIRECTORY_WITH_PUZ_FILES =
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ";
+            const string DIRECTORY_WITH_SO_FILES =
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\dataFromSO";
+
+            PuzParser parser = new PuzParser();
+            ClueRepository clues = new ClueRepository();
+            clues.ReadFromDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
+            foreach (string file in Directory.EnumerateFiles(DIRECTORY_WITH_SO_FILES, "*.json"))
+            {
+                Console.WriteLine($"Adding {file}, words so far {clues.CountOfWordWithClues}.");
+                clues.ImportStackOverflowFormatFile(file);
+            }
+            clues.WriteToDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
+        }
+
     }
 }
