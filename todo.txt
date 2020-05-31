@@ -1,4 +1,8 @@
-Update Letters and Arrows to include Clue Repository
+Update Puzzle Generator program to prompt for clues (with suggestions)
+
+Add method to Clue Repository for Deleting a clue. 
+Update Puzzle Generator to allow user to delete clues as well. 
+
 
 Merge NewClue/Clue objects (replace Clue with NewClue)
 
@@ -30,6 +34,8 @@ List of tests that occassionally fail.
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
 --- DONE (most recent on top)
+Update Letters and Arrows to include Clue Repository (Don't need Clue Repository. Can exist outside the puzzle.)
+
 Next source of clues: Dictionary definitions
 
 Next source of clues: Antonyms (Opposite of)

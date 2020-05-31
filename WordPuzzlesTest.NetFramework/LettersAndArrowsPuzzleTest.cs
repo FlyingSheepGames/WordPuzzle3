@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
@@ -339,6 +340,45 @@ namespace WordPuzzlesTest
                         Assert.AreNotEqual(Direction.Undefined, cell.Direction);
                     }
                 }
+            }
+        }
+
+        [TestFixture]
+        public class GetWords
+        {
+            [Test]
+            public void FourByFour_ReturnsExpectedWords()
+            {
+                LettersAndArrowsPuzzle sizeFourPuzzle = new LettersAndArrowsPuzzle("ohio", true, 0, 42);
+
+                List<string> words = sizeFourPuzzle.GetWords();
+                Assert.AreEqual(4, words.Count, "Expected 4 words");
+                Assert.AreEqual("ONES", words[0], "Unexpected first word");
+                Assert.AreEqual("IONS", words[1], "Unexpected second word");
+                Assert.AreEqual("FAWN", words[2], "Unexpected third word");
+                Assert.AreEqual("HOPE", words[3], "Unexpected fourth word");
+            }
+        }
+
+        [TestFixture]
+        public class SetClueForRowIndex
+        {
+
+            [Test]
+            public void SetsExpectedClue_ClueAppearsInHtml()
+            {
+                LettersAndArrowsPuzzle fourByFourPuzzle = new LettersAndArrowsPuzzle("OHIO", true, 4, 42);
+
+                fourByFourPuzzle.SetClueForRowIndex(0, "Vending machine bills"); //ONES
+                fourByFourPuzzle.SetClueForRowIndex(1, "They have their pluses and minuses"); //IONS
+                fourByFourPuzzle.SetClueForRowIndex(2, "Try to gain favor by cringing or flattering"); //FAWN
+                fourByFourPuzzle.SetClueForRowIndex(3, "Optimist's feeling"); //HOPE
+
+                string puzzleAsHtml = fourByFourPuzzle.FormatHtmlForGoogle();
+                StringAssert.Contains("Vending machine bills", puzzleAsHtml);
+                StringAssert.Contains("They have their pluses and minuses", puzzleAsHtml);
+                StringAssert.Contains("Try to gain favor by cringing or flattering", puzzleAsHtml);
+                StringAssert.Contains("Optimist's feeling", puzzleAsHtml);
             }
         }
     }

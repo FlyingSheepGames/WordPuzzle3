@@ -14,6 +14,7 @@ namespace WordPuzzles
         {
             Size = size;
             InitializeGrid();
+            _clues = new string[size];
         }
 
         public WordRepository Repository;
@@ -51,6 +52,7 @@ namespace WordPuzzles
             InitializeGrid();
             PlaceSolution(solution);
             FillEmptyCells();
+            _clues = new string[Size];
         }
 
         public bool RowsMustFormWords { get; set; }
@@ -307,6 +309,7 @@ namespace WordPuzzles
 
         public List<int> RowsVisited = new List<int>();
         private string Solution = "";
+        private string[] _clues;
 
         public string FormatHtmlForGoogle()
         {
@@ -325,7 +328,13 @@ namespace WordPuzzles
                 {
                     wordRow.Append(GetCellAtCoordinates(row, column).Letter);
                 }
-                builder.AppendLine($@"    <td width=""250"">Clue for {wordRow}</td>");
+
+                string clueForThisRow = $@"Clue for {wordRow}";
+                if (!string.IsNullOrWhiteSpace(_clues[row]))
+                {
+                    clueForThisRow = _clues[row];
+                }
+                builder.AppendLine($@"    <td width=""250"">" + clueForThisRow + $@"</td>");
 
                 for (int column = 0; column < Size; column++)
                 {
@@ -461,6 +470,27 @@ namespace WordPuzzles
                     }
                 }
             }
+        }
+
+        public List<string> GetWords()
+        {
+            var wordsToReturn = new List<string>();
+            StringBuilder builder = new StringBuilder();
+            for (int rowIndex = 0; rowIndex < Size; rowIndex++)
+            {
+                builder.Clear();
+                for (int columnIndex = 0; columnIndex < Size; columnIndex++)
+                {
+                    builder.Append(GetCellAtCoordinates(rowIndex, columnIndex).Letter);
+                }
+                wordsToReturn.Add(builder.ToString());
+            }
+            return wordsToReturn;
+        }
+
+        public void SetClueForRowIndex(int rowIndex, string clue)
+        {
+            _clues[rowIndex] = clue;
         }
     }
 
