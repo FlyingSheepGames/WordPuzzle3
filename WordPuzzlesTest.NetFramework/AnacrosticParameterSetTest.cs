@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles;
@@ -17,8 +18,8 @@ namespace WordPuzzlesTest
             {
                 AnacrosticParameterSet set = new AnacrosticParameterSet {TweetId = 0};
                 set.Serialize();
-
-                const string EXPECTED_FILE_PATH = @"anacrostics\parameter_set_0.xml";
+                
+                string EXPECTED_FILE_PATH = ConfigurationManager.AppSettings["BaseDirectory"] +  @"anacrostics\parameter_set_0.xml";
                 FileAssert.Exists(EXPECTED_FILE_PATH);
                 var readAllText = File.ReadAllText(EXPECTED_FILE_PATH);
                 Console.WriteLine(readAllText);
