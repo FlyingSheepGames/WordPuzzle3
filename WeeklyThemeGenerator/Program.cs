@@ -18,6 +18,7 @@ namespace WeeklyThemeGenerator
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
         private static readonly WordSquareHistory History = new WordSquareHistory();
+        static readonly ClueRepository _clueRepository = new ClueRepository();
 
         // ReSharper disable once UnusedMember.Local
         private static readonly string[] Themes = {
@@ -48,6 +49,8 @@ namespace WeeklyThemeGenerator
         [STAThread]
         static void Main()
         {
+            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+
             string monthToScore = "May 2019";
             Console.WriteLine("Enter a month (e.g. May 2019) to generate scoring tweets for that month. Or just hit enter to continue.");
             monthToScore = Console.ReadLine();
@@ -165,6 +168,8 @@ namespace WeeklyThemeGenerator
 
                 GenerateTweetsForSelectedPuzzles(weekOfPuzzles);
             }
+            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+
         }
 
         private static string CalculateFileNameForTheme(string theme) //TODO: Probably move this to WeekOfPuzzles class.
@@ -1468,51 +1473,48 @@ namespace WeeklyThemeGenerator
 
                 if (selectedSquare != null)//populate clues
                 {
-                    Console.WriteLine();
                     string[] currentLines = selectedSquare.Lines;
-                    for (int currentLineIndex = 1; currentLineIndex < 5; currentLineIndex++)
+                    for (int currentLineIndex = 0; currentLineIndex < selectedSquare.Size; currentLineIndex++)
                     {
+                        Console.Clear();
                         string currentLine = currentLines[currentLineIndex];
-                        string previousClue = WordRepository.FindClueFor(currentLine);
 
-                        Console.WriteLine($"Enter a clue for {currentLine} (or enter 0 to choose another square) [{previousClue}]:");
-                        string suggestedClue = Console.ReadLine();
-                        if (suggestedClue == "0")
+                        var clues = _clueRepository.GetCluesForWord(currentLine);
+
+                        Console.WriteLine($"Enter a clue for {currentLine.ToUpperInvariant()} OR select an index from the following options:");
+                        for (var index = 0; index < clues.Count; index++)
                         {
-                            selectedSquare = null;
-                            break;
+                            var clue = clues[index];
+                            Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
                         }
 
-                        if (!string.IsNullOrWhiteSpace(previousClue))
+                        string suggestedClue = Console.ReadLine();
+                        int selectedIndex;
+
+                        if (int.TryParse(suggestedClue, out selectedIndex))
                         {
-                            if (string.IsNullOrWhiteSpace(suggestedClue))
-                            {
-                                suggestedClue = previousClue;
-                            }
+                            suggestedClue = clues[selectedIndex].ClueText;
                         }
                         else
                         {
-                            var userInput = new ConsoleKeyInfo();
-                            while (userInput.Key != ConsoleKey.C)
-                            {
-
-                                Console.WriteLine(
-                                    "New clue has been copied to the clipboard. Please paste it into the words spreadsheet and replace the existing row for that word. Press 'c' to continue, or anything else to copy it again.");
-                                Clipboard.SetText($"{currentLine}\t{currentLine.Length}\t{suggestedClue}");
-                                userInput = Console.ReadKey();
-                            }
-
-                            WordRepository.AddClue(currentLine, suggestedClue);
-                            WordRepository.SaveClues();
+                            _clueRepository.AddClue(currentLine, suggestedClue, ClueSource.CLUE_SOURCE_CHIP);
                         }
                         selectedSquare.Clues[currentLineIndex] = suggestedClue;
                     }
 
-                    if (selectedSquare != null)
+                    string squareFormattedForGoogle = selectedSquare.FormatForGoogle();
+                    var userInput = new ConsoleKeyInfo();
+                    while (userInput.Key != ConsoleKey.C)
                     {
-                        break;
+
+                        Console.WriteLine(
+                            "Word Square has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
+                        Clipboard.SetText(squareFormattedForGoogle);
+                        Clipboard.SetData(DataFormats.Html, selectedSquare.FormatHtmlForGoogle());
+                        userInput = Console.ReadKey();
                     }
 
+                    break;
                 }
             }
             return selectedSquare;

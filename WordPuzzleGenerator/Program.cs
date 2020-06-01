@@ -1070,63 +1070,48 @@ namespace WordPuzzleGenerator
 
                 if (selectedSquare != null)//populate clues
                 {
-                    Console.WriteLine();
                     string[] currentLines = selectedSquare.Lines;
                     for (int currentLineIndex = 0; currentLineIndex < selectedSquare.Size; currentLineIndex++)
                     {
+                        Console.Clear();
                         string currentLine = currentLines[currentLineIndex];
-                        string previousClue = WordRepository.FindClueFor(currentLine);
 
-                        Console.WriteLine($"Enter a clue for {currentLine} (or enter 0 to choose another square) [{previousClue}]:");
-                        string suggestedClue = Console.ReadLine();
-                        if (suggestedClue == "0")
+                        var clues = _clueRepository.GetCluesForWord(currentLine);
+
+                        Console.WriteLine($"Enter a clue for {currentLine.ToUpperInvariant()} OR select an index from the following options:");
+                        for (var index = 0; index < clues.Count; index++)
                         {
-                            selectedSquare = null;
-                            break;
+                            var clue = clues[index];
+                            Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
                         }
 
-                        if (!string.IsNullOrWhiteSpace(previousClue))
+                        string suggestedClue = Console.ReadLine();
+                        int selectedIndex;
+
+                        if (int.TryParse(suggestedClue, out selectedIndex))
                         {
-                            if (string.IsNullOrWhiteSpace(suggestedClue))
-                            {
-                                suggestedClue = previousClue;
-                            }
+                            suggestedClue = clues[selectedIndex].ClueText;
                         }
                         else
                         {
-                            var userInput = new ConsoleKeyInfo();
-                            while (userInput.Key != ConsoleKey.C)
-                            {
-
-                                Console.WriteLine(
-                                    "New clue has been copied to the clipboard. Please paste it into the words spreadsheet and replace the existing row for that word. Press 'c' to continue, or anything else to copy it again.");
-                                Clipboard.SetText($"{currentLine}\t{currentLine.Length}\t{suggestedClue}");
-                                userInput = Console.ReadKey();
-                            }
-
-                            WordRepository.AddClue(currentLine, suggestedClue);
-                            WordRepository.SaveClues();
+                            _clueRepository.AddClue(currentLine, suggestedClue, ClueSource.CLUE_SOURCE_CHIP);
                         }
                         selectedSquare.Clues[currentLineIndex] = suggestedClue;
                     }
 
-                    if (selectedSquare != null)
+                    string squareFormattedForGoogle = selectedSquare.FormatForGoogle();
+                    var userInput = new ConsoleKeyInfo();
+                    while (userInput.Key != ConsoleKey.C)
                     {
-                        string squareFormattedForGoogle = selectedSquare.FormatForGoogle();
-                        var userInput = new ConsoleKeyInfo();
-                        while (userInput.Key != ConsoleKey.C)
-                        {
 
-                            Console.WriteLine(
-                                "Word Square has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
-                            Clipboard.SetText(squareFormattedForGoogle);
-                            Clipboard.SetData(DataFormats.Html, selectedSquare.FormatHtmlForGoogle());
-                            userInput = Console.ReadKey();
-                        }
-
-                        break;
+                        Console.WriteLine(
+                            "Word Square has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
+                        Clipboard.SetText(squareFormattedForGoogle);
+                        Clipboard.SetData(DataFormats.Html, selectedSquare.FormatHtmlForGoogle());
+                        userInput = Console.ReadKey();
                     }
 
+                    break;
                 }
             }
         }

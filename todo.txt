@@ -5,6 +5,13 @@ Merge NewClue/Clue objects (replace Clue with NewClue)
 	
 Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
 
+Next Puzzle to update formatting: WordSquares 
+	Figure out how to highlight squares in the grid
+
+Next Puzzle to update formatting: Anacrostics
+	Figure out how to create black squares in the grid
+
+Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 
 Generate solution as HTML
 
