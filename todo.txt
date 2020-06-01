@@ -1,10 +1,14 @@
-Update Letters and Arrows to include Clue Repository
-
 Merge NewClue/Clue objects (replace Clue with NewClue)
+
+Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
+
 
 Generate solution as HTML
 
 Already have an example for "Puzzle" - 
+
+Add method to Clue Repository for Deleting a clue. 
+Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
 
 Rename "Puzzle" to a more descriptive name. 
 Serialize/Deserialize all puzzles to JSON
@@ -30,6 +34,11 @@ List of tests that occassionally fail.
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
 --- DONE (most recent on top)
+Update Puzzle Generator program to prompt for clues (with suggestions)
+
+
+Update Letters and Arrows to include Clue Repository (Don't need Clue Repository. Can exist outside the puzzle.)
+
 Next source of clues: Dictionary definitions
 
 Next source of clues: Antonyms (Opposite of)

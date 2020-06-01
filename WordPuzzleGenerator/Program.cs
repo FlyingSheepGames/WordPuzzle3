@@ -19,9 +19,12 @@ namespace WordPuzzleGenerator
         static readonly WordSquareHistory History = new WordSquareHistory(); //Todo: populate
         static readonly AnagramFinder AnagramFinder = new AnagramFinder() {Repository = WordRepository};
         static readonly Random RandomNumberGenerator = new Random();
+        static readonly ClueRepository _clueRepository = new ClueRepository();
         [STAThread]
         static void Main()
         {
+            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+
             //LoadSevenLetterWords();
             //FindWordsThatMakeDigits();
 
@@ -294,6 +297,9 @@ namespace WordPuzzleGenerator
                 Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
                 wordPattern = Console.ReadLine();
             }
+
+            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+
         }
 
         private static void LoadSevenLetterWords()
@@ -787,6 +793,7 @@ namespace WordPuzzleGenerator
                 try
                 {
                     LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution, true, size);
+                    InteractiveSetCluesForLettersAndArrowsPuzzle(puzzle);
                     formatHtmlForGoogle = puzzle.FormatHtmlForGoogle();
                     break;
                 }
@@ -806,6 +813,46 @@ namespace WordPuzzleGenerator
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
 
+        }
+
+        private static void InteractiveSetCluesForLettersAndArrowsPuzzle(LettersAndArrowsPuzzle puzzle)
+        {
+            List<string> wordsInGrid = puzzle.GetWords();
+            for (int i = 0; i < puzzle.Size; i++)
+            {
+                string currentWord = wordsInGrid[i];
+                List<NewClue> suggestedClues = _clueRepository.GetCluesForWord(currentWord);
+                Console.Clear();
+                if (0 < suggestedClues.Count)
+                {
+                    Console.WriteLine($"Input or select a clue for {currentWord}");
+                    for (var index = 0; index < suggestedClues.Count; index++)
+                    {
+                        var clue = suggestedClues[index];
+                        Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine($"Input a clue for {currentWord}");
+                }
+
+                int selectedIndex;
+                string userInput = Console.ReadLine();
+                string clueToUse;
+
+                if (int.TryParse(userInput, out selectedIndex))
+                {
+                    clueToUse = suggestedClues[selectedIndex].ClueText;
+                }
+                else //Use all input as the clue
+                {
+                    clueToUse = userInput;
+                    _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
+                }
+                puzzle.SetClueForRowIndex(i, clueToUse);
+            }
         }
 
         private static void InteractiveFindWordLadder(string solution)
