@@ -849,6 +849,7 @@ namespace WordPuzzleGenerator
                 else //Use all input as the clue
                 {
                     clueToUse = userInput;
+                    _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
                 }
                 puzzle.SetClueForRowIndex(i, clueToUse);
             }
