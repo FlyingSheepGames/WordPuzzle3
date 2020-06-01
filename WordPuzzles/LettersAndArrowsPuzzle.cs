@@ -50,9 +50,9 @@ namespace WordPuzzles
                 Size = sizeOverride;
             }
             InitializeGrid();
+            _clues = new string[Size];
             PlaceSolution(solution);
             FillEmptyCells();
-            _clues = new string[Size];
         }
 
         public bool RowsMustFormWords { get; set; }
