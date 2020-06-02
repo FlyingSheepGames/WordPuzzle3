@@ -9,13 +9,6 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Merge NewClue/Clue objects (replace Clue with NewClue)
-	Better idea: Remove all references to old Clue, and then delete it, and then rename NewClue -> Clue. 
-	Puzzles that use Clue objects: WordSquares (copy/paste in Weekly Puzzle and Puzzle Generator)
-	Puzzle that uses Clue object: Anacrostics
-	
-Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
-
 Next Puzzle to update formatting: WordSquares 
 	Figure out how to highlight squares in the grid
 
@@ -36,6 +29,8 @@ Serialize/Deserialize all puzzles to JSON
 
 Create a general puzzle object. 
 
+Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
+
 Add new puzzle types.
 NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
 	e.g. (Adding A): "Don't try to carry everything without a platter: _ _ A _" Solution: TRAY (anagram try)
@@ -55,6 +50,12 @@ List of tests that occassionally fail.
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
 --- DONE (most recent on top)
+Merge NewClue/Clue objects (replace Clue with NewClue)
+	Better idea: Remove all references to old Clue, and then delete it, and then rename NewClue -> Clue. 
+	Puzzles that use Clue objects: WordSquares (copy/paste in Weekly Puzzle and Puzzle Generator)
+	Puzzle that uses Clue object: Anacrostics
+	
+
 Update Puzzle Generator program to prompt for clues (with suggestions)
 
 
