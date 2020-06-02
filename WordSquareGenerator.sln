@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzlesTest", "WordPuzzlesTest\WordPuzzlesTest.csproj", "{08947F41-4049-4D7D-90D2-A446002DDF8E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeeklyThemeGenerator", "WeeklyThemeGenerator\WeeklyThemeGenerator.csproj", "{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzles", "WordPuzzles\WordPuzzles.csproj", "{F1AE5059-7E91-4553-9C57-647CBFB4FB51}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08947F41-4049-4D7D-90D2-A446002DDF8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB8EBF74-95B0-4A17-BEF3-5CBCCDB970DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
