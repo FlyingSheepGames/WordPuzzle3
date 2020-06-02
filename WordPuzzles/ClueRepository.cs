@@ -9,12 +9,12 @@ namespace WordPuzzles
     {
         public int CountOfWordWithClues => Clues.Count;
 
-        private Dictionary<string, List<NewClue>> Clues = new Dictionary<string, List<NewClue>>();
+        private Dictionary<string, List<Clue>> Clues = new Dictionary<string, List<Clue>>();
 
         public void AddClue(string word, string clue, ClueSource source=ClueSource.CLUE_SOURCE_UNKNOWN)
         {
             string canonicalWord = word.ToUpperInvariant();
-            List<NewClue> currentCluesForWord = null;
+            List<Clue> currentCluesForWord = null;
             if (Clues.ContainsKey(canonicalWord))
             {
                 currentCluesForWord = Clues[canonicalWord];
@@ -22,12 +22,12 @@ namespace WordPuzzles
 
             if (currentCluesForWord == null)
             {
-                currentCluesForWord = new List<NewClue>();
+                currentCluesForWord = new List<Clue>();
             }
 
             if (! AlreadyContainsClue(currentCluesForWord, clue))
             {
-                currentCluesForWord.Add( new NewClue()
+                currentCluesForWord.Add( new Clue()
                 {
                     ClueText =  clue, 
                     ClueSource = source,
@@ -37,7 +37,7 @@ namespace WordPuzzles
             Clues[canonicalWord] = currentCluesForWord;
         }
 
-        private bool AlreadyContainsClue(List<NewClue> existingClues, string clueToAdd)
+        private bool AlreadyContainsClue(List<Clue> existingClues, string clueToAdd)
         {
             foreach (var clue in existingClues)
             {
@@ -50,14 +50,14 @@ namespace WordPuzzles
             return false;
         }
 
-        public List<NewClue> GetCluesForWord(string word)
+        public List<Clue> GetCluesForWord(string word)
         {
             string canonicalWord = word.ToUpperInvariant();
             if (Clues.ContainsKey(canonicalWord))
             {
                 return Clues[canonicalWord];
             }
-            return new List<NewClue>();
+            return new List<Clue>();
         }
 
         public void WriteToDisk(string fileLocation)
@@ -67,7 +67,7 @@ namespace WordPuzzles
 
         public void ReadFromDisk(string fileLocation)
         {
-            var CluesToAdd = JsonConvert.DeserializeObject<Dictionary<string, List<NewClue>>>(File.ReadAllText(fileLocation));
+            var CluesToAdd = JsonConvert.DeserializeObject<Dictionary<string, List<Clue>>>(File.ReadAllText(fileLocation));
             foreach (var clueKey in CluesToAdd.Keys)
             {
                 var newClues = CluesToAdd[clueKey];
@@ -91,20 +91,5 @@ namespace WordPuzzles
             }
         }
 
-    }
-
-    public class NewClue
-    {
-        public string ClueText { get; set; }
-        public ClueSource ClueSource { get; set; }
-    }
-
-    public enum ClueSource
-    {
-        CLUE_SOURCE_UNKNOWN = 0,
-        CLUE_SOURCE_CHIP = 1,
-        CLUE_SOURCE_CROSSWORD = 2,
-        CLUE_SOURCE_STACKOVERFLOW_MEANING = 3,
-        CLUE_SOURCE_STACKOVERFLOW_ANTONYM
     }
 }

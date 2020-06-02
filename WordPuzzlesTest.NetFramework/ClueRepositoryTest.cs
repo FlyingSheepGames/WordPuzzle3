@@ -42,7 +42,7 @@ namespace WordPuzzlesTest
             public void NoClues_ReturnsEmptyList()
             {
                 ClueRepository repository = new ClueRepository();
-                List<NewClue> clues=  repository.GetCluesForWord("Clueless"); 
+                List<Clue> clues=  repository.GetCluesForWord("Clueless"); 
                 Assert.AreEqual(0, clues.Count);
             }
 
@@ -53,7 +53,7 @@ namespace WordPuzzlesTest
                 Assert.AreEqual(0, repository.CountOfWordWithClues, "Repository should start out empty");
                 repository.AddClue("ONES", "Singletons");
                 repository.AddClue("ONES", "Smallest denomination of folding money.");
-                List<NewClue> clues = repository.GetCluesForWord("ONES");
+                List<Clue> clues = repository.GetCluesForWord("ONES");
                 Assert.AreEqual(2, clues.Count);
             }
 
@@ -64,7 +64,7 @@ namespace WordPuzzlesTest
                 Assert.AreEqual(0, repository.CountOfWordWithClues, "Repository should start out empty");
                 repository.AddClue("ones", "Singletons");
                 repository.AddClue("OnEs", "Smallest denomination of folding money.");
-                List<NewClue> clues = repository.GetCluesForWord("Ones");
+                List<Clue> clues = repository.GetCluesForWord("Ones");
                 Assert.AreEqual(2, clues.Count);
             }
 
@@ -143,9 +143,9 @@ namespace WordPuzzlesTest
                 repository.ReadFromDisk(@"data\expected_nonempty_clue_repository.json");
 
                 Assert.AreEqual(2, repository.CountOfWordWithClues);
-                List<NewClue> clues = repository.GetCluesForWord("ONES");
+                List<Clue> clues = repository.GetCluesForWord("ONES");
                 Assert.AreEqual(2, clues.Count);
-                List<NewClue> cluesForLego = repository.GetCluesForWord("Lego");
+                List<Clue> cluesForLego = repository.GetCluesForWord("Lego");
                 Assert.AreEqual(1, cluesForLego.Count);
                 Assert.AreEqual("A small colorful brick.", cluesForLego[0].ClueText);
                 Assert.AreEqual(ClueSource.CLUE_SOURCE_CHIP, cluesForLego[0].ClueSource);

@@ -821,7 +821,7 @@ namespace WordPuzzleGenerator
             for (int i = 0; i < puzzle.Size; i++)
             {
                 string currentWord = wordsInGrid[i];
-                List<NewClue> suggestedClues = _clueRepository.GetCluesForWord(currentWord);
+                List<Clue> suggestedClues = _clueRepository.GetCluesForWord(currentWord);
                 Console.Clear();
                 if (0 < suggestedClues.Count)
                 {
@@ -849,7 +849,10 @@ namespace WordPuzzleGenerator
                 else //Use all input as the clue
                 {
                     clueToUse = userInput;
-                    _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
+                    if (!string.IsNullOrWhiteSpace(clueToUse))
+                    {
+                        _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
+                    }
                 }
                 puzzle.SetClueForRowIndex(i, clueToUse);
             }
@@ -1070,63 +1073,26 @@ namespace WordPuzzleGenerator
 
                 if (selectedSquare != null)//populate clues
                 {
-                    Console.WriteLine();
                     string[] currentLines = selectedSquare.Lines;
                     for (int currentLineIndex = 0; currentLineIndex < selectedSquare.Size; currentLineIndex++)
                     {
                         string currentLine = currentLines[currentLineIndex];
-                        string previousClue = WordRepository.FindClueFor(currentLine);
-
-                        Console.WriteLine($"Enter a clue for {currentLine} (or enter 0 to choose another square) [{previousClue}]:");
-                        string suggestedClue = Console.ReadLine();
-                        if (suggestedClue == "0")
-                        {
-                            selectedSquare = null;
-                            break;
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(previousClue))
-                        {
-                            if (string.IsNullOrWhiteSpace(suggestedClue))
-                            {
-                                suggestedClue = previousClue;
-                            }
-                        }
-                        else
-                        {
-                            var userInput = new ConsoleKeyInfo();
-                            while (userInput.Key != ConsoleKey.C)
-                            {
-
-                                Console.WriteLine(
-                                    "New clue has been copied to the clipboard. Please paste it into the words spreadsheet and replace the existing row for that word. Press 'c' to continue, or anything else to copy it again.");
-                                Clipboard.SetText($"{currentLine}\t{currentLine.Length}\t{suggestedClue}");
-                                userInput = Console.ReadKey();
-                            }
-
-                            WordRepository.AddClue(currentLine, suggestedClue);
-                            WordRepository.SaveClues();
-                        }
-                        selectedSquare.Clues[currentLineIndex] = suggestedClue;
+                        selectedSquare.Clues[currentLineIndex] = InteractiveGetClueForWord(currentLine);
                     }
 
-                    if (selectedSquare != null)
+                    string squareFormattedForGoogle = selectedSquare.FormatForGoogle();
+                    var userInput = new ConsoleKeyInfo();
+                    while (userInput.Key != ConsoleKey.C)
                     {
-                        string squareFormattedForGoogle = selectedSquare.FormatForGoogle();
-                        var userInput = new ConsoleKeyInfo();
-                        while (userInput.Key != ConsoleKey.C)
-                        {
 
-                            Console.WriteLine(
-                                "Word Square has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
-                            Clipboard.SetText(squareFormattedForGoogle);
-                            Clipboard.SetData(DataFormats.Html, selectedSquare.FormatHtmlForGoogle());
-                            userInput = Console.ReadKey();
-                        }
-
-                        break;
+                        Console.WriteLine(
+                            "Word Square has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
+                        Clipboard.SetText(squareFormattedForGoogle);
+                        Clipboard.SetData(DataFormats.Html, selectedSquare.FormatHtmlForGoogle());
+                        userInput = Console.ReadKey();
                     }
 
+                    break;
                 }
             }
         }
@@ -1217,7 +1183,6 @@ namespace WordPuzzleGenerator
         private static void InteractiveGenerateAnacrostic(AnacrosticParameterSet parameterSet)
         {
             List<string> wordsAlreadyUsed = new List<string>();
-            bool boolAddedAtLeastOneClue = false;
 
             int selectedIndex;
             bool readyToProceed = false;
@@ -1364,25 +1329,9 @@ Enter 0 for none.");
             wordsAlreadyUsed.AddRange(anacrostic.WordsFoundSoFar);
 
 
-            foreach (PuzzleWord clue in anacrostic.Puzzle.Clues)
+            foreach (PuzzleWord puzzleWord in anacrostic.Puzzle.Clues)
             {
-                string clueAsString = clue;
-                string previouslyUsedClue = WordRepository.FindClueFor(clueAsString);
-                if (string.IsNullOrWhiteSpace(previouslyUsedClue))
-                {
-                    Console.WriteLine($"Enter customized clue for {clueAsString}:");
-                    string userEnteredHint = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(userEnteredHint))
-                    {
-                        clue.CustomizedClue = userEnteredHint;
-                        WordRepository.AddClue(clueAsString, userEnteredHint);
-                        boolAddedAtLeastOneClue = true;
-                    }
-                }
-                else
-                {
-                    clue.CustomizedClue = previouslyUsedClue;
-                }
+                puzzleWord.CustomizedClue = InteractiveGetClueForWord(puzzleWord);
             }
 
             //Generate Html File
@@ -1394,10 +1343,35 @@ Enter 0 for none.");
 
             generator.GenerateHtmlFile(BASE_DIRECTORY + $@"anacrostics\puzzle_{parameterSet.TweetId}.html", false);
 
-            if (boolAddedAtLeastOneClue)
+        }
+
+        private static string InteractiveGetClueForWord(string currentWord)
+        {
+            Console.Clear();
+            Console.WriteLine(
+                $"Enter customized clue for {currentWord.ToUpperInvariant()} or selected index from the following:");
+            var clues = _clueRepository.GetCluesForWord(currentWord);
+            for (var index = 0; index < clues.Count; index++)
             {
-                WordRepository.SaveClues();
+                var clue = clues[index];
+                Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
             }
+
+            string userEnteredHint = Console.ReadLine();
+            int selectedClueIndex;
+            if (int.TryParse(userEnteredHint, out selectedClueIndex))
+            {
+                userEnteredHint = clues[selectedClueIndex].ClueText;
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(userEnteredHint))
+                {
+                    _clueRepository.AddClue(currentWord, userEnteredHint, ClueSource.CLUE_SOURCE_CHIP);
+                }
+            }
+
+            return userEnteredHint;
         }
 
         private static Anacrostic CreateAnacrosticFromPuzzleSet(AnacrosticParameterSet parameterSet, List<string> wordsAlreadyUsed)

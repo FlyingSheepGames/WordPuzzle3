@@ -101,35 +101,6 @@ namespace WordPuzzlesTest
         }
 
         [TestFixture]
-        public class WriteToDisk
-        {
-            [Test]
-            public void EmptyExample_WritesFile()
-            {
-                const string FILENAME_FOR_THIS_TEST = "testFile_emptyExample.xml";
-                WordRepository.WriteToDisk(new List<Clue>(), FILENAME_FOR_THIS_TEST);
-                Assert.AreEqual(@"<?xml version=""1.0"" encoding=""us-ascii""?>
-<ArrayOfClue xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" />", File.ReadAllText(FILENAME_FOR_THIS_TEST));
-            }
-
-            [Test]
-            public void SingleExample_WritesFile()
-            {
-                const string FILENAME_FOR_THIS_TEST = "testFile_singleExample.xml";
-                var clues = new List<Clue>() {new Clue() {Hint = "Hint", Word = "word"}};
-
-                WordRepository.WriteToDisk(clues, FILENAME_FOR_THIS_TEST);
-                Assert.AreEqual(@"<?xml version=""1.0"" encoding=""us-ascii""?>
-<ArrayOfClue xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <Clue>
-    <Word>word</Word>
-    <Hint>Hint</Hint>
-  </Clue>
-</ArrayOfClue>", File.ReadAllText(FILENAME_FOR_THIS_TEST));
-            }
-        }
-
-        [TestFixture]
         public class GetRelatedWordsForTheme
         {
             [Test]

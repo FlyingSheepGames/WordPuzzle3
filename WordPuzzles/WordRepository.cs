@@ -4,10 +4,8 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json.Linq;
-using Formatting = System.Xml.Formatting;
 
 namespace WordPuzzles
 {
@@ -282,42 +280,6 @@ namespace WordPuzzles
             return null;
         }
 
-        //TODO: Currently there's a mix of storing clues in the google spreadsheet 
-        //and storing them on disk as XML.  Neither approach is really perfect.
-        internal static void WriteToDisk(List<Clue> clues, string fileName = null)
-        {
-            if (string.IsNullOrWhiteSpace(fileName))
-            {
-                fileName = BASE_DIRECTORY + @"clues.xml";
-            }
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Clue>));
-            using (var fileWriter = new XmlTextWriter(fileName, Encoding.ASCII))
-            {
-                fileWriter.Formatting = Formatting.Indented;
-                serializer.Serialize(fileWriter, clues);
-                fileWriter.Flush();
-            }
-        }
-
-        public void AddClue(string clueAsString, string userEnteredHint)
-        {
-            if (!DictionaryOfClues.ContainsKey(clueAsString))
-            {
-                DictionaryOfClues.Add(clueAsString, userEnteredHint);
-            }
-            SaveClues();
-        }
-
-        public void SaveClues()
-        {
-            List<Clue> cluesToSave = new List<Clue>();
-            foreach (string key in DictionaryOfClues.Keys)
-            {
-                cluesToSave.Add(new Clue() {Word = key, Hint = DictionaryOfClues[key]});
-            }
-            WriteToDisk(cluesToSave);
-        }
-
         public List<string> GetRelatedWordsForTheme(string theme)
         {
             GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA" };
@@ -554,13 +516,5 @@ namespace WordPuzzles
 
             return themes;
         }
-    }
-
-
-    [Serializable]
-    public class Clue
-    {
-        public string Word { get; set; }
-        public string Hint { get; set; }
     }
 }

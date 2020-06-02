@@ -1,7 +1,28 @@
-Merge NewClue/Clue objects (replace Clue with NewClue)
+NOTES
+------------------------------
+Four types of tasks
+A. Create new types of puzzles.
+B. Format puzzles (and solutions) as HTML
+C. Get More clues
+D. Serialize a month's worth of clues. 
+E. Rafactorings
 
+TASKS
+------------------------------
+Merge NewClue/Clue objects (replace Clue with NewClue)
+	Better idea: Remove all references to old Clue, and then delete it, and then rename NewClue -> Clue. 
+	Puzzles that use Clue objects: WordSquares (copy/paste in Weekly Puzzle and Puzzle Generator)
+	Puzzle that uses Clue object: Anacrostics
+	
 Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
 
+Next Puzzle to update formatting: WordSquares 
+	Figure out how to highlight squares in the grid
+
+Next Puzzle to update formatting: Anacrostics
+	Figure out how to create black squares in the grid
+
+Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 
 Generate solution as HTML
 

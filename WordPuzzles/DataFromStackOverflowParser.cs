@@ -9,11 +9,11 @@ namespace WordPuzzles
     //From https://stackoverflow.com/questions/41768215/english-json-dictionary-with-word-word-type-and-definition
     public class DataFromStackOverflowParser
     {
-        public Dictionary<string, List<NewClue>> ReadCluesFromFile(string fileToParse)
+        public Dictionary<string, List<Clue>> ReadCluesFromFile(string fileToParse)
         {
             string words = File.ReadAllText(fileToParse);
             JObject results = JObject.Parse(words);
-            var clues = new Dictionary<string, List<NewClue>>();
+            var clues = new Dictionary<string, List<Clue>>();
 
             foreach (var result in results)
             {
@@ -21,7 +21,7 @@ namespace WordPuzzles
 
                 if (!clues.ContainsKey(wordToAdd))
                 {
-                    clues[wordToAdd] = new List<NewClue>();
+                    clues[wordToAdd] = new List<Clue>();
                 }
                 var wordDetails = result.Value;
                 var definitions = wordDetails["MEANINGS"];
@@ -32,7 +32,7 @@ namespace WordPuzzles
                     clueText = clueText[0].ToString().ToUpperInvariant() + clueText.Substring(1);
                     //Console.WriteLine($"{wordToAdd}: {clueText}");
                     clues[wordToAdd].Add( 
-                        new NewClue()
+                        new Clue()
                         {
                             ClueText = clueText, 
                             ClueSource = ClueSource.CLUE_SOURCE_STACKOVERFLOW_MEANING
@@ -43,7 +43,7 @@ namespace WordPuzzles
                 {
                     //Console.WriteLine($"{antonymObject}");
                     clues[wordToAdd].Add(
-                        new NewClue()
+                        new Clue()
                         {
                             ClueText = "Opposite of " + antonymObject,
                             ClueSource = ClueSource.CLUE_SOURCE_STACKOVERFLOW_ANTONYM
@@ -64,7 +64,7 @@ namespace WordPuzzles
                 if (2 < listOfSynonyms.Count)
                 {
                     clues[wordToAdd].Add(
-                        new NewClue()
+                        new Clue()
                         {
                             ClueText = $"Synonyms include {listOfSynonyms[0]}, {listOfSynonyms[1]}, and {listOfSynonyms[2]}",
                             ClueSource = ClueSource.CLUE_SOURCE_STACKOVERFLOW_ANTONYM
