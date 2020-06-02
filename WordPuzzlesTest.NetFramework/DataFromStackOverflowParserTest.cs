@@ -14,19 +14,19 @@ namespace WordPuzzlesTest
             public void Example_IncludesExpectedClues()
             {
                 DataFromStackOverflowParser parser = new DataFromStackOverflowParser();
-                Dictionary<string, List<NewClue>> retrievedClues =
+                Dictionary<string, List<Clue>> retrievedClues =
                     parser.ReadCluesFromFile(@"data\dataFromSO\example.json");
 
                 Assert.Less(0, retrievedClues.Count, "Unexpected number of clues.");
-                List<NewClue> actualCluesForA = retrievedClues["A"];
+                List<Clue> actualCluesForA = retrievedClues["A"];
                 Assert.AreEqual("The 1st letter of the Roman alphabet", actualCluesForA[0].ClueText,
                     "Expected specific clue for A");
 
-                List<NewClue> actualCluesForAbactinal = retrievedClues["ABACTINAL"];
+                List<Clue> actualCluesForAbactinal = retrievedClues["ABACTINAL"];
                 Assert.AreEqual("Opposite of actinal", actualCluesForAbactinal[1].ClueText,
                     "Expected specific clue for ABACTINAL");
 
-                List<NewClue> actualCluesForAardvark = retrievedClues["AARDVARK"];
+                List<Clue> actualCluesForAardvark = retrievedClues["AARDVARK"];
                 Assert.AreEqual("Synonyms include Orycteropus afer, Ant bear, and Anteater", actualCluesForAardvark[1].ClueText, 
                     "Expected Synonym clue for Aardvark");
 

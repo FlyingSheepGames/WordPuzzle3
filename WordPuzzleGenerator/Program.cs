@@ -821,7 +821,7 @@ namespace WordPuzzleGenerator
             for (int i = 0; i < puzzle.Size; i++)
             {
                 string currentWord = wordsInGrid[i];
-                List<NewClue> suggestedClues = _clueRepository.GetCluesForWord(currentWord);
+                List<Clue> suggestedClues = _clueRepository.GetCluesForWord(currentWord);
                 Console.Clear();
                 if (0 < suggestedClues.Count)
                 {

@@ -1,11 +1,10 @@
-﻿using System;
+﻿using System.Xml.Serialization;
 
 namespace WordPuzzles
 {
-    [Serializable]
     public class Clue
     {
-        public string Word { get; set; }
-        public string Hint { get; set; }
+        public string ClueText { get; set; }
+        public ClueSource ClueSource { get; set; }
     }
 }
