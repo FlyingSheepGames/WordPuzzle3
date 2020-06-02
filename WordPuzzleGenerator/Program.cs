@@ -1076,33 +1076,8 @@ namespace WordPuzzleGenerator
                     string[] currentLines = selectedSquare.Lines;
                     for (int currentLineIndex = 0; currentLineIndex < selectedSquare.Size; currentLineIndex++)
                     {
-                        Console.Clear();
                         string currentLine = currentLines[currentLineIndex];
-
-                        var clues = _clueRepository.GetCluesForWord(currentLine);
-
-                        Console.WriteLine($"Enter a clue for {currentLine.ToUpperInvariant()} OR select an index from the following options:");
-                        for (var index = 0; index < clues.Count; index++)
-                        {
-                            var clue = clues[index];
-                            Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
-                        }
-
-                        string suggestedClue = Console.ReadLine();
-                        int selectedIndex;
-
-                        if (int.TryParse(suggestedClue, out selectedIndex))
-                        {
-                            suggestedClue = clues[selectedIndex].ClueText;
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrWhiteSpace(suggestedClue))
-                            {
-                                _clueRepository.AddClue(currentLine, suggestedClue, ClueSource.CLUE_SOURCE_CHIP);
-                            }
-                        }
-                        selectedSquare.Clues[currentLineIndex] = suggestedClue;
+                        selectedSquare.Clues[currentLineIndex] = InteractiveGetClueForWord(currentLine);
                     }
 
                     string squareFormattedForGoogle = selectedSquare.FormatForGoogle();
@@ -1208,7 +1183,6 @@ namespace WordPuzzleGenerator
         private static void InteractiveGenerateAnacrostic(AnacrosticParameterSet parameterSet)
         {
             List<string> wordsAlreadyUsed = new List<string>();
-            bool boolAddedAtLeastOneClue = false;
 
             int selectedIndex;
             bool readyToProceed = false;
@@ -1355,25 +1329,9 @@ Enter 0 for none.");
             wordsAlreadyUsed.AddRange(anacrostic.WordsFoundSoFar);
 
 
-            foreach (PuzzleWord clue in anacrostic.Puzzle.Clues)
+            foreach (PuzzleWord puzzleWord in anacrostic.Puzzle.Clues)
             {
-                string clueAsString = clue;
-                string previouslyUsedClue = WordRepository.FindClueFor(clueAsString);
-                if (string.IsNullOrWhiteSpace(previouslyUsedClue))
-                {
-                    Console.WriteLine($"Enter customized clue for {clueAsString}:");
-                    string userEnteredHint = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(userEnteredHint))
-                    {
-                        clue.CustomizedClue = userEnteredHint;
-                        WordRepository.AddClue(clueAsString, userEnteredHint);
-                        boolAddedAtLeastOneClue = true;
-                    }
-                }
-                else
-                {
-                    clue.CustomizedClue = previouslyUsedClue;
-                }
+                puzzleWord.CustomizedClue = InteractiveGetClueForWord(puzzleWord);
             }
 
             //Generate Html File
@@ -1385,10 +1343,35 @@ Enter 0 for none.");
 
             generator.GenerateHtmlFile(BASE_DIRECTORY + $@"anacrostics\puzzle_{parameterSet.TweetId}.html", false);
 
-            if (boolAddedAtLeastOneClue)
+        }
+
+        private static string InteractiveGetClueForWord(string currentWord)
+        {
+            Console.Clear();
+            Console.WriteLine(
+                $"Enter customized clue for {currentWord.ToUpperInvariant()} or selected index from the following:");
+            var clues = _clueRepository.GetCluesForWord(currentWord);
+            for (var index = 0; index < clues.Count; index++)
             {
-                WordRepository.SaveClues();
+                var clue = clues[index];
+                Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
             }
+
+            string userEnteredHint = Console.ReadLine();
+            int selectedClueIndex;
+            if (int.TryParse(userEnteredHint, out selectedClueIndex))
+            {
+                userEnteredHint = clues[selectedClueIndex].ClueText;
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(userEnteredHint))
+                {
+                    _clueRepository.AddClue(currentWord, userEnteredHint, ClueSource.CLUE_SOURCE_CHIP);
+                }
+            }
+
+            return userEnteredHint;
         }
 
         private static Anacrostic CreateAnacrosticFromPuzzleSet(AnacrosticParameterSet parameterSet, List<string> wordsAlreadyUsed)
