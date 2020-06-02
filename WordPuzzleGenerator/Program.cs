@@ -849,7 +849,10 @@ namespace WordPuzzleGenerator
                 else //Use all input as the clue
                 {
                     clueToUse = userInput;
-                    _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
+                    if (!string.IsNullOrWhiteSpace(clueToUse))
+                    {
+                        _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
+                    }
                 }
                 puzzle.SetClueForRowIndex(i, clueToUse);
             }
@@ -1094,7 +1097,10 @@ namespace WordPuzzleGenerator
                         }
                         else
                         {
-                            _clueRepository.AddClue(currentLine, suggestedClue, ClueSource.CLUE_SOURCE_CHIP);
+                            if (!string.IsNullOrWhiteSpace(suggestedClue))
+                            {
+                                _clueRepository.AddClue(currentLine, suggestedClue, ClueSource.CLUE_SOURCE_CHIP);
+                            }
                         }
                         selectedSquare.Clues[currentLineIndex] = suggestedClue;
                     }
