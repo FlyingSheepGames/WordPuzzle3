@@ -291,7 +291,6 @@ namespace WordPuzzlesTest
                 string generateHtml = puzzle.FormatHtmlForGoogle();
 
                 File.WriteAllText(HTML_DIRECTORY + "actualExample1.html",  generateHtml);
-                //FileAssert.AreEqual(HTML_DIRECTORY + "expectedExample1.html", HTML_DIRECTORY + "actualExample1.html");
                 var expectedLines = File.ReadAllLines(HTML_DIRECTORY + "expectedExample1.html");
                 var actualLines = File.ReadAllLines(HTML_DIRECTORY + "actualExample1.html");
                 bool anyLinesDifferent = false;

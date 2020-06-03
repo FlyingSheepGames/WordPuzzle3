@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using WordPuzzles;
 
@@ -344,6 +346,10 @@ Thing that hangs above your throat
         [Test]
         public void SHOE_ReturnsExpectedResult()
         {
+            const string HTML_DIRECTORY = @"html\WordSquares\";
+            const string SOURCE_DIRECTORY =
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\WordSquares";
+
             WordSquare square = new WordSquare("____");
             square.SetWordAtIndex("shoe", 0);
             square.SetWordAtIndex("heal", 1);
@@ -354,47 +360,36 @@ Thing that hangs above your throat
             square.Clues[2] = "Trees that grow from acorns.";
             square.Clues[3] = "Clue for else.";
 
-            const string EXPECTED_HTML =
-                @"<html>
-<body>
-<!--StartFragment-->
-Use the clues below to fill in the grid. Each horizontal word also appears vertically (in the same order).
-Then read the solution to the puzzle from the highlighted squares.
-<table border=""1"">
-	<tr>
-		<td>Something you wear on your foot.</td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-	</tr>
-	<tr>
-		<td>Recover from an illness.</td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-	</tr>
-	<tr>
-		<td>Trees that grow from acorns.</td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-	</tr>
-	<tr>
-		<td>Clue for else.</td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-		<td> </td>
-	</tr>
-</table>
-<!--EndFragment-->
-</body>
-</html>
-";
-            Assert.AreEqual(EXPECTED_HTML, square.FormatHtmlForGoogle());
+            string generatedHtml = square.FormatHtmlForGoogle();
+
+            File.WriteAllText(HTML_DIRECTORY + "actualExample1.html", generatedHtml);
+            var expectedLines = File.ReadAllLines(HTML_DIRECTORY + "expectedExample1.html");
+            var actualLines = File.ReadAllLines(HTML_DIRECTORY + "actualExample1.html");
+            bool anyLinesDifferent = false;
+            for (var index = 0; index < expectedLines.Length; index++)
+            {
+                string expectedLine = expectedLines[index];
+                string actualLine = "End of file already reached.";
+                if (index >= 0 && actualLines.Length > index)
+                {
+                    actualLine = actualLines[index];
+                }
+
+                if (expectedLine != actualLine)
+                {
+                    anyLinesDifferent = true;
+                    Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                    Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                }
+            }
+
+            if (anyLinesDifferent)
+            {
+                Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                File.WriteAllLines(SOURCE_DIRECTORY + @"\expectedExample1.html", actualLines);
+            }
+            Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
         }
     }
 
