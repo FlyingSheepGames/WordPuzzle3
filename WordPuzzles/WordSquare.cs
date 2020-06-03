@@ -159,6 +159,46 @@ namespace WordPuzzles
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("<html>");
+            string styleSection = @"
+<head>
+<style type=""text / css"">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+</style>
+</head>
+            ";
+            builder.AppendLine(styleSection);
             builder.AppendLine("<body>");
             builder.AppendLine("<!--StartFragment-->");
             builder.AppendLine(
@@ -166,14 +206,31 @@ namespace WordPuzzles
             builder.AppendLine(
                 @"Then read the solution to the puzzle from the highlighted squares.");
             builder.AppendLine(@"<table border=""1"">");
-            foreach (var clue in Clues)
+            for (var rowIndex = 0; rowIndex < Clues.Length; rowIndex++)
             {
+                var clue = Clues[rowIndex];
+                if (rowIndex == 0)
+                {
+                    clue = "&nbsp;";
+                }
                 builder.AppendLine("\t<tr>");
-                builder.AppendLine($"\t\t<td>{clue}</td>");
+                builder.AppendLine($@"		<td width=""250"">{clue}</td>");
                 for (int i = 0; i < Size; i++)
                 {
-                    builder.AppendLine("\t\t<td> </td>");
+                    string letterInWord = @"&nbsp;";
+                    string style = @"class=""normal""";
+                    if (rowIndex == 0)
+                    {
+                        style = @"class=""bold""";
+                        if (i == 0)
+                        {
+                            letterInWord = Lines[rowIndex][i].ToString().ToUpperInvariant();
+                        }
+                    }
+
+                    builder.AppendLine(@"		<td width=""20"" " + style + ">" + letterInWord + @"</td>");
                 }
+
                 builder.AppendLine("\t</tr>");
             }
 
