@@ -9,9 +9,6 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Next Puzzle to update formatting: WordSquares 
-	Figure out how to highlight squares in the grid
-
 Next Puzzle to update formatting: Anacrostics
 	Figure out how to create black squares in the grid
 
@@ -50,6 +47,9 @@ List of tests that occassionally fail.
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
 --- DONE (most recent on top)
+Next Puzzle to update formatting: WordSquares 
+	Figure out how to highlight squares in the grid
+
 Merge NewClue/Clue objects (replace Clue with NewClue)
 	Better idea: Remove all references to old Clue, and then delete it, and then rename NewClue -> Clue. 
 	Puzzles that use Clue objects: WordSquares (copy/paste in Weekly Puzzle and Puzzle Generator)
