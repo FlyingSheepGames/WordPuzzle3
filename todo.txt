@@ -10,13 +10,21 @@ E. Rafactorings
 TASKS
 ------------------------------
 Next Puzzle to update formatting: Anacrostics
-	Figure out how to create black squares in the grid
+	Figure out how to create black squares in the grid (empty squares instead)
+	Update Puzzle Generator to prompt user for clues. 
+	Consolidate formatted HTML things in Anacrostics
 
-Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 
 Generate solution as HTML
 
+Create general HTMLFormatter (exists, but not sure what it looks like)
+	Single place for all styles
+	Create table cells
+
 Already have an example for "Puzzle" - 
+
+Who was born on this day? 
+What famous thing did they say? 
 
 Add method to Clue Repository for Deleting a clue. 
 Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
@@ -25,6 +33,8 @@ Rename "Puzzle" to a more descriptive name.
 Serialize/Deserialize all puzzles to JSON
 
 Create a general puzzle object. 
+
+Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 
 Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
 

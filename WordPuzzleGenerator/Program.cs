@@ -1323,7 +1323,7 @@ Enter 0 for none.");
             string encodedPhraseForGoogle = anacrostic.GetEncodedPhraseForGoogle();
             Console.WriteLine(encodedPhraseForGoogle);
             Console.WriteLine("Puzzle copied to clipboard. Press any key to continue");//todo loop
-            Clipboard.SetData(DataFormats.Html, anacrostic.GetFormattedHtmlForGoogle());
+            Clipboard.SetData(DataFormats.Html, anacrostic.FormatHtmlForGoogle());
             Console.ReadKey();
 
             wordsAlreadyUsed.AddRange(anacrostic.WordsFoundSoFar);
