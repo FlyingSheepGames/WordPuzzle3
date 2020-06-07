@@ -10,7 +10,6 @@ E. Rafactorings
 TASKS
 ------------------------------
 Next Puzzle to update formatting: Anacrostics
-	Figure out how to create black squares in the grid (empty squares instead)
 	Update Puzzle Generator to prompt user for clues. 
 	Consolidate formatted HTML things in Anacrostics
 
@@ -56,7 +55,15 @@ List of tests that occassionally time out
 List of tests that occassionally fail. 
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
+----------------------------------
+
 --- DONE (most recent on top)
+
+----------------------------------
+
+Next Puzzle to update formatting: Anacrostics
+	Figure out how to create black squares in the grid (empty squares instead)
+
 Next Puzzle to update formatting: WordSquares 
 	Figure out how to highlight squares in the grid
 
