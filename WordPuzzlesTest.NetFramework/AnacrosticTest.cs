@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
@@ -186,76 +187,18 @@ C10	C11	C12	C13	C14	C15
         }
 
         [TestFixture]
-        public class GetFormattedHtmlForGoogle
+        public class FormatHtmlForGoogle
         {
-            [Test]
-            public void WHICHZ_ReturnsExpectedResults()
-            {
-                Anacrostic anacrostic = new Anacrostic("whichz");
-                anacrostic.FindNextWord();
-                anacrostic.RemoveWord("which");
-                Assert.AreEqual("z", anacrostic.RemainingLetters());
-                
-                const string EXPECTED_HTML =
-@"<html>
-<body>
-<!--StartFragment-->
-Fill in the blanks below based on the clues. 
-<table border=""1"">
-<tr>
-    <td colspan=""5"">Clue for which</td>
-    <td> </td>
-    <td colspan=""1"">Clue for z</td>
-</tr>
-<tr>
-    <td>W</td>
-    <td>H</td>
-    <td>I</td>
-    <td>C</td>
-    <td>H</td>
-    <td> </td>
-    <td>Z</td>
-</tr>
-<tr>
-    <td>A1</td>
-    <td>A2</td>
-    <td>A3</td>
-    <td>A4</td>
-    <td>A5</td>
-    <td> </td>
-    <td>B6</td>
-</tr>
-</table>
-Then copy the letters to the grid below, using the numbers as a guide. 
-<table border=""1"">
-<tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>A1</td>
-    <td>A2</td>
-    <td>A3</td>
-    <td>A4</td>
-    <td>A5</td>
-    <td>B6</td>
-</tr>
-</table>
-<!--EndFragment-->
-</body>
-</html>
-";
-                Assert.AreEqual(
-                    EXPECTED_HTML, anacrostic.GetFormattedHtmlForGoogle());
-            }
 
             [Test]
-            public void LongerPhrase_ReturnsExpectedResults()
+            [TestCase(true)]
+            [TestCase(false)]
+            public void LongerPhrase_ReturnsExpectedResult(bool includeSolution)
             {
+                const string HTML_DIRECTORY = @"html\Anacrostics\";
+                const string SOURCE_DIRECTORY =
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\Anacrostics";
+
                 Anacrostic anacrostic = new Anacrostic("this longer phrase has at least twenty characters");
 
                 anacrostic.RemoveWord("place");
@@ -270,289 +213,75 @@ Then copy the letters to the grid below, using the numbers as a guide.
                 anacrostic.RemoveWord("hosts");
                 anacrostic.RemoveWord("hats");
 
+                foreach (var clue in anacrostic.Puzzle.Clues)
+                {
+                    string currentWord;
+                    StringBuilder builder = new StringBuilder();
+                    foreach (var letter in clue.Letters)
+                    {
+                        builder.Append(letter.ActualLetter);
+                    }
+
+                    currentWord = builder.ToString();
+                    switch (currentWord)
+                    {
+                        case "place":
+                            clue.CustomizedClue = "Ace is the ___";
+                            break;
+                        default:
+                            Console.WriteLine($"No clue yet for {currentWord}");
+                            break;
+                    }
+                }
                 Assert.AreEqual("nnt", anacrostic.RemainingLetters());
-                const string EXPECTED_HTML =
-                    @"<html>
-<body>
-<!--StartFragment-->
-Fill in the blanks below based on the clues. 
-<table border=""1"">
-<tr>
-    <td colspan=""5"">Clue for place</td>
-    <td> </td>
-    <td colspan=""5"">Clue for years</td>
-</tr>
-<tr>
-    <td>P</td>
-    <td>L</td>
-    <td>A</td>
-    <td>C</td>
-    <td>E</td>
-    <td> </td>
-    <td>Y</td>
-    <td>E</td>
-    <td>A</td>
-    <td>R</td>
-    <td>S</td>
-</tr>
-<tr>
-    <td>A1</td>
-    <td>A2</td>
-    <td>A3</td>
-    <td>A4</td>
-    <td>A5</td>
-    <td> </td>
-    <td>B6</td>
-    <td>B7</td>
-    <td>B8</td>
-    <td>B9</td>
-    <td>B10</td>
-</tr>
-<tr>
-    <td colspan=""5"">Clue for great</td>
-    <td> </td>
-    <td colspan=""5"">Clue for which</td>
-</tr>
-<tr>
-    <td>G</td>
-    <td>R</td>
-    <td>E</td>
-    <td>A</td>
-    <td>T</td>
-    <td> </td>
-    <td>W</td>
-    <td>H</td>
-    <td>I</td>
-    <td>C</td>
-    <td>H</td>
-</tr>
-<tr>
-    <td>C11</td>
-    <td>C12</td>
-    <td>C13</td>
-    <td>C14</td>
-    <td>C15</td>
-    <td> </td>
-    <td>D16</td>
-    <td>D17</td>
-    <td>D18</td>
-    <td>D19</td>
-    <td>D20</td>
-</tr>
-<tr>
-    <td colspan=""5"">Clue for rates</td>
-    <td> </td>
-    <td colspan=""5"">Clue for later</td>
-</tr>
-<tr>
-    <td>R</td>
-    <td>A</td>
-    <td>T</td>
-    <td>E</td>
-    <td>S</td>
-    <td> </td>
-    <td>L</td>
-    <td>A</td>
-    <td>T</td>
-    <td>E</td>
-    <td>R</td>
-</tr>
-<tr>
-    <td>E21</td>
-    <td>E22</td>
-    <td>E23</td>
-    <td>E24</td>
-    <td>E25</td>
-    <td> </td>
-    <td>F26</td>
-    <td>F27</td>
-    <td>F28</td>
-    <td>F29</td>
-    <td>F30</td>
-</tr>
-<tr>
-    <td colspan=""5"">Clue for hosts</td>
-    <td> </td>
-    <td colspan=""4"">Clue for hats</td>
-</tr>
-<tr>
-    <td>H</td>
-    <td>O</td>
-    <td>S</td>
-    <td>T</td>
-    <td>S</td>
-    <td> </td>
-    <td>H</td>
-    <td>A</td>
-    <td>T</td>
-    <td>S</td>
-</tr>
-<tr>
-    <td>G31</td>
-    <td>G32</td>
-    <td>G33</td>
-    <td>G34</td>
-    <td>G35</td>
-    <td> </td>
-    <td>H36</td>
-    <td>H37</td>
-    <td>H38</td>
-    <td>H39</td>
-</tr>
-<tr>
-    <td colspan=""3"">Clue for nnt</td>
-    <td> </td>
-</tr>
-<tr>
-    <td>N</td>
-    <td>N</td>
-    <td>T</td>
-    <td> </td>
-</tr>
-<tr>
-    <td>I40</td>
-    <td>I41</td>
-    <td>I42</td>
-    <td> </td>
-</tr>
-</table>
-Then copy the letters to the grid below, using the numbers as a guide. 
-<table border=""1"">
-<tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>C15</td>
-    <td>D17</td>
-    <td>D18</td>
-    <td>B10</td>
-    <td> </td>
-    <td>A2</td>
-    <td>G32</td>
-    <td>I40</td>
-    <td>C11</td>
-    <td>A5</td>
-</tr>
-<tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>B9</td>
-    <td> </td>
-    <td>A1</td>
-    <td>D20</td>
-    <td>C12</td>
-    <td>A3</td>
-    <td>E25</td>
-    <td>B7</td>
-    <td> </td>
-    <td>G31</td>
-</tr>
-<tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>B8</td>
-    <td>G33</td>
-    <td> </td>
-    <td>C14</td>
-    <td>E23</td>
-    <td> </td>
-    <td>F26</td>
-    <td>C13</td>
-    <td>E22</td>
-    <td>G35</td>
-</tr>
-<tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>F28</td>
-    <td> </td>
-    <td>G34</td>
-    <td>D16</td>
-    <td>E24</td>
-    <td>I41</td>
-    <td>H38</td>
-    <td>B6</td>
-    <td> </td>
-    <td>A4</td>
-</tr>
-<tr>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>H36</td>
-    <td>F27</td>
-    <td>E21</td>
-    <td>H37</td>
-    <td>D19</td>
-    <td>I42</td>
-    <td>F29</td>
-    <td>F30</td>
-    <td>H39</td>
-    <td></td>
-</tr>
-</table>
-<!--EndFragment-->
-</body>
-</html>
-";
-                string formattedHtmlForGoogle = anacrostic.GetFormattedHtmlForGoogle();
-                Console.WriteLine();
-                Console.WriteLine(anacrostic.EncodedPhrase);
-                Console.WriteLine();
-                Console.WriteLine(anacrostic.EncodedPhraseForGoogle);
-                Assert.AreEqual(10, anacrostic.LineLength);
-                Assert.AreEqual(
-                    EXPECTED_HTML, formattedHtmlForGoogle);
+
+                string generatedHtml = anacrostic.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample1.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution1.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample1.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution1.html";
+                }
+
+                string[] expectedLines = new string[] { " "};// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (expectedLine != actualLine)
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
 
             }
+
         }
 
         [TestFixture]
@@ -569,9 +298,9 @@ Then copy the letters to the grid below, using the numbers as a guide.
                 Assert.AreEqual(
                     @"A1A2A3A4A5B6", anacrostic.EncodedPhrase);
                 Assert.AreEqual(
-                    "A1\tA2\tA3\tA4\tA5\tB6\r\n", anacrostic.EncodedPhraseForGoogle);
+                    "A1\tA2\tA3\tA4\tA5\tB6\t", anacrostic.EncodedPhraseForGoogle);
                 Assert.AreEqual(
-                    "A1\tA5\tA3\tA4\tA2\tB6\r\n", anacrostic.GetEncodedPhraseForGoogle());
+                    "A1\tA5\tA3\tA4\tA2\tB6\t", anacrostic.GetEncodedPhraseForGoogle());
 
             }
 
@@ -594,19 +323,12 @@ Then copy the letters to the grid below, using the numbers as a guide.
                 Assert.AreEqual(
                     @"C15D17D18B10 A2G32I40C11A5B9 A1D20C12A3E25B7 G31B8G33 C14E23 F26C13E22G35F28 G34D16E24I41H38B6 A4H36F27E21H37D19I42F29F30H39", anacrostic.EncodedPhrase);
                 Assert.AreEqual(
-@"C15	D17	D18	B10	 	A2	G32	I40	C11	A5
-B9	 	A1	D20	C12	A3	E25	B7	 	G31
-B8	G33	 	C14	E23	 	F26	C13	E22	G35
-F28	 	G34	D16	E24	I41	H38	B6	 	A4
-H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
+@"C15	D17	D18	B10	 	A2	G32	I40	C11	A5	B9	 
+A1	D20	C12	A3	E25	B7	 	G31	B8	G33	 
+C14	E23	 	F26	C13	E22	G35	F28	 	G34	D16	E24	I41	H38	B6	 
+A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
 
-                Assert.AreEqual(
-@"H38	G31	D18	B10		A2	G32	I40	C11	B7
-E21		A1	D17	B9	E22	G33	C13		D20
-A3	G35		F27	I42		F26	A5	C14	H39
-E23		C15	D16	E24	I41	F28	B6		A4
-H36	H37	C12	B8	D19	G34	F29	F30	E25	", anacrostic.GetEncodedPhraseForGoogle());
-
+       
 
             }
 

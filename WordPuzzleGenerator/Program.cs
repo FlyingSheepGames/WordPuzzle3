@@ -1317,22 +1317,31 @@ Enter 0 for none.");
                 Console.ReadKey();
                 return;
             }
-            string wordsFormattedForGoogleDocs = anacrostic.WordsFormattedForGoogleDocs();
-            Console.WriteLine(wordsFormattedForGoogleDocs); //was WordsWithNumberedBlanks()
-            //Console.ReadKey();
-            string encodedPhraseForGoogle = anacrostic.GetEncodedPhraseForGoogle();
-            Console.WriteLine(encodedPhraseForGoogle);
-            Console.WriteLine("Puzzle copied to clipboard. Press any key to continue");//todo loop
-            Clipboard.SetData(DataFormats.Html, anacrostic.GetFormattedHtmlForGoogle());
-            Console.ReadKey();
-
-            wordsAlreadyUsed.AddRange(anacrostic.WordsFoundSoFar);
-
 
             foreach (PuzzleWord puzzleWord in anacrostic.Puzzle.Clues)
             {
                 puzzleWord.CustomizedClue = InteractiveGetClueForWord(puzzleWord);
             }
+
+            string wordsFormattedForGoogleDocs = anacrostic.WordsFormattedForGoogleDocs();
+            //Console.WriteLine(wordsFormattedForGoogleDocs); //was WordsWithNumberedBlanks()
+            //Console.ReadKey();
+
+            //Console.WriteLine(encodedPhraseForGoogle);
+            ConsoleKeyInfo lastkeyPressed = new ConsoleKeyInfo();
+
+            while (lastkeyPressed.KeyChar != 'c')
+            {
+                Console.WriteLine("Puzzle copied to clipboard. Press 'c' to continue or any other key to copy it again."); //todo loop
+                Clipboard.SetData(DataFormats.Html, anacrostic.FormatHtmlForGoogle());
+
+                lastkeyPressed = Console.ReadKey();
+            }
+
+            wordsAlreadyUsed.AddRange(anacrostic.WordsFoundSoFar);
+
+
+
 
             //Generate Html File
             HtmlGenerator generator = new HtmlGenerator

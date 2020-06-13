@@ -22,15 +22,19 @@ namespace WordPuzzles
 
         public string GetEncodedPhraseForGoogle()
         {
+            int MAX_LINE_LENGTH = 10;
             PreparePuzzle();
             StringBuilder phraseEncodedForGoogle = new StringBuilder();
+            int lineLength = 0;
             for (var index = 0; index < Puzzle.Phrase.Count; index++)
             {
+                lineLength++;
                 var letter = Puzzle.Phrase[index];
                 phraseEncodedForGoogle.Append(letter);
-                if (index % LineLength == LineLength-1)
+                if (MAX_LINE_LENGTH < lineLength && (letter.ActualLetter == ' '))
                 {
                     phraseEncodedForGoogle.Append("\r\n");
+                    lineLength = 0;
                 }
                 else
                 {
@@ -59,13 +63,17 @@ namespace WordPuzzles
 
             StringBuilder encodedPhraseForGoogle = new StringBuilder();
             int currentCount = 0;
+            int lineLengthSoFar = 0;
+            int MAX_LINE_LENGTH = 10;
             foreach (char letter in phrase)
             {
+                lineLengthSoFar++;
                 encodedPhraseForGoogle.Append(letter);
                 currentCount++;
-                if (currentCount % LineLength == 0)
+                if ((MAX_LINE_LENGTH < lineLengthSoFar) && (letter == ' '))
                 {
                     encodedPhraseForGoogle.Append("\r\n");
+                    lineLengthSoFar = 0;
                 }
                 else
                 {
@@ -367,21 +375,88 @@ namespace WordPuzzles
 
         }
 
-        public string GetFormattedHtmlForGoogle()
+        public string FormatHtmlForGoogle(bool includeSolution = false)
         {
             PreparePuzzle();
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("<html>");
+            builder.AppendLine(@"
+<head>
+<style type=""text / css"">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+</style>
+</head>");
             builder.AppendLine("<body>");
             builder.AppendLine("<!--StartFragment-->");
 
             builder.AppendLine("Fill in the blanks below based on the clues. ");
 
-            AppendCluesTable(builder);
+            AppendCluesTable(builder, includeSolution);
 
 
-            builder.AppendLine("Then copy the letters to the grid below, using the numbers as a guide. ");
-            AppendEncodedMessageTable(builder);
+            builder.AppendLine("<p/>Then copy the letters to the grid below, using the numbers as a guide. ");
+            AppendEncodedMessageTable(builder, includeSolution);
 
 
             builder.AppendLine("<!--EndFragment-->");
@@ -390,45 +465,66 @@ namespace WordPuzzles
             return builder.ToString();
         }
 
-        private void AppendEncodedMessageTable(StringBuilder builder)
+        private void AppendEncodedMessageTable(StringBuilder builder, bool includeSolution = false)
         {
             builder.AppendLine(@"<table border=""1"">");
             StringBuilder topLine = new StringBuilder();
             topLine.AppendLine("<tr>");
+            StringBuilder middleLine = new StringBuilder();
+            middleLine.AppendLine("<tr>");
             StringBuilder bottomLine = new StringBuilder();
             bottomLine.AppendLine("<tr>");
 
+
             string[] enumeratedCellValues = EncodedPhraseForGoogle.Split('\t');
-            foreach(string cellValue in enumeratedCellValues)
+            int phraseIndex = 0; //Can get out of sync with enumerated Cell Values.
+            for (var index = 0; index < enumeratedCellValues.Length; index++)
             {
+                string cellValue = enumeratedCellValues[index];
+                char letterInSolution = ' ';
+
+                if ( phraseIndex < _originalPhrase.Length)
+                {
+                    letterInSolution = _originalPhrase[phraseIndex];
+                    phraseIndex += 1;
+                }
+
+
                 if (cellValue.Contains("\r\n"))
                 {
-                    string[] splitTokens = cellValue.Split(new []{"\r\n"}, StringSplitOptions.None);
+                    string[] splitTokens = cellValue.Split(new[] {"\r\n"}, StringSplitOptions.None);
                     string lastCellValueInThisRow = splitTokens[0];
                     string firstCellValueInNextRow = splitTokens[1];
-                    ProcessCellValue(topLine, bottomLine, lastCellValueInThisRow);
+                    ProcessCellValue(topLine, middleLine, bottomLine, lastCellValueInThisRow, letterInSolution);
 
                     ProcessLineReturn(topLine, builder);
+                    ProcessLineReturn(middleLine, builder);
                     ProcessLineReturn(bottomLine, builder);
 
                     if (!string.IsNullOrWhiteSpace(firstCellValueInNextRow))
                     {
-                        ProcessCellValue(topLine, bottomLine, firstCellValueInNextRow);
+                        letterInSolution = ' ';
+                        if (phraseIndex < _originalPhrase.Length)
+                        {
+                            letterInSolution = _originalPhrase[phraseIndex];
+                            phraseIndex += 1;
+                        }
+                        ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow, letterInSolution);
                     }
                 }
                 else
                 {
-                    ProcessCellValue(topLine, bottomLine, cellValue);
+                    ProcessCellValue(topLine, middleLine, bottomLine, cellValue, letterInSolution);
                 }
             }
 
             if (topLine.ToString() != "<tr>\r\n")//There's something left in the last line to be closed off.
             {
                 topLine.AppendLine("</tr>");
-                bottomLine.AppendLine("</tr>");
+                middleLine.AppendLine("</tr>");
 
                 builder.Append(topLine);
-                builder.Append(bottomLine);
+                builder.Append(middleLine);
             }
 
             builder.AppendLine(@"</table>");
@@ -444,13 +540,26 @@ namespace WordPuzzles
             line.AppendLine("<tr>");
         }
 
-        private static void ProcessCellValue(StringBuilder topLine, StringBuilder bottomLine, string cellValue)
+        private static void ProcessCellValue(StringBuilder topLine, StringBuilder middleLine, StringBuilder bottomLine, string cellValue,
+            char letterInSolution = ' ')
         {
-            topLine.AppendLine("    <td> </td>");
-            bottomLine.AppendLine($"    <td>{cellValue}</td>");
+            var classAttribute = @"class=""normal""";
+            if (string.IsNullOrWhiteSpace(cellValue))
+            {
+                classAttribute = @"class=""hollow""";
+            }
+
+            string letterInSolutionAsString = @"&nbsp;";
+            if (letterInSolution != ' ')
+            {
+                letterInSolutionAsString = letterInSolution.ToString().ToUpperInvariant();
+            }
+            topLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">" + letterInSolutionAsString + @"</td>");
+            middleLine.AppendLine($@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
+            bottomLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">&nbsp;</td>");
         }
 
-        private void AppendCluesTable(StringBuilder builder)
+        private void AppendCluesTable(StringBuilder builder, bool showSolution = false)
         {
             builder.AppendLine(@"<table border=""1"">");
             StringBuilder topLine = new StringBuilder();
@@ -462,13 +571,28 @@ namespace WordPuzzles
 
             char currentLetter = 'A';
             int lettersAssignedSoFar = 1;
-            foreach (string word in Puzzle.Clues)
+            foreach (PuzzleWord wordAsClue in Puzzle.Clues)
             {
-                topLine.AppendLine($@"    <td colspan=""{word.Length}"">Clue for {word}</td>");
+                string word = wordAsClue;
+                string currentClue = $@"Clue for {word}";
+                if (!string.IsNullOrWhiteSpace(wordAsClue.CustomizedClue))
+                {
+                    currentClue = wordAsClue.CustomizedClue;
+                }
+                topLine.AppendLine($@"    <td colspan=""{word.Length}"" class=""open""><br/>" + currentClue + $@"</td>");
                 foreach (char letter in word.ToUpper())
                 {
-                    middleLine.AppendLine($"    <td>{letter}</td>");
-                    bottomLine.AppendLine($"    <td>{currentLetter}{lettersAssignedSoFar++}</td>");
+                    middleLine.Append($@"    <td width=""30"" class=""normal"">");
+                    if (showSolution)
+                    {
+                        middleLine.Append(letter);
+                    }
+                    else
+                    {
+                        middleLine.Append(@"&nbsp;");
+                    }
+                    middleLine.AppendLine($@"</td>");
+                    bottomLine.AppendLine($@"    <td width=""30"" class=""normal"">{currentLetter}{lettersAssignedSoFar++}</td>");
                 }
 
                 currentLetter++;
@@ -492,9 +616,9 @@ namespace WordPuzzles
                 }
                 else
                 {
-                    topLine.AppendLine(@"    <td> </td>"); //space between words.
-                    middleLine.AppendLine(@"    <td> </td>"); //space between words.
-                    bottomLine.AppendLine(@"    <td> </td>"); //space between words.
+                    topLine.AppendLine(@"    <td width=""30"" class=""open"">&nbsp;</td>"); 
+                    middleLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>"); 
+                    bottomLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>");
                 }
             }
 
