@@ -375,7 +375,7 @@ namespace WordPuzzles
 
         }
 
-        public string FormatHtmlForGoogle()
+        public string FormatHtmlForGoogle(bool includeSolution = false)
         {
             PreparePuzzle();
             StringBuilder builder = new StringBuilder();
@@ -452,11 +452,11 @@ namespace WordPuzzles
 
             builder.AppendLine("Fill in the blanks below based on the clues. ");
 
-            AppendCluesTable(builder);
+            AppendCluesTable(builder, includeSolution);
 
 
             builder.AppendLine("<p/>Then copy the letters to the grid below, using the numbers as a guide. ");
-            AppendEncodedMessageTable(builder);
+            AppendEncodedMessageTable(builder, includeSolution);
 
 
             builder.AppendLine("<!--EndFragment-->");
@@ -465,46 +465,66 @@ namespace WordPuzzles
             return builder.ToString();
         }
 
-        private void AppendEncodedMessageTable(StringBuilder builder)
+        private void AppendEncodedMessageTable(StringBuilder builder, bool includeSolution = false)
         {
             builder.AppendLine(@"<table border=""1"">");
             StringBuilder topLine = new StringBuilder();
             topLine.AppendLine("<tr>");
+            StringBuilder middleLine = new StringBuilder();
+            middleLine.AppendLine("<tr>");
             StringBuilder bottomLine = new StringBuilder();
             bottomLine.AppendLine("<tr>");
 
+
             string[] enumeratedCellValues = EncodedPhraseForGoogle.Split('\t');
-            foreach(string cellValue in enumeratedCellValues)
+            int phraseIndex = 0; //Can get out of sync with enumerated Cell Values.
+            for (var index = 0; index < enumeratedCellValues.Length; index++)
             {
+                string cellValue = enumeratedCellValues[index];
+                char letterInSolution = ' ';
+
+                if ( phraseIndex < _originalPhrase.Length)
+                {
+                    letterInSolution = _originalPhrase[phraseIndex];
+                    phraseIndex += 1;
+                }
+
+
                 if (cellValue.Contains("\r\n"))
                 {
-                    string[] splitTokens = cellValue.Split(new []{"\r\n"}, StringSplitOptions.None);
+                    string[] splitTokens = cellValue.Split(new[] {"\r\n"}, StringSplitOptions.None);
                     string lastCellValueInThisRow = splitTokens[0];
                     string firstCellValueInNextRow = splitTokens[1];
-                    ProcessCellValue(topLine, bottomLine, lastCellValueInThisRow);
+                    ProcessCellValue(topLine, middleLine, bottomLine, lastCellValueInThisRow, letterInSolution);
 
-                    ProcessLineReturn(new StringBuilder(topLine.ToString()), builder);
+                    ProcessLineReturn(topLine, builder);
+                    ProcessLineReturn(middleLine, builder);
                     ProcessLineReturn(bottomLine, builder);
-                    ProcessLineReturn(topLine.Replace("normal", "open"), builder);
 
                     if (!string.IsNullOrWhiteSpace(firstCellValueInNextRow))
                     {
-                        ProcessCellValue(topLine, bottomLine, firstCellValueInNextRow);
+                        letterInSolution = ' ';
+                        if (phraseIndex < _originalPhrase.Length)
+                        {
+                            letterInSolution = _originalPhrase[phraseIndex];
+                            phraseIndex += 1;
+                        }
+                        ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow, letterInSolution);
                     }
                 }
                 else
                 {
-                    ProcessCellValue(topLine, bottomLine, cellValue);
+                    ProcessCellValue(topLine, middleLine, bottomLine, cellValue, letterInSolution);
                 }
             }
 
             if (topLine.ToString() != "<tr>\r\n")//There's something left in the last line to be closed off.
             {
                 topLine.AppendLine("</tr>");
-                bottomLine.AppendLine("</tr>");
+                middleLine.AppendLine("</tr>");
 
                 builder.Append(topLine);
-                builder.Append(bottomLine);
+                builder.Append(middleLine);
             }
 
             builder.AppendLine(@"</table>");
@@ -520,15 +540,23 @@ namespace WordPuzzles
             line.AppendLine("<tr>");
         }
 
-        private static void ProcessCellValue(StringBuilder topLine, StringBuilder bottomLine, string cellValue)
+        private static void ProcessCellValue(StringBuilder topLine, StringBuilder middleLine, StringBuilder bottomLine, string cellValue,
+            char letterInSolution = ' ')
         {
             var classAttribute = @"class=""normal""";
             if (string.IsNullOrWhiteSpace(cellValue))
             {
                 classAttribute = @"class=""hollow""";
             }
-            topLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">&nbsp;</td>");
-            bottomLine.AppendLine($@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
+
+            string letterInSolutionAsString = @"&nbsp;";
+            if (letterInSolution != ' ')
+            {
+                letterInSolutionAsString = letterInSolution.ToString().ToUpperInvariant();
+            }
+            topLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">" + letterInSolutionAsString + @"</td>");
+            middleLine.AppendLine($@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
+            bottomLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">&nbsp;</td>");
         }
 
         private void AppendCluesTable(StringBuilder builder, bool showSolution = false)

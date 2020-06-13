@@ -191,7 +191,9 @@ C10	C11	C12	C13	C14	C15
         {
 
             [Test]
-            public void LongerPhrase_ReturnsExpectedResult()
+            [TestCase(true)]
+            [TestCase(false)]
+            public void LongerPhrase_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\Anacrostics\";
                 const string SOURCE_DIRECTORY =
@@ -233,11 +235,26 @@ C10	C11	C12	C13	C14	C15
                 }
                 Assert.AreEqual("nnt", anacrostic.RemainingLetters());
 
-                string generatedHtml = anacrostic.FormatHtmlForGoogle();
+                string generatedHtml = anacrostic.FormatHtmlForGoogle(includeSolution);
 
-                File.WriteAllText(HTML_DIRECTORY + "actualExample1.html", generatedHtml);
-                var expectedLines = File.ReadAllLines(HTML_DIRECTORY + "expectedExample1.html");
-                var actualLines = File.ReadAllLines(HTML_DIRECTORY + "actualExample1.html");
+                var actualFileName = "actualExample1.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution1.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample1.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution1.html";
+                }
+
+                string[] expectedLines = new string[] { " "};// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
                 bool anyLinesDifferent = false;
                 for (var index = 0; index < expectedLines.Length; index++)
                 {
@@ -259,7 +276,7 @@ C10	C11	C12	C13	C14	C15
                 if (anyLinesDifferent)
                 {
                     Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
-                    File.WriteAllLines(SOURCE_DIRECTORY + @"\expectedExample1.html", actualLines);
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
                 }
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
 

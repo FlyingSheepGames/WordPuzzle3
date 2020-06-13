@@ -9,11 +9,6 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Next Puzzle to update formatting: Anacrostics
-	Update Puzzle Generator to prompt user for clues. 
-	Consolidate formatted HTML things in Anacrostics
-
-
 Generate solution as HTML
 
 Create general HTMLFormatter (exists, but not sure what it looks like)
@@ -22,13 +17,16 @@ Create general HTMLFormatter (exists, but not sure what it looks like)
 
 Already have an example for "Puzzle" - 
 
+Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
+	Capture partially-filled month of puzzles. 
+
 Who was born on this day? 
 What famous thing did they say? 
 
 Add method to Clue Repository for Deleting a clue. 
 Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
 
-Rename "Puzzle" to a more descriptive name. 
+Rename Anacrostic."Puzzle" to a more descriptive name. 
 Serialize/Deserialize all puzzles to JSON
 
 Create a general puzzle object. 
@@ -36,6 +34,8 @@ Create a general puzzle object.
 Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 
 Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
+	
+Consolidate Anacrostic.EncodedPhrase and Anacrostic.EncodedPhraseForGoogle
 
 Add new puzzle types.
 NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
@@ -60,6 +60,8 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Next Puzzle to update formatting: Anacrostics
+	Update Puzzle Generator to prompt user for clues. 
 
 Next Puzzle to update formatting: Anacrostics
 	Figure out how to create black squares in the grid (empty squares instead)
