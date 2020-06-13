@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -90,7 +91,7 @@ namespace WordPuzzles
             int offsetOfMatch = 0;
             foreach (var letter in Puzzle.Phrase)
             {
-                if (letter.ActualLetter == ' ' || char.IsPunctuation(letter.ActualLetter))
+                if (letter.ActualLetter == ' ' || Char.IsPunctuation(letter.ActualLetter))
                 {
                     puzzleLengthWithoutBlanks--;
                 }
@@ -144,7 +145,7 @@ namespace WordPuzzles
             builder.AppendLine("\t<td>");
 
             string puzzleClueCustomizedClue = puzzleClue.CustomizedClue;
-            if (string.IsNullOrWhiteSpace(puzzleClueCustomizedClue))
+            if (String.IsNullOrWhiteSpace(puzzleClueCustomizedClue))
             {
                 puzzleClueCustomizedClue = $"Clue for {(string) puzzleClue}";
             }
@@ -200,7 +201,7 @@ namespace WordPuzzles
                 }
                 else
                 {
-                    if (char.IsPunctuation(phrase[currentOffset]))
+                    if (Char.IsPunctuation(phrase[currentOffset]))
                     {
                         builder.AppendLine();
                         builder.AppendLine($"\t{phrase[currentOffset]}");
@@ -319,7 +320,7 @@ function colorMeAndMyMatch(currentIndex, color) {
             builder.Append(@"</form>
 </body>
 ");
-            if (!string.IsNullOrWhiteSpace(TwitterUrl))
+            if (!String.IsNullOrWhiteSpace(TwitterUrl))
             {
                 builder.AppendLine(
                     $@"Click here to confirm the <a href=""{TwitterUrl}"">solution</a> (spoiler warning).");
@@ -333,5 +334,84 @@ function colorMeAndMyMatch(currentIndex, color) {
         }
 
         public string TwitterUrl { get; set; }
+
+        public void AppendHtmlFooter(StringBuilder builder)
+        {
+            builder.AppendLine("</body>");
+            builder.AppendLine("</html>");
+        }
+
+        public void AppendHtmlHeader(StringBuilder builder)
+        {
+            builder.AppendLine("<html>");
+            builder.AppendLine(@"
+<head>
+<style type=""text / css"">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+</style>
+</head>");
+            builder.AppendLine("<body>");
+        }
     }
 }

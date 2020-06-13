@@ -4,11 +4,12 @@ using System.Text;
 
 namespace WordPuzzles
 {
-    public class Anacrostic
+    public class Anacrostic : IPuzzle
     {
         public Puzzle Puzzle = new Puzzle();
         public WordRepository Repository = new WordRepository();
         private readonly int[] _remainingLetters = new int[26];
+        public HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public List<string> WordsFoundSoFar = new List<string>();
         private string _originalPhrase;
@@ -375,79 +376,15 @@ namespace WordPuzzles
 
         }
 
-        public string FormatHtmlForGoogle(bool includeSolution = false)
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             PreparePuzzle();
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<html>");
-            builder.AppendLine(@"
-<head>
-<style type=""text / css"">
-        table td, table th {
-            padding: 0
-        }
-       .bold {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 2.2pt;
-            border-right-width: 2.2pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 2.2pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 2.2pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-        .normal {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 1pt;
-            border-right-width: 1pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 1pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 1pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-        .hollow {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 0pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 0pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
 
-        .open {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 0pt;
-            border-right-width: 0pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 0pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 0pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-</style>
-</head>");
-            builder.AppendLine("<body>");
             builder.AppendLine("<!--StartFragment-->");
 
             builder.AppendLine("Fill in the blanks below based on the clues. ");
@@ -460,8 +397,11 @@ namespace WordPuzzles
 
 
             builder.AppendLine("<!--EndFragment-->");
-            builder.AppendLine("</body>");
-            builder.AppendLine("</html>");
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
+
             return builder.ToString();
         }
 
@@ -495,7 +435,9 @@ namespace WordPuzzles
                     string[] splitTokens = cellValue.Split(new[] {"\r\n"}, StringSplitOptions.None);
                     string lastCellValueInThisRow = splitTokens[0];
                     string firstCellValueInNextRow = splitTokens[1];
-                    ProcessCellValue(topLine, middleLine, bottomLine, lastCellValueInThisRow, letterInSolution);
+
+                    ProcessCellValue(topLine, middleLine, bottomLine, lastCellValueInThisRow, 
+                        includeSolution ? letterInSolution: ' ');
 
                     ProcessLineReturn(topLine, builder);
                     ProcessLineReturn(middleLine, builder);
@@ -509,12 +451,14 @@ namespace WordPuzzles
                             letterInSolution = _originalPhrase[phraseIndex];
                             phraseIndex += 1;
                         }
-                        ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow, letterInSolution);
+                        ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow,
+                            includeSolution ? letterInSolution : ' ');
                     }
                 }
                 else
                 {
-                    ProcessCellValue(topLine, middleLine, bottomLine, cellValue, letterInSolution);
+                    ProcessCellValue(topLine, middleLine, bottomLine, cellValue,
+                        includeSolution ? letterInSolution : ' ');
                 }
             }
 

@@ -9,11 +9,19 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Generate solution as HTML
-
-Create general HTMLFormatter (exists, but not sure what it looks like)
+Update HTMLFormatter 
 	Single place for all styles
+	Flag for "just the puzzle fragment"
+	Create a general puzzle interface (IPuzzle). 
+
+Update WordPuzzleGenerator to produce a set of puzzles (and solutions)
+	Load/Save partially-filled set of puzzles. 
+
+
+HTMLFormatter (common code)
 	Create table cells
+
+Generate solution as HTML
 
 Already have an example for "Puzzle" - 
 
@@ -22,14 +30,15 @@ Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
 
 Who was born on this day? 
 What famous thing did they say? 
+(Actors) what movies were they in?
+(Writers) what books did they write?
+(Musicians) what songs did they perform?
 
 Add method to Clue Repository for Deleting a clue. 
 Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
 
 Rename Anacrostic."Puzzle" to a more descriptive name. 
 Serialize/Deserialize all puzzles to JSON
-
-Create a general puzzle object. 
 
 Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 

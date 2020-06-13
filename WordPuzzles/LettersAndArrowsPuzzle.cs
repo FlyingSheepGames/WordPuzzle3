@@ -5,11 +5,13 @@ using System.Text;
 namespace WordPuzzles
 {
 
-    public class LettersAndArrowsPuzzle
+    public class LettersAndArrowsPuzzle : IPuzzle
     {
         private Random _randomNumberGenerator;
         public int Size { get; set; }
         private readonly Dictionary<string, LetterAndArrowCell> _grid = new Dictionary<string, LetterAndArrowCell>();
+        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
+
         public LettersAndArrowsPuzzle(int size)
         {
             Size = size;
@@ -310,12 +312,14 @@ namespace WordPuzzles
         public List<int> RowsVisited = new List<int>();
         private string Solution = "";
         private string[] _clues;
-
-        public string FormatHtmlForGoogle()
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<html>");
-            builder.AppendLine("<body>");
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
+
             builder.AppendLine("<!--StartFragment-->");
             builder.AppendLine(@"Fill in the words below (one letter per box) based on the clues. ");
             builder.AppendLine("Starting in the top left box, follow the direction (e.g. three spaces to the right) to find the next letter. ");
@@ -353,9 +357,11 @@ namespace WordPuzzles
 
             builder.AppendLine();
             builder.AppendLine("<!--EndFragment-->");
-            builder.AppendLine("</body>");
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
 
-            builder.AppendLine("</html>");
             return builder.ToString();
         }
 
@@ -492,6 +498,8 @@ namespace WordPuzzles
         {
             _clues[rowIndex] = clue;
         }
+
+
     }
 
     public enum Direction

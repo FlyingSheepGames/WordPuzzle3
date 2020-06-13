@@ -6,12 +6,12 @@ using System.Text;
 
 namespace WordPuzzles
 {
-    public class WordSquare
+    public class WordSquare : IPuzzle
     {
         public WordRepository Repository { get; set; } = new WordRepository();
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
-
+        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
         public string[] Lines ;
         public int Size;
 
@@ -155,51 +155,15 @@ namespace WordPuzzles
             return builder.ToString();
         }
 
-        public string FormatHtmlForGoogle()
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<html>");
-            string styleSection = @"
-<head>
-<style type=""text / css"">
-        table td, table th {
-            padding: 0
-        }
-       .bold {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 2.2pt;
-            border-right-width: 2.2pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 2.2pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 2.2pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-        .normal {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 1pt;
-            border-right-width: 1pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 1pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 1pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-</style>
-</head>
-            ";
-            builder.AppendLine(styleSection);
-            builder.AppendLine("<body>");
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
+
+
             builder.AppendLine("<!--StartFragment-->");
             builder.AppendLine(
                 @"Use the clues below to fill in the grid. Each horizontal word also appears vertically (in the same order).");
@@ -236,8 +200,11 @@ namespace WordPuzzles
 
             builder.AppendLine("</table>");
             builder.AppendLine("<!--EndFragment-->");
-            builder.AppendLine("</body>");
-            builder.AppendLine("</html>");
+            if (!isFragment)
+            {
+                builder.AppendLine("</body>");
+                builder.AppendLine("</html>");
+            }
 
             //reset 
             return builder.ToString();
