@@ -73,6 +73,18 @@ namespace WordPuzzlesTest
             [TestCase("ions")]
             [TestCase("hope")]
             [TestCase("fawn")]
+            [TestCase("badger")]
+            [TestCase("stolen")]
+            [TestCase("bronze")]
+            [TestCase("models")]
+            [TestCase("silent")]
+            [TestCase("french")]
+            [TestCase("sequin")]
+            [TestCase("bounce")]
+            [TestCase("theory")]
+            [TestCase("poster")]
+            [TestCase("anthem")]
+
             public void AllWords_ContainsSpecificWords(string word)
             {
                 const string ALL_WORDS_FILE =

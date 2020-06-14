@@ -20,6 +20,9 @@ namespace WordPuzzleGenerator
         static readonly AnagramFinder AnagramFinder = new AnagramFinder() {Repository = WordRepository};
         static readonly Random RandomNumberGenerator = new Random();
         static readonly ClueRepository _clueRepository = new ClueRepository();
+        private static readonly StringBuilder _puzzleBuilder = new StringBuilder();
+        private static readonly StringBuilder _solutionBuilder = new StringBuilder();
+
         [STAThread]
         static void Main()
         {
@@ -36,6 +39,9 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
+            HtmlGenerator htmlGenerator = new HtmlGenerator();
+            htmlGenerator.AppendHtmlHeader(_puzzleBuilder);
+            htmlGenerator.AppendHtmlHeader(_solutionBuilder);
 
             Console.WriteLine("Enter the word or phrase you'd like to create a puzzle for.");
             string solution = Console.ReadLine();
@@ -58,15 +64,15 @@ namespace WordPuzzleGenerator
                 Console.WriteLine($"Which type of puzzle would you like to create for '{solution}'?");
                 Console.WriteLine("0. None. Quit to word patterns.");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("1. Word Square");
+                Console.WriteLine("1. * Word Square");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("2. Sudoku");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("3. Anacrostic");
+                Console.WriteLine("3. * Anacrostic");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("4. Word Ladder");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("5. Letters and Arrows");
+                Console.WriteLine("5. * Letters and Arrows");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
                 Console.WriteLine("6. Read Down Column");
                 Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
@@ -102,7 +108,9 @@ namespace WordPuzzleGenerator
                         {
                             Console.Clear();
                             Console.WriteLine("Creating a word square for you.");
-                            InteractiveFindWordSquare(solution);
+                            var wordSquare = InteractiveFindWordSquare(solution);
+                            _puzzleBuilder.Append(wordSquare?.FormatHtmlForGoogle(false, true));
+                            _solutionBuilder.Append(wordSquare?.FormatHtmlForGoogle(true, true));
                             Console.WriteLine("Done. Press a key to continue.");
                             Console.ReadKey();
                         }
@@ -139,11 +147,14 @@ namespace WordPuzzleGenerator
                         {
                             Console.Clear();
                             Console.WriteLine("Creating an anacrostic for you.");
-                            InteractiveGenerateAnacrostic(new AnacrosticParameterSet
+                            var anacrostic = InteractiveGenerateAnacrostic(new AnacrosticParameterSet
                             {
                                 Phrase = solution,
                                 WordsToUse = new List<string>() { }
                             });
+                            _puzzleBuilder.Append(anacrostic?.FormatHtmlForGoogle(false, true));
+                            _solutionBuilder.Append(anacrostic?.FormatHtmlForGoogle(true, true));
+
                             Console.WriteLine("Done. Press a key to continue.");
                             Console.ReadKey();
                         }
@@ -179,7 +190,11 @@ namespace WordPuzzleGenerator
                         {
                             Console.Clear();
                             Console.WriteLine("Creating a letters and arrows puzzle for you.");
-                            InteractiveFindLettersAndArrowsPuzzle(solution);
+                            var lettersAndArrows = InteractiveFindLettersAndArrowsPuzzle(solution);
+
+                            _puzzleBuilder.Append(lettersAndArrows?.FormatHtmlForGoogle(false, true));
+                            _solutionBuilder.Append(lettersAndArrows?.FormatHtmlForGoogle(true, true));
+
                             Console.WriteLine("Done. Press a key to continue.");
                             Console.ReadKey();
                         }
@@ -299,6 +314,12 @@ namespace WordPuzzleGenerator
             }
 
             _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+
+            htmlGenerator.AppendHtmlFooter(_puzzleBuilder);
+            htmlGenerator.AppendHtmlFooter(_solutionBuilder);
+            long ticks = DateTime.Now.Ticks;
+            File.WriteAllText($"{ticks}_puzzles.html", _puzzleBuilder.ToString());
+            File.WriteAllText($"{ticks}_solutions.html", _solutionBuilder.ToString());
 
         }
 
@@ -785,14 +806,15 @@ namespace WordPuzzleGenerator
         }
 
 
-        private static void InteractiveFindLettersAndArrowsPuzzle(string solution)
+        private static IPuzzle InteractiveFindLettersAndArrowsPuzzle(string solution)
         {
+            LettersAndArrowsPuzzle puzzle = null;
             string formatHtmlForGoogle = null;
             for (int size = 4; size < 7; size++)
             {
                 try
                 {
-                    LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution, true, size);
+                    puzzle = new LettersAndArrowsPuzzle(solution, true, size);
                     InteractiveSetCluesForLettersAndArrowsPuzzle(puzzle);
                     formatHtmlForGoogle = puzzle.FormatHtmlForGoogle();
                     break;
@@ -803,7 +825,7 @@ namespace WordPuzzleGenerator
                 }
             }
 
-            if (formatHtmlForGoogle == null) return;
+            if (formatHtmlForGoogle == null) return null;
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
@@ -813,6 +835,7 @@ namespace WordPuzzleGenerator
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
 
+            return puzzle;
         }
 
         private static void InteractiveSetCluesForLettersAndArrowsPuzzle(LettersAndArrowsPuzzle puzzle)
@@ -1038,7 +1061,7 @@ namespace WordPuzzleGenerator
 
         }
 
-        private static void InteractiveFindWordSquare(string relatedWord)
+        private static IPuzzle InteractiveFindWordSquare(string relatedWord)
         {
             string fileWithMagicWordSquares = WordSquare.GetFileNameFor(relatedWord);
             if (!File.Exists(fileWithMagicWordSquares))
@@ -1095,6 +1118,8 @@ namespace WordPuzzleGenerator
                     break;
                 }
             }
+
+            return selectedSquare;
         }
 
         private static void GenerateWordSquaresOfAnySize(string firstWordCandidate)
@@ -1180,7 +1205,7 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static void InteractiveGenerateAnacrostic(AnacrosticParameterSet parameterSet)
+        private static IPuzzle InteractiveGenerateAnacrostic(AnacrosticParameterSet parameterSet)
         {
             List<string> wordsAlreadyUsed = new List<string>();
 
@@ -1315,7 +1340,7 @@ Enter 0 for none.");
             {
                 Console.WriteLine("There are letters remaining. Press any key to exit.");
                 Console.ReadKey();
-                return;
+                return null;
             }
 
             foreach (PuzzleWord puzzleWord in anacrostic.Puzzle.Clues)
@@ -1351,7 +1376,7 @@ Enter 0 for none.");
             };
 
             generator.GenerateHtmlFile(BASE_DIRECTORY + $@"anacrostics\puzzle_{parameterSet.TweetId}.html", false);
-
+            return anacrostic;
         }
 
         private static string InteractiveGetClueForWord(string currentWord)
