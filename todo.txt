@@ -9,11 +9,6 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Update HTMLFormatter 
-	Single place for all styles
-	Flag for "just the puzzle fragment"
-	Create a general puzzle interface (IPuzzle). 
-
 Update WordPuzzleGenerator to produce a set of puzzles (and solutions)
 	Load/Save partially-filled set of puzzles. 
 
@@ -69,6 +64,11 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Update HTMLFormatter 
+	Single place for all styles
+	Flag for "just the puzzle fragment"
+	Create a general puzzle interface (IPuzzle). 
+
 Next Puzzle to update formatting: Anacrostics
 	Update Puzzle Generator to prompt user for clues. 
 
