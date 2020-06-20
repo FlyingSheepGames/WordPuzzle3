@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace WordPuzzles
 {
@@ -14,6 +15,7 @@ namespace WordPuzzles
         int _letterCount = 1;
         private int _lettersInPhrase;
 
+        [JsonIgnore]
         public int LettersInPhrase
         {
             get

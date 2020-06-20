@@ -18,6 +18,8 @@ HTMLFormatter (common code)
 
 Generate solution as HTML
 
+Rename unit test project to remove .NetFramework
+
 Already have an example for "Puzzle" - 
 
 Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)

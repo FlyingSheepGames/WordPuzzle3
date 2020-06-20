@@ -12,7 +12,7 @@ namespace WordPuzzles
         public HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public List<string> WordsFoundSoFar = new List<string>();
-        private string _originalPhrase;
+        public string OriginalPhrase;
         public string EncodedPhrase;
         public Anacrostic(string phrase)
         {
@@ -54,7 +54,7 @@ namespace WordPuzzles
             {
                 //throw new Exception("Phrases of length 57 or more are not supported (line length doesn't fit in the 8 - 14 range without 3 or more black spaces in the final row).");
             }
-            _originalPhrase = phrase.ToLower();
+            OriginalPhrase = phrase.ToLower();
             foreach (string word in phrase.Split(new [] { " "}, StringSplitOptions.RemoveEmptyEntries))
             {
                 IgnoreWord(word);
@@ -364,7 +364,7 @@ namespace WordPuzzles
             if (string.IsNullOrWhiteSpace(Puzzle.PhraseAsString))
             {
                 HandleLeftoverLetters();
-                Puzzle.PhraseAsString = _originalPhrase;
+                Puzzle.PhraseAsString = OriginalPhrase;
                 Puzzle.PlaceLetters();
             }
         }
@@ -423,9 +423,9 @@ namespace WordPuzzles
                 string cellValue = enumeratedCellValues[index];
                 char letterInSolution = ' ';
 
-                if ( phraseIndex < _originalPhrase.Length)
+                if ( phraseIndex < OriginalPhrase.Length)
                 {
-                    letterInSolution = _originalPhrase[phraseIndex];
+                    letterInSolution = OriginalPhrase[phraseIndex];
                     phraseIndex += 1;
                 }
 
@@ -446,9 +446,9 @@ namespace WordPuzzles
                     if (!string.IsNullOrWhiteSpace(firstCellValueInNextRow))
                     {
                         letterInSolution = ' ';
-                        if (phraseIndex < _originalPhrase.Length)
+                        if (phraseIndex < OriginalPhrase.Length)
                         {
-                            letterInSolution = _originalPhrase[phraseIndex];
+                            letterInSolution = OriginalPhrase[phraseIndex];
                             phraseIndex += 1;
                         }
                         ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow,

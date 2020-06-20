@@ -85,6 +85,15 @@ namespace WordPuzzlesTest
             [TestCase("poster")]
             [TestCase("anthem")]
 
+
+            [TestCase("simple")]
+            [TestCase("shaped")]
+            [TestCase("magnet")]
+            [TestCase("paired")]
+            [TestCase("wicked")]
+            [TestCase("faking")]
+            [TestCase("weight")]
+            [TestCase("eating")]
             public void AllWords_ContainsSpecificWords(string word)
             {
                 const string ALL_WORDS_FILE =
