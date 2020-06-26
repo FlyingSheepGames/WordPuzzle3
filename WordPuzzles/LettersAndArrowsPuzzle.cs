@@ -365,6 +365,8 @@ namespace WordPuzzles
             return builder.ToString();
         }
 
+        public string Description => "Letters and Arrows: " + Solution;
+
         public void FillEmptyCells()
         {
             for (int row = 0; row < Size; row++)

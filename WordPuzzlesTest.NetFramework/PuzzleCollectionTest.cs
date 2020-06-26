@@ -86,4 +86,46 @@ namespace WordPuzzlesTest
             }
         }
     }
+
+    [TestFixture]
+    public class ParseNameFromFileName
+    {
+        [Test]
+        public void Example_ReturnsExpectedName()
+        {
+            PuzzleCollection collection = new PuzzleCollection();
+            Assert.AreEqual("FirstCollection", collection.ParseNameFromFileName(@"C:\utilities\WordSquare\data\basic\collections\FirstCollection.json"));
+        }
+    }
+
+    [TestFixture]
+    public class RemovePuzzleAtIndex
+    {
+        [Test]
+        public void RemovesPuzzle()
+        {
+            PuzzleCollection collection = new PuzzleCollection();
+            collection.AddPuzzle(new WordSquare());
+            Assert.AreEqual(1, collection.PuzzleCount, "Expected to have one puzzle before removing it.");
+
+            collection.RemovePuzzleAtIndex(0);
+            Assert.AreEqual(0, collection.PuzzleCount, "Expected to have no puzzles left.");
+        }
+
+        [Test]
+        public void RemovesExpectedPuzzle()
+        {
+            PuzzleCollection collection = new PuzzleCollection();
+            collection.AddPuzzle(new WordSquare());
+            collection.AddPuzzle(new Anacrostic("phrase"));
+            collection.AddPuzzle(new LettersAndArrowsPuzzle("phrase"));
+
+            collection.RemovePuzzleAtIndex(1);
+
+            Assert.AreEqual(2, collection.PuzzleCount, "There should be two puzzles left.");
+            Assert.IsInstanceOf<WordSquare>(collection.RetrievePuzzleAtIndex(0));
+            Assert.IsInstanceOf<LettersAndArrowsPuzzle>(collection.RetrievePuzzleAtIndex(1));
+
+        }
+    }
 }

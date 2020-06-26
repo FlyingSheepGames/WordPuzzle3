@@ -405,6 +405,8 @@ namespace WordPuzzles
             return builder.ToString();
         }
 
+        public string Description => "Anacrostic: " + OriginalPhrase;
+
         private void AppendEncodedMessageTable(StringBuilder builder, bool includeSolution = false)
         {
             builder.AppendLine(@"<table border=""1"">");

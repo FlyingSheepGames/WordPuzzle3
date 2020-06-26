@@ -39,6 +39,11 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
+            PuzzleCollection collection = InteractiveSelectPuzzleCollection();
+            if (0 < collection.PuzzleCount)
+            {
+                InteractiveDeletePuzzles(collection);
+            }
             HtmlGenerator htmlGenerator = new HtmlGenerator();
             htmlGenerator.AppendHtmlHeader(_puzzleBuilder);
             htmlGenerator.AppendHtmlHeader(_solutionBuilder);
@@ -64,8 +69,9 @@ namespace WordPuzzleGenerator
                 while (userPuzzleSelection != 0)
                 {
                     userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solution, availablePuzzleTypes);
-                    InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection, solutionLength, solution,
+                    IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection, solutionLength, solution,
                         solutionThemes);
+                    collection.AddPuzzle(createdPuzzle);
                 }
             }
 
@@ -78,12 +84,82 @@ namespace WordPuzzleGenerator
             long ticks = DateTime.Now.Ticks;
             File.WriteAllText($"{ticks}_puzzles.html", _puzzleBuilder.ToString());
             File.WriteAllText($"{ticks}_solutions.html", _solutionBuilder.ToString());
+
+            SavePuzzleCollection(collection);
+        }
+
+        private static void InteractiveDeletePuzzles(PuzzleCollection collection)
+        {
+            int selectedIndex = 0;
+            while (selectedIndex != int.MinValue)
+            {
+                Console.Clear();
+                Console.WriteLine("Select an index to delete, or just hit enter to skip this step.");
+                for (var index = 0; index < collection.ToList().Count; index++)
+                {
+                    IPuzzle puzzle = collection.ToList()[index];
+                    Console.WriteLine($"{index}: {puzzle.Description}");
+                }
+
+                string userInput = Console.ReadLine();
+                if (int.TryParse(userInput, out selectedIndex))
+                {
+                    collection.RemovePuzzleAtIndex(selectedIndex);
+                }
+                else
+                {
+                    selectedIndex = int.MinValue;
+                }
+            }
+
+        }
+
+        private static void SavePuzzleCollection(PuzzleCollection collection)
+        {
+            if (collection.PuzzleCount == 0) return;
+            if (string.IsNullOrWhiteSpace(collection.Name)) return;
+            string directory = Path.Combine(BASE_DIRECTORY, "collections");
+            collection.Serialize($@"{directory}\{collection.Name}.json");
+        }
+
+        private static PuzzleCollection InteractiveSelectPuzzleCollection()
+        {
+            Console.Clear();
+            PuzzleCollection selectedCollection = new PuzzleCollection();
+            string directory = Path.Combine(BASE_DIRECTORY, "collections");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            var enumerateFiles = Directory.EnumerateFiles(directory, "*.json", SearchOption.TopDirectoryOnly).ToArray();
+            Console.WriteLine("Please select one of the following options.");
+
+            for (var i = 0; i < enumerateFiles.Length; i++)
+            {
+                string fileName = enumerateFiles[i];
+                Console.WriteLine($"{i}:{fileName}");
+            }
+
+            Console.WriteLine($"To create a new collection, enter a name.");
+            string userInput = Console.ReadLine();
+            int selectedIndex = 0;
+            if (int.TryParse(userInput, out selectedIndex))
+            {
+                selectedCollection.Deserialize(enumerateFiles[selectedIndex]);
+            }
+            else
+            {
+                selectedCollection.Name = userInput;
+            }
+            return selectedCollection;
         }
 
         private static WordPuzzleType DisplayMenuOfAvailablePuzzles(string solution, Dictionary<WordPuzzleType, bool> availablePuzzleTypes)
         {
             WordPuzzleType userPuzzleSelection;
-            Console.Clear();
+            
+            ClearConsoleInputAndOutput();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"Which type of puzzle would you like to create for '{solution.ToUpperInvariant()}'?");
             Console.WriteLine("0. None. Enter the next word or phrase.");
@@ -133,6 +209,15 @@ namespace WordPuzzleGenerator
             return userPuzzleSelection;
         }
 
+        private static void ClearConsoleInputAndOutput()
+        {
+            Console.Clear();
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey();
+            }
+        }
+
         private static void InterativelyCreatesWordsWithSelectedPattern()
         {
             string wordPattern = "test";
@@ -158,17 +243,19 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static void InteractivelyGenerateSelectedPuzzleType(WordPuzzleType userPuzzleSelection, int solutionLength,
+        private static IPuzzle InteractivelyGenerateSelectedPuzzleType(WordPuzzleType userPuzzleSelection, int solutionLength,
             string solution, List<string> solutionThemes)
         {
+            IPuzzle generatedPuzzle = null;
             switch (userPuzzleSelection)
             {
                 case WordPuzzleType.WordSquare:
                     if (3 < solutionLength && solutionLength < 7)
                     {
-                        var wordSquare = InteractiveFindWordSquare(solution);
-                        _puzzleBuilder.Append(wordSquare?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(wordSquare?.FormatHtmlForGoogle(true, true));
+                        generatedPuzzle = InteractiveFindWordSquare(solution);
+                        
+                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
                     }
                     else
                     {
@@ -203,13 +290,13 @@ namespace WordPuzzleGenerator
                     {
                         Console.Clear();
                         Console.WriteLine("Creating an anacrostic for you.");
-                        var anacrostic = InteractiveGenerateAnacrostic(new AnacrosticParameterSet
+                        generatedPuzzle = InteractiveGenerateAnacrostic(new AnacrosticParameterSet
                         {
                             Phrase = solution,
                             WordsToUse = new List<string>() { }
                         });
-                        _puzzleBuilder.Append(anacrostic?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(anacrostic?.FormatHtmlForGoogle(true, true));
+                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
 
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
@@ -246,10 +333,10 @@ namespace WordPuzzleGenerator
                     {
                         Console.Clear();
                         Console.WriteLine("Creating a letters and arrows puzzle for you.");
-                        var lettersAndArrows = InteractiveFindLettersAndArrowsPuzzle(solution);
+                        generatedPuzzle = InteractiveFindLettersAndArrowsPuzzle(solution);
 
-                        _puzzleBuilder.Append(lettersAndArrows?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(lettersAndArrows?.FormatHtmlForGoogle(true, true));
+                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
 
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
@@ -348,6 +435,8 @@ namespace WordPuzzleGenerator
                 }
                     break;
             }
+
+            return generatedPuzzle;
         }
 
         private static void LoadSevenLetterWords()

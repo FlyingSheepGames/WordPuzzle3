@@ -209,5 +209,18 @@ namespace WordPuzzles
             //reset 
             return builder.ToString();
         }
+
+        public string Description
+        {
+            get
+            {
+                string line = "No first line.";
+                if (Lines.Length > 0)
+                {
+                    line = Lines[0];
+                }
+                return "Word Square: " + line;
+            }
+        }
     }
 }
