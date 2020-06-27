@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
 
@@ -48,120 +50,83 @@ namespace WordPuzzlesTest
         [TestFixture]
         public class FormatHtmlForGoogle
         {
+
             [Test]
-            public void CAT_ReturnsExpectedResult()
+            [TestCase(true)]
+            [TestCase(false)]
+            public void LongerPhrase_ReturnsExpectedResult(bool includeSolution)
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle
+                const string HTML_DIRECTORY = @"html\ReadDownColumn\";
+                const string SOURCE_DIRECTORY =
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\ReadDownColumn";
+
+                var puzzle = new ReadDownColumnPuzzle()
                 {
-                    Solution = "cat",
-                    Words = new List<string>() {"pacing", "shaved", "metric"}
+                    Solution = "XRAY", 
+                    Words =
+                    {
+                        "boxing", 
+                        "parent",
+                        "brazen",
+                        "joyful"
+                    }
                 };
 
-                const string EXPECTED_HTML =
-@"<html>
-<body>
-<!--StartFragment-->
-Fill in the clues below, and then read the solution down the third column. 
-<table border=""1"">
-<tr>
-    <td>Clue for pacing</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>Clue for shaved</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>Clue for metric</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-</table>
-Solution: _ _ _ 
-<!--EndFragment-->
-</body>
-</html>
-";
+                puzzle.Clues = new List<string>
+                {
+                    "Clue for boxing",
+                    "Clue for parent",
+                    "Clue for brazen",
+                    "Clue for joyful"
+                };
 
-                string actualResult = puzzle.FormatHtmlForGoogle();
-                Console.WriteLine(actualResult);
-                Assert.AreEqual(EXPECTED_HTML, actualResult);
+                string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample1.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution1.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample1.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution1.html";
+                }
+
+                string[] expectedLines = new string[] { " " };// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (expectedLine != actualLine)
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
             }
-            [Test]
-            public void XRAY_ReturnsExpectedResult()
-            {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "x-ray"};
-                puzzle.PopulateWords();
-                puzzle.Words = new List<string>() { "boxing", "parent", "frayed", "joyful" };
 
-                const string EXPECTED_HTML =
-                    @"<html>
-<body>
-<!--StartFragment-->
-Fill in the clues below, and then read the solution down the third column. 
-<table border=""1"">
-<tr>
-    <td>Clue for boxing</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>Clue for parent</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>Clue for frayed</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-<tr>
-    <td>Clue for joyful</td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-    <td> </td>
-</tr>
-</table>
-Solution: _ -_ _ _ 
-<!--EndFragment-->
-</body>
-</html>
-";
-
-                string actualResult = puzzle.FormatHtmlForGoogle();
-                Console.WriteLine(actualResult);
-                Assert.AreEqual(EXPECTED_HTML, actualResult);
-            }
         }
-
     }
 }

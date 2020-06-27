@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WordPuzzles
 {
-    public class ReadDownColumnPuzzle
+    public class ReadDownColumnPuzzle :IPuzzle
     {
         private string _solution;
         public List<string> Words = new List<string>();
@@ -48,7 +48,7 @@ namespace WordPuzzles
             }
         }
 
-        public string FormatHtmlForGoogle()
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("<html>");
@@ -93,5 +93,9 @@ namespace WordPuzzles
 
             return builder.ToString();
         }
+
+
+        public string Description => $"Read Down Column puzzle {Solution}";
+        public List<string> Clues { get; set; }
     }
 }
