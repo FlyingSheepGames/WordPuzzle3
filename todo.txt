@@ -9,16 +9,20 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Update WordPuzzleGenerator to produce a set of puzzles (and solutions)
-	Load/Save partially-filled set of puzzles. 
+Convert remaining puzzles
+2. Sudoku
+4. Word Ladder
+6. Read Down Column
+7. Hidden Words
+8. Building Blocks
+9. Related Words
+Q. Missing Letters
 
 
 HTMLFormatter (common code)
 	Create table cells
 
 Generate solution as HTML
-
-Rename unit test project to remove .NetFramework
 
 Already have an example for "Puzzle" - 
 
@@ -35,7 +39,6 @@ Add method to Clue Repository for Deleting a clue.
 Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
 
 Rename Anacrostic."Puzzle" to a more descriptive name. 
-Serialize/Deserialize all puzzles to JSON
 
 Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
 
@@ -54,10 +57,12 @@ Next source of clues: Games (Days of Wonder hit by Alan Moon: "____ To Ride")
 Next source of clues: Books (Dante's classic "____ Lost")
 
 Replace Tests with .NetFrameworkTests
+Rename unit test project to remove .NetFramework
 
 List of tests that occassionally time out
 	EndingWith_D_FindsAtLeastOnePuzzle
 	SimpleTest_PutsWordInExpectedPosition
+
 List of tests that occassionally fail. 
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
@@ -66,6 +71,9 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Update WordPuzzleGenerator to produce a set of puzzles (and solutions)
+	Load/Save partially-filled set of puzzles. 
+
 Update HTMLFormatter 
 	Single place for all styles
 	Flag for "just the puzzle fragment"

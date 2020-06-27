@@ -502,7 +502,7 @@ namespace WordPuzzles
             }
             topLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">" + letterInSolutionAsString + @"</td>");
             middleLine.AppendLine($@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
-            bottomLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">&nbsp;</td>");
+            bottomLine.AppendLine(@"    <td width=""30"" " + @"class=""open""" + @">&nbsp;</td>");
         }
 
         private void AppendCluesTable(StringBuilder builder, bool showSolution = false)
