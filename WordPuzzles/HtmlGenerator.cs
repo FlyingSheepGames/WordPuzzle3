@@ -409,6 +409,9 @@ function colorMeAndMyMatch(currentIndex, color) {
             border-top-color: #000000;
             border-bottom-style: solid
         }
+    	.centered {
+	        text-align: center
+	    }
 </style>
 </head>");
             builder.AppendLine("<body>");

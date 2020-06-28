@@ -489,7 +489,7 @@ namespace WordPuzzles
         private static void ProcessCellValue(StringBuilder topLine, StringBuilder middleLine, StringBuilder bottomLine, string cellValue,
             char letterInSolution = ' ')
         {
-            var classAttribute = @"class=""normal""";
+            var classAttribute = @"class=""normal centered""";
             if (string.IsNullOrWhiteSpace(cellValue))
             {
                 classAttribute = @"class=""hollow""";
@@ -510,10 +510,12 @@ namespace WordPuzzles
             builder.AppendLine(@"<table border=""1"">");
             StringBuilder topLine = new StringBuilder();
             topLine.AppendLine("<tr>");
-            StringBuilder middleLine = new StringBuilder();
-            middleLine.AppendLine("<tr>");
-            StringBuilder bottomLine = new StringBuilder();
-            bottomLine.AppendLine("<tr>");
+            StringBuilder secondLine = new StringBuilder();
+            secondLine.AppendLine("<tr>");
+            StringBuilder thirdLine = new StringBuilder();
+            thirdLine.AppendLine("<tr>");
+            StringBuilder fourthLine = new StringBuilder();
+            fourthLine.AppendLine("<tr>");
 
             char currentLetter = 'A';
             int lettersAssignedSoFar = 1;
@@ -528,56 +530,62 @@ namespace WordPuzzles
                 topLine.AppendLine($@"    <td colspan=""{word.Length}"" class=""open""><br/>" + currentClue + $@"</td>");
                 foreach (char letter in word.ToUpper())
                 {
-                    middleLine.Append($@"    <td width=""30"" class=""normal"">");
+                    secondLine.Append($@"    <td width=""30"" class=""normal centered"">");
                     if (showSolution)
                     {
-                        middleLine.Append(letter);
+                        secondLine.Append(letter);
                     }
                     else
                     {
-                        middleLine.Append(@"&nbsp;");
+                        secondLine.Append(@"&nbsp;");
                     }
-                    middleLine.AppendLine($@"</td>");
-                    bottomLine.AppendLine($@"    <td width=""30"" class=""normal"">{currentLetter}{lettersAssignedSoFar++}</td>");
+                    secondLine.AppendLine($@"</td>");
+                    thirdLine.AppendLine($@"    <td width=""30"" class=""normal centered"">{currentLetter}{lettersAssignedSoFar++}</td>");
+                    fourthLine.AppendLine($@"    <td width=""30"" class=""open""></td>");
                 }
 
                 currentLetter++;
 
                 if (currentLetter % 2 == 1)
                 {
-                    topLine.AppendLine("</tr>");
-                    middleLine.AppendLine("</tr>");
-                    bottomLine.AppendLine("</tr>");
-
-                    builder.Append(topLine);
-                    builder.Append(middleLine);
-                    builder.Append(bottomLine);
+                    CloseAndAppendAllLines(builder, topLine, secondLine, thirdLine, fourthLine);
 
                     topLine.Clear();
                     topLine.AppendLine("<tr>");
-                    middleLine.Clear();
-                    middleLine.AppendLine("<tr>");
-                    bottomLine.Clear();
-                    bottomLine.AppendLine("<tr>");
+                    secondLine.Clear();
+                    secondLine.AppendLine("<tr>");
+                    thirdLine.Clear();
+                    thirdLine.AppendLine("<tr>");
+                    fourthLine.Clear();
+                    fourthLine.AppendLine("<tr>");
                 }
                 else
                 {
                     topLine.AppendLine(@"    <td width=""30"" class=""open"">&nbsp;</td>"); 
-                    middleLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>"); 
-                    bottomLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>");
+                    secondLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>"); 
+                    thirdLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>");
                 }
             }
 
             if (currentLetter % 2 == 0)
             {
-                topLine.AppendLine("</tr>");
-                middleLine.AppendLine("</tr>");
-                bottomLine.AppendLine("</tr>");
-                builder.Append(topLine);
-                builder.Append(middleLine);
-                builder.Append(bottomLine);
+                CloseAndAppendAllLines(builder, topLine, secondLine, thirdLine, fourthLine);
             }
             builder.AppendLine("</table>");
+        }
+
+        private static void CloseAndAppendAllLines(StringBuilder builder, StringBuilder topLine, StringBuilder secondLine,
+            StringBuilder thirdLine, StringBuilder fourthLine)
+        {
+            topLine.AppendLine("</tr>");
+            secondLine.AppendLine("</tr>");
+            thirdLine.AppendLine("</tr>");
+            fourthLine.AppendLine("</tr>");
+
+            builder.Append(topLine);
+            builder.Append(secondLine);
+            builder.Append(thirdLine);
+            builder.Append(fourthLine);
         }
     }
 }
