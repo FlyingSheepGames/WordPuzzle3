@@ -10,6 +10,8 @@ namespace WordPuzzles
         public List<string> Words = new List<string>();
         public int Size => 6;
         private readonly Random _random = new Random();
+        public int ZeroBasedIndexOfSolution = 2;
+        private HtmlGenerator _generator = new HtmlGenerator();
         public WordRepository Repository => new WordRepository() {ExludeAdvancedWords = true};
         public int NumberOfWordsToInclude => 3;
 
@@ -29,9 +31,9 @@ namespace WordPuzzles
                     continue;
                 }
                 builder.Clear();
-                builder.Append('_', 2);
+                builder.Append('_', ZeroBasedIndexOfSolution);
                 builder.Append(letterToPlace);
-                builder.Append('_', (Size - 3));
+                builder.Append('_', (Size - (ZeroBasedIndexOfSolution +1)));
 
                 var wordCandidates = Repository.WordsMatchingPattern(builder.ToString());
                 StringBuilder selectedWordCanidates = new StringBuilder();
@@ -51,47 +53,98 @@ namespace WordPuzzles
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<html>");
-            builder.AppendLine("<body>");
-            builder.AppendLine("<!--StartFragment-->");
-            builder.AppendLine("Fill in the clues below, and then read the solution down the third column. ");
-            builder.AppendLine(@"<table border=""1"">");
-            foreach (string word in Words)
+            if (!isFragment)
             {
+                _generator.AppendHtmlHeader(builder);
+            }
+            
+            builder.AppendLine("<!--StartFragment-->");
+            var ordinalOfColumnWithSolution = GetOrdinalOfColumnWithSolution();
+
+            builder.AppendLine($"Fill in the clues below, and then read the solution down the {ordinalOfColumnWithSolution} column. ");
+            builder.AppendLine(@"<table border=""1"">");
+            for (var index = 0; index < Words.Count; index++)
+            {
+                string word = Words[index];
                 builder.AppendLine(@"<tr>");
-                builder.AppendLine($@"    <td>Clue for {word}</td>");
+                string currentClue = $@"Clue for {word}";
+                if (!string.IsNullOrWhiteSpace(Clues[index]))
+                {
+                    currentClue = Clues[index];
+                }
+                builder.AppendLine($@"    <td width=""250"">" + currentClue + $@"</td>");
                 for (int i = 0; i < Size; i++)
                 {
-                    builder.AppendLine(@"    <td> </td>");
+                    string style = "normal";
+                    if (i == ZeroBasedIndexOfSolution)
+                    {
+                        style = "bold";
+                    }
+
+                    string letterToDisplay = "&nbsp;";
+                    if (includeSolution)
+                    {
+                        letterToDisplay = word[i].ToString().ToUpperInvariant();
+                        style += " centered";
+                    }
+                    builder.AppendLine($@"    <td class=""{style}"" width=""30"">{letterToDisplay}</td>");
                 }
 
                 builder.AppendLine(@"</tr>");
             }
+
             builder.AppendLine("</table>");
             builder.Append(@"Solution: ");
-            foreach (char character in Solution)
+            if (includeSolution)
             {
-                if (char.IsLetter(character))
+                builder.AppendLine($"<u>{Solution.ToUpperInvariant()}</u>");
+            }
+            else
+            {
+                foreach (char character in Solution)
                 {
-                    builder.Append("_ ");
-                    continue;
-                }
+                    if (char.IsLetter(character))
+                    {
+                        builder.Append("_ ");
+                        continue;
+                    }
 
-                if (character == ' ')
-                {
-                    builder.Append("&nbsp;&nbsp;&nbsp;");
-                    continue;
-                }
+                    if (character == ' ')
+                    {
+                        builder.Append("&nbsp;&nbsp;&nbsp;");
+                        continue;
+                    }
 
-                builder.Append(character);
+                    builder.Append(character);
+                }
             }
 
             builder.AppendLine();
             builder.AppendLine("<!--EndFragment-->");
-            builder.AppendLine("</body>");
-            builder.AppendLine("</html>");
+            if (!isFragment)
+            {
+                _generator.AppendHtmlFooter(builder);
+            }
 
             return builder.ToString();
+        }
+
+        private string GetOrdinalOfColumnWithSolution()
+        {
+            if (ZeroBasedIndexOfSolution == (Size - 1))
+            {
+                return "last";
+            }
+            switch (ZeroBasedIndexOfSolution)
+            {
+                case 0: return "first";
+                case 1: return "second";
+                case 2: return "third";
+                case 3: return "fourth";
+                case 4: return "fifth";
+                case 5: return "sixth";
+            }
+            throw new Exception("Unexpected ZeroBasedIndexOfSolution.");
         }
 
 

@@ -59,6 +59,8 @@ namespace WordPuzzlesTest
                 const string HTML_DIRECTORY = @"html\ReadDownColumn\";
                 const string SOURCE_DIRECTORY =
                     @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\ReadDownColumn";
+                ClueRepository clueRepository = new ClueRepository();
+                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
 
                 var puzzle = new ReadDownColumnPuzzle()
                 {
@@ -74,10 +76,10 @@ namespace WordPuzzlesTest
 
                 puzzle.Clues = new List<string>
                 {
-                    "Clue for boxing",
-                    "Clue for parent",
-                    "Clue for brazen",
-                    "Clue for joyful"
+                    clueRepository.GetCluesForWord("boxing")[0].ClueText,
+                    clueRepository.GetCluesForWord("parent")[0].ClueText,
+                    clueRepository.GetCluesForWord("brazen")[0].ClueText,
+                    clueRepository.GetCluesForWord("joyful")[0].ClueText,
                 };
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
