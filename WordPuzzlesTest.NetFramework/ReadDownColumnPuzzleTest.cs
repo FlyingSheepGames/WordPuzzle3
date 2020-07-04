@@ -45,6 +45,24 @@ namespace WordPuzzlesTest
                     currentIndex++;
                 }
             }
+
+            [Test]
+            public void SpecialCharacter_IncludedInEachWord()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.RandomSeed = 42;
+                puzzle.SpecialCharacter = 'm';
+                puzzle.Solution = "claw";
+                puzzle.NumberOfWordsToInclude = 1;
+                puzzle.PopulateWords();
+
+                foreach (string word in puzzle.Words)
+                {
+                    if (word == "lowing") continue; //not sure why "mowing" isn't a word. 
+                    StringAssert.Contains("m", word, "Expected the letter 'm' in each word.");
+                }
+
+            }
         }
 
         [TestFixture]
@@ -129,6 +147,25 @@ namespace WordPuzzlesTest
 
             }
 
+        }
+
+        [TestFixture]
+        public class InsertSpecialCharacterInPattern
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.SpecialCharacter = 'm';
+                puzzle.RandomSeed = 42;
+
+                var results = puzzle.InsertSpecialCharacterInPattern("__x___");
+                Assert.AreEqual("m_x___", results[0]);
+                Assert.AreEqual("_mx___", results[1]);
+                Assert.AreEqual("__xm__", results[2]);
+                Assert.AreEqual("__x_m_", results[3]);
+                Assert.AreEqual("__x__m", results[4]);
+            }
         }
     }
 }

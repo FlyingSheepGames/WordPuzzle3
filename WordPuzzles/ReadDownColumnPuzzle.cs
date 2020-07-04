@@ -9,11 +9,13 @@ namespace WordPuzzles
         private string _solution;
         public List<string> Words = new List<string>();
         public int Size => 6;
-        private readonly Random _random = new Random();
+        private Random _random;
         public int ZeroBasedIndexOfSolution = 2;
         private HtmlGenerator _generator = new HtmlGenerator();
-        public WordRepository Repository => new WordRepository() {ExludeAdvancedWords = true};
-        public int NumberOfWordsToInclude => 3;
+
+        public WordRepository Repository { get; } = new WordRepository() {ExludeAdvancedWords = true};
+
+        public int NumberOfWordsToInclude { get; set; } = 3;
 
         public string Solution
         {
@@ -35,19 +37,52 @@ namespace WordPuzzles
                 builder.Append(letterToPlace);
                 builder.Append('_', (Size - (ZeroBasedIndexOfSolution +1)));
 
-                var wordCandidates = Repository.WordsMatchingPattern(builder.ToString());
-                StringBuilder selectedWordCanidates = new StringBuilder();
+                string patternToMatch = builder.ToString();
+                var wordCandidates = GetWordCandidates(patternToMatch);
+
+                StringBuilder selectedWordCandidates = new StringBuilder();
+
                 for (int includedWordCount = 0; includedWordCount < NumberOfWordsToInclude; includedWordCount++)
                 {
-                    selectedWordCanidates.Append(wordCandidates[_random.Next(wordCandidates.Count)]);
+                    selectedWordCandidates.Append(wordCandidates[Random1.Next(wordCandidates.Count)]);
                     if (includedWordCount != (NumberOfWordsToInclude - 1))
                     {
-                        selectedWordCanidates.Append(", ");
+                        selectedWordCandidates.Append(", ");
                     }
                 }
 
-                Words.Add(selectedWordCanidates.ToString());
+                Words.Add(selectedWordCandidates.ToString());
             }
+        }
+
+        private List<string> GetWordCandidates(string patternToMatch)
+        {
+            List<string> allWordCandidates = new List<string>();
+
+            foreach (var pattern in InsertSpecialCharacterInPattern(patternToMatch))
+            {
+                allWordCandidates.AddRange(Repository.WordsMatchingPattern(pattern));
+            }
+
+            if (allWordCandidates.Count == 0)// if there aren't any matches, exclude the special character.
+            {
+                allWordCandidates.AddRange(Repository.WordsMatchingPattern(patternToMatch)); 
+            }
+            return allWordCandidates;
+        }
+
+        internal List<string> InsertSpecialCharacterInPattern(string patternToMatch)
+        {
+            List<string> patterns = new List<string>();
+            for (int i = 0; i < patternToMatch.Length; i++)
+            {
+                if (patternToMatch[i] != '_') continue;
+                string patternWithSpecialCharacter =
+                    patternToMatch.Substring(0, i) + SpecialCharacter + patternToMatch.Substring(i +1);
+                patterns.Add(patternWithSpecialCharacter);
+            }
+
+            return patterns;
         }
 
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
@@ -150,5 +185,26 @@ namespace WordPuzzles
 
         public string Description => $"Read Down Column puzzle {Solution}";
         public List<string> Clues { get; set; }
+        public char SpecialCharacter { get; set; }
+
+        public int RandomSeed { get; set; } = 0;
+        public Random Random1
+        {
+            get
+            {
+                if (_random == null)
+                {
+                    if (RandomSeed == 0)
+                    {
+                        _random = new Random();
+                    }
+                    else
+                    {
+                        _random = new Random(RandomSeed);
+                    }
+                }
+                return _random;
+            }
+        }
     }
 }
