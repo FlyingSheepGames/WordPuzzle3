@@ -51,7 +51,7 @@ namespace WordPuzzlesTest
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
                 puzzle.RandomSeed = 42;
-                puzzle.SpecialCharacter = 'm';
+                puzzle.SpecialCharacter = 'M';
                 puzzle.Solution = "claw";
                 puzzle.NumberOfWordsToInclude = 1;
                 puzzle.PopulateWords();

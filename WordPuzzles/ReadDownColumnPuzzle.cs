@@ -12,6 +12,7 @@ namespace WordPuzzles
         private Random _random;
         public int ZeroBasedIndexOfSolution = 2;
         private HtmlGenerator _generator = new HtmlGenerator();
+        private char _specialCharacter;
 
         public WordRepository Repository { get; } = new WordRepository() {ExludeAdvancedWords = true};
 
@@ -185,7 +186,12 @@ namespace WordPuzzles
 
         public string Description => $"Read Down Column puzzle {Solution}";
         public List<string> Clues { get; set; }
-        public char SpecialCharacter { get; set; }
+
+        public char SpecialCharacter
+        {
+            get => _specialCharacter;
+            set => _specialCharacter = value.ToString().ToLowerInvariant()[0];
+        }
 
         public int RandomSeed { get; set; } = 0;
         public Random Random1
