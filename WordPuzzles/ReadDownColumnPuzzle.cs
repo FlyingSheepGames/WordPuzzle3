@@ -118,7 +118,7 @@ namespace WordPuzzles
                     }
 
                     string letterToDisplay = "&nbsp;";
-                    if (includeSolution)
+                    if (includeSolution || (char.ToUpperInvariant(SpecialCharacter) == char.ToUpperInvariant(word[i])) )
                     {
                         letterToDisplay = word[i].ToString().ToUpperInvariant();
                         style += " centered";
