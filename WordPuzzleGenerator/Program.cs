@@ -906,14 +906,55 @@ namespace WordPuzzleGenerator
         {
             ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
             puzzle.Solution = solution;
-            puzzle.PopulateWords();
+            //puzzle.PopulateWords();
+            for (var index = 0; index < solution.Length; index++)
+            {
+                char letter = solution[index];
+                if (!char.IsLetter(letter)) continue;
+                Console.Clear();
+                Console.WriteLine($"Pick (or enter) a word for the {index}-indexed letter in the solution:{letter.ToString().ToUpperInvariant()}");
+                var list = puzzle.GetWordCandidatesForIndex(index);
+                for (var i = 0; i < list.Count; i++)
+                {
+                    var word = list[i];
+                    Console.WriteLine($"{i}: {word}");
+                }
+
+                var userInput = Console.ReadLine();
+                int userSelectedIndex;
+                string userSelectedWord; 
+                if (int.TryParse(userInput, out userSelectedIndex))
+                {
+                    userSelectedWord = list[userSelectedIndex];
+                }
+                else
+                {
+                    userSelectedWord = userInput;
+                }
+
+                if (string.IsNullOrWhiteSpace(userSelectedWord))
+                {
+                    return; //null. 
+                }
+                puzzle.SetWordAtIndex(userSelectedWord, index);
+                string clue = InteractiveGetClueForWord(userSelectedWord);
+                if (!string.IsNullOrWhiteSpace(clue))
+                {
+                    puzzle.SetClueAtIndex(clue, index);
+                }
+            }
+
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
-                foreach (string word in puzzle.Words)
+                Console.Clear();
+                for (var index = 0; index < puzzle.Words.Count; index++)
                 {
-                    Console.WriteLine(word);
+                    string word = puzzle.Words[index];
+                    string clue = puzzle.Clues[index];
+                    Console.WriteLine($"{word.ToUpperInvariant()} ({clue})");
                 }
+
                 Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
                 Console.WriteLine(
                     "Read Down Column puzzle has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");

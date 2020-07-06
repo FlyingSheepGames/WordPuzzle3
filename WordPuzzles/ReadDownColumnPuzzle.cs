@@ -7,7 +7,6 @@ namespace WordPuzzles
     public class ReadDownColumnPuzzle :IPuzzle
     {
         private string _solution;
-        public List<string> Words = new List<string>();
         public int Size => 6;
         private Random _random;
         public int ZeroBasedIndexOfSolution = 2;
@@ -26,20 +25,16 @@ namespace WordPuzzles
 
         public void PopulateWords()
         {
-            StringBuilder builder = new StringBuilder();
-            foreach (var letterToPlace in Solution)
+            for (var index = 0; index < Solution.Length; index++)
             {
+                var letterToPlace = Solution[index];
                 if (!char.IsLetter(letterToPlace))
                 {
                     continue;
                 }
-                builder.Clear();
-                builder.Append('_', ZeroBasedIndexOfSolution);
-                builder.Append(letterToPlace);
-                builder.Append('_', (Size - (ZeroBasedIndexOfSolution +1)));
 
-                string patternToMatch = builder.ToString();
-                var wordCandidates = GetWordCandidates(patternToMatch);
+
+                var wordCandidates = GetWordCandidatesForIndex(index);
 
                 StringBuilder selectedWordCandidates = new StringBuilder();
 
@@ -52,8 +47,49 @@ namespace WordPuzzles
                     }
                 }
 
-                Words.Add(selectedWordCandidates.ToString());
+                SetWordAtIndex(selectedWordCandidates.ToString(), index);
             }
+        }
+
+        public void SetWordAtIndex(string wordToSet, int index)
+        {
+            if (index >= 0 && Words.Count > index)
+            {
+                Words[index] = wordToSet;
+            }
+            else
+            {
+                Words.Add(wordToSet);
+            }
+        }
+
+        public void SetClueAtIndex(string clueToSet, int index)
+        {
+            if (index >= 0 && Clues.Count > index)
+            {
+                Clues[index] = clueToSet;
+            }
+            else
+            {
+                Clues.Add(clueToSet);
+            }
+        }
+        public List<string> GetWordCandidatesForIndex(int index)
+        {
+            var patternToMatch = CreatePatternToMatch(Solution[index]);
+            var wordCandidates = GetWordCandidates(patternToMatch);
+            return wordCandidates;
+        }
+
+        private string CreatePatternToMatch(char letterToPlace)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append('_', ZeroBasedIndexOfSolution);
+            builder.Append(letterToPlace);
+            builder.Append('_', (Size - (ZeroBasedIndexOfSolution + 1)));
+
+            string patternToMatch = builder.ToString();
+            return patternToMatch;
         }
 
         private List<string> GetWordCandidates(string patternToMatch)
@@ -185,7 +221,7 @@ namespace WordPuzzles
 
 
         public string Description => $"Read Down Column puzzle {Solution}";
-        public List<string> Clues { get; set; }
+        public List<string> Clues = new List<string>();
 
         public char SpecialCharacter
         {
@@ -212,5 +248,7 @@ namespace WordPuzzles
                 return _random;
             }
         }
+
+        public List<string> Words = new List<string>();
     }
 }
