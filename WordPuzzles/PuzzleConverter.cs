@@ -27,6 +27,11 @@ namespace WordPuzzles
             {
                 return new Anacrostic(jObject["OriginalPhrase"].Value<string>());
             }
+
+            if (FieldExists("SpecialCharacter", jObject))
+            {
+                return new ReadDownColumnPuzzle();
+            }
             throw new Exception("Unable to determine type.");
         }
     }

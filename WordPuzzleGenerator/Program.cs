@@ -176,7 +176,7 @@ namespace WordPuzzleGenerator
             Console.WriteLine("5. * Letters and Arrows");
             Console.ForegroundColor =
                 availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("6. Read Down Column");
+            Console.WriteLine("6. * Read Down Column");
             Console.ForegroundColor =
                 availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
             Console.WriteLine("7. Hidden Words");
@@ -356,7 +356,9 @@ namespace WordPuzzleGenerator
                     {
                         Console.Clear();
                         Console.WriteLine("Creating a read down column puzzle for you.");
-                        InteractiveFindReadDownColumnPuzzle(solution);
+                        generatedPuzzle = InteractiveFindReadDownColumnPuzzle(solution);
+                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
                     }
@@ -902,7 +904,7 @@ namespace WordPuzzleGenerator
 
         }
 
-        private static void InteractiveFindReadDownColumnPuzzle(string solution)
+        private static IPuzzle InteractiveFindReadDownColumnPuzzle(string solution)
         {
             ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
             puzzle.Solution = solution;
@@ -914,7 +916,14 @@ namespace WordPuzzleGenerator
                 Console.Clear();
                 Console.WriteLine($"Pick (or enter) a word for the {index}-indexed letter in the solution:{letter.ToString().ToUpperInvariant()}");
                 var list = puzzle.GetWordCandidatesForIndex(index);
-                for (var i = 0; i < list.Count; i++)
+                list.Shuffle();
+
+                var numberOfOptionsToDisplay = list.Count;
+                if (10 < numberOfOptionsToDisplay)
+                {
+                    numberOfOptionsToDisplay = 10;
+                }
+                for (var i = 0; i < numberOfOptionsToDisplay; i++)
                 {
                     var word = list[i];
                     Console.WriteLine($"{i}: {word}");
@@ -934,7 +943,7 @@ namespace WordPuzzleGenerator
 
                 if (string.IsNullOrWhiteSpace(userSelectedWord))
                 {
-                    return; //null. 
+                    return null; //null. 
                 }
                 puzzle.SetWordAtIndex(userSelectedWord, index);
                 string clue = InteractiveGetClueForWord(userSelectedWord);
@@ -947,7 +956,7 @@ namespace WordPuzzleGenerator
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
-                Console.Clear();
+                ClearConsoleInputAndOutput();
                 for (var index = 0; index < puzzle.Words.Count; index++)
                 {
                     string word = puzzle.Words[index];
@@ -955,11 +964,13 @@ namespace WordPuzzleGenerator
                     Console.WriteLine($"{word.ToUpperInvariant()} ({clue})");
                 }
 
-                Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
+//                Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
                 Console.WriteLine(
                     "Read Down Column puzzle has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
+
+            return puzzle;
         }
 
 
