@@ -83,6 +83,7 @@
     <Compile Include="LettersAndArrowsPuzzleTest.cs" />
     <Compile Include="MissingLettersPuzzleTest.cs" />
     <Compile Include="MonthlyScoreKeeperTest.cs" />
+    <Compile Include="PhraseSegmentPuzzleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PuzParserTest.cs" />
     <Compile Include="PuzzleCollectionTest.cs" />

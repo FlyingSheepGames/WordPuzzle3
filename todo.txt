@@ -9,15 +9,13 @@ E. Rafactorings
 
 TASKS
 ------------------------------
+Create new puzzle type - PhraseSegmentPuzzle
+
+
 Convert remaining puzzles
-6. Read Down Column
-	Implement IPuzzle
-	Update Program to match
 2. Sudoku
 8. Building Blocks
 9. Related Words
-
-Update Read Down Column to include a specific (revealed) letter in each word.
 
 Convert remaining puzzles
 Q. Missing Letters
@@ -72,11 +70,26 @@ List of tests that occassionally time out
 List of tests that occassionally fail. 
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
+Add property to each IPuzzle implementation to indicate which type of puzzle it is 
+public bool IsAcrostic = true;
+And update Puzzle Converter
+            if (FieldExists("IsAcrostic", jObject))
+            {
+                return new Acrostic();
+            }
+
 ----------------------------------
 
 --- DONE (most recent on top)
 
 ----------------------------------
+Update Read Down Column to include a specific (revealed) letter in each word.
+
+Convert remaining puzzles
+6. Read Down Column
+	Implement IPuzzle
+	Update Program to match
+
 Update WordPuzzleGenerator to produce a set of puzzles (and solutions)
 	Load/Save partially-filled set of puzzles. 
 
