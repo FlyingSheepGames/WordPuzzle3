@@ -14,6 +14,23 @@ Create new puzzle type - PhraseSegmentPuzzle
 Who was born on this day? 
 What famous thing did they say? 
 
+Would like to be able to support long phrases. for example: 
+    "Phrase": "In some parts of the world, students are going to school every day. It's their normal life. But in other part of the world, we are starving for education... it's like a precious gift. It's like a diamond.",
+    "Author": "Malala Yousafzai",
+    "CompleteLength": 224,
+
+This should be presented as 3 separate rows of blocks. There are 14 blocks in all, so they could be: 
+5 blocks of 4 = 20 * 4 = 80
+5 blocks of 4 = 20 * 4 = 80
+4 blocks of 4 = 16 * 4 = 64
+= 224
+
+We probably want the number of blocks per row to be between 3 and 5. So it looks like we're doing the same 
+sort of math in figuring out how many blocks there are, as well as how many blocks per row or section. 
+
+This is confusing, because we're talking about both lines per block (4), and blocks per line (3-5). Maybe
+we should call the larger-grain line a "section". 
+
 Convert remaining puzzles
 2. Sudoku
 8. Building Blocks

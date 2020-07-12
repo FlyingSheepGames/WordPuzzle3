@@ -47,6 +47,10 @@ namespace WordPuzzleGenerator
             HtmlGenerator htmlGenerator = new HtmlGenerator();
             htmlGenerator.AppendHtmlHeader(_puzzleBuilder);
             htmlGenerator.AppendHtmlHeader(_solutionBuilder);
+            var phraseSegmentPuzzleForDate = InteractiveGetPuzzleForDate(DateTime.Now);
+
+            AddPuzzleToCollection(phraseSegmentPuzzleForDate, collection, _puzzleBuilder, _solutionBuilder);
+
             string solution = "Placeholder that is not empty";
             while (!string.IsNullOrWhiteSpace(solution))
             {
@@ -86,6 +90,48 @@ namespace WordPuzzleGenerator
             File.WriteAllText($"{ticks}_solutions.html", _solutionBuilder.ToString());
 
             SavePuzzleCollection(collection);
+        }
+
+        private static void AddPuzzleToCollection(IPuzzle puzzleToAdd, PuzzleCollection collection, StringBuilder puzzleBuilder, StringBuilder solutionBuilder)
+        {
+            if (puzzleToAdd == null) return;
+            collection.AddPuzzle(puzzleToAdd);
+            _puzzleBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(false, true));
+            _solutionBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(true, true));
+        }
+
+        private static PhraseSegmentPuzzle InteractiveGetPuzzleForDate(DateTime date)
+        {
+            BirthdayFinder finder = new BirthdayFinder();
+            var results = finder.FindPeopleForDate(date.Month, date.Day);
+            ClearConsoleInputAndOutput();
+            foreach (var person in results)
+            {
+                ClearConsoleInputAndOutput();
+                Console.WriteLine($"{person.Name} was born on {date.ToShortDateString()}");
+                for (var index = 0; index < person.Quotes.Count; index++)
+                {
+                    var quote = person.Quotes[index];
+                    Console.WriteLine($"{index}: {quote}");
+                }
+                Console.WriteLine("Either enter the number of the quote to use, or press Z to go to the next person born this day (if there is one).");
+                string userInputAsString = Console.ReadLine();
+                int selectedIndex;
+                if (int.TryParse(userInputAsString, out selectedIndex))
+                {
+                    PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle()
+                    {
+                        Author = person.Name,
+                        Phrase = person.Quotes[selectedIndex],
+                    };
+                    puzzle.PlacePhrase();
+                    
+                    return puzzle;
+
+                }
+            }
+
+            return null;
         }
 
         private static void InteractiveDeletePuzzles(PuzzleCollection collection)
