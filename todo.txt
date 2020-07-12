@@ -11,6 +11,8 @@ TASKS
 ------------------------------
 Create new puzzle type - PhraseSegmentPuzzle
 
+Who was born on this day? 
+What famous thing did they say? 
 
 Convert remaining puzzles
 2. Sudoku
@@ -22,19 +24,16 @@ Q. Missing Letters
 7. Hidden Words
 4. Word Ladder
 
+Add instructions to PhraseSegmentPuzzle
 
 HTMLFormatter (common code)
 	Create table cells
-
-Generate solution as HTML
 
 Already have an example for "Puzzle" - 
 
 Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
 	Capture partially-filled month of puzzles. 
 
-Who was born on this day? 
-What famous thing did they say? 
 (Actors) what movies were they in?
 (Writers) what books did they write?
 (Musicians) what songs did they perform?

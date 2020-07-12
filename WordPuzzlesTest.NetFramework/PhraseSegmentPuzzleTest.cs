@@ -1,5 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using WordPuzzles;
 
 namespace WordPuzzlesTest
@@ -150,7 +153,7 @@ namespace WordPuzzlesTest
                 Assert.AreEqual("on t", firstBlock.Lines[2], "Unexpected third line in firstBlock");
                 Assert.AreEqual("at. ", firstBlock.Lines[3], "Unexpected fourth line in firstBlock");
 
-                CollectionAssert.AreEquivalent(new[] {"The", "cat", "on", "t", "at."}, 
+                CollectionAssert.AreEquivalent(new[] {"THE", "CAT", "ON", "T", "AT"}, 
                     firstBlock.Fragments, "Unexpected set of Fragments");
 
                 var secondBlock = blocks[1];
@@ -163,10 +166,83 @@ namespace WordPuzzlesTest
                 Assert.AreEqual("he b", secondBlock.Lines[2], "Unexpected third line in secondBlock");
                 Assert.AreEqual("Chip", secondBlock.Lines[3], "Unexpected fourth line in secondBlock");
 
-                CollectionAssert.AreEquivalent(new[] { "fat", "sat", "he", "b", "Chip" },
+                CollectionAssert.AreEquivalent(new[] { "FAT", "SAT", "HE", "B", "CHIP" },
                     secondBlock.Fragments, "Unexpected set of Fragments");
 
             }
         }
+
+        [TestFixture]
+        public class FormatHtmlForGoogle
+        {
+
+            [Test]
+            [TestCase(true)]
+            [TestCase(false)]
+            public void ExamplePuzzle_ReturnsExpectedResult(bool includeSolution)
+            {
+                const string HTML_DIRECTORY = @"html\PhraseSegment\";
+                const string SOURCE_DIRECTORY =
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\PhraseSegment";
+
+                const string AUTHOR = "Chip";
+                const string PHRASE = "The fat cat sat on the bat.";
+                PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle
+                {
+                    Phrase = PHRASE,
+                    Author = AUTHOR
+                };
+
+                puzzle.PlacePhrase();
+
+                string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample1.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution1.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample1.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution1.html";
+                }
+
+                string[] expectedLines = new string[] { "  " };// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (expectedLine != actualLine)
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
+            }
+
+        }
+
     }
 }

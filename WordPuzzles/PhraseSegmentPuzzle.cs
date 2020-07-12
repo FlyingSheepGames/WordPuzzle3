@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace WordPuzzles
 {
-    public class PhraseSegmentPuzzle
+    public class PhraseSegmentPuzzle :IPuzzle
     {
         public string Phrase { get; set; }
         public string Author { get; set; }
@@ -24,14 +26,7 @@ namespace WordPuzzles
             }
             CompleteLength = Phrase.Length + Author.Length + SpacesBeforeAuthor;
             LineLength = CompleteLength / 4;
-            foreach (int blockSize in CalculateBlockSizes(LineLength))
-            {
-                Blocks.Add(new Block()
-                {
-                    Width = blockSize
-                });
-
-            }
+            Blocks = BreakPhraseIntoBlocks(CompletePhrase, CalculateBlockSizes(LineLength));
         }
 
         public int LineLength { get; set; }
@@ -63,6 +58,7 @@ namespace WordPuzzles
         }
 
         public List<Block> Blocks = new List<Block>();
+        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public int SpacesBeforeAuthor { get; set; }
 
@@ -97,9 +93,26 @@ namespace WordPuzzles
             {
                 var subString = GetSubString(completePhrase, lineLengthSoFar, nextWidthToTake, lineIndex, singleLineLength);
                 blockToReturn.Lines.Add(subString);
-                blockToReturn.Fragments.AddRange(subString.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries));
+                AddFragments(blockToReturn, subString);
             }
             return blockToReturn;
+        }
+
+        private static void AddFragments(Block blockToReturn, string subString)
+        {
+            var fragmentsWithoutSpaces  = subString.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var fragment in fragmentsWithoutSpaces)
+            {
+                StringBuilder fragmentToAdd = new StringBuilder();
+                foreach (char character in fragment)
+                {
+                    if (char.IsLetter(character))
+                    {
+                        fragmentToAdd.Append( character);
+                    }
+                }
+                blockToReturn.Fragments.Add(fragmentToAdd.ToString().ToUpperInvariant());
+            }
         }
 
         internal string GetSubString(string completePhrase, int lineLengthSoFar, int nextWidthToTake, int lineIndex,
@@ -110,6 +123,49 @@ namespace WordPuzzles
             return completePhrase.Substring(startIndex, nextWidthToTake);
         }
 
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
+
+            builder.AppendLine("<table>");
+            List<StringBuilder> htmlLineBuilders = new List<StringBuilder>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                htmlLineBuilders.Add(new StringBuilder());
+            }
+
+            foreach (var lineBuilder in htmlLineBuilders)
+            {
+                lineBuilder.AppendLine("<tr>");
+            }
+            foreach (var block in Blocks)
+            {
+                block.WriteToLineBuilders(htmlLineBuilders, includeSolution);
+            }
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
+            foreach (var lineBuilder in htmlLineBuilders)
+            {
+                lineBuilder.AppendLine("</tr>");
+            }
+
+            foreach (var lineBuilder in htmlLineBuilders)
+            {
+                builder.AppendLine(lineBuilder.ToString());
+            }
+            builder.AppendLine("</table>");
+
+            return builder.ToString();
+        }
+
+        public string Description => $"PhraseSegmentPuzzle for phrase {this.Phrase} ";
     }
 
     public class Block
@@ -117,5 +173,90 @@ namespace WordPuzzles
         public int Width { get; set; }
         public List<string> Lines { get; set; }
         public List<string> Fragments { get; set; }
+
+        public void WriteToLineBuilders(List<StringBuilder> htmlLineBuilders, bool includeSolution)
+        {
+
+            for (var lineIndex = 0; lineIndex < Lines.Count; lineIndex++)
+            {
+                var line = Lines[lineIndex];
+                for (var characterIndex = 0; characterIndex < line.Length; characterIndex++)
+                {
+
+                    char character = line[characterIndex];
+                    var classAttribute = DetermineClassAttribute(lineIndex, characterIndex, 
+                        line.Length - 1, 
+                        character == ' ', 
+                        (!char.IsLetter(character))
+                        );
+
+                    htmlLineBuilders[lineIndex].Append($@"<td width=""30"" {classAttribute}>");
+                    if (includeSolution || (!char.IsLetter(character)))
+                    {
+                        htmlLineBuilders[lineIndex].Append(character);
+                    }
+                    htmlLineBuilders[lineIndex].Append("</td>");
+                }
+
+                htmlLineBuilders[lineIndex].AppendLine();
+            }
+
+            if (!includeSolution)
+            {
+                StringBuilder fragmentsLine = htmlLineBuilders[4];
+                fragmentsLine.AppendLine($@"<td class=""normal"" colspan=""{Width}"">");
+                fragmentsLine.AppendLine("<ul>");
+                foreach (var fragment in Fragments)
+                {
+                    fragmentsLine.AppendLine($"<li>{fragment.ToUpperInvariant()}");
+                }
+
+                fragmentsLine.AppendLine("</ul>");
+                fragmentsLine.AppendLine($@"</td>");
+            }
+
+        }
+
+        private string DetermineClassAttribute(int lineIndex, int characterIndex, int lastLineIndex, bool blackOutCell, bool greyOutCell)
+        {
+            List<string> cssAttributes = new List<string>();
+            cssAttributes.Add("centered");
+            if (blackOutCell)
+            {
+                cssAttributes.Add("black");
+            }
+            else
+            {
+                if (greyOutCell)
+                {
+                    cssAttributes.Add("grey");
+                }
+            }
+
+            string positionAttribute = "normal";
+
+            if (lineIndex == 0)
+            {
+                positionAttribute += "-top";
+            }
+
+            if (lineIndex == (Lines.Count - 1))
+            {
+                positionAttribute += "-bottom";
+            }
+
+            if (characterIndex == 0)
+            {
+                positionAttribute += "-left";
+            }
+
+            if (characterIndex == (lastLineIndex))
+            {
+                positionAttribute += "-right";
+            }
+            cssAttributes.Add(positionAttribute);
+            string classAttributeToReturn = $@"class=""{string.Join(" ", cssAttributes)}"" ";
+            return classAttributeToReturn;
+        }
     }
 }

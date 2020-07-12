@@ -72,6 +72,7 @@ namespace WordPuzzlesTest
         public class HideWordInLine
         {
             [Test]
+            [Ignore("Takes too long to run.")]
             public void SimpleTest_PutsWordInExpectedPosition()
             {
                 AlphabetSoup puzzle = new AlphabetSoup(Repository);

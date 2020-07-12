@@ -380,6 +380,126 @@ function colorMeAndMyMatch(currentIndex, color) {
             border-top-color: #000000;
             border-bottom-style: solid
         }
+        .normal-top {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
         .hollow {
             border-right-style: solid;
             border-bottom-color: #000000;
@@ -412,6 +532,13 @@ function colorMeAndMyMatch(currentIndex, color) {
     	.centered {
 	        text-align: center
 	    }
+    	.black {
+	        background-color:#000000
+	    }
+    	.grey {
+	        background-color:#AAAAAA
+	    }
+
 </style>
 </head>");
             builder.AppendLine("<body>");
