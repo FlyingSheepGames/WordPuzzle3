@@ -74,6 +74,7 @@
     <Compile Include="AnacrosticParameterSetTest.cs" />
     <Compile Include="AnacrosticTest.cs" />
     <Compile Include="AnagramFinderTest.cs" />
+    <Compile Include="BirthdayFinderTest.cs" />
     <Compile Include="BuildingBlocksPuzzleTest.cs" />
     <Compile Include="ClassicWordLadderTest.cs" />
     <Compile Include="ClueRepositoryTest.cs" />

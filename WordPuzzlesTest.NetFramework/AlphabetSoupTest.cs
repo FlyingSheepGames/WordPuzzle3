@@ -175,6 +175,7 @@ namespace WordPuzzlesTest
     public class GenerateLineAtIndex
     {
         [Test]
+        [Ignore("Takes too long to run")]
         public void PopulatesExpectedLine()
         {
             AlphabetSoup puzzle = new AlphabetSoup();
