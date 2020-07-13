@@ -147,10 +147,6 @@ namespace WordPuzzles
             {
                 block.WriteToLineBuilders(htmlLineBuilders, includeSolution);
             }
-            if (!isFragment)
-            {
-                _htmlGenerator.AppendHtmlFooter(builder);
-            }
             foreach (var lineBuilder in htmlLineBuilders)
             {
                 lineBuilder.AppendLine("</tr>");
@@ -161,6 +157,10 @@ namespace WordPuzzles
                 builder.AppendLine(lineBuilder.ToString());
             }
             builder.AppendLine("</table>");
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
 
             return builder.ToString();
         }
