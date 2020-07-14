@@ -32,6 +32,11 @@ namespace WordPuzzles
             {
                 return new ReadDownColumnPuzzle();
             }
+
+            if (FieldExists("IsPhraseSegmentPuzzle", jObject))
+            {
+                return new PhraseSegmentPuzzle();
+            }
             throw new Exception("Unable to determine type.");
         }
     }

@@ -102,19 +102,27 @@ namespace WordPuzzleGenerator
 
         private static PhraseSegmentPuzzle InteractiveGetPuzzleForDate(DateTime date)
         {
+            Console.Clear();
+            Console.WriteLine("Finding people born on this day.");
             BirthdayFinder finder = new BirthdayFinder();
             var results = finder.FindPeopleForDate(date.Month, date.Day);
             ClearConsoleInputAndOutput();
             foreach (var person in results)
             {
                 ClearConsoleInputAndOutput();
-                Console.WriteLine($"{person.Name} was born on {date.ToShortDateString()}");
-                for (var index = 0; index < person.Quotes.Count; index++)
+                Console.WriteLine($"{person.Name} was born on {date.Month}/{date.Day}");
+                var quotesCount = person.Quotes.Count;
+                var MAX_QUOTES_TO_SHOW = 7;
+                if (MAX_QUOTES_TO_SHOW < quotesCount)
+                {
+                    quotesCount = MAX_QUOTES_TO_SHOW;
+                }
+                for (var index = 0; index < quotesCount; index++)
                 {
                     var quote = person.Quotes[index];
                     Console.WriteLine($"{index}: {quote}");
                 }
-                Console.WriteLine("Either enter the number of the quote to use, or press Z to go to the next person born this day (if there is one).");
+                Console.WriteLine("Either enter the number of the quote to use, or press enter to go to the next person born this day (if there is one).");
                 string userInputAsString = Console.ReadLine();
                 int selectedIndex;
                 if (int.TryParse(userInputAsString, out selectedIndex))

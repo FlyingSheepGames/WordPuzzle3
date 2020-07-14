@@ -49,6 +49,39 @@ namespace WordPuzzlesTest
 
             }
 
+            [Test]
+            public void LongPhrase_CreatesSubPuzzles()
+            {
+                const string AUTHOR = "Malala Yousafzai";
+                const string PHRASE = "In some parts of the world, students are going to school every day. It's their normal life. But in other part of the world, we are starving for education... it's like a precious gift. It's like a diamond.";
+                PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle
+                {
+                    Phrase = PHRASE,
+                    Author = AUTHOR
+                };
+                puzzle.PlacePhrase();
+
+                Assert.AreEqual(3, puzzle.SubPuzzles.Count);
+                StringBuilder piecePhraseTogetherAgain = new StringBuilder();
+                for (var index = 0; index < puzzle.SubPuzzles.Count; index++)
+                {
+                    var subPuzzle = puzzle.SubPuzzles[index];
+                    if (index == 2)
+                    {
+                        Assert.AreEqual(AUTHOR, puzzle.SubPuzzles[2].Author);
+                    }
+                    else
+                    {
+                        Assert.AreEqual("", subPuzzle.Author);
+                    }
+
+                    piecePhraseTogetherAgain.Append(subPuzzle.Phrase);
+                    piecePhraseTogetherAgain.Append(" ");
+                }
+
+                Assert.AreEqual(PHRASE + " ", piecePhraseTogetherAgain.ToString());
+
+            }
         }
 
         [TestFixture]
@@ -310,5 +343,29 @@ namespace WordPuzzlesTest
 
         }
 
+        [TestFixture]
+        public class BreakLongCompletePhraseIntoSubPhrases
+        {
+            [Test]
+            public void Example_CreatesExpectedSubPhrases()
+            {
+
+                const string AUTHOR = "Malala Yousafzai";
+                const string PHRASE = "In some parts of the world, students are going to school every day. It's their normal life. But in other part of the world, we are starving for education... it's like a precious gift. It's like a diamond.";
+                PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle
+                {
+                    Phrase = PHRASE,
+                    Author = AUTHOR
+                };
+                List<string> subPhrases = puzzle.BreakLongPhraseIntoSubPhrases();
+
+                Assert.AreEqual(3, subPhrases.Count);
+                foreach (var subPhrase in subPhrases)
+                {
+                    Console.WriteLine($"{subPhrase.Length} : {subPhrase}");
+                    Assert.LessOrEqual(subPhrase.Length, 100, "Expected 100 characters or less.");
+                }
+            }
+        }
     }
 }

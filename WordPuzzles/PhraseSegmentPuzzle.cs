@@ -7,11 +7,42 @@ namespace WordPuzzles
 {
     public class PhraseSegmentPuzzle :IPuzzle
     {
+        public bool IsPhraseSegmentPuzzle = true;
         public string Phrase { get; set; }
         public string Author { get; set; }
         public int CompleteLength { get; set; }
 
         public void PlacePhrase()
+        {
+            if (CompletePhrase.Length < 100)
+            {
+                PlaceShortPhrase();
+            }
+            else
+            {
+                SubPuzzles = new List<PhraseSegmentPuzzle>();
+                var list = BreakLongPhraseIntoSubPhrases();
+                for (var index = 0; index < list.Count; index++)
+                {
+                    var subphrase = list[index];
+                    string author = "";
+                    if (index == list.Count - 1)
+                    {
+                        author = Author;//only append author to the last one.
+                    }
+
+                    var subPuzzle = new PhraseSegmentPuzzle()
+                    {
+                        Phrase = subphrase,
+                        Author = author
+                    };
+                    subPuzzle.PlacePhrase();
+                    SubPuzzles.Add(subPuzzle);
+                }
+            }
+        }
+
+        private void PlaceShortPhrase()
         {
             CompleteLength = Phrase.Length + Author.Length + 1;
 
@@ -24,6 +55,7 @@ namespace WordPuzzles
             {
                 SpacesBeforeAuthor = 5 - distanceToNextMultipleOfFour;
             }
+
             CompleteLength = Phrase.Length + Author.Length + SpacesBeforeAuthor;
             LineLength = CompleteLength / 4;
             Blocks = BreakPhraseIntoBlocks(CompletePhrase, CalculateBlockSizes(LineLength));
@@ -59,6 +91,7 @@ namespace WordPuzzles
 
         public List<Block> Blocks = new List<Block>();
         private HtmlGenerator _htmlGenerator = new HtmlGenerator();
+        public List<PhraseSegmentPuzzle> SubPuzzles;
 
         public int SpacesBeforeAuthor { get; set; }
 
@@ -131,6 +164,28 @@ namespace WordPuzzles
                 _htmlGenerator.AppendHtmlHeader(builder);
             }
 
+            if (SubPuzzles == null)
+            {
+                AppendPuzzleTable(includeSolution, builder);
+            }
+            else
+            {
+                foreach (var subPuzzle in SubPuzzles)
+                {
+                    subPuzzle.AppendPuzzleTable(includeSolution, builder);
+                }
+            }
+
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
+
+            return builder.ToString();
+        }
+
+        private void AppendPuzzleTable(bool includeSolution, StringBuilder builder)
+        {
             builder.AppendLine("<table>");
             List<StringBuilder> htmlLineBuilders = new List<StringBuilder>();
 
@@ -143,10 +198,12 @@ namespace WordPuzzles
             {
                 lineBuilder.AppendLine("<tr>");
             }
+
             foreach (var block in Blocks)
             {
                 block.WriteToLineBuilders(htmlLineBuilders, includeSolution);
             }
+
             foreach (var lineBuilder in htmlLineBuilders)
             {
                 lineBuilder.AppendLine("</tr>");
@@ -156,16 +213,55 @@ namespace WordPuzzles
             {
                 builder.AppendLine(lineBuilder.ToString());
             }
-            builder.AppendLine("</table>");
-            if (!isFragment)
-            {
-                _htmlGenerator.AppendHtmlFooter(builder);
-            }
 
-            return builder.ToString();
+            builder.AppendLine("</table>");
         }
 
         public string Description => $"PhraseSegmentPuzzle for phrase {this.Phrase} ";
+
+        public List<string> BreakLongPhraseIntoSubPhrases()
+        {
+            var subPhrases = new List<string>();
+            StringBuilder builder = new StringBuilder();
+            int cumulativeTotal = 0;
+            foreach (var word in Phrase.Split(' '))
+            {
+                cumulativeTotal += word.Length + 1;
+                int phraseLengthLimit = CalculatePhraseLengthLimit(CompletePhrase.Length);
+                if (phraseLengthLimit < cumulativeTotal)
+                {
+                    //add this.
+                    string subPhraseToAdd = builder.ToString();
+                    if (subPhraseToAdd.EndsWith(" "))
+                    {
+                        subPhraseToAdd = subPhraseToAdd.Substring(0, subPhraseToAdd.Length - 1);
+                    }
+                    subPhrases.Add(subPhraseToAdd);
+
+                    builder.Clear();
+                    cumulativeTotal = word.Length + 1;
+                }
+
+                builder.Append(word);
+                builder.Append(' ');
+            }
+            //add last one
+            //add this.
+            string lastPhraseToAdd = builder.ToString();
+            if (lastPhraseToAdd.EndsWith(" "))
+            {
+                lastPhraseToAdd = lastPhraseToAdd.Substring(0, lastPhraseToAdd.Length - 1);
+            }
+            subPhrases.Add(lastPhraseToAdd);
+
+            return subPhrases;
+        }
+
+        private int CalculatePhraseLengthLimit(int phraseLength)
+        {
+            int numberOfDesiredPhrases = (phraseLength / 100) + 1;
+            return phraseLength / numberOfDesiredPhrases;
+        }
     }
 
     public class Block
