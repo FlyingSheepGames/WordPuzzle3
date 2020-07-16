@@ -367,5 +367,25 @@ namespace WordPuzzlesTest
                 }
             }
         }
+
+        [TestFixture]
+        public class AddFragments
+        {
+            [Test]
+            public void HandlesApostrophesCorrectly()
+            {
+                Block newBlock = new Block()
+                {
+                    Fragments =  new List<string>()
+                };
+                PhraseSegmentPuzzle.AddFragments(newBlock, "lot's and lot's of a'pos'tr'o'phe's.");
+                foreach (string fragment in newBlock.Fragments)
+                {
+                    Console.WriteLine(fragment);
+                    Assert.AreNotEqual("LOTS", fragment, "Did not expect LOTS as a fragment");
+                }
+
+            }
+        }
     }
 }

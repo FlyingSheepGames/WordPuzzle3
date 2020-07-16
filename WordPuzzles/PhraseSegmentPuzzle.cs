@@ -131,7 +131,7 @@ namespace WordPuzzles
             return blockToReturn;
         }
 
-        private static void AddFragments(Block blockToReturn, string subString)
+        internal static void AddFragments(Block blockToReturn, string subString)
         {
             var fragmentsWithoutSpaces  = subString.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var fragment in fragmentsWithoutSpaces)
@@ -143,9 +143,20 @@ namespace WordPuzzles
                     {
                         fragmentToAdd.Append( character);
                     }
+                    else
+                    {
+                        AddExtractedFragment(blockToReturn, fragmentToAdd);
+                        fragmentToAdd.Clear();
+                    }
                 }
-                blockToReturn.Fragments.Add(fragmentToAdd.ToString().ToUpperInvariant());
+                AddExtractedFragment(blockToReturn, fragmentToAdd);
             }
+        }
+
+        private static void AddExtractedFragment(Block blockToReturn, StringBuilder fragmentToAdd)
+        {
+            if (fragmentToAdd.Length == 0) return;
+            blockToReturn.Fragments.Add(fragmentToAdd.ToString().ToUpperInvariant());
         }
 
         internal string GetSubString(string completePhrase, int lineLengthSoFar, int nextWidthToTake, int lineIndex,
