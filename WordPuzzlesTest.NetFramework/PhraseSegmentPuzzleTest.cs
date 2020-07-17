@@ -225,7 +225,7 @@ namespace WordPuzzlesTest
                     Phrase = PHRASE,
                     Author = AUTHOR
                 };
-
+                puzzle.RandomSeed = 42;
                 puzzle.PlacePhrase();
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
@@ -291,6 +291,7 @@ namespace WordPuzzlesTest
                     Phrase = PHRASE,
                     Author = AUTHOR
                 };
+                puzzle.RandomSeed = 42;
 
                 puzzle.PlacePhrase();
 

@@ -7,11 +7,16 @@ namespace WordPuzzles
 {
     public class PhraseSegmentPuzzle :IPuzzle
     {
-        public bool IsPhraseSegmentPuzzle = true;
+        public bool IsPhraseSegmentPuzzle = true;//Used when deserializing.
         public string Phrase { get; set; }
         public string Author { get; set; }
         public int CompleteLength { get; set; }
 
+        private Random _randomNumberGenerator;
+
+
+        public int RandomSeed = 0;
+        
         public void PlacePhrase()
         {
             if (CompletePhrase.Length < 100)
@@ -34,7 +39,8 @@ namespace WordPuzzles
                     var subPuzzle = new PhraseSegmentPuzzle()
                     {
                         Phrase = subphrase,
-                        Author = author
+                        Author = author, 
+                        RandomSeed = RandomSeed
                     };
                     subPuzzle.PlacePhrase();
                     SubPuzzles.Add(subPuzzle);
@@ -128,6 +134,7 @@ namespace WordPuzzles
                 blockToReturn.Lines.Add(subString);
                 AddFragments(blockToReturn, subString);
             }
+            blockToReturn.Fragments.Shuffle(RandomNumberGenerator);
             return blockToReturn;
         }
 
@@ -151,6 +158,7 @@ namespace WordPuzzles
                 }
                 AddExtractedFragment(blockToReturn, fragmentToAdd);
             }
+
         }
 
         private static void AddExtractedFragment(Block blockToReturn, StringBuilder fragmentToAdd)
@@ -229,6 +237,25 @@ namespace WordPuzzles
         }
 
         public string Description => $"PhraseSegmentPuzzle for phrase {this.Phrase} ";
+
+        public Random RandomNumberGenerator
+        {
+            get
+            {
+                if (_randomNumberGenerator == null)
+                {
+                    if (RandomSeed == 0)
+                    {
+                        _randomNumberGenerator = new Random();
+                    }
+                    else
+                    {
+                        _randomNumberGenerator = new Random(RandomSeed);
+                    }
+                }
+                return _randomNumberGenerator;
+            }
+        }
 
         public List<string> BreakLongPhraseIntoSubPhrases()
         {
