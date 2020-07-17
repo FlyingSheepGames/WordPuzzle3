@@ -9,17 +9,27 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-PhraseSegmentPuzzle bug - "It's" becomes "Its", not {"It", "s"}
+Create new puzzle based on HiddenRelatedWords.
 
+Create new puzzle based on TakeTwo
 
+Review todo below this line.
+
+Group puzzles into months
+	Placeholders for days where we know the solution, but not the puzzle.
+	Multiple possible puzzles for the same day
+	Replace or add puzzle to specific day
+	"Which month do you want to work on?" "Ok, which day?" "Ok, is <> still the word for that day?"
+
+Organize files into directories - Puzzles, Utilities, etc.
 Convert remaining puzzles
 2. Sudoku
 8. Building Blocks
-9. Related Words
+9. Related Words (see new puzzle)
 
 Convert remaining puzzles
 Q. Missing Letters
-7. Hidden Words
+7. Hidden Words (see new puzzle)
 4. Word Ladder
 
 Add instructions to PhraseSegmentPuzzle
@@ -80,6 +90,8 @@ And update Puzzle Converter
 --- DONE (most recent on top)
 
 ----------------------------------
+PhraseSegmentPuzzle bug - "It's" becomes "Its", not {"It", "s"}
+
 Create new puzzle type - PhraseSegmentPuzzle
 
 Who was born on this day? 

@@ -79,6 +79,7 @@
     <Compile Include="ClassicWordLadderTest.cs" />
     <Compile Include="ClueRepositoryTest.cs" />
     <Compile Include="DataFromStackOverflowParserTest.cs" />
+    <Compile Include="HiddenRelatedWordsPuzzleTest.cs" />
     <Compile Include="HiddenWordPuzzleTest.cs" />
     <Compile Include="HtmlGeneratorTest.cs" />
     <Compile Include="LettersAndArrowsPuzzleTest.cs" />
