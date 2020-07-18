@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace WordPuzzles
 {
-    public class HiddenRelatedWordsPuzzle
+    public class HiddenRelatedWordsPuzzle : IPuzzle
     {
+        public bool isHiddenRelatedWordsPuzzle = true; //For deserialization
         List<HiddenWord> hiddenWords = new List<HiddenWord>();
+        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public int CombinedKeyIndex
         {
@@ -35,7 +38,6 @@ namespace WordPuzzles
                         maxLettersAfterIndex = word.LettersAfterIndex;
                     }
                 }
-
                 return maxLettersAfterIndex + CombinedKeyIndex + 1;
             }
         }
@@ -44,6 +46,75 @@ namespace WordPuzzles
         {
             hiddenWords.Add(hiddenWordToAdd);
         }
+
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
+        {
+            var builder = new StringBuilder();
+            _htmlGenerator = new HtmlGenerator();
+
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
+
+            builder.AppendLine("<table>");
+            foreach (var currentWord in hiddenWords)
+            {
+                AppendHiddenWord(builder, currentWord, includeSolution);
+            }
+            builder.AppendLine("</table>");
+
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
+            return builder.ToString();
+        }
+
+        private void AppendHiddenWord(StringBuilder builder, HiddenWord currentWord, bool includeSolution)
+        {
+            builder.AppendLine("<tr>");
+            builder.AppendLine($@"<td width=""250"" class=""normal"">{currentWord.SentenceHidingWord}</td>");
+            int numberOfPreceedingEmptyCells = CombinedKeyIndex - currentWord.KeyIndex;
+            string uppercaseCurrentWord = currentWord.Word.ToUpperInvariant();
+            for (int index = 0; index < CombinedLength; index++)
+            {
+                if (index < numberOfPreceedingEmptyCells) // cells before word
+                {
+                    AppendCell(builder, $@"hollow", $@"&nbsp;");
+                    continue;
+                }
+                if ((CombinedKeyIndex + currentWord.LettersAfterIndex) < index) //cells after word
+                {
+                    AppendCell(builder, $@"hollow", $@"&nbsp;");
+                    continue;
+                }
+
+                string letterInWord = "nbsp;";
+                if (includeSolution)
+                {
+                    letterInWord = uppercaseCurrentWord[index - numberOfPreceedingEmptyCells].ToString();
+                }
+
+                string classAttributes = "normal centered";
+                if (index == CombinedKeyIndex)
+                {
+                    classAttributes = "bold centered";
+                }
+                AppendCell(builder, classAttributes, letterInWord);
+
+            }
+            builder.AppendLine("</tr>");
+
+        }
+
+        private void AppendCell(StringBuilder builder, string classAttributes, string letterInWord)
+        {
+            builder.AppendLine($@"<td class=""" + classAttributes + $@""" width=""30"">" + letterInWord + $@"</td>");
+        }
+
+        public string Description => $"Hidden Related Words puzzle for {Solution}";
+        public string Solution { get; set; }
     }
 
     public class HiddenWord

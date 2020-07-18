@@ -125,6 +125,12 @@
     <Content Include="html\PhraseSegment\expectedExampleWithSolution2.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="html\HiddenRelatedWords\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\HiddenRelatedWords\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\ReadDownColumn\expectedExample1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -37,6 +37,11 @@ namespace WordPuzzles
             {
                 return new PhraseSegmentPuzzle();
             }
+
+            if (FieldExists("isHiddenRelatedWordsPuzzle", jObject))
+            {
+                return new HiddenRelatedWordsPuzzle();
+            }
             throw new Exception("Unable to determine type.");
         }
     }
