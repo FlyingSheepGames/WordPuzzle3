@@ -92,6 +92,7 @@
     <Compile Include="PuzzleWordTest.cs" />
     <Compile Include="ReadDownColumnPuzzleTest.cs" />
     <Compile Include="RelatedWordsPuzzle.cs" />
+    <Compile Include="ThemeRepositoryTest.cs" />
     <Compile Include="VowelMovementTest.cs" />
     <Compile Include="WebRequestUtilityTest.cs" />
     <Compile Include="WeekOfPuzzlesTest.cs" />

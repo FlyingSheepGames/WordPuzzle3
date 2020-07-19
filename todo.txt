@@ -91,6 +91,8 @@ And update Puzzle Converter
 --- DONE (most recent on top)
 
 ----------------------------------
+Create ThemeRepository
+
 PhraseSegmentPuzzle bug - "It's" becomes "Its", not {"It", "s"}
 
 Create new puzzle type - PhraseSegmentPuzzle
@@ -116,7 +118,7 @@ sort of math in figuring out how many blocks there are, as well as how many bloc
 This is confusing, because we're talking about both lines per block (4), and blocks per line (3-5). Maybe
 we should call the larger-grain line a "section". 
 
-
+Move Theme Repository tests from Word Repository. Replace callers to use Theme Respository instead.
 
 Update Read Down Column to include a specific (revealed) letter in each word.
 
