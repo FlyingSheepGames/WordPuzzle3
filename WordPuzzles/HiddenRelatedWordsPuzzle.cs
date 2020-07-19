@@ -57,13 +57,24 @@ namespace WordPuzzles
                 _htmlGenerator.AppendHtmlHeader(builder);
             }
 
-            builder.AppendLine("<table>");
-            foreach (var currentWord in hiddenWords)
+            StringBuilder tableBuilder = new StringBuilder();
+            StringBuilder clueBuilder = new StringBuilder();
+            tableBuilder.AppendLine("<table>");
+            clueBuilder.AppendLine("<ol>");
+            for (var index = 0; index < hiddenWords.Count; index++)
             {
-                AppendHiddenWord(builder, currentWord, includeSolution);
+                var currentWord = hiddenWords[index];
+                tableBuilder.AppendLine("<tr>");
+                tableBuilder.AppendLine($@"<td class=""normal centered"" width=""30""> {index+1} </td>");
+                AppendHiddenWord(tableBuilder, currentWord, includeSolution);
+                clueBuilder.AppendLine($"<li>{currentWord.SentenceHidingWord}");
             }
-            builder.AppendLine("</table>");
 
+            tableBuilder.AppendLine("</table>");
+            clueBuilder.AppendLine("</ol>");
+            builder.Append(clueBuilder);
+            builder.AppendLine("<br />");
+            builder.Append(tableBuilder);
             if (!isFragment)
             {
                 _htmlGenerator.AppendHtmlFooter(builder);
@@ -73,8 +84,8 @@ namespace WordPuzzles
 
         private void AppendHiddenWord(StringBuilder builder, HiddenWord currentWord, bool includeSolution)
         {
-            builder.AppendLine("<tr>");
-            builder.AppendLine($@"<td width=""250"" class=""normal"">{currentWord.SentenceHidingWord}</td>");
+            //Replaced by OL of sentences
+            //builder.AppendLine($@"<td width=""250"" class=""normal"">{currentWord.SentenceHidingWord}</td>");
             int numberOfPreceedingEmptyCells = CombinedKeyIndex - currentWord.KeyIndex;
             string uppercaseCurrentWord = currentWord.Word.ToUpperInvariant();
             for (int index = 0; index < CombinedLength; index++)
@@ -90,7 +101,7 @@ namespace WordPuzzles
                     continue;
                 }
 
-                string letterInWord = "nbsp;";
+                string letterInWord = "&nbsp;";
                 if (includeSolution)
                 {
                     letterInWord = uppercaseCurrentWord[index - numberOfPreceedingEmptyCells].ToString();
