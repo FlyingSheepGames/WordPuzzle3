@@ -33,6 +33,7 @@ Q. Missing Letters
 4. Word Ladder
 
 Add instructions to PhraseSegmentPuzzle
+Add instructions to HiddenRelatedWords
 
 HTMLFormatter (common code)
 	Create table cells

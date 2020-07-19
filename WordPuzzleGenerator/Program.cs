@@ -75,7 +75,7 @@ namespace WordPuzzleGenerator
                     userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solution, availablePuzzleTypes);
                     IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection, solutionLength, solution,
                         solutionThemes);
-                    collection.AddPuzzle(createdPuzzle);
+                    AddPuzzleToCollection(createdPuzzle, collection, _puzzleBuilder, _solutionBuilder);
                 }
             }
 
@@ -232,8 +232,8 @@ namespace WordPuzzleGenerator
                 availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
             Console.WriteLine("6. * Read Down Column");
             Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("7. Hidden Words");
+                availablePuzzleTypes[WordPuzzleType.HiddenRelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("7. * Hidden Related Words");
             Console.ForegroundColor =
                 availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
             Console.WriteLine("8. Building Blocks");
@@ -297,7 +297,8 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static IPuzzle InteractivelyGenerateSelectedPuzzleType(WordPuzzleType userPuzzleSelection, int solutionLength,
+        private static IPuzzle InteractivelyGenerateSelectedPuzzleType(WordPuzzleType userPuzzleSelection,
+            int solutionLength,
             string solution, List<string> solutionThemes)
         {
             IPuzzle generatedPuzzle = null;
@@ -349,9 +350,6 @@ namespace WordPuzzleGenerator
                             Phrase = solution,
                             WordsToUse = new List<string>() { }
                         });
-                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
-
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
                     }
@@ -388,10 +386,6 @@ namespace WordPuzzleGenerator
                         Console.Clear();
                         Console.WriteLine("Creating a letters and arrows puzzle for you.");
                         generatedPuzzle = InteractiveFindLettersAndArrowsPuzzle(solution);
-
-                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
-
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
                     }
@@ -411,8 +405,6 @@ namespace WordPuzzleGenerator
                         Console.Clear();
                         Console.WriteLine("Creating a read down column puzzle for you.");
                         generatedPuzzle = InteractiveFindReadDownColumnPuzzle(solution);
-                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
                     }
@@ -425,12 +417,12 @@ namespace WordPuzzleGenerator
                     }
 
                     break;
-                case WordPuzzleType.HiddenWords:
+                case WordPuzzleType.HiddenRelatedWords:
                     if (!solution.ToLower().Contains('x'))
                     {
                         Console.Clear();
-                        Console.WriteLine("Creating a Hidden Word puzzle for you.");
-                        InteractiveCreateHiddenWordPuzzle(solution);
+                        Console.WriteLine("Creating a Hidden Related Word puzzle for you.");
+                        generatedPuzzle = InteractiveCreateHiddenRelatedWordPuzzle(solution);
                         Console.WriteLine("Done. Press a key to continue.");
                         Console.ReadKey();
                     }
@@ -827,7 +819,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.WordLadder, (2 < solutionLength && solutionLength < 7));
             availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (7 < solutionLength && solutionLength < 30));
             availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
-            availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
+            availablePuzzleTypes.Add(WordPuzzleType.HiddenRelatedWords, (!solution.ToLower().Contains('x')));
             availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
             availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
             availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, ( 10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
@@ -838,6 +830,7 @@ namespace WordPuzzleGenerator
         private static void InteractiveCreateHiddenWordPuzzle(string solution)
         {
             HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {Solution = solution};
+
             foreach (char letter in solution.ToLower())
             {
                 bool foundSentence = false;
@@ -877,26 +870,6 @@ namespace WordPuzzleGenerator
                         puzzle.Sentences.Add(sentence);
                     }
 
-                    if (false) //TODO: Delete me.
-                    {
-                        var phrase = puzzle.HideWord(hiddenWordCandidate);
-                        if (phrase.Count == 0)
-                        {
-                            Console.WriteLine($"Unable to hide word {hiddenWordCandidate}");
-                        }
-                        else
-                        {
-                            Console.WriteLine(
-                                $"Write a sentence that hides '{string.Join(",", phrase)}' and '{hiddenWordCandidate}'. Or just hit enter to create another one for this letter.");
-
-                            sentence = Console.ReadLine();
-                            if (!string.IsNullOrEmpty(sentence))
-                            {
-                                foundSentence = true;
-                                puzzle.Sentences.Add(sentence);
-                            }
-                        }
-                    }
                 }
             }
             Console.Clear();
@@ -913,6 +886,85 @@ namespace WordPuzzleGenerator
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
 
+        }
+
+        private static HiddenRelatedWordsPuzzle InteractiveCreateHiddenRelatedWordPuzzle(string solution)
+        {
+            HiddenRelatedWordsPuzzle puzzle = new HiddenRelatedWordsPuzzle() {Solution = solution};
+            HiddenWordPuzzle legacyPuzzle = new HiddenWordPuzzle() { Solution = solution };
+
+            foreach (char letter in solution.ToLower())
+            {
+                bool foundSentence = false;
+                while (!foundSentence)
+                {
+                    Console.Clear();
+                    int blanksToAdd = RandomNumberGenerator.Next(2, 5);
+                    if (letter == 'q') //must be at least 4 letters long.
+                    {
+                        blanksToAdd = RandomNumberGenerator.Next(3, 5);
+                    }
+
+                    //blanksToAdd = 5;//Let's just try hiding the longest words. 
+
+                    StringBuilder patternBuilder = new StringBuilder();
+                    patternBuilder.Append(letter);
+                    patternBuilder.Append('_', blanksToAdd);
+                    var pattern = patternBuilder.ToString();
+                    var hiddenWordCandidates = WordRepository.WordsMatchingPattern(pattern);
+                    if (0 == hiddenWordCandidates.Count)
+                    {
+                        throw new Exception($"No words found for pattern {pattern}");
+                    }
+
+                    string hiddenWordCandidate = hiddenWordCandidates[RandomNumberGenerator.Next(hiddenWordCandidates.Count)];
+                    foreach (string splitableString in legacyPuzzle.GenerateAllSplitableStrings(hiddenWordCandidate))
+                    {
+                        List<string> phraseHidingWord =
+                            legacyPuzzle.CreateSpecificExampleFromSplitableString(splitableString);
+                        Console.WriteLine($"({splitableString}) : {string.Join(" ", phraseHidingWord)}      {hiddenWordCandidate.ToUpper()}.");
+                    }
+                    Console.WriteLine("Or just hit enter to create another one for this letter.");
+                    string sentence = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(sentence))
+                    {
+                        if (!hiddenWordCandidate.Contains(letter))
+                        {
+                            Console.WriteLine($"{hiddenWordCandidate} does not contain {letter}! Try again.");
+                        }
+                        else
+                        {
+                            foundSentence = true;
+                            legacyPuzzle.Sentences.Add(sentence);
+                            int keyIndex = hiddenWordCandidate.IndexOf(letter);
+
+                            puzzle.AddWord(
+                                new HiddenWord()
+                                {
+                                    Word = hiddenWordCandidate,
+                                    KeyIndex = keyIndex,
+                                    SentenceHidingWord = sentence,
+                                });
+                        }
+                    }
+
+                }
+            }
+            Console.Clear();
+            Console.WriteLine("Created hidden word puzzle!");
+            char lastKeyPressed = 'z';
+            while (lastKeyPressed != 'c')
+            {
+                string puzzleAsString = legacyPuzzle.FormatPuzzleAsText();
+                Console.WriteLine(puzzleAsString);
+                Clipboard.SetText(puzzleAsString);
+
+                Console.WriteLine(
+                    "Puzzle copied to clipboard. Press 'c' to continue, or anything else to copy it again.");
+                lastKeyPressed = Console.ReadKey().KeyChar;
+            }
+
+            return puzzle;
         }
 
         private static void InteractiveHideTheseWords(List<string> wordsToHide)
