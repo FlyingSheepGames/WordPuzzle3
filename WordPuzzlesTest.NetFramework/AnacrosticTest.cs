@@ -445,6 +445,7 @@ A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
             }
 
             [Test]
+            [Ignore("takes too long")]
             public void First56Numbers_SetsCorrectLineLength()
             {
                 for (int puzzleLength = 1; puzzleLength <= 56; puzzleLength++)

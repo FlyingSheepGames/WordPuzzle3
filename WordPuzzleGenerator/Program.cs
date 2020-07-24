@@ -47,9 +47,6 @@ namespace WordPuzzleGenerator
             HtmlGenerator htmlGenerator = new HtmlGenerator();
             htmlGenerator.AppendHtmlHeader(_puzzleBuilder);
             htmlGenerator.AppendHtmlHeader(_solutionBuilder);
-            var phraseSegmentPuzzleForDate = InteractiveGetPuzzleForDate(DateTime.Now);
-
-            AddPuzzleToCollection(phraseSegmentPuzzleForDate, collection, _puzzleBuilder, _solutionBuilder);
 
             string solution = "Placeholder that is not empty";
             while (!string.IsNullOrWhiteSpace(solution))
@@ -243,6 +240,9 @@ namespace WordPuzzleGenerator
             Console.ForegroundColor =
                 availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
             Console.WriteLine("Q. Missing Letters");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.PuzzleForDate] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("W. Puzzle For Date");
             Console.ForegroundColor = ConsoleColor.Gray;
 
             var userPuzzleSelectionInput = Console.ReadKey();
@@ -250,6 +250,10 @@ namespace WordPuzzleGenerator
             if (userPuzzleSelectionString == "q")
             {
                 userPuzzleSelectionString = "10";
+            }
+            if (userPuzzleSelectionString == "w")
+            {
+                userPuzzleSelectionString = "11";
             }
 
             if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
@@ -481,6 +485,9 @@ namespace WordPuzzleGenerator
                     Console.WriteLine("Done. Press a key to continue.");
                     Console.ReadKey();
                 }
+                    break;
+                case WordPuzzleType.PuzzleForDate:
+                    generatedPuzzle = InteractiveGetPuzzleForDate(DateTime.Now);
                     break;
             }
 
@@ -823,6 +830,7 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
             availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
             availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, ( 10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
+            availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
 
             return availablePuzzleTypes;
         }
@@ -899,26 +907,15 @@ namespace WordPuzzleGenerator
                 while (!foundSentence)
                 {
                     Console.Clear();
-                    int blanksToAdd = RandomNumberGenerator.Next(2, 5);
-                    if (letter == 'q') //must be at least 4 letters long.
-                    {
-                        blanksToAdd = RandomNumberGenerator.Next(3, 5);
-                    }
-
-                    //blanksToAdd = 5;//Let's just try hiding the longest words. 
-
-                    StringBuilder patternBuilder = new StringBuilder();
-                    patternBuilder.Append(letter);
-                    patternBuilder.Append('_', blanksToAdd);
-                    var pattern = patternBuilder.ToString();
-                    var hiddenWordCandidates = WordRepository.WordsMatchingPattern(pattern);
-                    if (0 == hiddenWordCandidates.Count)
-                    {
-                        throw new Exception($"No words found for pattern {pattern}");
-                    }
+                    var hiddenWordCandidates = GetHiddenWordCandidates(letter);
 
                     string hiddenWordCandidate = hiddenWordCandidates[RandomNumberGenerator.Next(hiddenWordCandidates.Count)];
-                    foreach (string splitableString in legacyPuzzle.GenerateAllSplitableStrings(hiddenWordCandidate))
+                    var splitableStrings = legacyPuzzle.GenerateAllSplitableStrings(hiddenWordCandidate);
+                    if (splitableStrings.Count == 0)
+                    {
+                        continue;
+                    }
+                    foreach (string splitableString in splitableStrings)
                     {
                         List<string> phraseHidingWord =
                             legacyPuzzle.CreateSpecificExampleFromSplitableString(splitableString);
@@ -965,6 +962,32 @@ namespace WordPuzzleGenerator
             }
 
             return puzzle;
+        }
+
+        private static List<string> GetHiddenWordCandidates(char letter)
+        {
+            int blanksToAdd = RandomNumberGenerator.Next(2, 5);
+            if (letter == 'q') //must be at least 4 letters long.
+            {
+                blanksToAdd = RandomNumberGenerator.Next(3, 5);
+            }
+
+            //blanksToAdd = 5;//Let's just try hiding the longest words. 
+
+            StringBuilder patternBuilder = new StringBuilder();
+            patternBuilder.Append(letter);
+            patternBuilder.Append('_', blanksToAdd);
+            var pattern = patternBuilder.ToString();
+            var hiddenWordCandidates = WordRepository.WordsMatchingPattern(pattern);
+            int wordLength = RandomNumberGenerator.Next(4, 6);
+            var randomIndex = RandomNumberGenerator.Next(0, wordLength - 1);
+            hiddenWordCandidates = WordRepository.WordsWithCharacterAtIndex(letter, randomIndex, wordLength);
+            if (0 == hiddenWordCandidates.Count)
+            {
+                throw new Exception($"No words found with {letter} in index {randomIndex} with length {wordLength}");
+            }
+
+            return hiddenWordCandidates;
         }
 
         private static void InteractiveHideTheseWords(List<string> wordsToHide)

@@ -13,6 +13,7 @@
         BuildingBlocks,
         RelatedWords,
         MissingLetters,
+        PuzzleForDate,
         MAX_VALUE,
     }
 }
