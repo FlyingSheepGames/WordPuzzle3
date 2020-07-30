@@ -74,20 +74,25 @@
     <Compile Include="AnacrosticParameterSetTest.cs" />
     <Compile Include="AnacrosticTest.cs" />
     <Compile Include="AnagramFinderTest.cs" />
+    <Compile Include="BirthdayFinderTest.cs" />
     <Compile Include="BuildingBlocksPuzzleTest.cs" />
     <Compile Include="ClassicWordLadderTest.cs" />
     <Compile Include="ClueRepositoryTest.cs" />
     <Compile Include="DataFromStackOverflowParserTest.cs" />
+    <Compile Include="HiddenRelatedWordsPuzzleTest.cs" />
     <Compile Include="HiddenWordPuzzleTest.cs" />
     <Compile Include="HtmlGeneratorTest.cs" />
     <Compile Include="LettersAndArrowsPuzzleTest.cs" />
     <Compile Include="MissingLettersPuzzleTest.cs" />
     <Compile Include="MonthlyScoreKeeperTest.cs" />
+    <Compile Include="PhraseSegmentPuzzleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PuzParserTest.cs" />
+    <Compile Include="PuzzleCollectionTest.cs" />
     <Compile Include="PuzzleWordTest.cs" />
     <Compile Include="ReadDownColumnPuzzleTest.cs" />
     <Compile Include="RelatedWordsPuzzle.cs" />
+    <Compile Include="ThemeRepositoryTest.cs" />
     <Compile Include="VowelMovementTest.cs" />
     <Compile Include="WebRequestUtilityTest.cs" />
     <Compile Include="WeekOfPuzzlesTest.cs" />
@@ -103,10 +108,46 @@
     <Content Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="html\Anacrostics\expectedExample2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\Anacrostics\expectedExampleWithSolution2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\PhraseSegment\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\PhraseSegment\expectedExample2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\PhraseSegment\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\PhraseSegment\expectedExampleWithSolution2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\HiddenRelatedWords\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\HiddenRelatedWords\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\ReadDownColumn\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\ReadDownColumn\expectedExample2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\ReadDownColumn\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\Anacrostics\expectedExample1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="html\Anacrostics\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\ReadDownColumn\expectedExampleWithSolution2.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="html\WordSquares\expectedExample1.html">

@@ -4,14 +4,18 @@ using System.Text;
 
 namespace WordPuzzles
 {
-    public class ReadDownColumnPuzzle
+    public class ReadDownColumnPuzzle :IPuzzle
     {
         private string _solution;
-        public List<string> Words = new List<string>();
         public int Size => 6;
-        private readonly Random _random = new Random();
-        public WordRepository Repository => new WordRepository() {ExludeAdvancedWords = true};
-        public int NumberOfWordsToInclude => 3;
+        private Random _random;
+        public int ZeroBasedIndexOfSolution = 2;
+        private HtmlGenerator _generator = new HtmlGenerator();
+        private char _specialCharacter;
+
+        public WordRepository Repository { get; } = new WordRepository() {ExludeAdvancedWords = true};
+
+        public int NumberOfWordsToInclude { get; set; } = 3;
 
         public string Solution
         {
@@ -21,77 +25,230 @@ namespace WordPuzzles
 
         public void PopulateWords()
         {
-            StringBuilder builder = new StringBuilder();
-            foreach (var letterToPlace in Solution)
+            for (var index = 0; index < Solution.Length; index++)
             {
+                var letterToPlace = Solution[index];
                 if (!char.IsLetter(letterToPlace))
                 {
                     continue;
                 }
-                builder.Clear();
-                builder.Append('_', 2);
-                builder.Append(letterToPlace);
-                builder.Append('_', (Size - 3));
 
-                var wordCandidates = Repository.WordsMatchingPattern(builder.ToString());
-                StringBuilder selectedWordCanidates = new StringBuilder();
+
+                var wordCandidates = GetWordCandidatesForIndex(index);
+
+                StringBuilder selectedWordCandidates = new StringBuilder();
+
                 for (int includedWordCount = 0; includedWordCount < NumberOfWordsToInclude; includedWordCount++)
                 {
-                    selectedWordCanidates.Append(wordCandidates[_random.Next(wordCandidates.Count)]);
+                    selectedWordCandidates.Append(wordCandidates[Random1.Next(wordCandidates.Count)]);
                     if (includedWordCount != (NumberOfWordsToInclude - 1))
                     {
-                        selectedWordCanidates.Append(", ");
+                        selectedWordCandidates.Append(", ");
                     }
                 }
 
-                Words.Add(selectedWordCanidates.ToString());
+                SetWordAtIndex(selectedWordCandidates.ToString(), index);
             }
         }
 
-        public string FormatHtmlForGoogle()
+        public void SetWordAtIndex(string wordToSet, int index)
+        {
+            if (index >= 0 && Words.Count > index)
+            {
+                Words[index] = wordToSet;
+            }
+            else
+            {
+                Words.Add(wordToSet);
+            }
+        }
+
+        public void SetClueAtIndex(string clueToSet, int index)
+        {
+            if (index >= 0 && Clues.Count > index)
+            {
+                Clues[index] = clueToSet;
+            }
+            else
+            {
+                Clues.Add(clueToSet);
+            }
+        }
+        public List<string> GetWordCandidatesForIndex(int index)
+        {
+            var patternToMatch = CreatePatternToMatch(Solution[index]);
+            var wordCandidates = GetWordCandidates(patternToMatch);
+            return wordCandidates;
+        }
+
+        private string CreatePatternToMatch(char letterToPlace)
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<html>");
-            builder.AppendLine("<body>");
-            builder.AppendLine("<!--StartFragment-->");
-            builder.AppendLine("Fill in the clues below, and then read the solution down the third column. ");
-            builder.AppendLine(@"<table border=""1"">");
-            foreach (string word in Words)
+            builder.Append('_', ZeroBasedIndexOfSolution);
+            builder.Append(letterToPlace);
+            builder.Append('_', (Size - (ZeroBasedIndexOfSolution + 1)));
+
+            string patternToMatch = builder.ToString();
+            return patternToMatch;
+        }
+
+        private List<string> GetWordCandidates(string patternToMatch)
+        {
+            List<string> allWordCandidates = new List<string>();
+
+            foreach (var pattern in InsertSpecialCharacterInPattern(patternToMatch))
             {
+                allWordCandidates.AddRange(Repository.WordsMatchingPattern(pattern));
+            }
+
+            if (allWordCandidates.Count == 0)// if there aren't any matches, exclude the special character.
+            {
+                allWordCandidates.AddRange(Repository.WordsMatchingPattern(patternToMatch)); 
+            }
+            return allWordCandidates;
+        }
+
+        internal List<string> InsertSpecialCharacterInPattern(string patternToMatch)
+        {
+            List<string> patterns = new List<string>();
+            for (int i = 0; i < patternToMatch.Length; i++)
+            {
+                if (patternToMatch[i] != '_') continue;
+                string patternWithSpecialCharacter =
+                    patternToMatch.Substring(0, i) + SpecialCharacter + patternToMatch.Substring(i +1);
+                patterns.Add(patternWithSpecialCharacter);
+            }
+
+            return patterns;
+        }
+
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (!isFragment)
+            {
+                _generator.AppendHtmlHeader(builder);
+            }
+            
+            builder.AppendLine("<!--StartFragment-->");
+            var ordinalOfColumnWithSolution = GetOrdinalOfColumnWithSolution();
+
+            builder.AppendLine($"Fill in the clues below, and then read the solution down the {ordinalOfColumnWithSolution} column. ");
+            builder.AppendLine(@"<table border=""1"">");
+            for (var index = 0; index < Words.Count; index++)
+            {
+                string word = Words[index];
                 builder.AppendLine(@"<tr>");
-                builder.AppendLine($@"    <td>Clue for {word}</td>");
+                string currentClue = $@"Clue for {word}";
+                if (!string.IsNullOrWhiteSpace(Clues[index]))
+                {
+                    currentClue = Clues[index];
+                }
+                builder.AppendLine($@"    <td width=""250"">" + currentClue + $@"</td>");
                 for (int i = 0; i < Size; i++)
                 {
-                    builder.AppendLine(@"    <td> </td>");
+                    string style = "normal";
+                    if (i == ZeroBasedIndexOfSolution)
+                    {
+                        style = "bold";
+                    }
+
+                    string letterToDisplay = "&nbsp;";
+                    if (includeSolution || (char.ToUpperInvariant(SpecialCharacter) == char.ToUpperInvariant(word[i])) )
+                    {
+                        letterToDisplay = word[i].ToString().ToUpperInvariant();
+                        style += " centered";
+                    }
+                    builder.AppendLine($@"    <td class=""{style}"" width=""30"">{letterToDisplay}</td>");
                 }
 
                 builder.AppendLine(@"</tr>");
             }
+
             builder.AppendLine("</table>");
             builder.Append(@"Solution: ");
-            foreach (char character in Solution)
+            if (includeSolution)
             {
-                if (char.IsLetter(character))
+                builder.AppendLine($"<u>{Solution.ToUpperInvariant()}</u>");
+            }
+            else
+            {
+                foreach (char character in Solution)
                 {
-                    builder.Append("_ ");
-                    continue;
-                }
+                    if (char.IsLetter(character))
+                    {
+                        builder.Append("_ ");
+                        continue;
+                    }
 
-                if (character == ' ')
-                {
-                    builder.Append("&nbsp;&nbsp;&nbsp;");
-                    continue;
-                }
+                    if (character == ' ')
+                    {
+                        builder.Append("&nbsp;&nbsp;&nbsp;");
+                        continue;
+                    }
 
-                builder.Append(character);
+                    builder.Append(character);
+                }
             }
 
             builder.AppendLine();
             builder.AppendLine("<!--EndFragment-->");
-            builder.AppendLine("</body>");
-            builder.AppendLine("</html>");
+            if (!isFragment)
+            {
+                _generator.AppendHtmlFooter(builder);
+            }
 
             return builder.ToString();
         }
+
+        private string GetOrdinalOfColumnWithSolution()
+        {
+            if (ZeroBasedIndexOfSolution == (Size - 1))
+            {
+                return "last";
+            }
+            switch (ZeroBasedIndexOfSolution)
+            {
+                case 0: return "first";
+                case 1: return "second";
+                case 2: return "third";
+                case 3: return "fourth";
+                case 4: return "fifth";
+                case 5: return "sixth";
+            }
+            throw new Exception("Unexpected ZeroBasedIndexOfSolution.");
+        }
+
+
+        public string Description => $"Read Down Column puzzle {Solution}";
+        public List<string> Clues = new List<string>();
+
+        public char SpecialCharacter
+        {
+            get => _specialCharacter;
+            set => _specialCharacter = value.ToString().ToLowerInvariant()[0];
+        }
+
+        public int RandomSeed { get; set; } = 0;
+        public Random Random1
+        {
+            get
+            {
+                if (_random == null)
+                {
+                    if (RandomSeed == 0)
+                    {
+                        _random = new Random();
+                    }
+                    else
+                    {
+                        _random = new Random(RandomSeed);
+                    }
+                }
+                return _random;
+            }
+        }
+
+        public List<string> Words = new List<string>();
     }
 }

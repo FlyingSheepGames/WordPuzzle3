@@ -9,11 +9,11 @@
         WordLadder,
         LettersAndArrows,
         ReadDownColumn,
-        HiddenWords,
+        HiddenRelatedWords,
         BuildingBlocks,
         RelatedWords,
         MissingLetters,
-        MAX_VALUE
-
+        PuzzleForDate,
+        MAX_VALUE,
     }
 }

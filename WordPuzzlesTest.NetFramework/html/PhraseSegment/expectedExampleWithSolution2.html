@@ -1,0 +1,312 @@
+<html>
+
+<head>
+<style type="text / css">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+    	.centered {
+	        text-align: center
+	    }
+    	.black {
+	        background-color:#000000
+	    }
+    	.grey {
+	        background-color:#AAAAAA
+	    }
+
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td width="30" class="centered normal-top-left" >I</td><td width="30" class="centered normal-top" >n</td><td width="30" class="centered black normal-top" > </td><td width="30" class="centered normal-top-right" >s</td>
+<td width="30" class="centered normal-top-left" >o</td><td width="30" class="centered normal-top" >m</td><td width="30" class="centered normal-top" >e</td><td width="30" class="centered black normal-top-right" > </td>
+<td width="30" class="centered normal-top-left" >p</td><td width="30" class="centered normal-top" >a</td><td width="30" class="centered normal-top" >r</td><td width="30" class="centered normal-top-right" >t</td>
+<td width="30" class="centered normal-top-left" >s</td><td width="30" class="centered black normal-top" > </td><td width="30" class="centered normal-top" >o</td><td width="30" class="centered normal-top-right" >f</td>
+<td width="30" class="centered black normal-top-left" > </td><td width="30" class="centered normal-top" >t</td><td width="30" class="centered normal-top-right" >h</td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-left" >e</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal" >w</td><td width="30" class="centered normal-right" >o</td>
+<td width="30" class="centered normal-left" >r</td><td width="30" class="centered normal" >l</td><td width="30" class="centered normal" >d</td><td width="30" class="centered grey normal-right" >,</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >s</td><td width="30" class="centered normal" >t</td><td width="30" class="centered normal-right" >u</td>
+<td width="30" class="centered normal-left" >d</td><td width="30" class="centered normal" >e</td><td width="30" class="centered normal" >n</td><td width="30" class="centered normal-right" >t</td>
+<td width="30" class="centered normal-left" >s</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal-right" >a</td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-left" >r</td><td width="30" class="centered normal" >e</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal-right" >g</td>
+<td width="30" class="centered normal-left" >o</td><td width="30" class="centered normal" >i</td><td width="30" class="centered normal" >n</td><td width="30" class="centered normal-right" >g</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >t</td><td width="30" class="centered normal" >o</td><td width="30" class="centered black normal-right" > </td>
+<td width="30" class="centered normal-left" >s</td><td width="30" class="centered normal" >c</td><td width="30" class="centered normal" >h</td><td width="30" class="centered normal-right" >o</td>
+<td width="30" class="centered normal-left" >o</td><td width="30" class="centered normal" >l</td><td width="30" class="centered black normal-right" > </td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-bottom-left" >e</td><td width="30" class="centered normal-bottom" >v</td><td width="30" class="centered normal-bottom" >e</td><td width="30" class="centered normal-bottom-right" >r</td>
+<td width="30" class="centered normal-bottom-left" >y</td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered normal-bottom" >d</td><td width="30" class="centered normal-bottom-right" >a</td>
+<td width="30" class="centered normal-bottom-left" >y</td><td width="30" class="centered grey normal-bottom" >.</td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered normal-bottom-right" >I</td>
+<td width="30" class="centered normal-bottom-left" >t</td><td width="30" class="centered grey normal-bottom" >'</td><td width="30" class="centered normal-bottom" >s</td><td width="30" class="centered black normal-bottom-right" > </td>
+<td width="30" class="centered black normal-bottom-left" > </td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered black normal-bottom-right" > </td>
+</tr>
+
+<tr>
+</tr>
+
+</table>
+<table>
+<tr>
+<td width="30" class="centered normal-top-left" >t</td><td width="30" class="centered normal-top" >h</td><td width="30" class="centered normal-top" >e</td><td width="30" class="centered normal-top-right" >i</td>
+<td width="30" class="centered normal-top-left" >r</td><td width="30" class="centered black normal-top" > </td><td width="30" class="centered normal-top-right" >n</td>
+<td width="30" class="centered normal-top-left" >o</td><td width="30" class="centered normal-top" >r</td><td width="30" class="centered normal-top" >m</td><td width="30" class="centered normal-top-right" >a</td>
+<td width="30" class="centered normal-top-left" >l</td><td width="30" class="centered black normal-top" > </td><td width="30" class="centered normal-top" >l</td><td width="30" class="centered normal-top-right" >i</td>
+<td width="30" class="centered normal-top-left" >f</td><td width="30" class="centered normal-top" >e</td><td width="30" class="centered grey normal-top-right" >.</td>
+</tr>
+
+<tr>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >B</td><td width="30" class="centered normal" >u</td><td width="30" class="centered normal-right" >t</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >i</td><td width="30" class="centered normal-right" >n</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >o</td><td width="30" class="centered normal" >t</td><td width="30" class="centered normal-right" >h</td>
+<td width="30" class="centered normal-left" >e</td><td width="30" class="centered normal" >r</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal-right" >p</td>
+<td width="30" class="centered normal-left" >a</td><td width="30" class="centered normal" >r</td><td width="30" class="centered normal-right" >t</td>
+</tr>
+
+<tr>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >o</td><td width="30" class="centered normal" >f</td><td width="30" class="centered black normal-right" > </td>
+<td width="30" class="centered normal-left" >t</td><td width="30" class="centered normal" >h</td><td width="30" class="centered normal-right" >e</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >w</td><td width="30" class="centered normal" >o</td><td width="30" class="centered normal-right" >r</td>
+<td width="30" class="centered normal-left" >l</td><td width="30" class="centered normal" >d</td><td width="30" class="centered grey normal" >,</td><td width="30" class="centered black normal-right" > </td>
+<td width="30" class="centered normal-left" >w</td><td width="30" class="centered normal" >e</td><td width="30" class="centered black normal-right" > </td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-bottom-left" >a</td><td width="30" class="centered normal-bottom" >r</td><td width="30" class="centered normal-bottom" >e</td><td width="30" class="centered black normal-bottom-right" > </td>
+<td width="30" class="centered normal-bottom-left" >s</td><td width="30" class="centered normal-bottom" >t</td><td width="30" class="centered normal-bottom-right" >a</td>
+<td width="30" class="centered normal-bottom-left" >r</td><td width="30" class="centered normal-bottom" >v</td><td width="30" class="centered normal-bottom" >i</td><td width="30" class="centered normal-bottom-right" >n</td>
+<td width="30" class="centered normal-bottom-left" >g</td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered normal-bottom" >f</td><td width="30" class="centered normal-bottom-right" >o</td>
+<td width="30" class="centered normal-bottom-left" >r</td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered black normal-bottom-right" > </td>
+</tr>
+
+<tr>
+</tr>
+
+</table>
+<table>
+<tr>
+<td width="30" class="centered normal-top-left" >e</td><td width="30" class="centered normal-top" >d</td><td width="30" class="centered normal-top" >u</td><td width="30" class="centered normal-top-right" >c</td>
+<td width="30" class="centered normal-top-left" >a</td><td width="30" class="centered normal-top" >t</td><td width="30" class="centered normal-top" >i</td><td width="30" class="centered normal-top-right" >o</td>
+<td width="30" class="centered normal-top-left" >n</td><td width="30" class="centered grey normal-top" >.</td><td width="30" class="centered grey normal-top" >.</td><td width="30" class="centered grey normal-top-right" >.</td>
+<td width="30" class="centered black normal-top-left" > </td><td width="30" class="centered normal-top" >i</td><td width="30" class="centered normal-top" >t</td><td width="30" class="centered grey normal-top-right" >'</td>
+<td width="30" class="centered normal-top-left" >s</td><td width="30" class="centered black normal-top" > </td><td width="30" class="centered normal-top" >l</td><td width="30" class="centered normal-top-right" >i</td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-left" >k</td><td width="30" class="centered normal" >e</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal-right" >a</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >p</td><td width="30" class="centered normal" >r</td><td width="30" class="centered normal-right" >e</td>
+<td width="30" class="centered normal-left" >c</td><td width="30" class="centered normal" >i</td><td width="30" class="centered normal" >o</td><td width="30" class="centered normal-right" >u</td>
+<td width="30" class="centered normal-left" >s</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal" >g</td><td width="30" class="centered normal-right" >i</td>
+<td width="30" class="centered normal-left" >f</td><td width="30" class="centered normal" >t</td><td width="30" class="centered grey normal" >.</td><td width="30" class="centered black normal-right" > </td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-left" >I</td><td width="30" class="centered normal" >t</td><td width="30" class="centered grey normal" >'</td><td width="30" class="centered normal-right" >s</td>
+<td width="30" class="centered black normal-left" > </td><td width="30" class="centered normal" >l</td><td width="30" class="centered normal" >i</td><td width="30" class="centered normal-right" >k</td>
+<td width="30" class="centered normal-left" >e</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal" >a</td><td width="30" class="centered black normal-right" > </td>
+<td width="30" class="centered normal-left" >d</td><td width="30" class="centered normal" >i</td><td width="30" class="centered normal" >a</td><td width="30" class="centered normal-right" >m</td>
+<td width="30" class="centered normal-left" >o</td><td width="30" class="centered normal" >n</td><td width="30" class="centered normal" >d</td><td width="30" class="centered grey normal-right" >.</td>
+</tr>
+
+<tr>
+<td width="30" class="centered black normal-bottom-left" > </td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered black normal-bottom-right" > </td>
+<td width="30" class="centered normal-bottom-left" >M</td><td width="30" class="centered normal-bottom" >a</td><td width="30" class="centered normal-bottom" >l</td><td width="30" class="centered normal-bottom-right" >a</td>
+<td width="30" class="centered normal-bottom-left" >l</td><td width="30" class="centered normal-bottom" >a</td><td width="30" class="centered black normal-bottom" > </td><td width="30" class="centered normal-bottom-right" >Y</td>
+<td width="30" class="centered normal-bottom-left" >o</td><td width="30" class="centered normal-bottom" >u</td><td width="30" class="centered normal-bottom" >s</td><td width="30" class="centered normal-bottom-right" >a</td>
+<td width="30" class="centered normal-bottom-left" >f</td><td width="30" class="centered normal-bottom" >z</td><td width="30" class="centered normal-bottom" >a</td><td width="30" class="centered normal-bottom-right" >i</td>
+</tr>
+
+<tr>
+</tr>
+
+</table>
+</body>
+</html>

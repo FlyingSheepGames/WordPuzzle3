@@ -4,14 +4,15 @@ using System.Text;
 
 namespace WordPuzzles
 {
-    public class Anacrostic
+    public class Anacrostic : IPuzzle
     {
         public Puzzle Puzzle = new Puzzle();
         public WordRepository Repository = new WordRepository();
         private readonly int[] _remainingLetters = new int[26];
+        public HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public List<string> WordsFoundSoFar = new List<string>();
-        private string _originalPhrase;
+        public string OriginalPhrase;
         public string EncodedPhrase;
         public Anacrostic(string phrase)
         {
@@ -53,7 +54,7 @@ namespace WordPuzzles
             {
                 //throw new Exception("Phrases of length 57 or more are not supported (line length doesn't fit in the 8 - 14 range without 3 or more black spaces in the final row).");
             }
-            _originalPhrase = phrase.ToLower();
+            OriginalPhrase = phrase.ToLower();
             foreach (string word in phrase.Split(new [] { " "}, StringSplitOptions.RemoveEmptyEntries))
             {
                 IgnoreWord(word);
@@ -363,7 +364,7 @@ namespace WordPuzzles
             if (string.IsNullOrWhiteSpace(Puzzle.PhraseAsString))
             {
                 HandleLeftoverLetters();
-                Puzzle.PhraseAsString = _originalPhrase;
+                Puzzle.PhraseAsString = OriginalPhrase;
                 Puzzle.PlaceLetters();
             }
         }
@@ -375,79 +376,15 @@ namespace WordPuzzles
 
         }
 
-        public string FormatHtmlForGoogle(bool includeSolution = false)
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             PreparePuzzle();
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("<html>");
-            builder.AppendLine(@"
-<head>
-<style type=""text / css"">
-        table td, table th {
-            padding: 0
-        }
-       .bold {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 2.2pt;
-            border-right-width: 2.2pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 2.2pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 2.2pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-        .normal {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 1pt;
-            border-right-width: 1pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 1pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 1pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-        .hollow {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 0pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 0pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
 
-        .open {
-            border-right-style: solid;
-            border-bottom-color: #000000;
-            border-top-width: 0pt;
-            border-right-width: 0pt;
-            border-left-color: #000000;
-            vertical-align: top;
-            border-right-color: #000000;
-            border-left-width: 0pt;
-            border-top-style: solid;
-            border-left-style: solid;
-            border-bottom-width: 0pt;
-            border-top-color: #000000;
-            border-bottom-style: solid
-        }
-</style>
-</head>");
-            builder.AppendLine("<body>");
             builder.AppendLine("<!--StartFragment-->");
 
             builder.AppendLine("Fill in the blanks below based on the clues. ");
@@ -460,10 +397,15 @@ namespace WordPuzzles
 
 
             builder.AppendLine("<!--EndFragment-->");
-            builder.AppendLine("</body>");
-            builder.AppendLine("</html>");
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
+
             return builder.ToString();
         }
+
+        public string Description => "Anacrostic: " + OriginalPhrase;
 
         private void AppendEncodedMessageTable(StringBuilder builder, bool includeSolution = false)
         {
@@ -483,9 +425,9 @@ namespace WordPuzzles
                 string cellValue = enumeratedCellValues[index];
                 char letterInSolution = ' ';
 
-                if ( phraseIndex < _originalPhrase.Length)
+                if ( phraseIndex < OriginalPhrase.Length)
                 {
-                    letterInSolution = _originalPhrase[phraseIndex];
+                    letterInSolution = OriginalPhrase[phraseIndex];
                     phraseIndex += 1;
                 }
 
@@ -495,7 +437,9 @@ namespace WordPuzzles
                     string[] splitTokens = cellValue.Split(new[] {"\r\n"}, StringSplitOptions.None);
                     string lastCellValueInThisRow = splitTokens[0];
                     string firstCellValueInNextRow = splitTokens[1];
-                    ProcessCellValue(topLine, middleLine, bottomLine, lastCellValueInThisRow, letterInSolution);
+
+                    ProcessCellValue(topLine, middleLine, bottomLine, lastCellValueInThisRow, 
+                        includeSolution ? letterInSolution: ' ');
 
                     ProcessLineReturn(topLine, builder);
                     ProcessLineReturn(middleLine, builder);
@@ -504,17 +448,19 @@ namespace WordPuzzles
                     if (!string.IsNullOrWhiteSpace(firstCellValueInNextRow))
                     {
                         letterInSolution = ' ';
-                        if (phraseIndex < _originalPhrase.Length)
+                        if (phraseIndex < OriginalPhrase.Length)
                         {
-                            letterInSolution = _originalPhrase[phraseIndex];
+                            letterInSolution = OriginalPhrase[phraseIndex];
                             phraseIndex += 1;
                         }
-                        ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow, letterInSolution);
+                        ProcessCellValue(topLine, middleLine, bottomLine, firstCellValueInNextRow,
+                            includeSolution ? letterInSolution : ' ');
                     }
                 }
                 else
                 {
-                    ProcessCellValue(topLine, middleLine, bottomLine, cellValue, letterInSolution);
+                    ProcessCellValue(topLine, middleLine, bottomLine, cellValue,
+                        includeSolution ? letterInSolution : ' ');
                 }
             }
 
@@ -543,7 +489,7 @@ namespace WordPuzzles
         private static void ProcessCellValue(StringBuilder topLine, StringBuilder middleLine, StringBuilder bottomLine, string cellValue,
             char letterInSolution = ' ')
         {
-            var classAttribute = @"class=""normal""";
+            var classAttribute = @"class=""normal centered""";
             if (string.IsNullOrWhiteSpace(cellValue))
             {
                 classAttribute = @"class=""hollow""";
@@ -556,7 +502,7 @@ namespace WordPuzzles
             }
             topLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">" + letterInSolutionAsString + @"</td>");
             middleLine.AppendLine($@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
-            bottomLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">&nbsp;</td>");
+            bottomLine.AppendLine(@"    <td width=""30"" " + @"class=""open""" + @">&nbsp;</td>");
         }
 
         private void AppendCluesTable(StringBuilder builder, bool showSolution = false)
@@ -564,10 +510,12 @@ namespace WordPuzzles
             builder.AppendLine(@"<table border=""1"">");
             StringBuilder topLine = new StringBuilder();
             topLine.AppendLine("<tr>");
-            StringBuilder middleLine = new StringBuilder();
-            middleLine.AppendLine("<tr>");
-            StringBuilder bottomLine = new StringBuilder();
-            bottomLine.AppendLine("<tr>");
+            StringBuilder secondLine = new StringBuilder();
+            secondLine.AppendLine("<tr>");
+            StringBuilder thirdLine = new StringBuilder();
+            thirdLine.AppendLine("<tr>");
+            StringBuilder fourthLine = new StringBuilder();
+            fourthLine.AppendLine("<tr>");
 
             char currentLetter = 'A';
             int lettersAssignedSoFar = 1;
@@ -582,56 +530,62 @@ namespace WordPuzzles
                 topLine.AppendLine($@"    <td colspan=""{word.Length}"" class=""open""><br/>" + currentClue + $@"</td>");
                 foreach (char letter in word.ToUpper())
                 {
-                    middleLine.Append($@"    <td width=""30"" class=""normal"">");
+                    secondLine.Append($@"    <td width=""30"" class=""normal centered"">");
                     if (showSolution)
                     {
-                        middleLine.Append(letter);
+                        secondLine.Append(letter);
                     }
                     else
                     {
-                        middleLine.Append(@"&nbsp;");
+                        secondLine.Append(@"&nbsp;");
                     }
-                    middleLine.AppendLine($@"</td>");
-                    bottomLine.AppendLine($@"    <td width=""30"" class=""normal"">{currentLetter}{lettersAssignedSoFar++}</td>");
+                    secondLine.AppendLine($@"</td>");
+                    thirdLine.AppendLine($@"    <td width=""30"" class=""normal centered"">{currentLetter}{lettersAssignedSoFar++}</td>");
+                    fourthLine.AppendLine($@"    <td width=""30"" class=""open""></td>");
                 }
 
                 currentLetter++;
 
                 if (currentLetter % 2 == 1)
                 {
-                    topLine.AppendLine("</tr>");
-                    middleLine.AppendLine("</tr>");
-                    bottomLine.AppendLine("</tr>");
-
-                    builder.Append(topLine);
-                    builder.Append(middleLine);
-                    builder.Append(bottomLine);
+                    CloseAndAppendAllLines(builder, topLine, secondLine, thirdLine, fourthLine);
 
                     topLine.Clear();
                     topLine.AppendLine("<tr>");
-                    middleLine.Clear();
-                    middleLine.AppendLine("<tr>");
-                    bottomLine.Clear();
-                    bottomLine.AppendLine("<tr>");
+                    secondLine.Clear();
+                    secondLine.AppendLine("<tr>");
+                    thirdLine.Clear();
+                    thirdLine.AppendLine("<tr>");
+                    fourthLine.Clear();
+                    fourthLine.AppendLine("<tr>");
                 }
                 else
                 {
                     topLine.AppendLine(@"    <td width=""30"" class=""open"">&nbsp;</td>"); 
-                    middleLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>"); 
-                    bottomLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>");
+                    secondLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>"); 
+                    thirdLine.AppendLine(@"    <td width=""30"" class=""hollow"">&nbsp;</td>");
                 }
             }
 
             if (currentLetter % 2 == 0)
             {
-                topLine.AppendLine("</tr>");
-                middleLine.AppendLine("</tr>");
-                bottomLine.AppendLine("</tr>");
-                builder.Append(topLine);
-                builder.Append(middleLine);
-                builder.Append(bottomLine);
+                CloseAndAppendAllLines(builder, topLine, secondLine, thirdLine, fourthLine);
             }
             builder.AppendLine("</table>");
+        }
+
+        private static void CloseAndAppendAllLines(StringBuilder builder, StringBuilder topLine, StringBuilder secondLine,
+            StringBuilder thirdLine, StringBuilder fourthLine)
+        {
+            topLine.AppendLine("</tr>");
+            secondLine.AppendLine("</tr>");
+            thirdLine.AppendLine("</tr>");
+            fourthLine.AppendLine("</tr>");
+
+            builder.Append(topLine);
+            builder.Append(secondLine);
+            builder.Append(thirdLine);
+            builder.Append(fourthLine);
         }
     }
 }

@@ -1,0 +1,226 @@
+<html>
+
+<head>
+<style type="text / css">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+    	.centered {
+	        text-align: center
+	    }
+    	.black {
+	        background-color:#000000
+	    }
+    	.grey {
+	        background-color:#AAAAAA
+	    }
+
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td width="30" class="centered normal-top-left" >T</td><td width="30" class="centered normal-top" >h</td><td width="30" class="centered normal-top" >e</td><td width="30" class="centered black normal-top-right" > </td>
+<td width="30" class="centered normal-top-left" >f</td><td width="30" class="centered normal-top" >a</td><td width="30" class="centered normal-top" >t</td><td width="30" class="centered black normal-top-right" > </td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-left" >c</td><td width="30" class="centered normal" >a</td><td width="30" class="centered normal" >t</td><td width="30" class="centered black normal-right" > </td>
+<td width="30" class="centered normal-left" >s</td><td width="30" class="centered normal" >a</td><td width="30" class="centered normal" >t</td><td width="30" class="centered black normal-right" > </td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-left" >o</td><td width="30" class="centered normal" >n</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal-right" >t</td>
+<td width="30" class="centered normal-left" >h</td><td width="30" class="centered normal" >e</td><td width="30" class="centered black normal" > </td><td width="30" class="centered normal-right" >b</td>
+</tr>
+
+<tr>
+<td width="30" class="centered normal-bottom-left" >a</td><td width="30" class="centered normal-bottom" >t</td><td width="30" class="centered grey normal-bottom" >.</td><td width="30" class="centered black normal-bottom-right" > </td>
+<td width="30" class="centered normal-bottom-left" >C</td><td width="30" class="centered normal-bottom" >h</td><td width="30" class="centered normal-bottom" >i</td><td width="30" class="centered normal-bottom-right" >p</td>
+</tr>
+
+<tr>
+</tr>
+
+</table>
+</body>
+</html>

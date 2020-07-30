@@ -65,7 +65,7 @@ namespace WordPuzzles
             File.WriteAllText(fileLocation, JsonConvert.SerializeObject(Clues));
         }
 
-        public void ReadFromDisk(string fileLocation)
+        public void ReadFromDisk(string fileLocation = @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json")
         {
             var CluesToAdd = JsonConvert.DeserializeObject<Dictionary<string, List<Clue>>>(File.ReadAllText(fileLocation));
             foreach (var clueKey in CluesToAdd.Keys)

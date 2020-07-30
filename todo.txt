@@ -9,37 +9,62 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Generate solution as HTML
 
-Create general HTMLFormatter (exists, but not sure what it looks like)
-	Single place for all styles
-	Create table cells
-
-Already have an example for "Puzzle" - 
-
-Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
-	Capture partially-filled month of puzzles. 
-
-Who was born on this day? 
-What famous thing did they say? 
-
-Add method to Clue Repository for Deleting a clue. 
-Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
+Organize files into directories - Puzzles, Utilities, etc.
 
 Rename Anacrostic."Puzzle" to a more descriptive name. 
-Serialize/Deserialize all puzzles to JSON
 
-Create a general puzzle object. 
-
-Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
-
-Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
-	
 Consolidate Anacrostic.EncodedPhrase and Anacrostic.EncodedPhraseForGoogle
+
+Replace Tests with .NetFrameworkTests
+Rename unit test project to remove .NetFramework
+
+Add property to each IPuzzle implementation to indicate which type of puzzle it is 
+public bool IsAcrostic = true;
+And update Puzzle Converter
+            if (FieldExists("IsAcrostic", jObject))
+            {
+                return new Acrostic();
+            }
+
+---------
+Add instructions to PhraseSegmentPuzzle
+Add instructions to HiddenRelatedWords
+
+Add method to Clue Repository for Deleting a clue. 
+	Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
+	Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
+
+Group puzzles into months
+	Placeholders for days where we know the solution, but not the puzzle.
+	Multiple possible puzzles for the same day (This is a bad idea)
+	Replace or add puzzle to specific day (See why above is a bad idea?)
+	"Which month do you want to work on?" "Ok, which day?" "Ok, is <> still the word for that day?"
+	Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
+	Capture partially-filled month of puzzles. 
+	Placeholder for month or year-long puzzle solutions (e.g. fill in the blanks for Days of week, phases of moon, etc.)
 
 Add new puzzle types.
 NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
 	e.g. (Adding A): "Don't try to carry everything without a platter: _ _ A _" Solution: TRAY (anagram try)
+
+Convert remaining puzzles
+2. Sudoku
+8. Building Blocks
+9. Related Words (see new puzzle)
+
+Convert remaining puzzles
+Q. Missing Letters
+7. Hidden Words (see new puzzle)
+4. Word Ladder
+
+Review todo below this line.
+
+HTMLFormatter (common code)
+	Create table cells
+
+Fix copy/pasted code in  Weekly Puzzle executable. Share code from Puzzle Generator instead.
+
 
 Next source of clues: Idioms ("raining cats and ___")
 Next source of clues: Songs (Beatles hit "Across the ____")
@@ -47,11 +72,16 @@ Next source of clues: Movies (80s film "Adventures in ____")
 Next source of clues: Games (Days of Wonder hit by Alan Moon: "____ To Ride")
 Next source of clues: Books (Dante's classic "____ Lost")
 
-Replace Tests with .NetFrameworkTests
+
+Other Birthdays
+	(Actors) what movies were they in?
+	(Writers) what books did they write?
+	(Musicians) what songs did they perform?
 
 List of tests that occassionally time out
 	EndingWith_D_FindsAtLeastOnePuzzle
 	SimpleTest_PutsWordInExpectedPosition
+
 List of tests that occassionally fail. 
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
@@ -60,6 +90,56 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Create new puzzle based on TakeTwo
+	Not enough examples. TakeOne might be a possibility. 
+
+
+Create new puzzle based on HiddenRelatedWords.
+
+Create ThemeRepository
+
+PhraseSegmentPuzzle bug - "It's" becomes "Its", not {"It", "s"}
+
+Create new puzzle type - PhraseSegmentPuzzle
+
+Who was born on this day? 
+What famous thing did they say? 
+
+Would like to be able to support long phrases. for example: 
+    "Phrase": "In some parts of the world, students are going to school every day. It's their normal life. But in other part of the world, we are starving for education... it's like a precious gift. It's like a diamond.",
+    "Author": "Malala Yousafzai",
+    "CompleteLength": 224,
+
+
+This should be presented as 3 separate rows of blocks. There are 14 blocks in all, so they could be: 
+5 blocks of 4 = 20 * 4 = 80
+5 blocks of 4 = 20 * 4 = 80
+4 blocks of 4 = 16 * 4 = 64
+= 224
+
+We probably want the number of blocks per row to be between 3 and 5. So it looks like we're doing the same 
+sort of math in figuring out how many blocks there are, as well as how many blocks per row or section. 
+
+This is confusing, because we're talking about both lines per block (4), and blocks per line (3-5). Maybe
+we should call the larger-grain line a "section". 
+
+Move Theme Repository tests from Word Repository. Replace callers to use Theme Respository instead.
+
+Update Read Down Column to include a specific (revealed) letter in each word.
+
+Convert remaining puzzles
+6. Read Down Column
+	Implement IPuzzle
+	Update Program to match
+
+Update WordPuzzleGenerator to produce a set of puzzles (and solutions)
+	Load/Save partially-filled set of puzzles. 
+
+Update HTMLFormatter 
+	Single place for all styles
+	Flag for "just the puzzle fragment"
+	Create a general puzzle interface (IPuzzle). 
+
 Next Puzzle to update formatting: Anacrostics
 	Update Puzzle Generator to prompt user for clues. 
 

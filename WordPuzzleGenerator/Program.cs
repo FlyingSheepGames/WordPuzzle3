@@ -20,11 +20,16 @@ namespace WordPuzzleGenerator
         static readonly AnagramFinder AnagramFinder = new AnagramFinder() {Repository = WordRepository};
         static readonly Random RandomNumberGenerator = new Random();
         static readonly ClueRepository _clueRepository = new ClueRepository();
+        private static readonly StringBuilder _puzzleBuilder = new StringBuilder();
+        private static readonly StringBuilder _solutionBuilder = new StringBuilder();
+
         [STAThread]
         static void Main()
         {
             _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
 
+            //FindAllTakeOneClues();
+            //FindAllTakeTwoClues();
             //LoadSevenLetterWords();
             //FindWordsThatMakeDigits();
 
@@ -36,248 +41,441 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-
-            Console.WriteLine("Enter the word or phrase you'd like to create a puzzle for.");
-            string solution = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(solution))
+            PuzzleCollection collection = InteractiveSelectPuzzleCollection();
+            if (0 < collection.PuzzleCount)
             {
-                return;
+                InteractiveDeletePuzzles(collection);
             }
-            int solutionLength = solution.Length;
+            HtmlGenerator htmlGenerator = new HtmlGenerator();
+            htmlGenerator.AppendHtmlHeader(_puzzleBuilder);
+            htmlGenerator.AppendHtmlHeader(_solutionBuilder);
 
-            List<string> solutionThemes = InteractiveFindThemesForWord(solution);
-            
-            WordPuzzleType userPuzzleSelection = WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
-
-            Dictionary<WordPuzzleType, bool> availablePuzzleTypes = CalculateAvailablePuzzleTypes(solution, solutionThemes);
-
-            while (userPuzzleSelection != 0)
+            string solution = "Placeholder that is not empty";
+            while (!string.IsNullOrWhiteSpace(solution))
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"Which type of puzzle would you like to create for '{solution}'?");
-                Console.WriteLine("0. None. Quit to word patterns.");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("1. Word Square");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("2. Sudoku");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("3. Anacrostic");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("4. Word Ladder");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("5. Letters and Arrows");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("6. Read Down Column");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.HiddenWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("7. Hidden Words");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("8. Building Blocks");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("9. Related Words");
-                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-                Console.WriteLine("Q. Missing Letters");
-                Console.ForegroundColor = ConsoleColor.Gray;
-
-                var userPuzzleSelectionInput = Console.ReadKey();
-                var userPuzzleSelectionString = userPuzzleSelectionInput.KeyChar.ToString();
-                if (userPuzzleSelectionString == "q")
+                Console.WriteLine("Enter the word or phrase you'd like to create a puzzle for.");
+                solution = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(solution))
                 {
-                    userPuzzleSelectionString = "10";
+                    break;
                 }
-                if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
-                {
 
+                int solutionLength = solution.Length;
+
+                List<string> solutionThemes = InteractiveFindThemesForWord(solution);
+                WordPuzzleType
+                    userPuzzleSelection = WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
+                Dictionary<WordPuzzleType, bool> availablePuzzleTypes =
+                    CalculateAvailablePuzzleTypes(solution, solutionThemes);
+
+                while (userPuzzleSelection != 0)
+                {
+                    userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solution, availablePuzzleTypes);
+                    IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection, solutionLength, solution,
+                        solutionThemes);
+                    AddPuzzleToCollection(createdPuzzle, collection, _puzzleBuilder, _solutionBuilder);
+                }
+            }
+
+            InterativelyCreatesWordsWithSelectedPattern();
+
+            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+
+            htmlGenerator.AppendHtmlFooter(_puzzleBuilder);
+            htmlGenerator.AppendHtmlFooter(_solutionBuilder);
+            long ticks = DateTime.Now.Ticks;
+            File.WriteAllText($"{ticks}_puzzles.html", _puzzleBuilder.ToString());
+            File.WriteAllText($"{ticks}_solutions.html", _solutionBuilder.ToString());
+
+            SavePuzzleCollection(collection);
+        }
+        /*
+         *Results
+         * Found 99 clues.
+a has 1 clue pairs.
+d has 8 clue pairs.
+e has 5 clue pairs.
+f has 2 clue pairs.
+g has 4 clue pairs.
+h has 1 clue pairs.
+i has 1 clue pairs.
+l has 12 clue pairs.
+m has 1 clue pairs.
+n has 1 clue pairs.
+o has 2 clue pairs.
+p has 3 clue pairs.
+r has 6 clue pairs.
+s has 48 clue pairs.
+t has 3 clue pairs.
+v has 1 clue pairs.
+
+         *
+         */
+        private static List<TakeTwoClue> FindAllTakeTwoClues()
+        {
+            return new List<TakeTwoClue>();
+            StringBuilder pattern = new StringBuilder();
+            long wordsConsidered = 0;
+            int[] countPerLetterRemoved = new int[26];
+            for (int i = 0; i < 26; i++)
+            {
+                countPerLetterRemoved[i] = 0;
+            }
+            var findAllTakeTwoClues = new List<TakeTwoClue>();
+            for (char letterToPlace = 'a'; letterToPlace <= 'z'; letterToPlace++)
+            {
+                for (int wordLength = 4; wordLength < 9; wordLength++)
+                {
+                    for (int firstLetterIndex = 0; firstLetterIndex < wordLength - 1; firstLetterIndex++)
+                    {
+                        for (int secondLetterIndex = firstLetterIndex + 1;
+                            secondLetterIndex < wordLength;
+                            secondLetterIndex++)
+                        {
+                            var placeLetterAtTheseIndicies = new List<int>() { firstLetterIndex, secondLetterIndex };
+                            pattern.Clear();
+                            for (int patternIndex = 0; patternIndex < wordLength; patternIndex++)
+                            {
+                                char letterToAppend = '_';
+                                if (placeLetterAtTheseIndicies.Contains(patternIndex))
+                                {
+                                    letterToAppend = letterToPlace;
+                                }
+
+                                pattern.Append(letterToAppend);
+                            }
+
+                            string patternAsString = pattern.ToString();
+                            foreach (var longerWord in WordRepository.WordsMatchingPattern(patternAsString))
+                            {
+                                wordsConsidered++;
+                                if (wordsConsidered % 50 == 0)
+                                {
+                                    Console.WriteLine($"Considered {wordsConsidered} words so far.");
+                                }
+                                string shorterWord = longerWord.Replace(letterToPlace.ToString(), "");
+                                if (WordRepository.IsAWord(shorterWord))
+                                {
+                                    if (shorterWord.Length + 2 == longerWord.Length) //exactly two letters were removed
+                                    {
+                                        countPerLetterRemoved[letterToPlace - 'a']++;
+                                        findAllTakeTwoClues.Add(
+                                            new TakeTwoClue()
+                                            {
+                                                LongerWord = longerWord, 
+                                                ShorterWord = shorterWord, 
+                                                LetterRemoved = letterToPlace
+                                            });
+                                        Console.WriteLine($"Found a pair: {longerWord} and {shorterWord}.");
+                                        //Console.ReadKey();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine($"Found {findAllTakeTwoClues.Count} clues.");
+            for (int i = 0; i < 26; i++)
+            {
+                int cluesForThisLetter = countPerLetterRemoved[i];
+                if (cluesForThisLetter == 0) continue;
+                Console.WriteLine($"{(char) (i+'a')} has {cluesForThisLetter} clue pairs.");
+            }
+            Console.ReadKey();
+            return findAllTakeTwoClues;
+        }
+
+        /*
+         * Take One clues
+         * Found 2222 clues.
+a has 56 clue pairs.
+b has 52 clue pairs.
+c has 61 clue pairs.
+d has 212 clue pairs.
+e has 103 clue pairs.
+f has 40 clue pairs.
+g has 47 clue pairs.
+h has 52 clue pairs.
+i has 35 clue pairs.
+j has 5 clue pairs.
+k has 40 clue pairs.
+l has 111 clue pairs.
+m has 49 clue pairs.
+n has 77 clue pairs.
+o has 36 clue pairs.
+p has 74 clue pairs.
+r has 160 clue pairs.
+s has 749 clue pairs.
+t has 102 clue pairs.
+u has 30 clue pairs.
+v has 15 clue pairs.
+w has 39 clue pairs.
+x has 4 clue pairs.
+y has 68 clue pairs.
+z has 5 clue pairs.
+
+         */
+        private static List<TakeTwoClue> FindAllTakeOneClues()
+        {
+            StringBuilder pattern = new StringBuilder();
+            long wordsConsidered = 0;
+            int[] countPerLetterRemoved = new int[26];
+            for (int i = 0; i < 26; i++)
+            {
+                countPerLetterRemoved[i] = 0;
+            }
+            var findAllTakeTwoClues = new List<TakeTwoClue>();
+            for (char letterToPlace = 'a'; letterToPlace <= 'z'; letterToPlace++)
+            {
+                for (int wordLength = 4; wordLength < 9; wordLength++)
+                {
+                    for (int firstLetterIndex = 0; firstLetterIndex < wordLength; firstLetterIndex++)
+                    {
+                        var placeLetterAtTheseIndicies = new List<int>() {firstLetterIndex};
+                        pattern.Clear();
+                        for (int patternIndex = 0; patternIndex < wordLength; patternIndex++)
+                        {
+                            char letterToAppend = '_';
+                            if (placeLetterAtTheseIndicies.Contains(patternIndex))
+                            {
+                                letterToAppend = letterToPlace;
+                            }
+
+                            pattern.Append(letterToAppend);
+                        }
+
+                        string patternAsString = pattern.ToString();
+                        foreach (var longerWord in WordRepository.WordsMatchingPattern(patternAsString))
+                        {
+                            wordsConsidered++;
+                            if (wordsConsidered % 50 == 0)
+                            {
+                                Console.WriteLine($"Considered {wordsConsidered} words so far.");
+                            }
+
+                            string shorterWord = longerWord.Replace(letterToPlace.ToString(), "");
+                            if (WordRepository.IsAWord(shorterWord))
+                            {
+                                if (shorterWord.Length + 1 == longerWord.Length) //exactly two letters were removed
+                                {
+                                    countPerLetterRemoved[letterToPlace - 'a']++;
+                                    findAllTakeTwoClues.Add(
+                                        new TakeTwoClue()
+                                        {
+                                            LongerWord = longerWord,
+                                            ShorterWord = shorterWord,
+                                            LetterRemoved = letterToPlace
+                                        });
+                                    Console.WriteLine($"Found a pair: {longerWord} and {shorterWord}.");
+                                    //Console.ReadKey();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine($"Found {findAllTakeTwoClues.Count} clues.");
+            for (int i = 0; i < 26; i++)
+            {
+                int cluesForThisLetter = countPerLetterRemoved[i];
+                if (cluesForThisLetter == 0) continue;
+                Console.WriteLine($"{(char)(i + 'a')} has {cluesForThisLetter} clue pairs.");
+            }
+            Console.ReadKey();
+            return findAllTakeTwoClues;
+        }
+
+        private static void AddPuzzleToCollection(IPuzzle puzzleToAdd, PuzzleCollection collection, StringBuilder puzzleBuilder, StringBuilder solutionBuilder)
+        {
+            if (puzzleToAdd == null) return;
+            collection.AddPuzzle(puzzleToAdd);
+            _puzzleBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(false, true));
+            _solutionBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(true, true));
+        }
+
+        private static PhraseSegmentPuzzle InteractiveGetPuzzleForDate(DateTime date)
+        {
+            Console.Clear();
+            Console.WriteLine("Finding people born on this day.");
+            BirthdayFinder finder = new BirthdayFinder();
+            var results = finder.FindPeopleForDate(date.Month, date.Day);
+            ClearConsoleInputAndOutput();
+            foreach (var person in results)
+            {
+                ClearConsoleInputAndOutput();
+                Console.WriteLine($"{person.Name} was born on {date.Month}/{date.Day}");
+                var quotesCount = person.Quotes.Count;
+                var MAX_QUOTES_TO_SHOW = 7;
+                if (MAX_QUOTES_TO_SHOW < quotesCount)
+                {
+                    quotesCount = MAX_QUOTES_TO_SHOW;
+                }
+                for (var index = 0; index < quotesCount; index++)
+                {
+                    var quote = person.Quotes[index];
+                    Console.WriteLine($"{index}: {quote}");
+                }
+                Console.WriteLine("Either enter the number of the quote to use, or press enter to go to the next person born this day (if there is one).");
+                string userInputAsString = Console.ReadLine();
+                int selectedIndex;
+                if (int.TryParse(userInputAsString, out selectedIndex))
+                {
+                    PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle()
+                    {
+                        Author = person.Name,
+                        Phrase = person.Quotes[selectedIndex],
+                    };
+                    puzzle.PlacePhrase();
+                    
+                    return puzzle;
+
+                }
+            }
+
+            return null;
+        }
+
+        private static void InteractiveDeletePuzzles(PuzzleCollection collection)
+        {
+            int selectedIndex = 0;
+            while (selectedIndex != int.MinValue)
+            {
+                Console.Clear();
+                Console.WriteLine("Select an index to delete, or just hit enter to skip this step.");
+                for (var index = 0; index < collection.ToList().Count; index++)
+                {
+                    IPuzzle puzzle = collection.ToList()[index];
+                    Console.WriteLine($"{index}: {puzzle.Description}");
+                }
+
+                string userInput = Console.ReadLine();
+                if (int.TryParse(userInput, out selectedIndex))
+                {
+                    collection.RemovePuzzleAtIndex(selectedIndex);
                 }
                 else
                 {
-                    userPuzzleSelection = 0;
-                }
-
-                switch (userPuzzleSelection)
-                {
-
-                    case WordPuzzleType.WordSquare:
-                        if (3 < solutionLength && solutionLength < 7)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a word square for you.");
-                            InteractiveFindWordSquare(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} is not the right length for a Magic Word Square. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-
-                    case WordPuzzleType.Sudoku:
-                        if (WordSudoku.ContainsDuplicateLetters(solution))
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} has duplicate letters, so cannot be used for Sudoku. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a word sudoku for you.");
-                            InteractiveGenerateWordSudoku(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-                    case WordPuzzleType.Anacrostic:
-                        if (7 < solutionLength && solutionLength < 57)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating an anacrostic for you.");
-                            InteractiveGenerateAnacrostic(new AnacrosticParameterSet
-                            {
-                                Phrase = solution,
-                                WordsToUse = new List<string>() { }
-                            });
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine($"{solution} is not the right length for an anacrostic.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-                    case WordPuzzleType.WordLadder:
-                        if (2 < solutionLength && solutionLength < 7)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a word ladder for you.");
-                            InteractiveFindWordLadder(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} is not the right length for a Word Ladder. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-
-                    case WordPuzzleType.LettersAndArrows:
-                        if (7 < solutionLength && solutionLength < 30)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a letters and arrows puzzle for you.");
-                            InteractiveFindLettersAndArrowsPuzzle(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} is not the right length for a Letters and Arrows puzzle. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-
-                    case WordPuzzleType.ReadDownColumn:
-                        if (3 < solutionLength && solutionLength < 30)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a read down column puzzle for you.");
-                            InteractiveFindReadDownColumnPuzzle(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} is not the right length for a Read Down Column puzzle. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-                    case WordPuzzleType.HiddenWords:
-                        if (!solution.ToLower().Contains('x'))
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a Hidden Word puzzle for you.");
-                            InteractiveCreateHiddenWordPuzzle(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} contains the letter X, so I can't create a hidden word puzzle. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-                    case WordPuzzleType.BuildingBlocks:
-                        if (!solution.Contains(' '))
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a Building Blocks puzzle for you.");
-                            InteractiveCreateBuildingBlocksPuzzle(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} contains a space, so I can't create a building blocks puzzle. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-
-                        break;
-
-                    case WordPuzzleType.RelatedWords:
-                        if (0 < solutionThemes.Count)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a Related Words puzzle for you.");
-                            InteractiveCreateRelatedWordsPuzzle(solution, solutionThemes);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine(
-                                $"{solution} doesn't have any themes, so I can't create a related words puzzle. Press anything to continue.");
-                            Console.ReadKey();
-                        }
-                        break;
-
-                    case WordPuzzleType.MissingLetters:
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Creating a Missing Letters puzzle for you.");
-                            InteractiveCreateMissingLettersPuzzle(solution);
-                            Console.WriteLine("Done. Press a key to continue.");
-                            Console.ReadKey();
-                        }
-                        break;
+                    selectedIndex = int.MinValue;
                 }
             }
 
+        }
+
+        private static void SavePuzzleCollection(PuzzleCollection collection)
+        {
+            if (collection.PuzzleCount == 0) return;
+            if (string.IsNullOrWhiteSpace(collection.Name)) return;
+            string directory = Path.Combine(BASE_DIRECTORY, "collections");
+            collection.Serialize($@"{directory}\{collection.Name}.json");
+        }
+
+        private static PuzzleCollection InteractiveSelectPuzzleCollection()
+        {
+            Console.Clear();
+            PuzzleCollection selectedCollection = new PuzzleCollection();
+            string directory = Path.Combine(BASE_DIRECTORY, "collections");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            var enumerateFiles = Directory.EnumerateFiles(directory, "*.json", SearchOption.TopDirectoryOnly).ToArray();
+            Console.WriteLine("Please select one of the following options.");
+
+            for (var i = 0; i < enumerateFiles.Length; i++)
+            {
+                string fileName = enumerateFiles[i];
+                Console.WriteLine($"{i}:{fileName}");
+            }
+
+            Console.WriteLine($"To create a new collection, enter a name.");
+            string userInput = Console.ReadLine();
+            int selectedIndex = 0;
+            if (int.TryParse(userInput, out selectedIndex))
+            {
+                selectedCollection.Deserialize(enumerateFiles[selectedIndex]);
+            }
+            else
+            {
+                selectedCollection.Name = userInput;
+            }
+            return selectedCollection;
+        }
+
+        private static WordPuzzleType DisplayMenuOfAvailablePuzzles(string solution, Dictionary<WordPuzzleType, bool> availablePuzzleTypes)
+        {
+            WordPuzzleType userPuzzleSelection;
+            
+            ClearConsoleInputAndOutput();
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine($"Which type of puzzle would you like to create for '{solution.ToUpperInvariant()}'?");
+            Console.WriteLine("0. None. Enter the next word or phrase.");
+            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("1. * Word Square");
+            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("2. Sudoku");
+            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("3. * Anacrostic");
+            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("4. Word Ladder");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("5. * Letters and Arrows");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("6. * Read Down Column");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.HiddenRelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("7. * Hidden Related Words");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("8. Building Blocks");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("9. Related Words");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("Q. Missing Letters");
+            Console.ForegroundColor =
+                availablePuzzleTypes[WordPuzzleType.PuzzleForDate] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.WriteLine("W. Puzzle For Date");
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            var userPuzzleSelectionInput = Console.ReadKey();
+            var userPuzzleSelectionString = userPuzzleSelectionInput.KeyChar.ToString();
+            if (userPuzzleSelectionString == "q")
+            {
+                userPuzzleSelectionString = "10";
+            }
+            if (userPuzzleSelectionString == "w")
+            {
+                userPuzzleSelectionString = "11";
+            }
+
+            if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
+            {
+            }
+            else
+            {
+                userPuzzleSelection = 0;
+            }
+
+            return userPuzzleSelection;
+        }
+
+        private static void ClearConsoleInputAndOutput()
+        {
+            Console.Clear();
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey();
+            }
+        }
+
+        private static void InterativelyCreatesWordsWithSelectedPattern()
+        {
             string wordPattern = "test";
             while (!string.IsNullOrWhiteSpace(wordPattern))
             {
@@ -290,16 +488,208 @@ namespace WordPuzzleGenerator
                     {
                         Console.WriteLine();
                     }
+
                     Console.Write(word);
                     Console.Write('\t');
                 }
+
                 Console.WriteLine();
                 Console.WriteLine("Enter a pattern (use underscores for missing letters) or just hit enter to exit:");
                 wordPattern = Console.ReadLine();
             }
+        }
 
-            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+        private static IPuzzle InteractivelyGenerateSelectedPuzzleType(WordPuzzleType userPuzzleSelection,
+            int solutionLength,
+            string solution, List<string> solutionThemes)
+        {
+            IPuzzle generatedPuzzle = null;
+            switch (userPuzzleSelection)
+            {
+                case WordPuzzleType.WordSquare:
+                    if (3 < solutionLength && solutionLength < 7)
+                    {
+                        generatedPuzzle = InteractiveFindWordSquare(solution);
+                        
+                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} is not the right length for a Magic Word Square. Press anything to continue.");
+                        Console.ReadKey();
+                    }
 
+                    break;
+
+                case WordPuzzleType.Sudoku:
+                    if (WordSudoku.ContainsDuplicateLetters(solution))
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} has duplicate letters, so cannot be used for Sudoku. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a word sudoku for you.");
+                        InteractiveGenerateWordSudoku(solution);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+                case WordPuzzleType.Anacrostic:
+                    if (7 < solutionLength && solutionLength < 57)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating an anacrostic for you.");
+                        generatedPuzzle = InteractiveGenerateAnacrostic(new AnacrosticParameterSet
+                        {
+                            Phrase = solution,
+                            WordsToUse = new List<string>() { }
+                        });
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"{solution} is not the right length for an anacrostic.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+                case WordPuzzleType.WordLadder:
+                    if (2 < solutionLength && solutionLength < 7)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a word ladder for you.");
+                        InteractiveFindWordLadder(solution);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} is not the right length for a Word Ladder. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+
+                case WordPuzzleType.LettersAndArrows:
+                    if (7 < solutionLength && solutionLength < 30)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a letters and arrows puzzle for you.");
+                        generatedPuzzle = InteractiveFindLettersAndArrowsPuzzle(solution);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} is not the right length for a Letters and Arrows puzzle. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+
+                case WordPuzzleType.ReadDownColumn:
+                    if (3 < solutionLength && solutionLength < 30)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a read down column puzzle for you.");
+                        generatedPuzzle = InteractiveFindReadDownColumnPuzzle(solution);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} is not the right length for a Read Down Column puzzle. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+                case WordPuzzleType.HiddenRelatedWords:
+                    if (!solution.ToLower().Contains('x'))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a Hidden Related Word puzzle for you.");
+                        generatedPuzzle = InteractiveCreateHiddenRelatedWordPuzzle(solution);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} contains the letter X, so I can't create a hidden word puzzle. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+                case WordPuzzleType.BuildingBlocks:
+                    if (!solution.Contains(' '))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a Building Blocks puzzle for you.");
+                        InteractiveCreateBuildingBlocksPuzzle(solution);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} contains a space, so I can't create a building blocks puzzle. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+
+                case WordPuzzleType.RelatedWords:
+                    if (0 < solutionThemes.Count)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Creating a Related Words puzzle for you.");
+                        InteractiveCreateRelatedWordsPuzzle(solution, solutionThemes);
+                        Console.WriteLine("Done. Press a key to continue.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} doesn't have any themes, so I can't create a related words puzzle. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+
+                case WordPuzzleType.MissingLetters:
+                {
+                    Console.Clear();
+                    Console.WriteLine("Creating a Missing Letters puzzle for you.");
+                    InteractiveCreateMissingLettersPuzzle(solution);
+                    Console.WriteLine("Done. Press a key to continue.");
+                    Console.ReadKey();
+                }
+                    break;
+                case WordPuzzleType.PuzzleForDate:
+                    generatedPuzzle = InteractiveGetPuzzleForDate(DateTime.Now);
+                    break;
+            }
+
+            return generatedPuzzle;
         }
 
         private static void LoadSevenLetterWords()
@@ -634,10 +1024,11 @@ namespace WordPuzzleGenerator
             availablePuzzleTypes.Add(WordPuzzleType.WordLadder, (2 < solutionLength && solutionLength < 7));
             availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (7 < solutionLength && solutionLength < 30));
             availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
-            availablePuzzleTypes.Add(WordPuzzleType.HiddenWords, (!solution.ToLower().Contains('x')));
+            availablePuzzleTypes.Add(WordPuzzleType.HiddenRelatedWords, (!solution.ToLower().Contains('x')));
             availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
             availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
             availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, ( 10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
+            availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
 
             return availablePuzzleTypes;
         }
@@ -645,6 +1036,7 @@ namespace WordPuzzleGenerator
         private static void InteractiveCreateHiddenWordPuzzle(string solution)
         {
             HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {Solution = solution};
+
             foreach (char letter in solution.ToLower())
             {
                 bool foundSentence = false;
@@ -684,26 +1076,6 @@ namespace WordPuzzleGenerator
                         puzzle.Sentences.Add(sentence);
                     }
 
-                    if (false) //TODO: Delete me.
-                    {
-                        var phrase = puzzle.HideWord(hiddenWordCandidate);
-                        if (phrase.Count == 0)
-                        {
-                            Console.WriteLine($"Unable to hide word {hiddenWordCandidate}");
-                        }
-                        else
-                        {
-                            Console.WriteLine(
-                                $"Write a sentence that hides '{string.Join(",", phrase)}' and '{hiddenWordCandidate}'. Or just hit enter to create another one for this letter.");
-
-                            sentence = Console.ReadLine();
-                            if (!string.IsNullOrEmpty(sentence))
-                            {
-                                foundSentence = true;
-                                puzzle.Sentences.Add(sentence);
-                            }
-                        }
-                    }
                 }
             }
             Console.Clear();
@@ -720,6 +1092,100 @@ namespace WordPuzzleGenerator
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
 
+        }
+
+        private static HiddenRelatedWordsPuzzle InteractiveCreateHiddenRelatedWordPuzzle(string solution)
+        {
+            HiddenRelatedWordsPuzzle puzzle = new HiddenRelatedWordsPuzzle() {Solution = solution};
+            HiddenWordPuzzle legacyPuzzle = new HiddenWordPuzzle() { Solution = solution };
+
+            foreach (char letter in solution.ToLower())
+            {
+                bool foundSentence = false;
+                while (!foundSentence)
+                {
+                    Console.Clear();
+                    var hiddenWordCandidates = GetHiddenWordCandidates(letter);
+
+                    string hiddenWordCandidate = hiddenWordCandidates[RandomNumberGenerator.Next(hiddenWordCandidates.Count)];
+                    var splitableStrings = legacyPuzzle.GenerateAllSplitableStrings(hiddenWordCandidate);
+                    if (splitableStrings.Count == 0)
+                    {
+                        continue;
+                    }
+                    foreach (string splitableString in splitableStrings)
+                    {
+                        List<string> phraseHidingWord =
+                            legacyPuzzle.CreateSpecificExampleFromSplitableString(splitableString);
+                        Console.WriteLine($"({splitableString}) : {string.Join(" ", phraseHidingWord)}      {hiddenWordCandidate.ToUpper()}.");
+                    }
+                    Console.WriteLine("Or just hit enter to create another one for this letter.");
+                    string sentence = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(sentence))
+                    {
+                        if (!hiddenWordCandidate.Contains(letter))
+                        {
+                            Console.WriteLine($"{hiddenWordCandidate} does not contain {letter}! Try again.");
+                        }
+                        else
+                        {
+                            foundSentence = true;
+                            legacyPuzzle.Sentences.Add(sentence);
+                            int keyIndex = hiddenWordCandidate.IndexOf(letter);
+
+                            puzzle.AddWord(
+                                new HiddenWord()
+                                {
+                                    Word = hiddenWordCandidate,
+                                    KeyIndex = keyIndex,
+                                    SentenceHidingWord = sentence,
+                                });
+                        }
+                    }
+
+                }
+            }
+            Console.Clear();
+            Console.WriteLine("Created hidden word puzzle!");
+            char lastKeyPressed = 'z';
+            while (lastKeyPressed != 'c')
+            {
+                string puzzleAsString = legacyPuzzle.FormatPuzzleAsText();
+                Console.WriteLine(puzzleAsString);
+                Clipboard.SetText(puzzleAsString);
+
+                Console.WriteLine(
+                    "Puzzle copied to clipboard. Press 'c' to continue, or anything else to copy it again.");
+                lastKeyPressed = Console.ReadKey().KeyChar;
+            }
+
+            return puzzle;
+        }
+
+        private static List<string> GetHiddenWordCandidates(char letter)
+        {
+            int blanksToAdd = RandomNumberGenerator.Next(2, 5);
+            if (letter == 'q') //must be at least 4 letters long.
+            {
+                blanksToAdd = RandomNumberGenerator.Next(3, 5);
+            }
+
+            //blanksToAdd = 5;//Let's just try hiding the longest words. 
+
+            StringBuilder patternBuilder = new StringBuilder();
+            patternBuilder.Append(letter);
+            patternBuilder.Append('_', blanksToAdd);
+            var pattern = patternBuilder.ToString();
+            var hiddenWordCandidates = WordRepository.WordsMatchingPattern(pattern);
+            int wordLength = RandomNumberGenerator.Next(4, 6);
+            var randomIndex = RandomNumberGenerator.Next(0, wordLength - 1);
+            hiddenWordCandidates = WordRepository.WordsWithCharacterAtIndex(letter, randomIndex, wordLength);
+            if (0 == hiddenWordCandidates.Count)
+            {
+                throw new Exception($"No words found with {letter} in index {randomIndex} with length {wordLength}");
+            }
+
+            return hiddenWordCandidates;
         }
 
         private static void InteractiveHideTheseWords(List<string> wordsToHide)
@@ -765,34 +1231,85 @@ namespace WordPuzzleGenerator
 
         }
 
-        private static void InteractiveFindReadDownColumnPuzzle(string solution)
+        private static IPuzzle InteractiveFindReadDownColumnPuzzle(string solution)
         {
             ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
             puzzle.Solution = solution;
-            puzzle.PopulateWords();
+            //puzzle.PopulateWords();
+            for (var index = 0; index < solution.Length; index++)
+            {
+                char letter = solution[index];
+                if (!char.IsLetter(letter)) continue;
+                Console.Clear();
+                Console.WriteLine($"Pick (or enter) a word for the {index}-indexed letter in the solution:{letter.ToString().ToUpperInvariant()}");
+                var list = puzzle.GetWordCandidatesForIndex(index);
+                list.Shuffle();
+
+                var numberOfOptionsToDisplay = list.Count;
+                if (10 < numberOfOptionsToDisplay)
+                {
+                    numberOfOptionsToDisplay = 10;
+                }
+                for (var i = 0; i < numberOfOptionsToDisplay; i++)
+                {
+                    var word = list[i];
+                    Console.WriteLine($"{i}: {word}");
+                }
+
+                var userInput = Console.ReadLine();
+                int userSelectedIndex;
+                string userSelectedWord; 
+                if (int.TryParse(userInput, out userSelectedIndex))
+                {
+                    userSelectedWord = list[userSelectedIndex];
+                }
+                else
+                {
+                    userSelectedWord = userInput;
+                }
+
+                if (string.IsNullOrWhiteSpace(userSelectedWord))
+                {
+                    return null; //null. 
+                }
+                puzzle.SetWordAtIndex(userSelectedWord, index);
+                string clue = InteractiveGetClueForWord(userSelectedWord);
+                if (!string.IsNullOrWhiteSpace(clue))
+                {
+                    puzzle.SetClueAtIndex(clue, index);
+                }
+            }
+
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
-                foreach (string word in puzzle.Words)
+                ClearConsoleInputAndOutput();
+                for (var index = 0; index < puzzle.Words.Count; index++)
                 {
-                    Console.WriteLine(word);
+                    string word = puzzle.Words[index];
+                    string clue = puzzle.Clues[index];
+                    Console.WriteLine($"{word.ToUpperInvariant()} ({clue})");
                 }
-                Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
+
+//                Clipboard.SetData(DataFormats.Html, puzzle.FormatHtmlForGoogle());
                 Console.WriteLine(
                     "Read Down Column puzzle has been copied to the clipboard. Press 'c' to continue, or anything else to copy it again.");
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
+
+            return puzzle;
         }
 
 
-        private static void InteractiveFindLettersAndArrowsPuzzle(string solution)
+        private static IPuzzle InteractiveFindLettersAndArrowsPuzzle(string solution)
         {
+            LettersAndArrowsPuzzle puzzle = null;
             string formatHtmlForGoogle = null;
             for (int size = 4; size < 7; size++)
             {
                 try
                 {
-                    LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution, true, size);
+                    puzzle = new LettersAndArrowsPuzzle(solution, true, size);
                     InteractiveSetCluesForLettersAndArrowsPuzzle(puzzle);
                     formatHtmlForGoogle = puzzle.FormatHtmlForGoogle();
                     break;
@@ -803,7 +1320,7 @@ namespace WordPuzzleGenerator
                 }
             }
 
-            if (formatHtmlForGoogle == null) return;
+            if (formatHtmlForGoogle == null) return null;
             char lastKeyPressed = 'z';
             while (lastKeyPressed != 'c')
             {
@@ -813,6 +1330,7 @@ namespace WordPuzzleGenerator
                 lastKeyPressed = Console.ReadKey().KeyChar;
             }
 
+            return puzzle;
         }
 
         private static void InteractiveSetCluesForLettersAndArrowsPuzzle(LettersAndArrowsPuzzle puzzle)
@@ -1038,8 +1556,11 @@ namespace WordPuzzleGenerator
 
         }
 
-        private static void InteractiveFindWordSquare(string relatedWord)
+        private static IPuzzle InteractiveFindWordSquare(string relatedWord)
         {
+            Console.Clear();
+            Console.WriteLine("Creating a word square for you.");
+
             string fileWithMagicWordSquares = WordSquare.GetFileNameFor(relatedWord);
             if (!File.Exists(fileWithMagicWordSquares))
             {
@@ -1095,6 +1616,11 @@ namespace WordPuzzleGenerator
                     break;
                 }
             }
+
+            Console.WriteLine("Done. Press a key to continue.");
+            Console.ReadKey();
+
+            return selectedSquare;
         }
 
         private static void GenerateWordSquaresOfAnySize(string firstWordCandidate)
@@ -1180,7 +1706,7 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static void InteractiveGenerateAnacrostic(AnacrosticParameterSet parameterSet)
+        private static IPuzzle InteractiveGenerateAnacrostic(AnacrosticParameterSet parameterSet)
         {
             List<string> wordsAlreadyUsed = new List<string>();
 
@@ -1315,7 +1841,7 @@ Enter 0 for none.");
             {
                 Console.WriteLine("There are letters remaining. Press any key to exit.");
                 Console.ReadKey();
-                return;
+                return null;
             }
 
             foreach (PuzzleWord puzzleWord in anacrostic.Puzzle.Clues)
@@ -1351,7 +1877,7 @@ Enter 0 for none.");
             };
 
             generator.GenerateHtmlFile(BASE_DIRECTORY + $@"anacrostics\puzzle_{parameterSet.TweetId}.html", false);
-
+            return anacrostic;
         }
 
         private static string InteractiveGetClueForWord(string currentWord)
@@ -1420,5 +1946,12 @@ Enter 0 for none.");
             Console.WriteLine(listOfWords.ToString());
             return anacrostic;
         }
+    }
+
+    internal class TakeTwoClue
+    {
+        public string LongerWord;
+        public string ShorterWord;
+        public char LetterRemoved;
     }
 }

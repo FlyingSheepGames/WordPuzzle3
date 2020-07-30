@@ -282,6 +282,101 @@ C10	C11	C12	C13	C14	C15
 
             }
 
+            [Test]
+            [TestCase(true)]
+            [TestCase(false)]
+            public void RatchetAndClank_ReturnsExpectedResult(bool includeSolution)
+            {
+                const string HTML_DIRECTORY = @"html\Anacrostics\";
+                const string SOURCE_DIRECTORY =
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\Anacrostics";
+
+                Anacrostic anacrostic = new Anacrostic("Ratchet and Clank");
+
+                anacrostic.RemoveWord("talk");
+                anacrostic.RemoveWord("ran");
+
+                anacrostic.RemoveWord("catch");
+                anacrostic.RemoveWord("end");
+
+                foreach (var clue in anacrostic.Puzzle.Clues)
+                {
+                    string currentWord;
+                    StringBuilder builder = new StringBuilder();
+                    foreach (var letter in clue.Letters)
+                    {
+                        builder.Append(letter.ActualLetter);
+                    }
+
+                    currentWord = builder.ToString();
+                    switch (currentWord)
+                    {
+                        case "talk":
+                            clue.CustomizedClue = "Speak";
+                            break;
+                        case "ran":
+                            clue.CustomizedClue = "Competed in a foot race";
+                            break;
+                        case "catch":
+                            clue.CustomizedClue = "I'll throw the ball, and you _____ it.";
+                            break;
+                        case "end":
+                            clue.CustomizedClue = "The last two words in most stories are 'The ___'.";
+                            break;
+                        default:
+                            Console.WriteLine($"No clue yet for {currentWord}");
+                            break;
+                    }
+                }
+                Assert.AreEqual("", anacrostic.RemainingLetters());
+
+                string generatedHtml = anacrostic.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample2.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution2.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample2.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution2.html";
+                }
+
+                string[] expectedLines = new string[] { " " };// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (expectedLine != actualLine)
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
+            }
+
         }
 
         [TestFixture]
@@ -350,6 +445,7 @@ A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
             }
 
             [Test]
+            [Ignore("takes too long")]
             public void First56Numbers_SetsCorrectLineLength()
             {
                 for (int puzzleLength = 1; puzzleLength <= 56; puzzleLength++)
