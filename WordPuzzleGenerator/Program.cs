@@ -28,6 +28,8 @@ namespace WordPuzzleGenerator
         {
             _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
 
+            //FindAllTakeOneClues();
+            //FindAllTakeTwoClues();
             //LoadSevenLetterWords();
             //FindWordsThatMakeDigits();
 
@@ -87,6 +89,202 @@ namespace WordPuzzleGenerator
             File.WriteAllText($"{ticks}_solutions.html", _solutionBuilder.ToString());
 
             SavePuzzleCollection(collection);
+        }
+        /*
+         *Results
+         * Found 99 clues.
+a has 1 clue pairs.
+d has 8 clue pairs.
+e has 5 clue pairs.
+f has 2 clue pairs.
+g has 4 clue pairs.
+h has 1 clue pairs.
+i has 1 clue pairs.
+l has 12 clue pairs.
+m has 1 clue pairs.
+n has 1 clue pairs.
+o has 2 clue pairs.
+p has 3 clue pairs.
+r has 6 clue pairs.
+s has 48 clue pairs.
+t has 3 clue pairs.
+v has 1 clue pairs.
+
+         *
+         */
+        private static List<TakeTwoClue> FindAllTakeTwoClues()
+        {
+            return new List<TakeTwoClue>();
+            StringBuilder pattern = new StringBuilder();
+            long wordsConsidered = 0;
+            int[] countPerLetterRemoved = new int[26];
+            for (int i = 0; i < 26; i++)
+            {
+                countPerLetterRemoved[i] = 0;
+            }
+            var findAllTakeTwoClues = new List<TakeTwoClue>();
+            for (char letterToPlace = 'a'; letterToPlace <= 'z'; letterToPlace++)
+            {
+                for (int wordLength = 4; wordLength < 9; wordLength++)
+                {
+                    for (int firstLetterIndex = 0; firstLetterIndex < wordLength - 1; firstLetterIndex++)
+                    {
+                        for (int secondLetterIndex = firstLetterIndex + 1;
+                            secondLetterIndex < wordLength;
+                            secondLetterIndex++)
+                        {
+                            var placeLetterAtTheseIndicies = new List<int>() { firstLetterIndex, secondLetterIndex };
+                            pattern.Clear();
+                            for (int patternIndex = 0; patternIndex < wordLength; patternIndex++)
+                            {
+                                char letterToAppend = '_';
+                                if (placeLetterAtTheseIndicies.Contains(patternIndex))
+                                {
+                                    letterToAppend = letterToPlace;
+                                }
+
+                                pattern.Append(letterToAppend);
+                            }
+
+                            string patternAsString = pattern.ToString();
+                            foreach (var longerWord in WordRepository.WordsMatchingPattern(patternAsString))
+                            {
+                                wordsConsidered++;
+                                if (wordsConsidered % 50 == 0)
+                                {
+                                    Console.WriteLine($"Considered {wordsConsidered} words so far.");
+                                }
+                                string shorterWord = longerWord.Replace(letterToPlace.ToString(), "");
+                                if (WordRepository.IsAWord(shorterWord))
+                                {
+                                    if (shorterWord.Length + 2 == longerWord.Length) //exactly two letters were removed
+                                    {
+                                        countPerLetterRemoved[letterToPlace - 'a']++;
+                                        findAllTakeTwoClues.Add(
+                                            new TakeTwoClue()
+                                            {
+                                                LongerWord = longerWord, 
+                                                ShorterWord = shorterWord, 
+                                                LetterRemoved = letterToPlace
+                                            });
+                                        Console.WriteLine($"Found a pair: {longerWord} and {shorterWord}.");
+                                        //Console.ReadKey();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine($"Found {findAllTakeTwoClues.Count} clues.");
+            for (int i = 0; i < 26; i++)
+            {
+                int cluesForThisLetter = countPerLetterRemoved[i];
+                if (cluesForThisLetter == 0) continue;
+                Console.WriteLine($"{(char) (i+'a')} has {cluesForThisLetter} clue pairs.");
+            }
+            Console.ReadKey();
+            return findAllTakeTwoClues;
+        }
+
+        /*
+         * Take One clues
+         * Found 2222 clues.
+a has 56 clue pairs.
+b has 52 clue pairs.
+c has 61 clue pairs.
+d has 212 clue pairs.
+e has 103 clue pairs.
+f has 40 clue pairs.
+g has 47 clue pairs.
+h has 52 clue pairs.
+i has 35 clue pairs.
+j has 5 clue pairs.
+k has 40 clue pairs.
+l has 111 clue pairs.
+m has 49 clue pairs.
+n has 77 clue pairs.
+o has 36 clue pairs.
+p has 74 clue pairs.
+r has 160 clue pairs.
+s has 749 clue pairs.
+t has 102 clue pairs.
+u has 30 clue pairs.
+v has 15 clue pairs.
+w has 39 clue pairs.
+x has 4 clue pairs.
+y has 68 clue pairs.
+z has 5 clue pairs.
+
+         */
+        private static List<TakeTwoClue> FindAllTakeOneClues()
+        {
+            StringBuilder pattern = new StringBuilder();
+            long wordsConsidered = 0;
+            int[] countPerLetterRemoved = new int[26];
+            for (int i = 0; i < 26; i++)
+            {
+                countPerLetterRemoved[i] = 0;
+            }
+            var findAllTakeTwoClues = new List<TakeTwoClue>();
+            for (char letterToPlace = 'a'; letterToPlace <= 'z'; letterToPlace++)
+            {
+                for (int wordLength = 4; wordLength < 9; wordLength++)
+                {
+                    for (int firstLetterIndex = 0; firstLetterIndex < wordLength; firstLetterIndex++)
+                    {
+                        var placeLetterAtTheseIndicies = new List<int>() {firstLetterIndex};
+                        pattern.Clear();
+                        for (int patternIndex = 0; patternIndex < wordLength; patternIndex++)
+                        {
+                            char letterToAppend = '_';
+                            if (placeLetterAtTheseIndicies.Contains(patternIndex))
+                            {
+                                letterToAppend = letterToPlace;
+                            }
+
+                            pattern.Append(letterToAppend);
+                        }
+
+                        string patternAsString = pattern.ToString();
+                        foreach (var longerWord in WordRepository.WordsMatchingPattern(patternAsString))
+                        {
+                            wordsConsidered++;
+                            if (wordsConsidered % 50 == 0)
+                            {
+                                Console.WriteLine($"Considered {wordsConsidered} words so far.");
+                            }
+
+                            string shorterWord = longerWord.Replace(letterToPlace.ToString(), "");
+                            if (WordRepository.IsAWord(shorterWord))
+                            {
+                                if (shorterWord.Length + 1 == longerWord.Length) //exactly two letters were removed
+                                {
+                                    countPerLetterRemoved[letterToPlace - 'a']++;
+                                    findAllTakeTwoClues.Add(
+                                        new TakeTwoClue()
+                                        {
+                                            LongerWord = longerWord,
+                                            ShorterWord = shorterWord,
+                                            LetterRemoved = letterToPlace
+                                        });
+                                    Console.WriteLine($"Found a pair: {longerWord} and {shorterWord}.");
+                                    //Console.ReadKey();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine($"Found {findAllTakeTwoClues.Count} clues.");
+            for (int i = 0; i < 26; i++)
+            {
+                int cluesForThisLetter = countPerLetterRemoved[i];
+                if (cluesForThisLetter == 0) continue;
+                Console.WriteLine($"{(char)(i + 'a')} has {cluesForThisLetter} clue pairs.");
+            }
+            Console.ReadKey();
+            return findAllTakeTwoClues;
         }
 
         private static void AddPuzzleToCollection(IPuzzle puzzleToAdd, PuzzleCollection collection, StringBuilder puzzleBuilder, StringBuilder solutionBuilder)
@@ -1748,5 +1946,12 @@ Enter 0 for none.");
             Console.WriteLine(listOfWords.ToString());
             return anacrostic;
         }
+    }
+
+    internal class TakeTwoClue
+    {
+        public string LongerWord;
+        public string ShorterWord;
+        public char LetterRemoved;
     }
 }
