@@ -5,9 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using Newtonsoft.Json.Linq;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class WordRepository
     {

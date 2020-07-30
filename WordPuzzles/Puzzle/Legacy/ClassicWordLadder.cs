@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using WordPuzzles.Utility;
 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle.Legacy
 {
     public class ClassicWordLadder 
         //TODO: Should probably be using polymorphism for this instead of copy/paste. 

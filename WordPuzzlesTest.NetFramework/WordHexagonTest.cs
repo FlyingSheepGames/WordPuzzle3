@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles;
+using WordPuzzles.Puzzle.Legacy;
 
 namespace WordPuzzlesTest
 {

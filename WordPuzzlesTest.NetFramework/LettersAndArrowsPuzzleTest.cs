@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
+using WordPuzzles.Puzzle;
+using WordPuzzles.Utility;
 
 namespace WordPuzzlesTest
 {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Text;
+using WordPuzzles.Utility;
 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle
 {
     public class WordSquare : IPuzzle
     {

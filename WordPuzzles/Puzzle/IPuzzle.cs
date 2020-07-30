@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using WordPuzzles.Utility;
 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle
 {
     [JsonConverter(typeof(PuzzleConverter))]
     public interface IPuzzle

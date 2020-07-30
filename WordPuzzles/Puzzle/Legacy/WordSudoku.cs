@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle.Legacy
 {
     public class WordSudoku
     {

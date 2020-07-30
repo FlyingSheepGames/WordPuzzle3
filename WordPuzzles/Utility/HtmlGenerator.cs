@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using WordPuzzles.Puzzle;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class HtmlGenerator
     {
-        public Puzzle Puzzle;
+        public Puzzle.Puzzle Puzzle;
 
         public Dictionary<int, int> IndexMap; 
 

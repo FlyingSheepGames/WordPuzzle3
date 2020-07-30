@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Text;
-
-namespace WordPuzzles
+﻿namespace WordPuzzles.Utility
 {
     public class WebRequestUtility
     {

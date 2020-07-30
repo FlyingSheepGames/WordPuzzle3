@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using NUnit.Framework;
 using WordPuzzles;
+using WordPuzzles.Utility;
 
 namespace WordPuzzlesTest
 {

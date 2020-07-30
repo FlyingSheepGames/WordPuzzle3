@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     //From https://stackoverflow.com/questions/41768215/english-json-dictionary-with-word-word-type-and-definition
     public class DataFromStackOverflowParser

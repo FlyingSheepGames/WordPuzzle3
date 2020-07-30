@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.Remoting;
 using NUnit.Framework;
 using WordPuzzles;
+using WordPuzzles.Utility;
 
 namespace WordPuzzlesTest
 {

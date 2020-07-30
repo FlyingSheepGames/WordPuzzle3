@@ -1,8 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WordPuzzles.Puzzle;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class PuzzleConverter : JsonCreationConverter<IPuzzle>
     {

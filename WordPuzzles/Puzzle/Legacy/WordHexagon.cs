@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using WordPuzzles.Utility;
 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle.Legacy
 {
     public class WordHexagon
     {

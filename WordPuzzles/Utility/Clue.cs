@@ -1,6 +1,4 @@
-﻿using System.Xml.Serialization;
-
-namespace WordPuzzles
+﻿namespace WordPuzzles.Utility
 {
     public class Clue
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles;
+using WordPuzzles.Utility;
 
 namespace WordPuzzlesTest
 {

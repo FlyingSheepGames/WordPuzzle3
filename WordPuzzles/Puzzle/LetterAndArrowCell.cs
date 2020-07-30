@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Text;
+
 // ReSharper disable NonReadonlyMemberInGetHashCode
 //TODO: Make this class immutable. 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle
 {
     public class LetterAndArrowCell
     {

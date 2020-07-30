@@ -1,4 +1,4 @@
-﻿namespace WordPuzzles
+﻿namespace WordPuzzles.Puzzle.Legacy
 {
     public enum WordPuzzleType
     {

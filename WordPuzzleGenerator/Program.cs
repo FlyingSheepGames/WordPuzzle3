@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using WordPuzzles;
+using WordPuzzles.Puzzle;
+using WordPuzzles.Puzzle.Legacy;
+using WordPuzzles.Utility;
 
 namespace WordPuzzleGenerator
 {

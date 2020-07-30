@@ -2,7 +2,7 @@
 using System.Web;
 using Newtonsoft.Json.Linq;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class GoogleSheet
     {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using WordPuzzles.Puzzle;
+using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class WeekOfPuzzles
     {

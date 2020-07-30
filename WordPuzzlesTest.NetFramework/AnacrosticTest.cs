@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using WordPuzzles;
+using WordPuzzles.Puzzle;
+using WordPuzzles.Utility;
 
 namespace WordPuzzlesTest
 {

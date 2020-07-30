@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class ThemeRepository
     {

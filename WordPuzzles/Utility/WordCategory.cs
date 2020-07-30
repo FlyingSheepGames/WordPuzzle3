@@ -1,4 +1,4 @@
-﻿namespace WordPuzzles
+﻿namespace WordPuzzles.Utility
 {
     public enum WordCategory
     {

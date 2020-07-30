@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Web;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class BirthdayFinder
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WordPuzzles
+namespace WordPuzzles.Utility
 {
     public class Player
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WordPuzzles
+namespace WordPuzzles.Puzzle
 {
     public class WordSquareHistory
     {

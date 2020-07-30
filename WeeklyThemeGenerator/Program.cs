@@ -6,6 +6,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using WordPuzzles;
+using WordPuzzles.Puzzle;
+using WordPuzzles.Puzzle.Legacy;
+using WordPuzzles.Utility;
+
 // ReSharper disable UnusedMember.Local
 // A lot of methods are only called on an ad-hoc basis. 
 //TODO: Clean this up and offer a menu of actions. 
