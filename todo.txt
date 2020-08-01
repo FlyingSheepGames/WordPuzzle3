@@ -11,13 +11,17 @@ TASKS
 ------------------------------
 
 Organize files into directories - Puzzles, Utilities, etc.
+	Organize Tests to match
+
+R# warnings
+
+Replace Tests with .NetFrameworkTests
+	Rename unit test project to remove .NetFramework
 
 Rename Anacrostic."Puzzle" to a more descriptive name. 
 
 Consolidate Anacrostic.EncodedPhrase and Anacrostic.EncodedPhraseForGoogle
 
-Replace Tests with .NetFrameworkTests
-Rename unit test project to remove .NetFramework
 
 Add property to each IPuzzle implementation to indicate which type of puzzle it is 
 public bool IsAcrostic = true;
