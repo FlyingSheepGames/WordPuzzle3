@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Runtime.Remoting;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Utility
 {
     [TestFixture]
     public class PuzParserTest

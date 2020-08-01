@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle
 {
     [TestFixture]
     public class LettersAndArrowsPuzzleTest

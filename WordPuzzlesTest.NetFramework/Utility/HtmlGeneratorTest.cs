@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using WordPuzzles;
-using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Utility
 {
     [TestFixture]
     public class HtmlGeneratorTest
@@ -16,7 +14,7 @@ namespace WordPuzzlesTest
             public void GeneratesExpectedComment()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -54,7 +52,7 @@ L 13 <-> 5
             public void ReturnsExpectedString()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -68,7 +66,7 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
@@ -89,7 +87,7 @@ L 13 <-> 5
             public void ReturnsExpectedResult()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -118,7 +116,7 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
@@ -144,7 +142,7 @@ L 13 <-> 5
             [Test]
             public void WithCustomClue_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
                 puzzle.Clues[0].CustomizedClue = "Customized Clue";
                 puzzle.PlaceLetters();
@@ -176,7 +174,7 @@ L 13 <-> 5
             public void ReturnsExpectedResult()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -205,7 +203,7 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
@@ -240,7 +238,7 @@ L 13 <-> 5
             public void CreatedExpectedFile()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -258,7 +256,7 @@ L 13 <-> 5
             public void WithoutKey_CreatedExpectedFile()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                Puzzle puzzle = new Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;

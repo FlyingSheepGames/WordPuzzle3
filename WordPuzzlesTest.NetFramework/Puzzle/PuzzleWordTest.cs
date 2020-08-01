@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle
 {
     [TestFixture]
     public class PuzzleWordTest
@@ -38,7 +37,7 @@ namespace WordPuzzlesTest
             [Test]
             public void MultipleWords_HaveExpectedLetters()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
                 PuzzleWord firstWord = puzzle.Clues[0];
@@ -71,7 +70,7 @@ namespace WordPuzzlesTest
             [Test]
             public void PlacesRequiredLetters()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -96,7 +95,7 @@ namespace WordPuzzlesTest
             [Test]
             public void HandlesPunctuation()
             {
-                Puzzle puzzleWithPunctuation = new Puzzle {PhraseAsString = "i'm x"};
+                WordPuzzles.Puzzle.Puzzle puzzleWithPunctuation = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x"};
 
                 puzzleWithPunctuation.AddWordToClues("mix");
 
@@ -114,7 +113,7 @@ namespace WordPuzzlesTest
             [Test]
             public void AsIsExample_FindsNothingForAlreadyPlacedFirstLetter()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -129,7 +128,7 @@ namespace WordPuzzlesTest
             [Test]
             public void AsIsExample_FindsOptionsForSecondLetter()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -146,7 +145,7 @@ namespace WordPuzzlesTest
             [Test]
             public void AsIsExample_ExcludingWordAlreadyPlaced_FindsSingleOptionForSecondLetter()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -169,7 +168,7 @@ namespace WordPuzzlesTest
             [Test]
             public void AsIsExample_PlacesRemainingLetters()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -193,7 +192,7 @@ namespace WordPuzzlesTest
             [Test]
             public void FirstExample_PlacesAllLetters()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("agility");
                 puzzle.AddWordToClues("quite");
                 puzzle.AddWordToClues("tethers");
@@ -222,7 +221,7 @@ namespace WordPuzzlesTest
             [Test]
             public void SecondExample_PlacesAllLetters()
             {
-                Puzzle puzzle = new Puzzle();
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
                 puzzle.AddWordToClues("donated");
                 puzzle.AddWordToClues("two");
                 puzzle.AddWordToClues("monster");
@@ -250,7 +249,7 @@ namespace WordPuzzlesTest
             [Test]
             public void ExampleWithPunctuation()
             {
-                Puzzle puzzle = new Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
 {
     [TestFixture]
     public class MissingLettersPuzzleTest

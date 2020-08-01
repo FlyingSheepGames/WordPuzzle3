@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using WordPuzzles;
+﻿using NUnit.Framework;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Utility
 {
     [TestFixture]
     class WebRequestUtilityTest

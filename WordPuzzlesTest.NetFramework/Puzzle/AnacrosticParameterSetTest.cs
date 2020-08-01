@@ -2,10 +2,9 @@
 using System.Configuration;
 using System.IO;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle
 {
     [TestFixture]
     public class AnacrosticParameterSetTest

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Utility
 {
     [TestFixture]
     public class ClueRepositoryTest

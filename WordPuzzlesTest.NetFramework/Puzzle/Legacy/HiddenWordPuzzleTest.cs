@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
 {
     [TestFixture]
     public class HiddenWordPuzzleTest

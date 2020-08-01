@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle
 {
     [TestFixture]
     public class HiddenRelatedWordsPuzzleTest

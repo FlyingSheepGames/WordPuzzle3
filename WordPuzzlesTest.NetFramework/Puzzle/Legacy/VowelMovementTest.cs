@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using WordPuzzles;
 using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzlesTest
+namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
 {
     [TestFixture]
     public class VowelMovementTest
