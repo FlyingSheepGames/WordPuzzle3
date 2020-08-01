@@ -4,7 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
+namespace WordPuzzlesTest.Puzzle.Legacy
 {
     [TestFixture]
     public class HiddenWordPuzzleTest
@@ -13,6 +13,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class HideWord
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TEST_GeneratesExpectedWords()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle {RandomSeed = 1};
@@ -26,6 +27,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
 
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SOCK_GeneratesNoPuzzles()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -57,6 +59,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class GenerateAllSplitableStrings
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TEST_ReturnsExpectedSplitableStrings()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -70,6 +73,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void LONE_ReturnsExpectedSplitableStrings()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -81,6 +85,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ONION_ReturnsExpectedSplitableStrings()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -98,6 +103,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
 
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void DOMAIN_ReturnsExpectedSplitableStrings()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -112,6 +118,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SOCK_NoWordsStartWithCK_ReturnsExpectedResults()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -128,6 +135,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class FindAllWordsThatStartWith
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SIS_ReturnsNonEmptyList()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -141,6 +149,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class VerifySplitableStringCandidate
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void O_A_SIS_ReturnsExpectedValue()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -152,6 +161,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class CreateSpecificExampleFromSplitableString
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ThreeDots_ReturnsExpectedValue()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {RandomSeed =  1};
@@ -184,6 +194,7 @@ Solution: _ _ .
 
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void AIN_IncludesA()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
@@ -197,6 +208,8 @@ Solution: _ _ .
         public class ProcessRemainingLetters
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
+
             public void DOMAIN_ReturnsExpectedResult()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Utility
+namespace WordPuzzlesTest.Utility
 {
     [TestFixture()]
     public class AnagramFinderTest

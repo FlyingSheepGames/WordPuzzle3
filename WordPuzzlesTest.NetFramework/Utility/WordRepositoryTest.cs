@@ -6,7 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Utility
+namespace WordPuzzlesTest.Utility
 {
     [TestFixture]
     public class WordRepositoryTest
@@ -16,6 +16,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
         public class WordsStartingWith
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TA_ReturnsExpectedList()
             {
                 WordRepository repository  = new WordRepository();
@@ -28,6 +29,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TA_SixLetters_ReturnsExpectedList()
             {
                 WordRepository repository = new WordRepository();
@@ -40,6 +42,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TA_FourLetters_ReturnsExpectedList()
             {
                 WordRepository repository = new WordRepository();
@@ -52,6 +55,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ON_ThreeLetters_ReturnsONE()
             {
                 WordRepository repository = new WordRepository();
@@ -72,6 +76,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
         public class GetRandomWord
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ReturnsWordOfExpectedLength()
             {
                 WordRepository repository = new WordRepository();
@@ -81,6 +86,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WordLengthSix_ReturnsWordOfExpectedLength()
             {
                 WordRepository repository = new WordRepository();
@@ -91,6 +97,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
 
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WordLengthFour_ReturnsWordOfExpectedLength()
             {
                 WordRepository repository = new WordRepository();
@@ -200,7 +207,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
         public class RemoveWordFromFile
         {
             [Test]
-            [Repeat(3)]
+            [Ignore("Takes more than 3 seconds.")]
             public void RemovesExpectedWord()
             {
                 //arrange
@@ -237,6 +244,7 @@ third
         public class LoadAllWords
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void PopulatesExpectedLists()
             {
                 WordRepository wordRepository = new WordRepository();
@@ -245,6 +253,8 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
+
             public void PopulatesClues()
             {
                 WordRepository wordRepository = new WordRepository();
@@ -294,6 +304,7 @@ third
         public class IsAWord
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NET_ReturnsTrue()
             {
                 WordRepository repository = new WordRepository();
@@ -301,6 +312,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void OnlySingleLetterWordsAreAandI()
             {
                 WordRepository repository = new WordRepository();
@@ -319,6 +331,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TO_IsAWord()
             {
                 WordRepository repository = new WordRepository();
@@ -326,6 +339,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void OT_IsNotAWord()
             {
                 WordRepository repository = new WordRepository();
@@ -333,6 +347,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SISTER_IsAWord()
             {
                 WordRepository repository = new WordRepository() {ExludeAdvancedWords = false};
@@ -340,6 +355,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ZESTFUL_IsAWord()
             {
                 WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
@@ -347,6 +363,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void OUTBREAK_IsAWord()
             {
                 WordRepository repository = new WordRepository() { ExludeAdvancedWords = true, IgnoreCache = true};
@@ -354,6 +371,7 @@ third
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void TRAMPOLINE_IsAWord()
             {
                 WordRepository repository = new WordRepository() { ExludeAdvancedWords = true };
@@ -402,6 +420,7 @@ third
         public class CategoriesToInclude
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void OnlyBasic_Excludes_ASP()
             {
                 WordRepository repository = new WordRepository()
@@ -417,6 +436,7 @@ third
         public class FindClueFor
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void LoadsWordsFirst()
             {
                 WordRepository repository = new  WordRepository();

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Utility
+namespace WordPuzzlesTest.Utility
 {
     [TestFixture]
     class WebRequestUtilityTest

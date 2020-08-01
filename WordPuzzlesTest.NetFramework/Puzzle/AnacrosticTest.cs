@@ -5,7 +5,7 @@ using NUnit.Framework;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle
+namespace WordPuzzlesTest.Puzzle
 {
     [TestFixture]
     public class AnacrosticTest
@@ -43,6 +43,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         public class FindNextWord
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WHICH_FindsWord()
             {
                 Anacrostic  anacrostic = new Anacrostic("whic h");
@@ -50,6 +51,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WillNotFindWordWithRepeatedLetters_IfNotEnoughLettersRemain()
             {
                 Anacrostic anacrostic = new Anacrostic("pule");
@@ -57,6 +59,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SimpleExample_FindsKEEPS()
             {
                 Anacrostic anacrostic = new Anacrostic("kbpmmurrhhstttttteeee");
@@ -65,6 +68,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void FourLetterExample_FindsPEEK()
             {
                 Anacrostic anacrostic = new Anacrostic("keep");
@@ -72,6 +76,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void IgnoresWords()
             {
                 Anacrostic anacrostic = new Anacrostic("keep");
@@ -80,6 +85,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void FindsThreeLetterWords()
             {
                 Anacrostic anacrostic = new Anacrostic("m om");
@@ -87,6 +93,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void FindsLint()
             {
                 Anacrostic anacrostic = new Anacrostic("lin t");
@@ -96,6 +103,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             [Test]
             [TestCase("on")]
             [TestCase("onx")]
+            [Ignore("Takes more than 3 seconds.")]
             public void NonWords_FindsNothing(string phrase)
             {
                 Anacrostic anacrostic = new Anacrostic(phrase);
@@ -134,6 +142,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         public class WordsWithNumberedBlanks
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WHICHZ_HasZLeft()
             {
                 Anacrostic anacrostic = new Anacrostic("whichz");
@@ -151,6 +160,7 @@ z B6
         public class WordsFormattedForGoogleDocs
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WHICHZ_ReturnsExpectedResults()
             {
                 Anacrostic anacrostic = new Anacrostic("whichz");
@@ -165,6 +175,7 @@ A1	A2	A3	A4	A5		B6
 ", anacrostic.WordsFormattedForGoogleDocs());
             }
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ThreeWords_ReturnsExpectedResults()
             {
                 Anacrostic anacrostic = new Anacrostic("whichzonepretty");
@@ -384,6 +395,7 @@ C10	C11	C12	C13	C14	C15
         public class EncodedPhrase
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void WHICHZ_ReturnsExpectedResults()
             {
                 Anacrostic anacrostic = new Anacrostic("whichz");
@@ -467,6 +479,7 @@ A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
             //There was at least word for each 5-letter in position 1
             //There was at least word for each 6-letter in position 2
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void AllWords()
             {
                 WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
@@ -504,6 +517,7 @@ A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void GenerateCodeForWordLengthStartingWithDictionary()
             {
                 WordRepository repository = new WordRepository() { ExludeAdvancedWords = true };

@@ -4,7 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle
+namespace WordPuzzlesTest.Puzzle
 {
     [TestFixture]
     public class WordSquareTest
@@ -136,6 +136,7 @@ eyqje", square.ToString());
     public class GetFirstWordCandidates
     {
         [Test]
+        [Ignore("Takes more than 3 seconds.")]
         public void Taste_ReturnsExpectedNumberOfCandidates()
         {
             WordSquare square = new WordSquare("taste");
@@ -304,6 +305,7 @@ Thing that hangs above your throat
     public class ReadAllWordSquaresFromFile
     {
         [Test]
+        [Ignore("Takes more than 3 seconds.")]
         public void CanReadSize5File()
         {
             var results = WordSquare.ReadAllWordSquaresFromFile(@"data\magic.txt");
@@ -311,6 +313,7 @@ Thing that hangs above your throat
         }
 
         [Test]
+        [Ignore("Takes more than 3 seconds.")]
         public void CanReadSize4File()
         {
             var results = WordSquare.ReadAllWordSquaresFromFile(@"data\area.txt", 4);
@@ -397,6 +400,7 @@ Thing that hangs above your throat
     public class IsLastLineAWord
     {
         [Test]
+        [Ignore("Takes more than 3 seconds.")]
         public void Example_ReturnsTrue()
         {
             WordSquare square = new WordSquare();

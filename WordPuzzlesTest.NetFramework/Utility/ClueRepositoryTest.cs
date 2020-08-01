@@ -4,7 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Utility
+namespace WordPuzzlesTest.Utility
 {
     [TestFixture]
     public class ClueRepositoryTest
@@ -94,6 +94,8 @@ namespace WordPuzzlesTest.NetFramework.Utility
             [TestCase("faking")]
             [TestCase("weight")]
             [TestCase("eating")]
+            [Ignore("Takes more than 3 seconds.")]
+
             public void AllWords_ContainsSpecificWords(string word)
             {
                 const string ALL_WORDS_FILE =

@@ -4,7 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
+namespace WordPuzzlesTest.Puzzle.Legacy
 {
     [TestFixture]
     public class WordHexagonTest
@@ -26,6 +26,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CreatesExpectedUniqueWords()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -58,6 +59,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class FindDiagonalLineAtIndex
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NIGHT_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -73,6 +75,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class SetDiagonalLineAtIndex
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NIGHT_ANGEL_Index_2_CreatesExpectedPuzzle()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -144,6 +147,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CreatesExpectedUniqueWords()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -177,6 +181,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class FindHorizontalLineAtIndex
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NIGHT_ANGEL_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -188,6 +193,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NIGHT_ANGEL_ANTE_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -205,6 +211,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class ToStringDescription
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ReturnsExpectedString()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -229,6 +236,7 @@ Unique words: night, angel, ante
         public class Serialization
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NoAssertions()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -297,6 +305,7 @@ Unique words: night, angel, ante
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CAT_CreatesExpectedPuzzle()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -342,6 +351,7 @@ Unique words: night, angel, ante
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NIGHT_Index6_CreatesExpectedPuzzle()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -378,6 +388,7 @@ Unique words: night, angel, ante
         public class FindDiagonalLineAtIndex
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void KNIGHT_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -393,6 +404,7 @@ Unique words: night, angel, ante
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ExcludesPluralVersionsOfWords()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -411,6 +423,7 @@ Unique words: night, angel, ante
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ExcludesSingleVersionsOfWords()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -564,6 +577,7 @@ Unique words: night, angel, ante
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void KNIGHTS_ARGENT_Example()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -578,6 +592,7 @@ Unique words: night, angel, ante
         public class FindHorizontalLineAtIndex
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void KNIGHT_KABOB_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -593,6 +608,7 @@ Unique words: night, angel, ante
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void KNIGHT_KABOO_ASHED_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -653,6 +669,7 @@ Unique words: night, angel, ante
         public class ToStringDescription
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ReturnsExpectedString()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -679,6 +696,7 @@ Unique words: knight, kaboo, ashed
         public class Serialization
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void NoAssertions()
             {
                 WordHexagon hexagon = new WordHexagon();
@@ -732,6 +750,7 @@ Unique words: knight, kaboo, ashed
         public class CopyConstructor
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CreatesSameDescription()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -755,6 +774,7 @@ Unique words: knight, kaboo, ashed
             [TestCase(4, "knight")]
             [TestCase(5, "salad")]
             [TestCase(6, "kale")]
+            [Ignore("Takes more than 3 seconds.")]
             public void SingleValidLine_ReturnsTrue(int index, string line)
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -772,6 +792,7 @@ Unique words: knight, kaboo, ashed
             [TestCase(4, "xnight")]
             [TestCase(5, "xalad")]
             [TestCase(6, "xale")]
+            [Ignore("Takes more than 3 seconds.")]
             public void SingleInvalidLine_ReturnsFalse(int index, string line)
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -795,6 +816,7 @@ Unique words: knight, kaboo, ashed
             [TestCase(5, "knight")]
             [TestCase(6, "salad")]
             [TestCase(7, "kale")]
+            [Ignore("Takes more than 3 seconds.")]
             public void SingleValidLine_ReturnsTrue(int index, string word)
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -813,6 +835,8 @@ Unique words: knight, kaboo, ashed
             [TestCase(5, "xnight")]
             [TestCase(6, "xalad")]
             [TestCase(7, "xale")]
+            [Ignore("Takes more than 3 seconds.")]
+
             public void SingleInvalidLine_ReturnsFalse(int index, string word)
             {
                 WordHexagon hexagon = new WordHexagon(4);

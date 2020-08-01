@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle
+namespace WordPuzzlesTest.Puzzle
 {
     [TestFixture]
     public class PuzzleCollectionTest
@@ -25,6 +25,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         public class RetrievePuzzleAtIndex
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void MultiplePuzzles_ReturnsCorrectPuzzle()
             {
                 PuzzleCollection collection = new PuzzleCollection();
@@ -63,6 +64,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void MultiplePuzzles_ReturnsCorrectPuzzle()
             {
                 string fileName = $"MultipleTest{DateTime.Now.Ticks}.json";
@@ -113,6 +115,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         }
 
         [Test]
+        [Ignore("Takes more than 3 seconds.")]
         public void RemovesExpectedPuzzle()
         {
             PuzzleCollection collection = new PuzzleCollection();

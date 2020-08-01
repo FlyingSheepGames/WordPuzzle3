@@ -6,7 +6,7 @@ using NUnit.Framework;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle
+namespace WordPuzzlesTest.Puzzle
 {
     [TestFixture]
     public class LettersAndArrowsPuzzleTest
@@ -72,6 +72,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes a long time.")]
             public void OHIO_RowsAsWords_CreatesWords()
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("ohio", true);
@@ -282,6 +283,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         {
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void OHIO_CreatesExpectedFile()
             {
                 const string HTML_DIRECTORY = @"html\LettersAndArrows\";
@@ -348,6 +350,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         public class GetWords
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void FourByFour_ReturnsExpectedWords()
             {
                 LettersAndArrowsPuzzle sizeFourPuzzle = new LettersAndArrowsPuzzle("ohio", true, 0, 42);
@@ -366,6 +369,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         {
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SetsExpectedClue_ClueAppearsInHtml()
             {
                 LettersAndArrowsPuzzle fourByFourPuzzle = new LettersAndArrowsPuzzle("OHIO", true, 4, 42);

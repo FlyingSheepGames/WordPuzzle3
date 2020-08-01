@@ -4,7 +4,7 @@ using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
+namespace WordPuzzlesTest.Puzzle.Legacy
 {
     [TestFixture]
     public class MissingLettersPuzzleTest
@@ -13,6 +13,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class FindWordsContainingLetters
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void BAD_ReturnsExpectedResults()
             {
                 MissingLettersPuzzle puzzle = new MissingLettersPuzzle();
@@ -22,6 +23,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void HE_ReturnsExpectedResults()
             {
                 MissingLettersPuzzle puzzle = new MissingLettersPuzzle();
@@ -67,6 +69,7 @@ war has 23 words with these letters.
 win has 22 words with these letters.
              */
             [Test]
+            [Ignore("Exploratory test")]
             public void WhichThreeLetterWordsHaveMoreThan10Options()
             {
                 MissingLettersPuzzle puzzle = new MissingLettersPuzzle();
@@ -86,6 +89,7 @@ win has 22 words with these letters.
         public class PlaceSolution
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CreatesExpectedWords()
             {
                 MissingLettersPuzzle puzzle = new MissingLettersPuzzle() {Shuffle = false};
@@ -106,6 +110,7 @@ win has 22 words with these letters.
         public class FormatHtmlForGoogle
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void HE_CreatesExpectedHtml()
             {
                 const string EXPECTED_HTML =

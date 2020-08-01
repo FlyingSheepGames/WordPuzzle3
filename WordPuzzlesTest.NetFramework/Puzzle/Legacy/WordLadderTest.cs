@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
+namespace WordPuzzlesTest.Puzzle.Legacy
 {
     [TestFixture]
     public class WordLadderTest
@@ -24,6 +24,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class FindNextWordsInChain
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void BED_2_FindsExpectedWords()
             {
                 WordLadder ladder = new WordLadder("bed");

@@ -6,7 +6,7 @@ using WordPuzzles.Puzzle;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Utility
+namespace WordPuzzlesTest.Utility
 {
     [TestFixture]
     public class WeekOfPuzzlesTest

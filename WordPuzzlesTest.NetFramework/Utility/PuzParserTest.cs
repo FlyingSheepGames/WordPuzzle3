@@ -5,7 +5,7 @@ using System.Net;
 using NUnit.Framework;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Utility
+namespace WordPuzzlesTest.Utility
 {
     [TestFixture]
     public class PuzParserTest
@@ -314,7 +314,7 @@ namespace WordPuzzlesTest.NetFramework.Utility
 
         [Test]
         [Timeout(6000000)]
-        //[Ignore("Run Manually")]
+        [Ignore("Run Manually")]
         public void ImportAllStackOverflowFiles_NoAssertions()
         {
             const string DIRECTORY_WITH_PUZ_FILES =

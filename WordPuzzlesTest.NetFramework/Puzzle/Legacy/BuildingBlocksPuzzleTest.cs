@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
+namespace WordPuzzlesTest.Puzzle.Legacy
 {
     [TestFixture]
     public class BuildingBlocksPuzzleTest
@@ -12,6 +12,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         public class PlaceSolution
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void GeneratesListOf6LetterWords()
             {
                 BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();
@@ -30,6 +31,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CreatesExpectedBlocks()
             {
                 BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();
@@ -59,6 +61,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
         {
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ReturnsExpectedString()
             {
                 BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();

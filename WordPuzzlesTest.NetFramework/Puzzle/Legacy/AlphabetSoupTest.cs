@@ -5,7 +5,7 @@ using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
+namespace WordPuzzlesTest.Puzzle.Legacy
 {
     [TestFixture]
     public class AlphabetSoupTest
@@ -190,6 +190,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle.Legacy
     public class ScrambleLines
     {
         [Test]
+        [Ignore("Takes more than 3 seconds.")]
         public void MovesSingleLine()
         {
             AlphabetSoup puzzle = new AlphabetSoup();

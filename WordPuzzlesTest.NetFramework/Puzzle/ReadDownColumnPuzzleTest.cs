@@ -5,7 +5,7 @@ using NUnit.Framework;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle
+namespace WordPuzzlesTest.Puzzle
 {
     [TestFixture]
     public class ReadDownColumnPuzzleTest
@@ -14,6 +14,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
         public class PopulateWords
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void CreatesExpectedPuzzle()
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "cat"};
@@ -30,6 +31,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SpacesInPhrase_CreatesExpectedPuzzle()
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "cats and dogs"};
@@ -47,6 +49,7 @@ namespace WordPuzzlesTest.NetFramework.Puzzle
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SpecialCharacter_IncludedInEachWord()
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();

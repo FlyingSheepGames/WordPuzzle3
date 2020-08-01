@@ -9,14 +9,11 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-
-Organize files into directories - Puzzles, Utilities, etc.
-	Organize Tests to match
+Replace Tests with .NetFrameworkTests
+	Rename unit test project to remove .NetFramework
 
 R# warnings
 
-Replace Tests with .NetFrameworkTests
-	Rename unit test project to remove .NetFramework
 
 Rename Anacrostic."Puzzle" to a more descriptive name. 
 
@@ -94,6 +91,9 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Organize files into directories - Puzzles, Utilities, etc.
+	Organize Tests to match
+
 Create new puzzle based on TakeTwo
 	Not enough examples. TakeOne might be a possibility. 
 

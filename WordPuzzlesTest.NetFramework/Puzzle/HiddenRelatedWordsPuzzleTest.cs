@@ -3,7 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 
-namespace WordPuzzlesTest.NetFramework.Puzzle
+namespace WordPuzzlesTest.Puzzle
 {
     [TestFixture]
     public class HiddenRelatedWordsPuzzleTest
