@@ -63,77 +63,77 @@ namespace WordPuzzlesTest.Utility
                 Assert.AreEqual(9, results.Count, "Expected 10 crossword entries");
 
                 Assert.AreEqual("POEMS", results[0].Word);
-                Assert.AreEqual(true, results[0].IsCellNumbered, $"Unexpected value for IsCellNumbered for word POEMS");
+                Assert.AreEqual(true, results[0].IsCellNumbered, "Unexpected value for IsCellNumbered for word POEMS");
                 Assert.AreEqual(0, results[0].IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word POEMS");
-                Assert.AreEqual(CrosswordDirection.ACROSS, results[0].Direction,
-                    $"Unexpected value for Direction for word POEMS");
-                Assert.AreEqual(1, results[0].ClueNumber, $"Unexpected value for ClueNumber for word POEMS");
+                Assert.AreEqual(CrosswordDirection.Across, results[0].Direction,
+                    "Unexpected value for Direction for word POEMS");
+                Assert.AreEqual(1, results[0].ClueNumber, "Unexpected value for ClueNumber for word POEMS");
 
                 var entryPom = results[1];
                 Assert.AreEqual("POM", entryPom.Word);
-                Assert.AreEqual(true, entryPom.IsCellNumbered, $"Unexpected value for IsCellNumbered for word POM");
+                Assert.AreEqual(true, entryPom.IsCellNumbered, "Unexpected value for IsCellNumbered for word POM");
                 Assert.AreEqual(0, entryPom.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word POM");
-                Assert.AreEqual(CrosswordDirection.DOWN, entryPom.Direction,
-                    $"Unexpected value for Direction for word POM");
+                Assert.AreEqual(CrosswordDirection.Down, entryPom.Direction,
+                    "Unexpected value for Direction for word POM");
 
                 var entryOnes = results[2];
                 Assert.AreEqual("ONES", entryOnes.Word);
-                Assert.AreEqual(true, entryOnes.IsCellNumbered, $"Unexpected value for IsCellNumbered for word ONES");
+                Assert.AreEqual(true, entryOnes.IsCellNumbered, "Unexpected value for IsCellNumbered for word ONES");
                 Assert.AreEqual(1, entryOnes.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word ONES");
-                Assert.AreEqual(CrosswordDirection.DOWN, entryOnes.Direction,
-                    $"Unexpected value for Direction for word ONES");
+                Assert.AreEqual(CrosswordDirection.Down, entryOnes.Direction,
+                    "Unexpected value for Direction for word ONES");
 
 
                 var entryEtch = results[3];
                 Assert.AreEqual("ETCH", entryEtch.Word);
-                Assert.AreEqual(true, entryEtch.IsCellNumbered, $"Unexpected value for IsCellNumbered for word ETCH");
+                Assert.AreEqual(true, entryEtch.IsCellNumbered, "Unexpected value for IsCellNumbered for word ETCH");
                 Assert.AreEqual(2, entryEtch.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word ETCH");
-                Assert.AreEqual(CrosswordDirection.DOWN, entryEtch.Direction,
-                    $"Unexpected value for Direction for word ETCH");
+                Assert.AreEqual(CrosswordDirection.Down, entryEtch.Direction,
+                    "Unexpected value for Direction for word ETCH");
 
                 var entryMaca = results[4];
                 Assert.AreEqual("MACA", entryMaca.Word);
-                Assert.AreEqual(true, entryMaca.IsCellNumbered, $"Unexpected value for IsCellNumbered for word MACA");
+                Assert.AreEqual(true, entryMaca.IsCellNumbered, "Unexpected value for IsCellNumbered for word MACA");
                 Assert.AreEqual(3, entryMaca.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word MACA");
-                Assert.AreEqual(CrosswordDirection.DOWN, entryMaca.Direction,
-                    $"Unexpected value for Direction for word MACA");
+                Assert.AreEqual(CrosswordDirection.Down, entryMaca.Direction,
+                    "Unexpected value for Direction for word MACA");
 
                 var entrySpar = results[5];
                 Assert.AreEqual("SPAR", entrySpar.Word);
-                Assert.AreEqual(true, entrySpar.IsCellNumbered, $"Unexpected value for IsCellNumbered for word SPAR");
+                Assert.AreEqual(true, entrySpar.IsCellNumbered, "Unexpected value for IsCellNumbered for word SPAR");
                 Assert.AreEqual(4, entrySpar.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word SPAR");
-                Assert.AreEqual(CrosswordDirection.DOWN, entrySpar.Direction,
-                    $"Unexpected value for Direction for word SPAR");
+                Assert.AreEqual(CrosswordDirection.Down, entrySpar.Direction,
+                    "Unexpected value for Direction for word SPAR");
 
                 var entryOnTap = results[6];
                 Assert.AreEqual("ONTAP", entryOnTap.Word);
-                Assert.AreEqual(true, entryOnTap.IsCellNumbered, $"Unexpected value for IsCellNumbered for word ONTAP");
+                Assert.AreEqual(true, entryOnTap.IsCellNumbered, "Unexpected value for IsCellNumbered for word ONTAP");
                 Assert.AreEqual(6, entryOnTap.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word ONTAP");
-                Assert.AreEqual(CrosswordDirection.ACROSS, entryOnTap.Direction,
-                    $"Unexpected value for Direction for word POEMS");
+                Assert.AreEqual(CrosswordDirection.Across, entryOnTap.Direction,
+                    "Unexpected value for Direction for word POEMS");
 
                 var entryMecca = results[7];
                 Assert.AreEqual("MECCA", entryMecca.Word);
-                Assert.AreEqual(true, entryMecca.IsCellNumbered, $"Unexpected value for IsCellNumbered for word MECCA");
+                Assert.AreEqual(true, entryMecca.IsCellNumbered, "Unexpected value for IsCellNumbered for word MECCA");
                 Assert.AreEqual(12, entryMecca.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word MECCA");
-                Assert.AreEqual(CrosswordDirection.ACROSS, entryMecca.Direction,
-                    $"Unexpected value for Direction for word MECCA");
+                Assert.AreEqual(CrosswordDirection.Across, entryMecca.Direction,
+                    "Unexpected value for Direction for word MECCA");
 
                 var entryShar = results[8];
                 Assert.AreEqual("SHAR", entryShar.Word);
-                Assert.AreEqual(true, entryShar.IsCellNumbered, $"Unexpected value for IsCellNumbered for word SHAR");
+                Assert.AreEqual(true, entryShar.IsCellNumbered, "Unexpected value for IsCellNumbered for word SHAR");
                 Assert.AreEqual(19, entryShar.IndexInSingleString,
                     "Unexpected value for IndexInSingleString for word SHAR");
-                Assert.AreEqual(CrosswordDirection.ACROSS, entryShar.Direction,
-                    $"Unexpected value for Direction for word SHAR");
+                Assert.AreEqual(CrosswordDirection.Across, entryShar.Direction,
+                    "Unexpected value for Direction for word SHAR");
             }
 
             [Test]
@@ -157,35 +157,35 @@ namespace WordPuzzlesTest.Utility
                     "TRAM.CUPS.SENSE" +
                     "ZENO.APSE.SNAKY");
                 Assert.AreEqual(74, results.Count, "Expected 34 results");
-                bool foundPOEMS = false; //first across
-                bool foundSNAKY = false; //last across
+                bool foundPoems = false; //first across
+                bool foundSnaky = false; //last across
 
-                bool foundPOM = false; //first down
-                bool foundREY = false; //last down
+                bool foundPom = false; //first down
+                bool foundRey = false; //last down
 
                 foreach (var result in results)
                 {
                     if (result.Word == "POEMS")
                     {
-                        foundPOEMS = true;
+                        foundPoems = true;
                         Assert.AreEqual(0, result.IndexInSingleString, "Unexpected IndexInSingleString for POEMS");
                         Assert.AreEqual(1, result.ClueNumber, "Unexpected IndexInSingleString for POEMS");
                         Assert.AreEqual(true, result.IsCellNumbered, "Unexpected IndexInSingleString for POEMS");
-                        Assert.AreEqual(CrosswordDirection.ACROSS, result.Direction,
+                        Assert.AreEqual(CrosswordDirection.Across, result.Direction,
                             "Unexpected IndexInSingleString for POEMS");
                     }
 
-                    if (result.Word == "SNAKY") foundSNAKY = true;
+                    if (result.Word == "SNAKY") foundSnaky = true;
 
-                    if (result.Word == "POM") foundPOM = true;
-                    if (result.Word == "REY") foundREY = true;
+                    if (result.Word == "POM") foundPom = true;
+                    if (result.Word == "REY") foundRey = true;
                 }
 
-                Assert.AreEqual(true, foundPOEMS, "Found POEMS");
-                Assert.AreEqual(true, foundSNAKY, "Found SNAKY");
+                Assert.AreEqual(true, foundPoems, "Found POEMS");
+                Assert.AreEqual(true, foundSnaky, "Found SNAKY");
 
-                Assert.AreEqual(true, foundPOM, "Found POM");
-                Assert.AreEqual(true, foundREY, "Found REY");
+                Assert.AreEqual(true, foundPom, "Found POM");
+                Assert.AreEqual(true, foundRey, "Found REY");
 
             }
         }
@@ -225,19 +225,19 @@ namespace WordPuzzlesTest.Utility
                 wordsToSort.Add(new CrosswordPuzzleEntry()
                 {
                     IndexInSingleString = 1,
-                    Direction = CrosswordDirection.ACROSS,
+                    Direction = CrosswordDirection.Across,
                     Word = "third"
                 });
                 wordsToSort.Add(new CrosswordPuzzleEntry()
                 {
                     IndexInSingleString = 0,
-                    Direction = CrosswordDirection.DOWN,
+                    Direction = CrosswordDirection.Down,
                     Word = "second"
                 });
                 wordsToSort.Add(new CrosswordPuzzleEntry()
                 {
                     IndexInSingleString = 0,
-                    Direction = CrosswordDirection.ACROSS,
+                    Direction = CrosswordDirection.Across,
                     Word = "first"
                 });
 
@@ -290,7 +290,7 @@ namespace WordPuzzlesTest.Utility
                 Console.WriteLine($"{results.CountOfWordWithClues}: {file}");
                 var fileWithClues = file.Replace(".puz", ".json");
                 results.WriteToDisk(fileWithClues);
-                Assert.LessOrEqual(70, results.CountOfWordWithClues, $"Expected at least 70 clues.");
+                Assert.LessOrEqual(70, results.CountOfWordWithClues, "Expected at least 70 clues.");
             }
         }
 

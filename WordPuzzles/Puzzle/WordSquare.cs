@@ -14,7 +14,7 @@ namespace WordPuzzles.Puzzle
         public WordRepository Repository { get; set; } = new WordRepository();
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
-        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
+        private readonly HtmlGenerator _htmlGenerator = new HtmlGenerator();
         public string[] Lines ;
         public int Size;
 
@@ -83,7 +83,9 @@ namespace WordPuzzles.Puzzle
 
         public static string GetFileNameFor(string relatedWord)
         {
+            // ReSharper disable StringLiteralTypo
             return BASE_DIRECTORY + $@"wordsquares\{relatedWord}.txt";
+            // ReSharper restore StringLiteralTypo
         }
 
         public string GetTweet()

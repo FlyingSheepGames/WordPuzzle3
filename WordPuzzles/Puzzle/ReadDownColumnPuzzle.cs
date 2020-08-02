@@ -13,10 +13,10 @@ namespace WordPuzzles.Puzzle
         public int Size => 6;
         private Random _random;
         public int ZeroBasedIndexOfSolution = 2;
-        private HtmlGenerator _generator = new HtmlGenerator();
+        private readonly HtmlGenerator _generator = new HtmlGenerator();
         private char _specialCharacter;
 
-        public WordRepository Repository { get; } = new WordRepository() {ExludeAdvancedWords = true};
+        public WordRepository Repository { get; } = new WordRepository() {ExcludeAdvancedWords = true};
 
         public int NumberOfWordsToInclude { get; set; } = 3;
 
@@ -147,7 +147,7 @@ namespace WordPuzzles.Puzzle
                 {
                     currentClue = Clues[index];
                 }
-                builder.AppendLine($@"    <td width=""250"">" + currentClue + $@"</td>");
+                builder.AppendLine(@"    <td width=""250"">" + currentClue + @"</td>");
                 for (int i = 0; i < Size; i++)
                 {
                     string style = "normal";

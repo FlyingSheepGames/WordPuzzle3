@@ -34,8 +34,7 @@ namespace WordPuzzles.Utility
         {
             using (TextReader reader = new StreamReader(fileName))
             {
-                WeekOfPuzzles deserializedPuzzles = _xmlSerializer.Deserialize(reader) as WeekOfPuzzles;
-                if (deserializedPuzzles != null)
+                if (_xmlSerializer.Deserialize(reader) is WeekOfPuzzles deserializedPuzzles)
                 {
                     MondayWordSquare = deserializedPuzzles.MondayWordSquare;
                     TuesdayVowelMovement = deserializedPuzzles.TuesdayVowelMovement;

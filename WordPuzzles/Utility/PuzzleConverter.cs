@@ -39,7 +39,7 @@ namespace WordPuzzles.Utility
                 return new PhraseSegmentPuzzle();
             }
 
-            if (FieldExists("isHiddenRelatedWordsPuzzle", jObject))
+            if (FieldExists("IsHiddenRelatedWordsPuzzle", jObject))
             {
                 return new HiddenRelatedWordsPuzzle();
             }

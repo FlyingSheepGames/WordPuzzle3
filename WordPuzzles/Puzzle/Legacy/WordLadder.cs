@@ -6,7 +6,7 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class WordLadder
     {
-        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExcludeAdvancedWords = true};
         public string Solution { get; }
         public int Size { get; set; }
 

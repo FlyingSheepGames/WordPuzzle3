@@ -8,7 +8,7 @@ namespace WordPuzzles.Puzzle.Legacy
         //TODO: Should probably be using polymorphism for this instead of copy/paste. 
         //Not sure yet what the new WordLadder will look like, but it may be possible to merge the two afterwards.
     {
-        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExcludeAdvancedWords = true};
         public string Solution { get; }
         public int Size { get; set; }
 

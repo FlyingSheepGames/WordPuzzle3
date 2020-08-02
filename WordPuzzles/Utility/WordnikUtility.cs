@@ -9,10 +9,10 @@ namespace WordPuzzles.Utility
         {
             List<PotentialTheme> themes = new List<PotentialTheme>();
             string html = WebRequestUtility.ReadHtmlPageFromUrl($"https://www.wordnik.com/fragments/lists/{word}");
-            int indexOfStartOfOtherLists = html.IndexOf(@"<ul class=""other_lists"">");
+            int indexOfStartOfOtherLists = html.IndexOf(@"<ul class=""other_lists"">", StringComparison.Ordinal);
             if (indexOfStartOfOtherLists < 0) return themes;
             string remainingHtml = html.Substring(indexOfStartOfOtherLists);
-            foreach (string listFragment in remainingHtml.Split(new string[] { @"<a href=""/lists/" }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string listFragment in remainingHtml.Split(new[] { @"<a href=""/lists/" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 int indexOfQuote = listFragment.IndexOf('"');
                 string listName = listFragment.Substring(0, indexOfQuote);

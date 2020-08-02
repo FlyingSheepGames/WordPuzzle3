@@ -8,35 +8,35 @@ namespace WordPuzzles.Puzzle
 {
     public class PuzzleCollection : IEnumerable<IPuzzle>
     {
-        List<IPuzzle> puzzles = new List<IPuzzle>();
+        List<IPuzzle> _puzzles = new List<IPuzzle>();
 
-        public long PuzzleCount => puzzles.Count;
+        public long PuzzleCount => _puzzles.Count;
         public string Name { get; set; }
 
         public void AddPuzzle(IPuzzle puzzleToAdd)
         {
-            if (puzzleToAdd != null) puzzles.Add(puzzleToAdd);
+            if (puzzleToAdd != null) _puzzles.Add(puzzleToAdd);
         }
 
         public IPuzzle RetrievePuzzleAtIndex(int i)
         {
-            if (i < puzzles.Count)
+            if (i < _puzzles.Count)
             {
-                return puzzles[i];
+                return _puzzles[i];
             }
             throw new ArgumentOutOfRangeException(nameof(i), "There aren't that many puzzles in the collection.");
         }
 
         public void Serialize(string fileName)
         {
-            string serializedCollection = JsonConvert.SerializeObject(puzzles);
+            string serializedCollection = JsonConvert.SerializeObject(_puzzles);
             File.WriteAllText(fileName, serializedCollection);
         }
 
         public void Deserialize(string fileName)
         {
             string serializedCollection = File.ReadAllText(fileName);
-            puzzles = JsonConvert.DeserializeObject<List<IPuzzle>>(serializedCollection);
+            _puzzles = JsonConvert.DeserializeObject<List<IPuzzle>>(serializedCollection);
             Name = ParseNameFromFileName(fileName);
             
         }
@@ -60,7 +60,7 @@ namespace WordPuzzles.Puzzle
 
         public IEnumerator<IPuzzle> GetEnumerator()
         {
-            return puzzles.GetEnumerator();
+            return _puzzles.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -70,9 +70,9 @@ namespace WordPuzzles.Puzzle
 
         public void RemovePuzzleAtIndex(int indexToRemove)
         {
-            if (indexToRemove >= 0 && puzzles.Count > indexToRemove)
+            if (indexToRemove >= 0 && _puzzles.Count > indexToRemove)
             {
-                puzzles.RemoveAt(indexToRemove);
+                _puzzles.RemoveAt(indexToRemove);
             }
         }
     }

@@ -117,7 +117,7 @@ namespace WordPuzzlesTest.Puzzle
                     expectedFileName = "expectedExampleWithSolution1.html";
                 }
 
-                string[] expectedLines = new string[] { " " };// need to have something to be different from generated file.
+                string[] expectedLines = new[] { " " };// need to have something to be different from generated file.
                 if (File.Exists(HTML_DIRECTORY + expectedFileName))
                 {
                     expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
@@ -143,7 +143,7 @@ namespace WordPuzzlesTest.Puzzle
 
                 if (anyLinesDifferent)
                 {
-                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
                     File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
                 }
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
@@ -195,7 +195,7 @@ namespace WordPuzzlesTest.Puzzle
                     expectedFileName = "expectedExampleWithSolution2.html";
                 }
 
-                string[] expectedLines = new string[] { " " };// need to have something to be different from generated file.
+                string[] expectedLines = new[] { " " };// need to have something to be different from generated file.
                 if (File.Exists(HTML_DIRECTORY + expectedFileName))
                 {
                     expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
@@ -221,7 +221,7 @@ namespace WordPuzzlesTest.Puzzle
 
                 if (anyLinesDifferent)
                 {
-                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
                     File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
                 }
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");

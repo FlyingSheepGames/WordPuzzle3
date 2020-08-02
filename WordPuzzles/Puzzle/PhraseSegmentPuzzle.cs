@@ -16,7 +16,7 @@ namespace WordPuzzles.Puzzle
         private Random _randomNumberGenerator;
 
 
-        public int RandomSeed = 0;
+        public int RandomSeed;
         
         public void PlacePhrase()
         {
@@ -30,7 +30,7 @@ namespace WordPuzzles.Puzzle
                 var list = BreakLongPhraseIntoSubPhrases();
                 for (var index = 0; index < list.Count; index++)
                 {
-                    var subphrase = list[index];
+                    var subPhrase = list[index];
                     string author = "";
                     if (index == list.Count - 1)
                     {
@@ -39,7 +39,7 @@ namespace WordPuzzles.Puzzle
 
                     var subPuzzle = new PhraseSegmentPuzzle()
                     {
-                        Phrase = subphrase,
+                        Phrase = subPhrase,
                         Author = author, 
                         RandomSeed = RandomSeed
                     };
@@ -97,7 +97,7 @@ namespace WordPuzzles.Puzzle
         }
 
         public List<Block> Blocks = new List<Block>();
-        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
+        private readonly HtmlGenerator _htmlGenerator = new HtmlGenerator();
         public List<PhraseSegmentPuzzle> SubPuzzles;
 
         public int SpacesBeforeAuthor { get; set; }
@@ -124,9 +124,7 @@ namespace WordPuzzles.Puzzle
 
         private Block CreateBlock(string completePhrase, int lineLengthSoFar, int nextWidthToTake)
         {
-            var blockToReturn = new Block();
-            blockToReturn.Width = nextWidthToTake;
-            blockToReturn.Lines = new List<string>();
+            var blockToReturn = new Block {Width = nextWidthToTake, Lines = new List<string>()};
             int singleLineLength = completePhrase.Length / 4;
             blockToReturn.Fragments = new List<string>();
             for (int lineIndex = 0; lineIndex < 4; lineIndex++)
@@ -237,7 +235,7 @@ namespace WordPuzzles.Puzzle
             builder.AppendLine("</table>");
         }
 
-        public string Description => $"PhraseSegmentPuzzle for phrase {this.Phrase} ";
+        public string Description => $"PhraseSegmentPuzzle for phrase {Phrase} ";
 
         public Random RandomNumberGenerator
         {
@@ -347,15 +345,14 @@ namespace WordPuzzles.Puzzle
                 }
 
                 fragmentsLine.AppendLine("</ul>");
-                fragmentsLine.AppendLine($@"</td>");
+                fragmentsLine.AppendLine(@"</td>");
             }
 
         }
 
         private string DetermineClassAttribute(int lineIndex, int characterIndex, int lastLineIndex, bool blackOutCell, bool greyOutCell)
         {
-            List<string> cssAttributes = new List<string>();
-            cssAttributes.Add("centered");
+            List<string> cssAttributes = new List<string> {"centered"};
             if (blackOutCell)
             {
                 cssAttributes.Add("black");

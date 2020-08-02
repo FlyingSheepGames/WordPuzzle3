@@ -140,7 +140,7 @@ namespace WordPuzzlesTest.Utility
                 repository.AddClue("ONES", "Singletons");
                 repository.AddClue("ONES", "Smallest denomination of folding money.");
 
-                repository.AddClue("Lego", "A small colorful brick.", ClueSource.CLUE_SOURCE_CHIP);
+                repository.AddClue("Lego", "A small colorful brick.", ClueSource.ClueSourceChip);
 
                 repository.WriteToDisk(@"data\actual_nonempty_clue_repository.json");
 
@@ -171,7 +171,7 @@ namespace WordPuzzlesTest.Utility
                 List<Clue> cluesForLego = repository.GetCluesForWord("Lego");
                 Assert.AreEqual(1, cluesForLego.Count);
                 Assert.AreEqual("A small colorful brick.", cluesForLego[0].ClueText);
-                Assert.AreEqual(ClueSource.CLUE_SOURCE_CHIP, cluesForLego[0].ClueSource);
+                Assert.AreEqual(ClueSource.ClueSourceChip, cluesForLego[0].ClueSource);
             }
         }
     }

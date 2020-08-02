@@ -12,7 +12,7 @@ namespace WordPuzzles.Puzzle
         public InnerAnacrosticPuzzle Puzzle = new InnerAnacrosticPuzzle();
         public WordRepository Repository = new WordRepository();
         private readonly int[] _remainingLetters = new int[26];
-        public HtmlGenerator _htmlGenerator = new HtmlGenerator();
+        internal HtmlGenerator HtmlGenerator = new HtmlGenerator();
 
         public List<string> WordsFoundSoFar = new List<string>();
         public string OriginalPhrase;
@@ -24,16 +24,16 @@ namespace WordPuzzles.Puzzle
 
         public string GetEncodedPhraseForGoogle()
         {
-            int MAX_LINE_LENGTH = 10;
+            int maxLineLength = 10;
             PreparePuzzle();
             StringBuilder phraseEncodedForGoogle = new StringBuilder();
             int lineLength = 0;
-            for (var index = 0; index < Puzzle.Phrase.Count; index++)
+            foreach (var puzzleLetter in Puzzle.Phrase)
             {
                 lineLength++;
-                var letter = Puzzle.Phrase[index];
+                var letter = puzzleLetter;
                 phraseEncodedForGoogle.Append(letter);
-                if (MAX_LINE_LENGTH < lineLength && (letter.ActualLetter == ' '))
+                if (maxLineLength < lineLength && (letter.ActualLetter == ' '))
                 {
                     phraseEncodedForGoogle.Append("\r\n");
                     lineLength = 0;
@@ -63,15 +63,13 @@ namespace WordPuzzles.Puzzle
             LineLength = CalculateLineLength(phrase.Length);
 
             StringBuilder encodedPhraseForGoogle = new StringBuilder();
-            int currentCount = 0;
             int lineLengthSoFar = 0;
-            int MAX_LINE_LENGTH = 10;
+            int maxLineLength = 10;
             foreach (char letter in phrase)
             {
                 lineLengthSoFar++;
                 encodedPhraseForGoogle.Append(letter);
-                currentCount++;
-                if ((MAX_LINE_LENGTH < lineLengthSoFar) && (letter == ' '))
+                if ((maxLineLength < lineLengthSoFar) && (letter == ' '))
                 {
                     encodedPhraseForGoogle.Append("\r\n");
                     lineLengthSoFar = 0;
@@ -104,7 +102,6 @@ namespace WordPuzzles.Puzzle
         {
             if (phraseLength < 15) return phraseLength;
 
-            int lineLengthThatGeneratesTwoBlackSpaces = 0;
             for (int lineLengthToConsider = 14; 7 < lineLengthToConsider; lineLengthToConsider--)
             {
                 if (phraseLength % lineLengthToConsider == 0) return lineLengthToConsider;
@@ -112,14 +109,7 @@ namespace WordPuzzles.Puzzle
                 if (phraseLength % lineLengthToConsider == (lineLengthToConsider - 2)) return lineLengthToConsider;
             }
 
-            if (lineLengthThatGeneratesTwoBlackSpaces == 0)
-            {
-                //throw new Exception("Was expecting line length to be set by now.");
-                //default to 10. 
-                lineLengthThatGeneratesTwoBlackSpaces = 10;
-            }
-
-            return lineLengthThatGeneratesTwoBlackSpaces;
+            return 10;
         }
 
         private static int GetAlphabetRank(char letter)
@@ -242,7 +232,6 @@ namespace WordPuzzles.Puzzle
         private void ReplaceFirstLetterWithLetterCodeInPhrase(char letterInWordCandidate, string letterCode)
         {
             StringBuilder updatedEncodedPhrase = new StringBuilder();
-            StringBuilder updatedEncodedPhraseforGoogle = new StringBuilder();
 
             bool alreadyReplaced = false;
 
@@ -266,8 +255,7 @@ namespace WordPuzzles.Puzzle
                 }
             }
 
-            alreadyReplaced = false;
-             EncodedPhrase = updatedEncodedPhrase.ToString();
+            EncodedPhrase = updatedEncodedPhrase.ToString();
 
         }
 
@@ -362,7 +350,7 @@ namespace WordPuzzles.Puzzle
             StringBuilder builder = new StringBuilder();
             if (!isFragment)
             {
-                _htmlGenerator.AppendHtmlHeader(builder);
+                HtmlGenerator.AppendHtmlHeader(builder);
             }
 
             builder.AppendLine("<!--StartFragment-->");
@@ -379,7 +367,7 @@ namespace WordPuzzles.Puzzle
             builder.AppendLine("<!--EndFragment-->");
             if (!isFragment)
             {
-                _htmlGenerator.AppendHtmlFooter(builder);
+                HtmlGenerator.AppendHtmlFooter(builder);
             }
 
             return builder.ToString();
@@ -400,9 +388,8 @@ namespace WordPuzzles.Puzzle
 
             string[] enumeratedCellValues = EnumerateCellValues();
             int phraseIndex = 0; //Can get out of sync with enumerated Cell Values.
-            for (var index = 0; index < enumeratedCellValues.Length; index++)
+            foreach (var cellValue in enumeratedCellValues)
             {
-                string cellValue = enumeratedCellValues[index];
                 char letterInSolution = ' ';
 
                 if ( phraseIndex < OriginalPhrase.Length)
@@ -489,7 +476,7 @@ namespace WordPuzzles.Puzzle
                 letterInSolutionAsString = letterInSolution.ToString().ToUpperInvariant();
             }
             topLine.AppendLine(@"    <td width=""30"" " + classAttribute + @">" + letterInSolutionAsString + @"</td>");
-            middleLine.AppendLine($@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
+            middleLine.AppendLine(@"    <td width=""30"" " + classAttribute + $@">{cellValue}</td>");
             bottomLine.AppendLine(@"    <td width=""30"" " + @"class=""open""" + @">&nbsp;</td>");
         }
 
@@ -515,10 +502,10 @@ namespace WordPuzzles.Puzzle
                 {
                     currentClue = wordAsClue.CustomizedClue;
                 }
-                topLine.AppendLine($@"    <td colspan=""{word.Length}"" class=""open""><br/>" + currentClue + $@"</td>");
+                topLine.AppendLine($@"    <td colspan=""{word.Length}"" class=""open""><br/>" + currentClue + @"</td>");
                 foreach (char letter in word.ToUpper())
                 {
-                    secondLine.Append($@"    <td width=""30"" class=""normal centered"">");
+                    secondLine.Append(@"    <td width=""30"" class=""normal centered"">");
                     if (showSolution)
                     {
                         secondLine.Append(letter);
@@ -527,9 +514,9 @@ namespace WordPuzzles.Puzzle
                     {
                         secondLine.Append(@"&nbsp;");
                     }
-                    secondLine.AppendLine($@"</td>");
+                    secondLine.AppendLine(@"</td>");
                     thirdLine.AppendLine($@"    <td width=""30"" class=""normal centered"">{currentLetter}{lettersAssignedSoFar++}</td>");
-                    fourthLine.AppendLine($@"    <td width=""30"" class=""open""></td>");
+                    fourthLine.AppendLine(@"    <td width=""30"" class=""open""></td>");
                 }
 
                 currentLetter++;

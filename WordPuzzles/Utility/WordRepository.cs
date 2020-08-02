@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -11,9 +10,8 @@ namespace WordPuzzles.Utility
     public class WordRepository
     {
         // ReSharper disable once InconsistentNaming
-        private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
 
-        private ThemeRepository themeRepository = new ThemeRepository();
+        private readonly ThemeRepository _themeRepository = new ThemeRepository();
 
         [XmlIgnore]
         public List<WordCategory> CategoriesToInclude
@@ -23,7 +21,7 @@ namespace WordPuzzles.Utility
         }
 
         [XmlIgnore]
-        public bool ExludeAdvancedWords { get; set; }
+        public bool ExcludeAdvancedWords { get; set; }
 
         readonly Random _randomNumberGenerator = new Random();
 
@@ -69,14 +67,14 @@ namespace WordPuzzles.Utility
         private readonly List<string> _sevenLetterWords = new List<string>();
         private readonly List<string> _eightLetterWords = new List<string>();
         private readonly List<string> _tenLetterWords = new List<string>();
-        internal bool _alreadyLoaded;
+        internal bool AlreadyLoaded;
         private static readonly Dictionary<string, string> DictionaryOfClues = new Dictionary<string, string>();
 
         public bool IgnoreCache = true;
         public void LoadAllWords()
         {
             CategoriesToInclude = new List<WordCategory>() {WordCategory.BasicWord};
-            if (!ExludeAdvancedWords)
+            if (!ExcludeAdvancedWords)
             {
                 CategoriesToInclude.Add(WordCategory.AdvancedWord);
             }
@@ -154,7 +152,7 @@ namespace WordPuzzles.Utility
                     }
                 }
             }
-            _alreadyLoaded = true;
+            AlreadyLoaded = true;
         }
 
 
@@ -179,15 +177,14 @@ namespace WordPuzzles.Utility
                 return WordsWithCharacterAtIndex(startingCharacters[0], 0, wordLength);
 
             }
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
             List<string> matchingWords = new List<string>();
-            List<string> wordsToSearch = null;
 
 
-            wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
+            List<string> wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
 
 
             if (wordsToSearch == null)
@@ -206,15 +203,14 @@ namespace WordPuzzles.Utility
 
         public List<string> WordsWithCharacterAtIndex(char expectedCharacter, int expectedIndex, int wordLength)
         {
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
 
             List<string> matchingWords = new List<string>();
-            List<string> wordsToSearch = null;
 
-            wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
+            List<string> wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
 
 
             if (wordsToSearch == null)
@@ -234,7 +230,7 @@ namespace WordPuzzles.Utility
         public bool IsAWord(string wordCandidate)
         {
 
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
@@ -246,7 +242,7 @@ namespace WordPuzzles.Utility
 
         public string GetRandomWord(int wordLength = 5)
         {
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
@@ -268,7 +264,7 @@ namespace WordPuzzles.Utility
 
         public string FindClueFor(string clueAsString)
         {
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
@@ -283,25 +279,7 @@ namespace WordPuzzles.Utility
 
         public List<string> GetRelatedWordsForTheme(string theme)
         {
-            return themeRepository.FindWordsForTheme(theme);
-
-            GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA" };
-            List<string> wordsForTheme = new List<string>();
-
-            List<Dictionary<int, string>> findRelatedWords = sheet.ExecuteQuery(string.Format($@"SELECT * WHERE A = '{theme}'"));
-            foreach (var dictionary in findRelatedWords)
-            {
-                if (dictionary.ContainsKey(1))
-                {
-                    string wordToAdd = dictionary[1];
-                    if (!wordsForTheme.Contains(wordToAdd)) //skip any duplicates
-                    {
-                        wordsForTheme.Add(wordToAdd);
-                    }
-                }
-            }
-
-            return wordsForTheme;
+            return _themeRepository.FindWordsForTheme(theme);
         }
 
         public bool IsSingleSyllable(string word)
@@ -365,7 +343,7 @@ namespace WordPuzzles.Utility
         {
             StringBuilder googleRowsBuilder = new StringBuilder();
 
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
@@ -402,15 +380,14 @@ namespace WordPuzzles.Utility
 
         public List<string> WordsMatchingPattern(string pattern)
         {
-            if (!_alreadyLoaded)
+            if (!AlreadyLoaded)
             {
                 LoadAllWords();
             }
             List<string> matchingWords = new List<string>();
-            List<string> wordsToSearch = null;
             int wordLength = pattern.Length;
 
-            wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
+            List<string> wordsToSearch = GetWordsToSearchBaseOnLength(wordLength);
 
 
             if (wordsToSearch == null)
@@ -440,7 +417,7 @@ namespace WordPuzzles.Utility
 
         private List<string> GetWordsToSearchBaseOnLength(int wordLength)
         {
-            List<string> wordsToSearch = new List<string>();
+            List<string> wordsToSearch;
             switch (wordLength)
             {
                 case 1:
@@ -500,7 +477,7 @@ namespace WordPuzzles.Utility
 
         public List<string> FindThemesForWord(string word)
         {
-            return themeRepository.FindThemesForWord(word);
+            return _themeRepository.FindThemesForWord(word);
         }
     }
 }

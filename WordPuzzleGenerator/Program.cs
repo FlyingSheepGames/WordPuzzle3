@@ -18,18 +18,18 @@ namespace WordPuzzleGenerator
 
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
-        static readonly WordRepository WordRepository = new WordRepository() {ExludeAdvancedWords = true};
+        static readonly WordRepository WordRepository = new WordRepository() {ExcludeAdvancedWords = true};
         static readonly WordSquareHistory History = new WordSquareHistory(); //Todo: populate
         static readonly AnagramFinder AnagramFinder = new AnagramFinder() {Repository = WordRepository};
         static readonly Random RandomNumberGenerator = new Random();
-        static readonly ClueRepository _clueRepository = new ClueRepository();
-        private static readonly StringBuilder _puzzleBuilder = new StringBuilder();
-        private static readonly StringBuilder _solutionBuilder = new StringBuilder();
+        static readonly ClueRepository ClueRepository = new ClueRepository();
+        private static readonly StringBuilder PuzzleBuilder = new StringBuilder();
+        private static readonly StringBuilder SolutionBuilder = new StringBuilder();
 
         [STAThread]
         static void Main()
         {
-            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+            ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
             //FindAllTakeOneClues();
             //FindAllTakeTwoClues();
@@ -50,8 +50,8 @@ namespace WordPuzzleGenerator
                 InteractiveDeletePuzzles(collection);
             }
             HtmlGenerator htmlGenerator = new HtmlGenerator();
-            htmlGenerator.AppendHtmlHeader(_puzzleBuilder);
-            htmlGenerator.AppendHtmlHeader(_solutionBuilder);
+            htmlGenerator.AppendHtmlHeader(PuzzleBuilder);
+            htmlGenerator.AppendHtmlHeader(SolutionBuilder);
 
             string solution = "Placeholder that is not empty";
             while (!string.IsNullOrWhiteSpace(solution))
@@ -77,19 +77,19 @@ namespace WordPuzzleGenerator
                     userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solution, availablePuzzleTypes);
                     IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection, solutionLength, solution,
                         solutionThemes);
-                    AddPuzzleToCollection(createdPuzzle, collection, _puzzleBuilder, _solutionBuilder);
+                    AddPuzzleToCollection(createdPuzzle, collection, PuzzleBuilder, SolutionBuilder);
                 }
             }
 
             InterativelyCreatesWordsWithSelectedPattern();
 
-            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+            ClueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
-            htmlGenerator.AppendHtmlFooter(_puzzleBuilder);
-            htmlGenerator.AppendHtmlFooter(_solutionBuilder);
+            htmlGenerator.AppendHtmlFooter(PuzzleBuilder);
+            htmlGenerator.AppendHtmlFooter(SolutionBuilder);
             long ticks = DateTime.Now.Ticks;
-            File.WriteAllText($"{ticks}_puzzles.html", _puzzleBuilder.ToString());
-            File.WriteAllText($"{ticks}_solutions.html", _solutionBuilder.ToString());
+            File.WriteAllText($"{ticks}_puzzles.html", PuzzleBuilder.ToString());
+            File.WriteAllText($"{ticks}_solutions.html", SolutionBuilder.ToString());
 
             SavePuzzleCollection(collection);
         }
@@ -294,8 +294,8 @@ z has 5 clue pairs.
         {
             if (puzzleToAdd == null) return;
             collection.AddPuzzle(puzzleToAdd);
-            _puzzleBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(false, true));
-            _solutionBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(true, true));
+            PuzzleBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(false, true));
+            SolutionBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(true, true));
         }
 
         private static PhraseSegmentPuzzle InteractiveGetPuzzleForDate(DateTime date)
@@ -310,10 +310,10 @@ z has 5 clue pairs.
                 ClearConsoleInputAndOutput();
                 Console.WriteLine($"{person.Name} was born on {date.Month}/{date.Day}");
                 var quotesCount = person.Quotes.Count;
-                var MAX_QUOTES_TO_SHOW = 7;
-                if (MAX_QUOTES_TO_SHOW < quotesCount)
+                var maxQuotesToShow = 7;
+                if (maxQuotesToShow < quotesCount)
                 {
-                    quotesCount = MAX_QUOTES_TO_SHOW;
+                    quotesCount = maxQuotesToShow;
                 }
                 for (var index = 0; index < quotesCount; index++)
                 {
@@ -392,7 +392,7 @@ z has 5 clue pairs.
                 Console.WriteLine($"{i}:{fileName}");
             }
 
-            Console.WriteLine($"To create a new collection, enter a name.");
+            Console.WriteLine("To create a new collection, enter a name.");
             string userInput = Console.ReadLine();
             int selectedIndex = 0;
             if (int.TryParse(userInput, out selectedIndex))
@@ -514,8 +514,8 @@ z has 5 clue pairs.
                     {
                         generatedPuzzle = InteractiveFindWordSquare(solution);
                         
-                        _puzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
-                        _solutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
+                        PuzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        SolutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
                     }
                     else
                     {
@@ -947,7 +947,7 @@ z has 5 clue pairs.
 
         private static void ListWordsThatCanBeShifted()
         {
-            WordRepository repository = new WordRepository() {ExludeAdvancedWords = false};
+            WordRepository repository = new WordRepository() {ExcludeAdvancedWords = false};
             StringBuilder completeList = new StringBuilder();
             foreach (string pattern in new[] {"___", "____", "_____", "______"})
             {
@@ -984,7 +984,7 @@ z has 5 clue pairs.
 
         private static void ListWordsThatCanPrependALetter(string initialLetter)
         {
-            WordRepository repositoryWithAdvancedWords = new WordRepository() {ExludeAdvancedWords = false};
+            WordRepository repositoryWithAdvancedWords = new WordRepository() {ExcludeAdvancedWords = false};
             for (int length = 3; length < 7; length++)
             {
                 StringBuilder patternBuilder = new StringBuilder();
@@ -1342,7 +1342,7 @@ z has 5 clue pairs.
             for (int i = 0; i < puzzle.Size; i++)
             {
                 string currentWord = wordsInGrid[i];
-                List<Clue> suggestedClues = _clueRepository.GetCluesForWord(currentWord);
+                List<Clue> suggestedClues = ClueRepository.GetCluesForWord(currentWord);
                 Console.Clear();
                 if (0 < suggestedClues.Count)
                 {
@@ -1372,7 +1372,7 @@ z has 5 clue pairs.
                     clueToUse = userInput;
                     if (!string.IsNullOrWhiteSpace(clueToUse))
                     {
-                        _clueRepository.AddClue(currentWord, clueToUse, ClueSource.CLUE_SOURCE_CHIP);
+                        ClueRepository.AddClue(currentWord, clueToUse, ClueSource.ClueSourceChip);
                     }
                 }
                 puzzle.SetClueForRowIndex(i, clueToUse);
@@ -1580,7 +1580,7 @@ z has 5 clue pairs.
             {
                 squareIndex++;
                 Console.WriteLine($"0: accept this square. {squareIndex} / {availableSquareCount}");
-                Console.WriteLine($"Or enter 'z' to skip to the next word.");
+                Console.WriteLine("Or enter 'z' to skip to the next word.");
 
                 Console.WriteLine(availableWordSquare);
                 Console.WriteLine($"Score: {History.CalculateScore(availableWordSquare)}");
@@ -1633,9 +1633,9 @@ z has 5 clue pairs.
 
             int[] wordsConsiderByLevel = { 0, 0, 0, 0, 0, 0, };
 
-            if (!Directory.Exists(BASE_DIRECTORY + $@"wordsquares\"))
+            if (!Directory.Exists(BASE_DIRECTORY + @"wordsquares\"))
             {
-                Directory.CreateDirectory(BASE_DIRECTORY + $@"wordsquares\");
+                Directory.CreateDirectory(BASE_DIRECTORY + @"wordsquares\");
             }
 
 
@@ -1728,7 +1728,7 @@ Press 0 to continue to the next step.");
                 string commaDelimitedResponse = Console.ReadLine();
                 if (commaDelimitedResponse == null)
                 {
-                    Console.WriteLine($"I don't know what you mean.");
+                    Console.WriteLine("I don't know what you mean.");
                     continue;
                 }
                 foreach (string response in commaDelimitedResponse.Split( new[] { ","}, StringSplitOptions.RemoveEmptyEntries))
@@ -1888,7 +1888,7 @@ Enter 0 for none.");
             Console.Clear();
             Console.WriteLine(
                 $"Enter customized clue for {currentWord.ToUpperInvariant()} or selected index from the following:");
-            var clues = _clueRepository.GetCluesForWord(currentWord);
+            var clues = ClueRepository.GetCluesForWord(currentWord);
             for (var index = 0; index < clues.Count; index++)
             {
                 var clue = clues[index];
@@ -1905,7 +1905,7 @@ Enter 0 for none.");
             {
                 if (!string.IsNullOrWhiteSpace(userEnteredHint))
                 {
-                    _clueRepository.AddClue(currentWord, userEnteredHint, ClueSource.CLUE_SOURCE_CHIP);
+                    ClueRepository.AddClue(currentWord, userEnteredHint, ClueSource.ClueSourceChip);
                 }
             }
 

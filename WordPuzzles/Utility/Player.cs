@@ -37,13 +37,13 @@ namespace WordPuzzles.Utility
                     {
                         switch (puzzleType)
                         {
-                            case PuzzleType.A_LITTLE_ALLITERATION:
+                            case PuzzleType.ALittleAlliteration:
                                 ALittleAlliterationScore += currentPuzzleScore;
                                 break;
-                            case PuzzleType.MAGIC_WORD_SQUARE:
+                            case PuzzleType.MagicWordSquare:
                                 MagicWordSquareScore += currentPuzzleScore;
                                 break;
-                            case PuzzleType.VOWEL_MOVEMENT:
+                            case PuzzleType.VowelMovement:
                                 VowelMovementScore += currentPuzzleScore;
                                 break;
                             default: 

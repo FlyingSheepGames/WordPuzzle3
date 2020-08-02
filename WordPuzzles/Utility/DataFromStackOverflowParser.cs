@@ -34,7 +34,7 @@ namespace WordPuzzles.Utility
                         new Clue()
                         {
                             ClueText = clueText, 
-                            ClueSource = ClueSource.CLUE_SOURCE_STACKOVERFLOW_MEANING
+                            ClueSource = ClueSource.ClueSourceStackoverflowMeaning
                         });
                 }
                 var antonyms = wordDetails["ANTONYMS"];
@@ -45,7 +45,7 @@ namespace WordPuzzles.Utility
                         new Clue()
                         {
                             ClueText = "Opposite of " + antonymObject,
-                            ClueSource = ClueSource.CLUE_SOURCE_STACKOVERFLOW_ANTONYM
+                            ClueSource = ClueSource.ClueSourceStackoverflowAntonym
                         });
                 }
                 var synonyms = wordDetails["SYNONYMS"];
@@ -66,7 +66,7 @@ namespace WordPuzzles.Utility
                         new Clue()
                         {
                             ClueText = $"Synonyms include {listOfSynonyms[0]}, {listOfSynonyms[1]}, and {listOfSynonyms[2]}",
-                            ClueSource = ClueSource.CLUE_SOURCE_STACKOVERFLOW_ANTONYM
+                            ClueSource = ClueSource.ClueSourceStackoverflowAntonym
                         });
 
                 }
@@ -76,9 +76,5 @@ namespace WordPuzzles.Utility
 
             return clues;
         }
-    }
-
-    public class WordCollection 
-    {
     }
 }

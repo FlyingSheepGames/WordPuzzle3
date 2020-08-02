@@ -388,7 +388,7 @@ Thing that hangs above your throat
 
             if (anyLinesDifferent)
             {
-                Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                Console.WriteLine("Updating source file. Will show up as a difference in source control.");
                 File.WriteAllLines(SOURCE_DIRECTORY + @"\expectedExample1.html", actualLines);
             }
             Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");

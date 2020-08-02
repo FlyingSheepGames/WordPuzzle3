@@ -6,7 +6,7 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class MissingLettersPuzzle
     {
-        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExcludeAdvancedWords = true};
         public List<string> Words = new List<string>();
         private string _solution;
         private readonly List<string> _decoyWords = new List<string>();

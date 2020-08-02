@@ -25,10 +25,10 @@ namespace WordPuzzles.Utility
                     alreadySkippedFirstOne = true;
                     continue;
                 }
-                int indexOfAnchorCloseTag = pageFragment.IndexOf("</a>");
+                int indexOfAnchorCloseTag = pageFragment.IndexOf("</a>", StringComparison.Ordinal);
                 if (indexOfAnchorCloseTag < 0) continue;
                 string workingFragment = pageFragment.Substring(0, indexOfAnchorCloseTag);
-                int indexOfAnchorTagEnd = workingFragment.IndexOf(@""">");
+                int indexOfAnchorTagEnd = workingFragment.IndexOf(@""">", StringComparison.Ordinal);
                 if (indexOfAnchorTagEnd < 0) continue;
                 string currentName = workingFragment.Substring(indexOfAnchorTagEnd + 2);
                 //Console.WriteLine(workingFragment);
@@ -60,7 +60,7 @@ namespace WordPuzzles.Utility
                     alreadySkippedFirstEntry = true;
                     continue;
                 }
-                int indexOfAnchorCloseTag = pageFragment.IndexOf("</a>");
+                int indexOfAnchorCloseTag = pageFragment.IndexOf("</a>", StringComparison.Ordinal);
                 if (indexOfAnchorCloseTag < 0) continue;
                 string quoteAsString = pageFragment.Substring(0, indexOfAnchorCloseTag);
                 quoteAsString = HttpUtility.HtmlDecode(quoteAsString);

@@ -7,8 +7,8 @@ namespace WordPuzzles.Puzzle
     public class HiddenRelatedWordsPuzzle : IPuzzle
     {
         // ReSharper disable once UnusedMember.Global
-        public bool isHiddenRelatedWordsPuzzle = true; //For deserialization
-        List<HiddenWord> hiddenWords = new List<HiddenWord>();
+        public bool IsHiddenRelatedWordsPuzzle = true; //For deserialization
+        readonly List<HiddenWord> _hiddenWords = new List<HiddenWord>();
         private HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public int CombinedKeyIndex
@@ -16,7 +16,7 @@ namespace WordPuzzles.Puzzle
             get
             {
                 int maxKeyIndexSoFar = -1;
-                foreach (var word in hiddenWords)
+                foreach (var word in _hiddenWords)
                 {
                     if (maxKeyIndexSoFar < word.KeyIndex)
                     {
@@ -33,7 +33,7 @@ namespace WordPuzzles.Puzzle
             get
             {
                 int maxLettersAfterIndex = -1;
-                foreach (var word in hiddenWords)
+                foreach (var word in _hiddenWords)
                 {
                     if (maxLettersAfterIndex < word.LettersAfterIndex)
                     {
@@ -46,7 +46,7 @@ namespace WordPuzzles.Puzzle
 
         public void AddWord(HiddenWord hiddenWordToAdd)
         {
-            hiddenWords.Add(hiddenWordToAdd);
+            _hiddenWords.Add(hiddenWordToAdd);
         }
 
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
@@ -63,9 +63,9 @@ namespace WordPuzzles.Puzzle
             StringBuilder clueBuilder = new StringBuilder();
             tableBuilder.AppendLine("<table>");
             clueBuilder.AppendLine("<ol>");
-            for (var index = 0; index < hiddenWords.Count; index++)
+            for (var index = 0; index < _hiddenWords.Count; index++)
             {
-                var currentWord = hiddenWords[index];
+                var currentWord = _hiddenWords[index];
                 tableBuilder.AppendLine("<tr>");
                 tableBuilder.AppendLine($@"<td class=""normal centered"" width=""30""> {index+1} </td>");
                 AppendHiddenWord(tableBuilder, currentWord, includeSolution);
@@ -88,25 +88,25 @@ namespace WordPuzzles.Puzzle
         {
             //Replaced by OL of sentences
             //builder.AppendLine($@"<td width=""250"" class=""normal"">{currentWord.SentenceHidingWord}</td>");
-            int numberOfPreceedingEmptyCells = CombinedKeyIndex - currentWord.KeyIndex;
+            int numberOfPrecedingEmptyCells = CombinedKeyIndex - currentWord.KeyIndex;
             string uppercaseCurrentWord = currentWord.Word.ToUpperInvariant();
             for (int index = 0; index < CombinedLength; index++)
             {
-                if (index < numberOfPreceedingEmptyCells) // cells before word
+                if (index < numberOfPrecedingEmptyCells) // cells before word
                 {
-                    AppendCell(builder, $@"hollow", $@"&nbsp;");
+                    AppendCell(builder, @"hollow", @"&nbsp;");
                     continue;
                 }
                 if ((CombinedKeyIndex + currentWord.LettersAfterIndex) < index) //cells after word
                 {
-                    AppendCell(builder, $@"hollow", $@"&nbsp;");
+                    AppendCell(builder, @"hollow", @"&nbsp;");
                     continue;
                 }
 
                 string letterInWord = "&nbsp;";
                 if (includeSolution)
                 {
-                    letterInWord = uppercaseCurrentWord[index - numberOfPreceedingEmptyCells].ToString();
+                    letterInWord = uppercaseCurrentWord[index - numberOfPrecedingEmptyCells].ToString();
                 }
 
                 string classAttributes = "normal centered";
@@ -123,7 +123,7 @@ namespace WordPuzzles.Puzzle
 
         private void AppendCell(StringBuilder builder, string classAttributes, string letterInWord)
         {
-            builder.AppendLine($@"<td class=""" + classAttributes + $@""" width=""30"">" + letterInWord + $@"</td>");
+            builder.AppendLine(@"<td class=""" + classAttributes + @""" width=""30"">" + letterInWord + @"</td>");
         }
 
         public string Description => $"Hidden Related Words puzzle for {Solution}";

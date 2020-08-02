@@ -8,7 +8,7 @@ namespace WordPuzzles.Utility
 {
     public class HtmlGenerator
     {
-        public Puzzle.InnerAnacrosticPuzzle Puzzle;
+        public InnerAnacrosticPuzzle Puzzle;
 
         public Dictionary<int, int> IndexMap; 
 
@@ -327,7 +327,7 @@ function colorMeAndMyMatch(currentIndex, color) {
                     $@"Click here to confirm the <a href=""{TwitterUrl}"">solution</a> (spoiler warning).");
             }
 
-        builder.Append(@"</html>");
+            builder.Append(@"</html>");
 
             File.WriteAllText(testPuzzleFilename, builder.ToString());
 

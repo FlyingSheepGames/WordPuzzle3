@@ -13,7 +13,7 @@ namespace WordPuzzles.Puzzle.Legacy
         Random _random;
         public int RandomSeed { get; set; }
 
-        internal WordRepository Repository = new WordRepository() {ExludeAdvancedWords = true};
+        internal WordRepository Repository = new WordRepository() {ExcludeAdvancedWords = true};
         Random Random
         {
             get

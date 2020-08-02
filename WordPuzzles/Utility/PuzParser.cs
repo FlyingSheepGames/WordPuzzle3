@@ -11,14 +11,10 @@ namespace WordPuzzles.Utility
         public ClueRepository ParseFile(string fileToParse)
         {
             var newClues = new ClueRepository();
-            //ParseAllLinesTemp(fileToParse);
             var allText = File.ReadAllText(fileToParse);
-            int tokenCount = 0;
-            string gridAsString;
 
-            var tokensSplitByNilCharacters = allText.Split(new char[] {(char) 0}, StringSplitOptions.RemoveEmptyEntries);
-            int indexOfGrid = 0;
-            gridAsString = ExtractGridAsStringFromTokens(tokensSplitByNilCharacters, out indexOfGrid);
+            var tokensSplitByNilCharacters = allText.Split(new[] {(char) 0}, StringSplitOptions.RemoveEmptyEntries);
+            string gridAsString = ExtractGridAsStringFromTokens(tokensSplitByNilCharacters, out var indexOfGrid);
 
             List<string> clues = new List<string>();
             for (var index = 0;
@@ -30,8 +26,6 @@ namespace WordPuzzles.Utility
                 //if (3 < token.Length)
                 {
                     bool isAWord = true;
-                    bool isAClue = true;
-                    bool hasAtLeastOneLetter = false;
                     foreach (char character in token)
                     {
                         if (!char.IsLetter(character))
@@ -40,7 +34,6 @@ namespace WordPuzzles.Utility
                         }
                         else
                         {
-                            hasAtLeastOneLetter = true;
                         }
 
                         if (!char.IsUpper(character))
@@ -49,25 +42,16 @@ namespace WordPuzzles.Utility
                         }
                     }
 
-                    if (!hasAtLeastOneLetter)
-                    {
-                        //isAClue = false;
-                    }
-
                     if (isAWord)
                     {
-                        //isAClue = false;
                         newClues.AddClue(token, "");
                         //Console.WriteLine($"Adding '{token}' as a word");
                     }
 
-                    if (isAClue)
+                    //Console.WriteLine($"'{token}' is a clue.");
+                    if (indexOfGrid + 3 < index)
                     {
-                        //Console.WriteLine($"'{token}' is a clue.");
-                        if (indexOfGrid + 3 < index)
-                        {
-                            clues.Add(token);
-                        }
+                        clues.Add(token);
                     }
                 }
             }
@@ -76,7 +60,7 @@ namespace WordPuzzles.Utility
             for (var index = 0; index < listOfClues.Count; index++)
             {
                 var clue = listOfClues[index];
-                string clueText = "No more clues";
+                string clueText;
                 if (index >= 0 && clues.Count > index)
                 {
                     clueText = clues[index];
@@ -85,7 +69,7 @@ namespace WordPuzzles.Utility
                 {
                     throw new Exception("No more clues");
                 }
-                newClues.AddClue(clue.Word, clueText, ClueSource.CLUE_SOURCE_CROSSWORD);
+                newClues.AddClue(clue.Word, clueText, ClueSource.ClueSourceCrossword);
                 Console.WriteLine($"{clue.Word}: {clueText}");
             }
 
@@ -135,15 +119,14 @@ namespace WordPuzzles.Utility
         public List<CrosswordPuzzleEntry> ParseWordsFromGridString(string grid)
         {
             var wordsFromGrid = new List<CrosswordPuzzleEntry>();
-            int dimension; //assume all grids are squares. If that's not the case, replace with width/height
-            dimension = (int) Math.Sqrt(grid.Length);
+            int dimension = (int) Math.Sqrt(grid.Length);
             char[][] letterGrid = new char[dimension][];
             string[] letterGridAsStrings = new string[dimension];
 
             StringBuilder currentAcrossWord = new StringBuilder();
-            PopulateGrid(grid, dimension, letterGrid, currentAcrossWord, wordsFromGrid, letterGridAsStrings);
+            PopulateGrid(grid, dimension, letterGrid, letterGridAsStrings);
 
-            ExtractAcrossWordsFromGrid(grid, dimension, letterGrid, currentAcrossWord, wordsFromGrid, letterGridAsStrings);
+            ExtractAcrossWordsFromGrid(grid, dimension, currentAcrossWord, wordsFromGrid, letterGridAsStrings);
             ExtractDownWordsFromGrid(grid, dimension, wordsFromGrid, letterGridAsStrings);
 
             wordsFromGrid = NumberWordsFromGrid(wordsFromGrid);
@@ -184,8 +167,8 @@ namespace WordPuzzles.Utility
                     var letterInCrosswordClue = grid[indexForCurrentLetter];
                     if (letterInCrosswordClue == '.')
                     {
-                        AddWordAndResetBuilder(currentDownWord, wordsFromGrid, x, y, isCurrentWordNumbered, 
-                            indexForCurrentWord, CrosswordDirection.DOWN);
+                        AddWordAndResetBuilder(currentDownWord, wordsFromGrid, isCurrentWordNumbered, 
+                            indexForCurrentWord, CrosswordDirection.Down);
                     }
                     else
                     {
@@ -200,14 +183,13 @@ namespace WordPuzzles.Utility
 
                 if (0 < currentDownWord.Length)
                 {
-                    AddWordAndResetBuilder(currentDownWord, wordsFromGrid, x, 0, isCurrentWordNumbered, 
-                        indexForCurrentWord, CrosswordDirection.DOWN);
+                    AddWordAndResetBuilder(currentDownWord, wordsFromGrid, isCurrentWordNumbered, 
+                        indexForCurrentWord, CrosswordDirection.Down);
                 }
             }
         }
 
-        private static void PopulateGrid(string grid, int dimension, char[][] letterGrid,
-            StringBuilder currentAcrossWord, List<CrosswordPuzzleEntry> wordsFromGrid, string[] letterGridAsStrings)
+        private static void PopulateGrid(string grid, int dimension, char[][] letterGrid, string[] letterGridAsStrings)
         {
             StringBuilder currentRowBuilder = new StringBuilder();
             for (int newY = 0; newY < dimension; newY++)
@@ -227,7 +209,7 @@ namespace WordPuzzles.Utility
 
         }
 
-        private void ExtractAcrossWordsFromGrid(string grid, int dimension, char[][] letterGrid,
+        private void ExtractAcrossWordsFromGrid(string grid, int dimension,
     StringBuilder currentAcrossWord, List<CrosswordPuzzleEntry> wordsFromGrid, string[] letterGridAsStrings)
         {
             bool isCurrentWordNumbered = false;
@@ -240,8 +222,8 @@ namespace WordPuzzles.Utility
                     var letterInCrosswordClue = grid[currentIndexInSingleString];
                     if (letterInCrosswordClue == '.')
                     {
-                        AddWordAndResetBuilder(currentAcrossWord, wordsFromGrid, newY, newX,
-                            isCurrentWordNumbered, startingIndexForNextWordToBeAdded, CrosswordDirection.ACROSS);
+                        AddWordAndResetBuilder(currentAcrossWord, wordsFromGrid,
+                            isCurrentWordNumbered, startingIndexForNextWordToBeAdded, CrosswordDirection.Across);
                     }
                     else
                     {
@@ -255,8 +237,8 @@ namespace WordPuzzles.Utility
 
                 }
 
-                AddWordAndResetBuilder(currentAcrossWord, wordsFromGrid, newY, dimension, 
-                    isCurrentWordNumbered, startingIndexForNextWordToBeAdded, CrosswordDirection.ACROSS);
+                AddWordAndResetBuilder(currentAcrossWord, wordsFromGrid, 
+                    isCurrentWordNumbered, startingIndexForNextWordToBeAdded, CrosswordDirection.Across);
             }
         }
 
@@ -265,8 +247,7 @@ namespace WordPuzzles.Utility
             return (dimension * y) + x;
         }
 
-        private static void AddWordAndResetBuilder(StringBuilder wordToAdd, List<CrosswordPuzzleEntry> wordsFromGrid,
-            int x = 0, int y = 0, bool isCurrentWordNumbered = false, int currentIndexInSingleString =0, CrosswordDirection direction = CrosswordDirection.UNKNOWN)
+        private static void AddWordAndResetBuilder(StringBuilder wordToAdd, List<CrosswordPuzzleEntry> wordsFromGrid, bool isCurrentWordNumbered = false, int currentIndexInSingleString =0, CrosswordDirection direction = CrosswordDirection.Unknown)
         {
             if (0 < wordToAdd.Length)
             {
@@ -288,8 +269,7 @@ namespace WordPuzzles.Utility
             //This might always return true....
             if (x == 0) return true;
             if (y == 0) return true;
-            //TODO: If cell immediately above is . return true
-            //TODO: If cell immediately to the left is . return true
+
             string currentRow = letterGridAsStrings[y];
             if (currentRow[x - 1] == '.') return true; 
 

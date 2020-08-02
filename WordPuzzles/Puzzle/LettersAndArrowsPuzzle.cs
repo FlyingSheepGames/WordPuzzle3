@@ -13,7 +13,7 @@ namespace WordPuzzles.Puzzle
         private Random _randomNumberGenerator;
         public int Size { get; set; }
         private readonly Dictionary<string, LetterAndArrowCell> _grid = new Dictionary<string, LetterAndArrowCell>();
-        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
+        private readonly HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public LettersAndArrowsPuzzle(int size)
         {
@@ -42,12 +42,12 @@ namespace WordPuzzles.Puzzle
             if (RowsMustFormWords)
             {
                 Size = 4;
-                Repository = new WordRepository() { ExludeAdvancedWords = true };
+                Repository = new WordRepository() { ExcludeAdvancedWords = true };
             }
             else
             {
                 Size = CalculateSizeBasedOnSolutionLength(solution.Length);
-                Repository = new WordRepository() {ExludeAdvancedWords = true};
+                Repository = new WordRepository() {ExcludeAdvancedWords = true};
             }
 
             if (sizeOverride != 0)
@@ -213,7 +213,7 @@ namespace WordPuzzles.Puzzle
 
         public void PlaceSolution(string solution)
         {
-            Solution = solution;
+            _solution = solution;
             int currentRow = 0;
             int currentColumn = 0;
 
@@ -313,8 +313,8 @@ namespace WordPuzzles.Puzzle
         }
 
         public List<int> RowsVisited = new List<int>();
-        private string Solution = "";
-        private string[] _clues;
+        private string _solution = "";
+        private readonly string[] _clues;
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             StringBuilder builder = new StringBuilder();
@@ -341,7 +341,7 @@ namespace WordPuzzles.Puzzle
                 {
                     clueForThisRow = _clues[row];
                 }
-                builder.AppendLine($@"    <td width=""250"">" + clueForThisRow + $@"</td>");
+                builder.AppendLine(@"    <td width=""250"">" + clueForThisRow + @"</td>");
 
                 for (int column = 0; column < Size; column++)
                 {
@@ -352,7 +352,7 @@ namespace WordPuzzles.Puzzle
             builder.AppendLine("</table>");
             builder.Append("<h2>");
             builder.Append("Solution: ");
-            for (var index = 0; index < Solution.Length; index++)
+            for (var index = 0; index < _solution.Length; index++)
             {
                 builder.Append("_ ");
             }
@@ -368,7 +368,7 @@ namespace WordPuzzles.Puzzle
             return builder.ToString();
         }
 
-        public string Description => "Letters and Arrows: " + Solution;
+        public string Description => "Letters and Arrows: " + _solution;
 
         public void FillEmptyCells()
         {

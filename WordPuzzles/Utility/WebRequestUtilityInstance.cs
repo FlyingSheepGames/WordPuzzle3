@@ -10,6 +10,9 @@ namespace WordPuzzles.Utility
 {
     public class WebRequestUtilityInstance
     {
+        // ReSharper disable IdentifierTypo
+        private const string BOARDGAMEGEEK_COM = "/boardgamegeek.com/";
+        // ReSharper restore IdentifierTypo
         internal readonly List<string> FailedRequests = new List<string>();
 
         // ReSharper disable once InconsistentNaming
@@ -31,7 +34,9 @@ namespace WordPuzzles.Utility
                 }
             }
 
-            if (url.ToLower().Contains("/boardgamegeek.com/"))
+            // ReSharper disable StringLiteralTypo
+            if (url.ToLower().Contains(BOARDGAMEGEEK_COM))
+                // ReSharper restore StringLiteralTypo
             {
                 if (BggTooManyRequests)
                 {
@@ -56,7 +61,7 @@ namespace WordPuzzles.Utility
             {
                 if (exception.Message.Contains("(429) Too Many Requests."))
                 {
-                    if (url.ToLower().Contains("/boardgamegeek.com/"))
+                    if (url.ToLower().Contains(BOARDGAMEGEEK_COM))
                     {
                         BggTooManyRequests = true;
                     }

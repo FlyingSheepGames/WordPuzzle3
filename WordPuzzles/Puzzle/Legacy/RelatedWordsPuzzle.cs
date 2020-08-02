@@ -6,7 +6,7 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class RelatedWordsPuzzle
     {
-        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExcludeAdvancedWords = true};
         public bool Shuffle = true;
         public string Solution;
         public void PlaceSolution(string theme, string hiddenWord)

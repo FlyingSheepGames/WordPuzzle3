@@ -261,7 +261,7 @@ C10	C11	C12	C13	C14	C15
                     expectedFileName = "expectedExampleWithSolution1.html";
                 }
 
-                string[] expectedLines = new string[] { " "};// need to have something to be different from generated file.
+                string[] expectedLines = new[] { " "};// need to have something to be different from generated file.
                 if (File.Exists(HTML_DIRECTORY + expectedFileName))
                 {
                     expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
@@ -287,7 +287,7 @@ C10	C11	C12	C13	C14	C15
 
                 if (anyLinesDifferent)
                 {
-                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
                     File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
                 }
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
@@ -357,7 +357,7 @@ C10	C11	C12	C13	C14	C15
                     expectedFileName = "expectedExampleWithSolution2.html";
                 }
 
-                string[] expectedLines = new string[] { " " };// need to have something to be different from generated file.
+                string[] expectedLines = new[] { " " };// need to have something to be different from generated file.
                 if (File.Exists(HTML_DIRECTORY + expectedFileName))
                 {
                     expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
@@ -383,7 +383,7 @@ C10	C11	C12	C13	C14	C15
 
                 if (anyLinesDifferent)
                 {
-                    Console.WriteLine($"Updating source file. Will show up as a difference in source control.");
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
                     File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
                 }
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
@@ -480,7 +480,7 @@ A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	",
             [Ignore("Takes more than 3 seconds.")]
             public void AllWords()
             {
-                WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+                WordRepository repository = new WordRepository() {ExcludeAdvancedWords = true};
                 for (int wordSize = 3; wordSize < 7; wordSize++)
                 {
                     for (int index = 0; index < wordSize; index++)
@@ -518,7 +518,7 @@ A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	",
             [Ignore("Takes more than 3 seconds.")]
             public void GenerateCodeForWordLengthStartingWithDictionary()
             {
-                WordRepository repository = new WordRepository() { ExludeAdvancedWords = true };
+                WordRepository repository = new WordRepository() { ExcludeAdvancedWords = true };
                 for (char initialLetter = 'a'; initialLetter <= 'z'; initialLetter++)
                 {
                     StringBuilder wordLengthsThatStartWithThisLetter = new StringBuilder();

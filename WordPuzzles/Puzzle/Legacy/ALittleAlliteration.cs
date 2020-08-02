@@ -8,10 +8,10 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class ALittleAlliteration
     {
-        private static readonly string A_LITTLE_ALLITERATION_GOOGLE_SHEET = "1J5j8fRBUVT66OjpflMe4K_Q-blicYiYQ2YZ6MbdaLQU";
+        private static readonly string ALittleAlliterationGoogleSheet = "1J5j8fRBUVT66OjpflMe4K_Q-blicYiYQ2YZ6MbdaLQU";
         private const int MAX_WORDS_TO_RETURN = 50;
 
-        private static readonly string A_LITTLE_ALLITERATION_SEASON_ONE_GOOGLE_SHEET =
+        private static readonly string ALittleAlliterationSeasonOneGoogleSheet =
             "1DKQ4a_H_JIE15NMXpnedW1dNe5ZqJzCMBXjFyk2IZJo";
         public ALittleAlliteration(): this("") { }
 
@@ -80,7 +80,7 @@ namespace WordPuzzles.Puzzle.Legacy
 
         public List<ALittleAlliteration> FindPuzzle(string firstThreeLetters)
         {
-            GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = A_LITTLE_ALLITERATION_GOOGLE_SHEET };
+            GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = ALittleAlliterationGoogleSheet };
 
             string firstThreeLetters1 = firstThreeLetters.ToLower();
 
@@ -115,11 +115,11 @@ namespace WordPuzzles.Puzzle.Legacy
         {
             List<ALittleAlliteration> matchingPuzzles = new List<ALittleAlliteration>();
 
-            GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = A_LITTLE_ALLITERATION_GOOGLE_SHEET};
+            GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = ALittleAlliterationGoogleSheet};
             string query = $"SELECT * WHERE H LIKE '%{theme}%'";
             if (season == 1)
             {
-                sheet.GoogleSheetKey = A_LITTLE_ALLITERATION_SEASON_ONE_GOOGLE_SHEET;
+                sheet.GoogleSheetKey = ALittleAlliterationSeasonOneGoogleSheet;
                 query = $"SELECT * WHERE I LIKE '%{theme}%'";
             }
 

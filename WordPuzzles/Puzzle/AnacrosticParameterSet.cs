@@ -35,8 +35,7 @@ namespace WordPuzzles.Puzzle
             if (!File.Exists(filePath)) return;
             using (FileStream stream = File.OpenRead(filePath))
             {
-                AnacrosticParameterSet setReadFromDisk = serializer.Deserialize(stream) as AnacrosticParameterSet;
-                if (setReadFromDisk != null)
+                if (serializer.Deserialize(stream) is AnacrosticParameterSet setReadFromDisk)
                 {
                     WordsToIgnore = setReadFromDisk.WordsToIgnore;
                     WordsToUse = setReadFromDisk.WordsToUse;

@@ -14,10 +14,11 @@ namespace WordPuzzles.Utility
         private Dictionary<string, List<string>> LoadThemes()
         {
             var dictionaryOfThemes = new Dictionary<string, List<string>>();
+            // ReSharper disable StringLiteralTypo
             GoogleSheet sheet = new GoogleSheet() { GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA" };
-            List<string> wordsForTheme = new List<string>();
+            // ReSharper restore StringLiteralTypo
 
-            List<Dictionary<int, string>> findRelatedWords = sheet.ExecuteQuery(string.Format($@"SELECT *"));
+            List<Dictionary<int, string>> findRelatedWords = sheet.ExecuteQuery(@"SELECT *");
             foreach (var dictionary in findRelatedWords)
             {
                 if (!dictionary.ContainsKey(0))
@@ -31,7 +32,7 @@ namespace WordPuzzles.Utility
                     dictionaryOfThemes.Add(theme, new List<string>());
                 }
 
-                wordsForTheme = dictionaryOfThemes[theme];
+                List<string> wordsForTheme = dictionaryOfThemes[theme];
 
                 if (string.IsNullOrWhiteSpace(theme))
                 {

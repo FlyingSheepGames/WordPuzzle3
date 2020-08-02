@@ -350,7 +350,7 @@ third
             [Ignore("Takes more than 3 seconds.")]
             public void SISTER_IsAWord()
             {
-                WordRepository repository = new WordRepository() {ExludeAdvancedWords = false};
+                WordRepository repository = new WordRepository() {ExcludeAdvancedWords = false};
                 Assert.IsTrue(repository.IsAWord("sister"));
             }
 
@@ -358,7 +358,7 @@ third
             [Ignore("Takes more than 3 seconds.")]
             public void ZESTFUL_IsAWord()
             {
-                WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+                WordRepository repository = new WordRepository() {ExcludeAdvancedWords = true};
                 Assert.IsTrue(repository.IsAWord("zestful"));
             }
 
@@ -366,7 +366,7 @@ third
             [Ignore("Takes more than 3 seconds.")]
             public void OUTBREAK_IsAWord()
             {
-                WordRepository repository = new WordRepository() { ExludeAdvancedWords = true, IgnoreCache = true};
+                WordRepository repository = new WordRepository() { ExcludeAdvancedWords = true, IgnoreCache = true};
                 Assert.IsTrue(repository.IsAWord("outbreak"));
             }
 
@@ -374,7 +374,7 @@ third
             [Ignore("Takes more than 3 seconds.")]
             public void TRAMPOLINE_IsAWord()
             {
-                WordRepository repository = new WordRepository() { ExludeAdvancedWords = true };
+                WordRepository repository = new WordRepository() { ExcludeAdvancedWords = true };
                 Assert.IsTrue(repository.IsAWord("trampoline"));
             }
 
@@ -425,7 +425,7 @@ third
             {
                 WordRepository repository = new WordRepository()
                 {
-                    ExludeAdvancedWords = true
+                    ExcludeAdvancedWords = true
                 };
                 Assert.IsFalse(repository.IsAWord("asp"));
 
@@ -440,9 +440,9 @@ third
             public void LoadsWordsFirst()
             {
                 WordRepository repository = new  WordRepository();
-                Assert.IsFalse(repository._alreadyLoaded);
+                Assert.IsFalse(repository.AlreadyLoaded);
                 repository.FindClueFor("ask");
-                Assert.IsTrue(repository._alreadyLoaded);
+                Assert.IsTrue(repository.AlreadyLoaded);
             }
         }
 

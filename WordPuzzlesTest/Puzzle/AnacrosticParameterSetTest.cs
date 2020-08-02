@@ -19,9 +19,9 @@ namespace WordPuzzlesTest.Puzzle
                 AnacrosticParameterSet set = new AnacrosticParameterSet {TweetId = 0};
                 set.Serialize();
                 
-                string EXPECTED_FILE_PATH = ConfigurationManager.AppSettings["BaseDirectory"] +  @"anacrostics\parameter_set_0.xml";
-                FileAssert.Exists(EXPECTED_FILE_PATH);
-                var readAllText = File.ReadAllText(EXPECTED_FILE_PATH);
+                string expectedFilePath = ConfigurationManager.AppSettings["BaseDirectory"] +  @"anacrostics\parameter_set_0.xml";
+                FileAssert.Exists(expectedFilePath);
+                var readAllText = File.ReadAllText(expectedFilePath);
                 Console.WriteLine(readAllText);
                 Assert.AreEqual(@"<?xml version=""1.0""?>
 <AnacrosticParameterSet xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">

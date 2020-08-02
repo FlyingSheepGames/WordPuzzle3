@@ -73,7 +73,7 @@ win has 22 words with these letters.
             public void WhichThreeLetterWordsHaveMoreThan10Options()
             {
                 MissingLettersPuzzle puzzle = new MissingLettersPuzzle();
-                WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+                WordRepository repository = new WordRepository() {ExcludeAdvancedWords = true};
                 foreach (string word in repository.WordsMatchingPattern("___"))
                 {
                     int count = puzzle.FindWordsContainingLetters(word).Count;

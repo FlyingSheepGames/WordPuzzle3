@@ -6,7 +6,9 @@ namespace WordPuzzles.Utility
     public class MonthlyScoreKeeper
     {
         readonly GoogleSheet _sheet = new GoogleSheet() {
+            // ReSharper disable StringLiteralTypo
             GoogleSheetKey = "1KiWsFIPCVmst--r57KEjDT-F5yuoeu-Ug9pqesuWyWA" ,
+            // ReSharper restore StringLiteralTypo
             IgnoreCache = true
 
         };
@@ -58,10 +60,12 @@ namespace WordPuzzles.Utility
 
     public enum PuzzleType
     {
-        UNKNOWN = 0, 
-        MAGIC_WORD_SQUARE = 1, 
-        VOWEL_MOVEMENT = 2, 
-        A_LITTLE_ALLITERATION = 3,
+        // ReSharper disable UnusedMember.Global
+        Unknown = 0, 
+        // ReSharper restore UnusedMember.Global
+        MagicWordSquare = 1, 
+        VowelMovement = 2, 
+        ALittleAlliteration = 3,
 
     }
 }

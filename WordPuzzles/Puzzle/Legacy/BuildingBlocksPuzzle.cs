@@ -7,7 +7,7 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class BuildingBlocksPuzzle
     {
-        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExcludeAdvancedWords = true};
         public int RandomSeed { get; set; }
         public int ColumnContainingSolution { get; set; }
 

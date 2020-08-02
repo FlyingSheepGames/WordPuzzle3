@@ -6,17 +6,17 @@ namespace WordPuzzles.Utility
 {
     public class ClueRepository
     {
-        public int CountOfWordWithClues => Clues.Count;
+        public int CountOfWordWithClues => _clues.Count;
 
-        private Dictionary<string, List<Clue>> Clues = new Dictionary<string, List<Clue>>();
+        private readonly Dictionary<string, List<Clue>> _clues = new Dictionary<string, List<Clue>>();
 
-        public void AddClue(string word, string clue, ClueSource source=ClueSource.CLUE_SOURCE_UNKNOWN)
+        public void AddClue(string word, string clue, ClueSource source=ClueSource.ClueSourceUnknown)
         {
             string canonicalWord = word.ToUpperInvariant();
             List<Clue> currentCluesForWord = null;
-            if (Clues.ContainsKey(canonicalWord))
+            if (_clues.ContainsKey(canonicalWord))
             {
-                currentCluesForWord = Clues[canonicalWord];
+                currentCluesForWord = _clues[canonicalWord];
             }
 
             if (currentCluesForWord == null)
@@ -33,7 +33,7 @@ namespace WordPuzzles.Utility
                 });
             }
 
-            Clues[canonicalWord] = currentCluesForWord;
+            _clues[canonicalWord] = currentCluesForWord;
         }
 
         private bool AlreadyContainsClue(List<Clue> existingClues, string clueToAdd)
@@ -52,24 +52,26 @@ namespace WordPuzzles.Utility
         public List<Clue> GetCluesForWord(string word)
         {
             string canonicalWord = word.ToUpperInvariant();
-            if (Clues.ContainsKey(canonicalWord))
+            if (_clues.ContainsKey(canonicalWord))
             {
-                return Clues[canonicalWord];
+                return _clues[canonicalWord];
             }
             return new List<Clue>();
         }
 
         public void WriteToDisk(string fileLocation)
         {
-            File.WriteAllText(fileLocation, JsonConvert.SerializeObject(Clues));
+            File.WriteAllText(fileLocation, JsonConvert.SerializeObject(_clues));
         }
 
+        // ReSharper disable StringLiteralTypo
         public void ReadFromDisk(string fileLocation = @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json")
+            // ReSharper restore StringLiteralTypo
         {
-            var CluesToAdd = JsonConvert.DeserializeObject<Dictionary<string, List<Clue>>>(File.ReadAllText(fileLocation));
-            foreach (var clueKey in CluesToAdd.Keys)
+            var cluesToAdd = JsonConvert.DeserializeObject<Dictionary<string, List<Clue>>>(File.ReadAllText(fileLocation));
+            foreach (var clueKey in cluesToAdd.Keys)
             {
-                var newClues = CluesToAdd[clueKey];
+                var newClues = cluesToAdd[clueKey];
                 foreach (var clue in newClues)
                 {
                     AddClue(clueKey, clue.ClueText, clue.ClueSource);
@@ -79,10 +81,10 @@ namespace WordPuzzles.Utility
         public void ImportStackOverflowFormatFile(string fileLocation)
         {
             DataFromStackOverflowParser parser = new DataFromStackOverflowParser();
-            var CluesToAdd = parser.ReadCluesFromFile(fileLocation);
-            foreach (var clueKey in CluesToAdd.Keys)
+            var cluesToAdd = parser.ReadCluesFromFile(fileLocation);
+            foreach (var clueKey in cluesToAdd.Keys)
             {
-                var newClues = CluesToAdd[clueKey];
+                var newClues = cluesToAdd[clueKey];
                 foreach (var clue in newClues)
                 {
                     AddClue(clueKey, clue.ClueText, clue.ClueSource);
