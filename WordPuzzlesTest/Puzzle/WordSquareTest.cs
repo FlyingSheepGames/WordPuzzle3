@@ -351,7 +351,7 @@ Thing that hangs above your throat
         {
             const string HTML_DIRECTORY = @"html\WordSquares\";
             const string SOURCE_DIRECTORY =
-                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\WordSquares";
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\WordSquares";
 
             WordSquare square = new WordSquare("____");
             square.SetWordAtIndex("shoe", 0);

@@ -209,7 +209,7 @@ C10	C11	C12	C13	C14	C15
             {
                 const string HTML_DIRECTORY = @"html\Anacrostics\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\Anacrostics";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\Anacrostics";
 
                 Anacrostic anacrostic = new Anacrostic("this longer phrase has at least twenty characters");
 
@@ -246,7 +246,7 @@ C10	C11	C12	C13	C14	C15
                     }
                 }
                 Assert.AreEqual("nnt", anacrostic.RemainingLetters());
-
+                CollectionAssert.AreEquivalent(anacrostic.EnumerateCellValues(), anacrostic.EnumerateCellValuesReplacement());
                 string generatedHtml = anacrostic.FormatHtmlForGoogle(includeSolution);
 
                 var actualFileName = "actualExample1.html";
@@ -301,7 +301,7 @@ C10	C11	C12	C13	C14	C15
             {
                 const string HTML_DIRECTORY = @"html\Anacrostics\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\Anacrostics";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\Anacrostics";
 
                 Anacrostic anacrostic = new Anacrostic("Ratchet and Clank");
 
@@ -343,6 +343,7 @@ C10	C11	C12	C13	C14	C15
                 Assert.AreEqual("", anacrostic.RemainingLetters());
 
                 string generatedHtml = anacrostic.FormatHtmlForGoogle(includeSolution);
+                CollectionAssert.AreEquivalent(anacrostic.EnumerateCellValues(), anacrostic.EnumerateCellValuesReplacement());
 
                 var actualFileName = "actualExample2.html";
                 if (includeSolution)
@@ -406,8 +407,6 @@ C10	C11	C12	C13	C14	C15
                 Assert.AreEqual(
                     @"A1A2A3A4A5B6", anacrostic.EncodedPhrase);
                 Assert.AreEqual(
-                    "A1\tA2\tA3\tA4\tA5\tB6\t", anacrostic.EncodedPhraseForGoogle);
-                Assert.AreEqual(
                     "A1\tA5\tA3\tA4\tA2\tB6\t", anacrostic.GetEncodedPhraseForGoogle());
 
             }
@@ -429,12 +428,11 @@ C10	C11	C12	C13	C14	C15
                 Assert.AreEqual("nnt", anacrostic.RemainingLetters());
                 anacrostic.WordsFormattedForGoogleDocs();
                 Assert.AreEqual(
-                    @"C15D17D18B10 A2G32I40C11A5B9 A1D20C12A3E25B7 G31B8G33 C14E23 F26C13E22G35F28 G34D16E24I41H38B6 A4H36F27E21H37D19I42F29F30H39", anacrostic.EncodedPhrase);
-                Assert.AreEqual(
 @"C15	D17	D18	B10	 	A2	G32	I40	C11	A5	B9	 
 A1	D20	C12	A3	E25	B7	 	G31	B8	G33	 
 C14	E23	 	F26	C13	E22	G35	F28	 	G34	D16	E24	I41	H38	B6	 
-A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", anacrostic.EncodedPhraseForGoogle);
+A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", 
+                    anacrostic.EncodedPhrase);
 
        
 

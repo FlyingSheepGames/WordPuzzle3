@@ -288,7 +288,7 @@ namespace WordPuzzlesTest.Puzzle
             {
                 const string HTML_DIRECTORY = @"html\LettersAndArrows\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\LettersAndArrows";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\LettersAndArrows";
 
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("ohio", true, 4, 42);
                 puzzle.FillEmptyCells();

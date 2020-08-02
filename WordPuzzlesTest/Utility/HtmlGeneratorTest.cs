@@ -14,7 +14,7 @@ namespace WordPuzzlesTest.Utility
             public void GeneratesExpectedComment()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -52,7 +52,7 @@ L 13 <-> 5
             public void ReturnsExpectedString()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -66,7 +66,7 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
@@ -87,7 +87,7 @@ L 13 <-> 5
             public void ReturnsExpectedResult()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -116,7 +116,7 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
@@ -142,7 +142,7 @@ L 13 <-> 5
             [Test]
             public void WithCustomClue_ReturnsExpectedString()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
                 puzzle.Clues[0].CustomizedClue = "Customized Clue";
                 puzzle.PlaceLetters();
@@ -174,7 +174,7 @@ L 13 <-> 5
             public void ReturnsExpectedResult()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -203,7 +203,7 @@ L 13 <-> 5
             [Test]
             public void WithPunctuation_ReturnsExpectedString()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
@@ -238,7 +238,7 @@ L 13 <-> 5
             public void CreatedExpectedFile()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
@@ -256,7 +256,7 @@ L 13 <-> 5
             public void WithoutKey_CreatedExpectedFile()
             {
                 HtmlGenerator generator = new HtmlGenerator();
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "max peel"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "max peel"};
                 puzzle.AddWordToClues("example");
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;

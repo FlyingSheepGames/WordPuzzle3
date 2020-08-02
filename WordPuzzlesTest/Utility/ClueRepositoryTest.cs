@@ -99,7 +99,7 @@ namespace WordPuzzlesTest.Utility
             public void AllWords_ContainsSpecificWords(string word)
             {
                 const string ALL_WORDS_FILE =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json";
                 ClueRepository clues = new ClueRepository();
                 clues.ReadFromDisk(ALL_WORDS_FILE);
                 var cluesForWord = clues.GetCluesForWord(word);

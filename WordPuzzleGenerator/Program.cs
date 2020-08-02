@@ -29,7 +29,7 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
-            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
             //FindAllTakeOneClues();
             //FindAllTakeTwoClues();
@@ -83,7 +83,7 @@ namespace WordPuzzleGenerator
 
             InterativelyCreatesWordsWithSelectedPattern();
 
-            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
             htmlGenerator.AppendHtmlFooter(_puzzleBuilder);
             htmlGenerator.AppendHtmlFooter(_solutionBuilder);

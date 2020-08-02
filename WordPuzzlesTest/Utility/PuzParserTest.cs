@@ -282,7 +282,7 @@ namespace WordPuzzlesTest.Utility
         {
             PuzParser parser = new PuzParser();
             const string DIRECTORY_WITH_PUZ_FILES =
-                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ";
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ";
             foreach (string file in Directory.EnumerateFiles(DIRECTORY_WITH_PUZ_FILES, "*.puz"))
             {
                 Console.WriteLine($"Attempting {file}");
@@ -299,7 +299,7 @@ namespace WordPuzzlesTest.Utility
         public void CollectAllTheClues_NoAssertions()
         {
             const string DIRECTORY_WITH_PUZ_FILES =
-                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ";
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ";
 
             PuzParser parser = new PuzParser();
             ClueRepository clues = new ClueRepository();
@@ -318,9 +318,9 @@ namespace WordPuzzlesTest.Utility
         public void ImportAllStackOverflowFiles_NoAssertions()
         {
             const string DIRECTORY_WITH_PUZ_FILES =
-                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ";
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ";
             const string DIRECTORY_WITH_SO_FILES =
-                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\dataFromSO";
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\dataFromSO";
 
             PuzParser parser = new PuzParser();
             ClueRepository clues = new ClueRepository();

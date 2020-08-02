@@ -8,7 +8,7 @@ namespace WordPuzzles.Utility
 {
     public class HtmlGenerator
     {
-        public Puzzle.Puzzle Puzzle;
+        public Puzzle.InnerAnacrosticPuzzle Puzzle;
 
         public Dictionary<int, int> IndexMap; 
 

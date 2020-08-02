@@ -7,7 +7,7 @@ namespace WordPuzzles.Puzzle
 {
     public class Anacrostic : IPuzzle
     {
-        public Puzzle Puzzle = new Puzzle();
+        public InnerAnacrosticPuzzle Puzzle = new InnerAnacrosticPuzzle();
         public WordRepository Repository = new WordRepository();
         private readonly int[] _remainingLetters = new int[26];
         public HtmlGenerator _htmlGenerator = new HtmlGenerator();
@@ -19,8 +19,6 @@ namespace WordPuzzles.Puzzle
         {
             SortLettersByReverseFrequency(phrase);
         }
-
-        public string EncodedPhraseForGoogle;
 
         public string GetEncodedPhraseForGoogle()
         {
@@ -44,7 +42,6 @@ namespace WordPuzzles.Puzzle
                 }
             }
             Console.WriteLine(phraseEncodedForGoogle.ToString());
-            Console.WriteLine(EncodedPhraseForGoogle);
             return phraseEncodedForGoogle.ToString();
         }
         public int LineLength { get; set; }
@@ -83,8 +80,8 @@ namespace WordPuzzles.Puzzle
                 }
             }
 
-            EncodedPhraseForGoogle = encodedPhraseForGoogle.ToString();
-
+            //EncodedPhraseForGoogle = encodedPhraseForGoogle.ToString();
+            EncodedPhrase = encodedPhraseForGoogle.ToString();
             for (int i = 0; i < 26; i++)
             {
                 _remainingLetters[i] = 0;
@@ -268,28 +265,8 @@ namespace WordPuzzles.Puzzle
             }
 
             alreadyReplaced = false;
-            foreach (char letter in EncodedPhraseForGoogle)
-            {
-                if (letter == letterInWordCandidate)
-                {
-                    if (alreadyReplaced)
-                    {
-                        updatedEncodedPhraseforGoogle.Append(letter);
-                    }
-                    else
-                    {
-                        updatedEncodedPhraseforGoogle.Append(letterCode);
-                        alreadyReplaced = true;
-                    }
-                }
-                else
-                {
-                    updatedEncodedPhraseforGoogle.Append(letter);
-                }
-            }
+             EncodedPhrase = updatedEncodedPhrase.ToString();
 
-            EncodedPhrase = updatedEncodedPhrase.ToString();
-            EncodedPhraseForGoogle = updatedEncodedPhraseforGoogle.ToString();
         }
 
         public string RemainingLetters()
@@ -419,7 +396,7 @@ namespace WordPuzzles.Puzzle
             bottomLine.AppendLine("<tr>");
 
 
-            string[] enumeratedCellValues = EncodedPhraseForGoogle.Split('\t');
+            string[] enumeratedCellValues = EnumerateCellValues();
             int phraseIndex = 0; //Can get out of sync with enumerated Cell Values.
             for (var index = 0; index < enumeratedCellValues.Length; index++)
             {
@@ -478,6 +455,14 @@ namespace WordPuzzles.Puzzle
 
         }
 
+        internal string[] EnumerateCellValues()
+        {
+            return EnumerateCellValuesReplacement();
+        }
+        internal string[] EnumerateCellValuesReplacement()
+        {
+            return EncodedPhrase.Split('\t');
+        }
         private void ProcessLineReturn(StringBuilder line, StringBuilder builder)
         {
             line.AppendLine("</tr>");

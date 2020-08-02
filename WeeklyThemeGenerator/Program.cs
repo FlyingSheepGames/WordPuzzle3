@@ -53,7 +53,7 @@ namespace WeeklyThemeGenerator
         [STAThread]
         static void Main()
         {
-            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
             string monthToScore = "May 2019";
             Console.WriteLine("Enter a month (e.g. May 2019) to generate scoring tweets for that month. Or just hit enter to continue.");
@@ -172,7 +172,7 @@ namespace WeeklyThemeGenerator
 
                 GenerateTweetsForSelectedPuzzles(weekOfPuzzles);
             }
-            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
         }
 

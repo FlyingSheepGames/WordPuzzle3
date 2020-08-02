@@ -9,12 +9,6 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Replace Tests with .NetFrameworkTests
-	Rename unit test project to remove .NetFramework
-
-R# warnings
-
-
 Rename Anacrostic."Puzzle" to a more descriptive name. 
 
 Consolidate Anacrostic.EncodedPhrase and Anacrostic.EncodedPhraseForGoogle
@@ -28,6 +22,8 @@ And update Puzzle Converter
                 return new Acrostic();
             }
 
+R# warnings
+ 
 ---------
 Add instructions to PhraseSegmentPuzzle
 Add instructions to HiddenRelatedWords
@@ -48,6 +44,10 @@ Group puzzles into months
 Add new puzzle types.
 NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
 	e.g. (Adding A): "Don't try to carry everything without a platter: _ _ A _" Solution: TRAY (anagram try)
+
+Tests probably take a long time because of initializing the various Repositories. 
+	Create a single repository of each type for all tests could share.
+	Ignore tests taking over 3 seconds. 
 
 Convert remaining puzzles
 2. Sudoku
@@ -86,11 +86,15 @@ List of tests that occassionally time out
 List of tests that occassionally fail. 
 	PopulatesExpectedLetters [TestCase("abcdefghijkl")]
 
+
 ----------------------------------
 
 --- DONE (most recent on top)
 
 ----------------------------------
+Replace Tests with .NetFrameworkTests
+	Rename unit test project to remove .NetFramework
+
 Organize files into directories - Puzzles, Utilities, etc.
 	Organize Tests to match
 

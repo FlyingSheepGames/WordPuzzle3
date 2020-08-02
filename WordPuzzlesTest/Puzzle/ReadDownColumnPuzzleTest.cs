@@ -79,9 +79,9 @@ namespace WordPuzzlesTest.Puzzle
             {
                 const string HTML_DIRECTORY = @"html\ReadDownColumn\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\ReadDownColumn";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\ReadDownColumn";
                 ClueRepository clueRepository = new ClueRepository();
-                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
                 var puzzle = new ReadDownColumnPuzzle()
                 {
@@ -157,9 +157,9 @@ namespace WordPuzzlesTest.Puzzle
             {
                 const string HTML_DIRECTORY = @"html\ReadDownColumn\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\ReadDownColumn";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\ReadDownColumn";
                 ClueRepository clueRepository = new ClueRepository();
-                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
                 var puzzle = new ReadDownColumnPuzzle()
                 {

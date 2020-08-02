@@ -37,7 +37,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void MultipleWords_HaveExpectedLetters()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
                 PuzzleWord firstWord = puzzle.Clues[0];
@@ -70,7 +70,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void PlacesRequiredLetters()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -95,7 +95,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void HandlesPunctuation()
             {
-                WordPuzzles.Puzzle.Puzzle puzzleWithPunctuation = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x"};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzleWithPunctuation = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "i'm x"};
 
                 puzzleWithPunctuation.AddWordToClues("mix");
 
@@ -113,7 +113,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void AsIsExample_FindsNothingForAlreadyPlacedFirstLetter()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -128,7 +128,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void AsIsExample_FindsOptionsForSecondLetter()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -145,7 +145,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void AsIsExample_ExcludingWordAlreadyPlaced_FindsSingleOptionForSecondLetter()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -168,7 +168,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void AsIsExample_PlacesRemainingLetters()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("as");
                 puzzle.AddWordToClues("is");
 
@@ -192,7 +192,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void FirstExample_PlacesAllLetters()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("agility");
                 puzzle.AddWordToClues("quite");
                 puzzle.AddWordToClues("tethers");
@@ -221,7 +221,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void SecondExample_PlacesAllLetters()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle();
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle();
                 puzzle.AddWordToClues("donated");
                 puzzle.AddWordToClues("two");
                 puzzle.AddWordToClues("monster");
@@ -249,7 +249,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void ExampleWithPunctuation()
             {
-                WordPuzzles.Puzzle.Puzzle puzzle = new WordPuzzles.Puzzle.Puzzle {PhraseAsString = "i'm x."};
+                WordPuzzles.Puzzle.InnerAnacrosticPuzzle puzzle = new WordPuzzles.Puzzle.InnerAnacrosticPuzzle {PhraseAsString = "i'm x."};
                 puzzle.AddWordToClues("mix");
 
                 puzzle.PlaceLetters();
