@@ -14,6 +14,7 @@ namespace WordPuzzlesTest.Utility
         private static readonly string ExpectedText = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <WeekOfPuzzles xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <MondayWordSquare>
+    <IsWordSquare>true</IsWordSquare>
     <Lines>
       <string>acorn</string>
       <string>curio</string>

@@ -7,6 +7,8 @@ namespace WordPuzzles.Puzzle
 {
     public class ReadDownColumnPuzzle :IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
+        public bool IsReadDownColumnPuzzle = true;
         private string _solution;
         public int Size => 6;
         private Random _random;

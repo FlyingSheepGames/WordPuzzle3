@@ -7,6 +7,8 @@ namespace WordPuzzles.Puzzle
 {
     public class Anacrostic : IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
+        public bool IsAnacrostic = true;
         public InnerAnacrosticPuzzle Puzzle = new InnerAnacrosticPuzzle();
         public WordRepository Repository = new WordRepository();
         private readonly int[] _remainingLetters = new int[26];

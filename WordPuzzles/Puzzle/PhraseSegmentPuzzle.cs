@@ -7,6 +7,7 @@ namespace WordPuzzles.Puzzle
 {
     public class PhraseSegmentPuzzle :IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
         public bool IsPhraseSegmentPuzzle = true;//Used when deserializing.
         public string Phrase { get; set; }
         public string Author { get; set; }

@@ -9,6 +9,8 @@ namespace WordPuzzles.Puzzle
 {
     public class WordSquare : IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
+        public bool IsWordSquare = true;
         public WordRepository Repository { get; set; } = new WordRepository();
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";

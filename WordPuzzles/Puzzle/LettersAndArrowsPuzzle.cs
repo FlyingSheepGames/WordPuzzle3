@@ -8,6 +8,8 @@ namespace WordPuzzles.Puzzle
 
     public class LettersAndArrowsPuzzle : IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
+        public bool IsLettersAndArrowsPuzzle = true;
         private Random _randomNumberGenerator;
         public int Size { get; set; }
         private readonly Dictionary<string, LetterAndArrowCell> _grid = new Dictionary<string, LetterAndArrowCell>();

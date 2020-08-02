@@ -19,17 +19,17 @@ namespace WordPuzzles.Utility
 
         protected override IPuzzle Create(Type objectType, JObject jObject)
         {
-            if (FieldExists("Theme", jObject))
+            if (FieldExists("IsWordSquare", jObject))
             {
                 return new WordSquare();
             }
 
-            if (FieldExists("OriginalPhrase", jObject))
+            if (FieldExists("IsAnacrostic", jObject))
             {
                 return new Anacrostic(jObject["OriginalPhrase"].Value<string>());
             }
 
-            if (FieldExists("SpecialCharacter", jObject))
+            if (FieldExists("IsReadDownColumnPuzzle", jObject))
             {
                 return new ReadDownColumnPuzzle();
             }
@@ -43,6 +43,12 @@ namespace WordPuzzles.Utility
             {
                 return new HiddenRelatedWordsPuzzle();
             }
+
+            if (FieldExists("IsLettersAndArrowsPuzzle", jObject))
+            {
+                return new LettersAndArrowsPuzzle(jObject["Size"].Value<int>());
+            }
+
             throw new Exception("Unable to determine type.");
         }
     }

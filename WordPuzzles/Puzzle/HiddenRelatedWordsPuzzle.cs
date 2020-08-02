@@ -6,6 +6,7 @@ namespace WordPuzzles.Puzzle
 {
     public class HiddenRelatedWordsPuzzle : IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
         public bool isHiddenRelatedWordsPuzzle = true; //For deserialization
         List<HiddenWord> hiddenWords = new List<HiddenWord>();
         private HtmlGenerator _htmlGenerator = new HtmlGenerator();

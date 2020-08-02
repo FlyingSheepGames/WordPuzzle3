@@ -9,20 +9,13 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Rename Anacrostic."Puzzle" to a more descriptive name. 
-
-Consolidate Anacrostic.EncodedPhrase and Anacrostic.EncodedPhraseForGoogle
-
-
-Add property to each IPuzzle implementation to indicate which type of puzzle it is 
-public bool IsAcrostic = true;
-And update Puzzle Converter
-            if (FieldExists("IsAcrostic", jObject))
-            {
-                return new Acrostic();
-            }
 
 R# warnings
+	Puzzle (and tests)
+	Utility (and tests)
+	puzzle.Legacy (and tests)
+
+Check for code coverage
  
 ---------
 Add instructions to PhraseSegmentPuzzle
@@ -92,6 +85,19 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Add property to each IPuzzle implementation to indicate which type of puzzle it is 
+public bool IsAcrostic = true;
+And update Puzzle Converter
+            if (FieldExists("IsAcrostic", jObject))
+            {
+                return new Acrostic();
+            }
+
+
+Rename Anacrostic."Puzzle" to a more descriptive name. 
+
+Consolidate Anacrostic.EncodedPhrase and Anacrostic.EncodedPhraseForGoogle
+
 Replace Tests with .NetFrameworkTests
 	Rename unit test project to remove .NetFramework
 
