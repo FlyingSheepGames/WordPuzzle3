@@ -140,9 +140,8 @@ namespace WordPuzzles.Puzzle.Legacy
         {
             totalWordsFound = 0;
 
-            string content = WebRequestUtility.ReadHtmlPageFromUrl(string.Format(
-                @"https://www.morewords.com/most-common-starting-with/{0}",
-                initialLetters));
+            string content = WebRequestUtility.ReadHtmlPageFromUrl(
+                $@"https://www.morewords.com/most-common-starting-with/{initialLetters}");
 
             var wordsFound = ParseContentOldFormat(content, out totalWordsFound);
             if (wordsFound == null || totalWordsFound == 0)

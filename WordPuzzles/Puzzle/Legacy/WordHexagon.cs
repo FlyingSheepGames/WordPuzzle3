@@ -255,7 +255,7 @@ namespace WordPuzzles.Puzzle.Legacy
                     if (UniqueWords.Contains(wordInLowercase + "s")) continue; //Exclude singular versions of existing words.
                     if (wordInLowercase.EndsWith("s"))
                     {
-                        if (UniqueWords.Contains(wordInLowercase.Substring(0, wordInLowercase.Length - 1))) //exlude plural versions of existing words.
+                        if (UniqueWords.Contains(wordInLowercase.Substring(0, wordInLowercase.Length - 1))) //exclude plural versions of existing words.
                         {
                             continue;
                         }
@@ -411,10 +411,10 @@ namespace WordPuzzles.Puzzle.Legacy
             return true;
         }
 
-        private string SetCharacterAtIndex(string originalString, int index, char charater)
+        private string SetCharacterAtIndex(string originalString, int index, char character)
         {
             char[] array = originalString.ToCharArray();
-            array[index] = charater;
+            array[index] = character;
             return new string(array);
         }
 
@@ -555,9 +555,9 @@ namespace WordPuzzles.Puzzle.Legacy
         {
             if (patternToCheck.Contains("*"))
             {
-                foreach (string subword in patternToCheck.Split(new [] {"*"}, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string subWord in patternToCheck.Split(new [] {"*"}, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (!ValidatePattern(subword))
+                    if (!ValidatePattern(subWord))
                     {
                         return false;
                     }

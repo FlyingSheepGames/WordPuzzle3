@@ -6,13 +6,13 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class RelatedWordsPuzzle
     {
-        WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
         public bool Shuffle = true;
         public string Solution;
         public void PlaceSolution(string theme, string hiddenWord)
         {
             Solution = hiddenWord;
-            List<string> themeWords = repository.GetRelatedWordsForTheme(theme);
+            List<string> themeWords = _repository.GetRelatedWordsForTheme(theme);
             if (Shuffle)
             {
                 themeWords.Shuffle();

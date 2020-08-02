@@ -142,14 +142,7 @@ namespace WordPuzzles.Puzzle.Legacy
                     List<int> availableNumbers = CalculateAvailableNumbersForRowAndColumn(column, length, currentLine.ToString(), gridInProgress);
                     if (0 == availableNumbers.Count)
                     {
-                        if (5 < stackDepth)
-                        {
-                            throw new Exception("Reached stack limit.");
-                        }
-                        else
-                        {
-                            return CreateGrid(length, stackDepth + 1);
-                        }
+                        return CreateGrid(length, stackDepth + 1);
                     }
 
                     int nextNumber = availableNumbers[RandomNumberGenerator.Next(availableNumbers.Count)];

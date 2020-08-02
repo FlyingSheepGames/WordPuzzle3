@@ -14,7 +14,7 @@ namespace WordPuzzles.Puzzle.Legacy
         {
             get
             {
-                foreach (bool currentLetterPlaced in SolutionLettersAlreadyPlaced)
+                foreach (bool currentLetterPlaced in _solutionLettersAlreadyPlaced)
                 {
                     if (!currentLetterPlaced) return false;
                 }
@@ -29,7 +29,7 @@ namespace WordPuzzles.Puzzle.Legacy
                 StringBuilder builder = new StringBuilder();
                 for (int index = 0; index < Solution.Length; index++)
                 {
-                    if (SolutionLettersAlreadyPlaced[index]) continue;
+                    if (_solutionLettersAlreadyPlaced[index]) continue;
                     builder.Append(Solution[index]);
                 }
                 return builder.ToString();
@@ -37,13 +37,13 @@ namespace WordPuzzles.Puzzle.Legacy
         }
 
         public List<WordAndClue> Chain = new List<WordAndClue>();
-        private bool[] SolutionLettersAlreadyPlaced;
+        private readonly bool[] _solutionLettersAlreadyPlaced;
 
         public WordLadder(string solution)
         {
             Solution = solution;
             Size = solution.Length;
-            SolutionLettersAlreadyPlaced = new bool[Size];
+            _solutionLettersAlreadyPlaced = new bool[Size];
         }
 
         public List<string> FindNextWordsInChain(string previousWord, int indexToReplace)
@@ -100,14 +100,14 @@ namespace WordPuzzles.Puzzle.Legacy
             builder.AppendLine(@"Copy the letters into the solution below, using the numbers as a guide.");
             builder.AppendLine(@"<table border=""1"">");
             builder.AppendLine("\t<tr>");
-            builder.AppendLine($"\t\t<td>Solution</td>");
+            builder.AppendLine("\t\t<td>Solution</td>");
             for (int i = 0; i < Solution.Length; i++)
             {
-                builder.AppendLine($"\t\t<td> </td>");
+                builder.AppendLine("\t\t<td> </td>");
             }
             builder.AppendLine("\t</tr>");
             builder.AppendLine("\t<tr>");
-            builder.AppendLine($"\t\t<td> </td>");
+            builder.AppendLine("\t\t<td> </td>");
             for (int i = 0; i < Solution.Length; i++)
             {
                 builder.AppendLine($"\t\t<td>{i+1}</td>");
@@ -142,14 +142,14 @@ namespace WordPuzzles.Puzzle.Legacy
             for (var indexOfLetterInSolution = 0; indexOfLetterInSolution < Solution.Length; indexOfLetterInSolution++)
             {
                 char letter = Solution[indexOfLetterInSolution];
-                if (SolutionLettersAlreadyPlaced[indexOfLetterInSolution]) continue;
+                if (_solutionLettersAlreadyPlaced[indexOfLetterInSolution]) continue;
                 int indexOfLetterInWord = word.IndexOf(letter);
                 if (indexOfLetterInWord < 0) continue;
 
                 wordAndClue.SolutionLetter = letter;
                 wordAndClue.SolutionLetterIndexInWord = indexOfLetterInWord;
                 wordAndClue.SolutionLetterIndexInSolution = indexOfLetterInSolution;
-                SolutionLettersAlreadyPlaced[indexOfLetterInSolution] = true;
+                _solutionLettersAlreadyPlaced[indexOfLetterInSolution] = true;
                 break; //Only place one letter.
             }
 

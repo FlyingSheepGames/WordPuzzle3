@@ -72,7 +72,6 @@ namespace WordPuzzles.Puzzle.Legacy
             StartPosition selectedPosition)
         {
             StringBuilder patternBuilder = new StringBuilder();
-            List<string> possibleWords;
             switch (selectedPosition)
             {
                 case StartPosition.FirstPosition:
@@ -93,7 +92,7 @@ namespace WordPuzzles.Puzzle.Legacy
                     break;
             }
 
-            possibleWords = _repository.WordsMatchingPattern(patternBuilder.ToString());
+            var possibleWords = _repository.WordsMatchingPattern(patternBuilder.ToString());
             if (possibleWords.Count <= 0)
             {
                 throw new Exception(

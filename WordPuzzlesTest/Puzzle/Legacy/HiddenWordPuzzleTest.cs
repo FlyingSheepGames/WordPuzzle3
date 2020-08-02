@@ -208,14 +208,14 @@ Solution: _ _ .
         public class ProcessRemainingLetters
         {
             [Test]
-            [Ignore("Takes more than 3 seconds.")]
+           [Ignore("Takes more than 3 seconds.")]
 
             public void DOMAIN_ReturnsExpectedResult()
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
                 puzzle.Solution = "domain";
                 var splitableStrings = new List<string>();
-                puzzle.ProcessRemainingLetters("domain", "ain", new StringBuilder("dom."), 3, splitableStrings);
+                puzzle.ProcessRemainingLetters("domain", "ain", new StringBuilder("dom."), splitableStrings);
                 CollectionAssert.Contains(splitableStrings, "dom.a.i.n")
                 ;
             }

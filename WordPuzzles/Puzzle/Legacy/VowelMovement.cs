@@ -100,7 +100,9 @@ namespace WordPuzzles.Puzzle.Legacy
 
         public List<VowelMovement> FindPuzzle(string startConsonant, string endConsonant)
         {
+            // ReSharper disable StringLiteralTypo
             GoogleSheet sheet = new GoogleSheet() {GoogleSheetKey = "1iYI-nE-5hYN7J3ckXmJjmzbxLmqs5UAGpGJh5yNUKgM" };
+            // ReSharper restore StringLiteralTypo
 
             string startConsonant1;
             if (string.IsNullOrWhiteSpace(startConsonant))

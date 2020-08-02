@@ -2,7 +2,9 @@
 {
     public enum WordPuzzleType
     {
+        // ReSharper disable UnusedMember.Global
         Undefined,
+        // ReSharper restore UnusedMember.Global
         WordSquare, 
         Sudoku, 
         Anacrostic, 
@@ -14,6 +16,8 @@
         RelatedWords,
         MissingLetters,
         PuzzleForDate,
+        // ReSharper disable InconsistentNaming
         MAX_VALUE,
+        // ReSharper restore InconsistentNaming
     }
 }

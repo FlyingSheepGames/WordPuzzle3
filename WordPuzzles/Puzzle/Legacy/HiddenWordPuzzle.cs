@@ -169,7 +169,27 @@ namespace WordPuzzles.Puzzle.Legacy
                 splitableStringBuilder.Append(wordToSplit.Substring(0, lengthOfFirstToken));
                 splitableStringBuilder.Append(".");
                 var remainingLetters = wordToSplit.Substring(lengthOfFirstToken);
-                ProcessRemainingLetters(wordToSplit, remainingLetters, splitableStringBuilder, lengthOfFirstToken, splitableStrings);
+                //Console.WriteLine($"Called with {wordToSplit}, {remainingLetters}, {splitableStringBuilder.ToString()}, {lengthOfAllPreviousTokens}, {string.Join( " - ", splitableStrings)}");
+                foreach (string word in FindWordsAtTheStartOfThisString(remainingLetters))
+                {
+                    StringBuilder builder = new StringBuilder(splitableStringBuilder.ToString());
+                    builder.Append(word);
+                    builder.Append(".");
+                    int lengthOfAllPreviousTokens = builder.ToString().Replace(".", "").Length;
+                    if (lengthOfAllPreviousTokens < wordToSplit.Length)
+                    {
+                        var remainingLettersAfterWordRemoved = wordToSplit.Substring(lengthOfAllPreviousTokens);
+                        ProcessRemainingLetters(wordToSplit, remainingLettersAfterWordRemoved, builder, splitableStrings);
+
+                        builder.Append(remainingLettersAfterWordRemoved);
+                        string splitableStringCandidate1 = builder.ToString();
+                        if (VerifySplitableStringCandidate(splitableStringCandidate1))
+                        {
+                            splitableStrings.Add(splitableStringCandidate1);
+                        }
+                    }
+                }
+
                 splitableStringBuilder.Append(remainingLetters);
 
                 string splitableStringCandidate = splitableStringBuilder.ToString();
@@ -227,8 +247,7 @@ namespace WordPuzzles.Puzzle.Legacy
             return lastTokenValid;
         }
 
-        internal void ProcessRemainingLetters(string wordToSplit, string remainingLetters, StringBuilder splitableStringBuilder,
-            int lengthOfAllPreviousTokens, List<string> splitableStrings)
+        internal void ProcessRemainingLetters(string wordToSplit, string remainingLetters, StringBuilder splitableStringBuilder, List<string> splitableStrings)
         {
             //Console.WriteLine($"Called with {wordToSplit}, {remainingLetters}, {splitableStringBuilder.ToString()}, {lengthOfAllPreviousTokens}, {string.Join( " - ", splitableStrings)}");
             foreach (string word in FindWordsAtTheStartOfThisString(remainingLetters))
@@ -236,12 +255,11 @@ namespace WordPuzzles.Puzzle.Legacy
                 StringBuilder builder = new StringBuilder(splitableStringBuilder.ToString());
                 builder.Append(word);
                 builder.Append(".");
-                lengthOfAllPreviousTokens = builder.ToString().Replace(".", "").Length;
+                int lengthOfAllPreviousTokens = builder.ToString().Replace(".", "").Length;
                 if (lengthOfAllPreviousTokens < wordToSplit.Length)
                 {
                     var remainingLettersAfterWordRemoved = wordToSplit.Substring(lengthOfAllPreviousTokens);
-                    ProcessRemainingLetters(wordToSplit, remainingLettersAfterWordRemoved, builder,
-                        lengthOfAllPreviousTokens, splitableStrings);
+                    ProcessRemainingLetters(wordToSplit, remainingLettersAfterWordRemoved, builder, splitableStrings);
 
                     builder.Append(remainingLettersAfterWordRemoved);
                     string splitableStringCandidate = builder.ToString();

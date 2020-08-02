@@ -6,10 +6,10 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class MissingLettersPuzzle
     {
-        WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
         public List<string> Words = new List<string>();
-        private string Solution;
-        private List<string> DecoyWords = new List<string>();
+        private string _solution;
+        private readonly List<string> _decoyWords = new List<string>();
         public bool Shuffle = true;
         public List<string> FindWordsContainingLetters(string wordToHide)
         {
@@ -25,7 +25,7 @@ namespace WordPuzzles.Puzzle.Legacy
                     builder.Append('_', wordLength - (wordToHide.Length + startingIndex));
                     string pattern = builder.ToString();
                     //Console.WriteLine(pattern);
-                    wordsContainingHiddenWord.AddRange(repository.WordsMatchingPattern(pattern));
+                    wordsContainingHiddenWord.AddRange(_repository.WordsMatchingPattern(pattern));
                 }
             }
             return wordsContainingHiddenWord;
@@ -33,13 +33,13 @@ namespace WordPuzzles.Puzzle.Legacy
 
         public void PlaceSolution(string solution)
         {
-            Solution = solution;
-            string pattern = new string('_', Solution.Length);
-            var decoyCandidates = repository.WordsMatchingPattern(pattern);
+            _solution = solution;
+            string pattern = new string('_', _solution.Length);
+            var decoyCandidates = _repository.WordsMatchingPattern(pattern);
             if (Shuffle) { decoyCandidates.Shuffle();}
 
 
-            var wordsContainingLetters = FindWordsContainingLetters(Solution);
+            var wordsContainingLetters = FindWordsContainingLetters(_solution);
             if (3 < wordsContainingLetters.Count)
             {
                 if (Shuffle) { wordsContainingLetters.Shuffle(); }
@@ -50,13 +50,13 @@ namespace WordPuzzles.Puzzle.Legacy
 
             foreach (string candidate in decoyCandidates)
             {
-                if (candidate == Solution) continue;
-                if (DecoyWords.Contains(candidate)) continue;
+                if (candidate == _solution) continue;
+                if (_decoyWords.Contains(candidate)) continue;
 
                 var wordsContainingLettersForCandidate = FindWordsContainingLetters(candidate);
                 if (2 < wordsContainingLettersForCandidate.Count)
                 {
-                    DecoyWords.Add(candidate);
+                    _decoyWords.Add(candidate);
                     if (Shuffle) { wordsContainingLettersForCandidate.Shuffle();}
                     Words.Add(wordsContainingLettersForCandidate[0]);
                     Words.Add(wordsContainingLettersForCandidate[1]);
@@ -67,42 +67,32 @@ namespace WordPuzzles.Puzzle.Legacy
             if (Shuffle) { Words.Shuffle();}
         }
 
-        private void AddWords(string substring, int count)
-        {
-            var wordsContainingLetters = FindWordsContainingLetters(substring);
-            if (Shuffle) { wordsContainingLetters.Shuffle();}
-            for (int i = 0; i < count; i++)
-            {
-                Words.Add(wordsContainingLetters[i]);
-            }
-        }
-
         public string FormatHtmlForGoogle()
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(@"<html>");
 builder.AppendLine(@"<body>");
             builder.AppendLine(@"<!--StartFragment-->");
-            builder.AppendLine($@"Fill in the blanks below with {Solution.Length} letter words. The word that you use three times is the solution to the puzzle.<br>");
-            string emptyPattern = new string('_', Solution.Length);
+            builder.AppendLine($@"Fill in the blanks below with {_solution.Length} letter words. The word that you use three times is the solution to the puzzle.<br>");
+            string emptyPattern = new string('_', _solution.Length);
             foreach (string word in Words)
             {
-                string maskedWord = word.Replace(Solution, emptyPattern);
+                string maskedWord = word.Replace(_solution, emptyPattern);
                 if (!maskedWord.Contains("_"))
                 {
-                    maskedWord = word.Replace(DecoyWords[0], emptyPattern);
+                    maskedWord = word.Replace(_decoyWords[0], emptyPattern);
                 }
 
                 if (!maskedWord.Contains("_"))
                 {
-                    maskedWord = word.Replace(DecoyWords[1], emptyPattern);
+                    maskedWord = word.Replace(_decoyWords[1], emptyPattern);
                 }
                 
                 builder.AppendLine($"{maskedWord.ToUpper()}<br>");
             }
 
             builder.Append(@"Solution: ");
-            for (int i = 0; i < Solution.Length; i++)
+            for (int i = 0; i < _solution.Length; i++)
             {
                 builder.Append("_ ");
             }

@@ -7,7 +7,7 @@ namespace WordPuzzles.Puzzle.Legacy
 {
     public class BuildingBlocksPuzzle
     {
-        WordRepository repository = new WordRepository() {ExludeAdvancedWords = true};
+        readonly WordRepository _repository = new WordRepository() {ExludeAdvancedWords = true};
         public int RandomSeed { get; set; }
         public int ColumnContainingSolution { get; set; }
 
@@ -15,24 +15,24 @@ namespace WordPuzzles.Puzzle.Legacy
         {
             get
             {
-                if (random == null)
+                if (_random == null)
                 {
                     if (RandomSeed != 0)
                     {
-                        random = new Random(RandomSeed);
+                        _random = new Random(RandomSeed);
                     }
                     else
                     {
-                        random = new Random();
+                        _random = new Random();
                     }
                 }
-                return random;
+                return _random;
             }
         }
 
         public List<string> Words  = new List<string>();
 
-        private Random random; 
+        private Random _random; 
 
         public void PlaceSolution(string solution)
         {
@@ -45,7 +45,7 @@ namespace WordPuzzles.Puzzle.Legacy
                 patternBuilder.Append(letter);
                 patternBuilder.Append('_', 5 - ColumnContainingSolution);
 
-                var candidatesToAdd = repository.WordsMatchingPattern(patternBuilder.ToString());
+                var candidatesToAdd = _repository.WordsMatchingPattern(patternBuilder.ToString());
                 string wordToAdd = candidatesToAdd[RandomNumberGenerator.Next(candidatesToAdd.Count)];
                 Words.Add(wordToAdd);
                 Blocks.Add(wordToAdd.Substring(2, 2));
