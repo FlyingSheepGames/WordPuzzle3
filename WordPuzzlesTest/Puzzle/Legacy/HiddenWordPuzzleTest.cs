@@ -92,11 +92,13 @@ namespace WordPuzzlesTest.Puzzle.Legacy
                 List<string> results = puzzle.GenerateAllSplitableStrings("onion");
                 List<string> expectedStrings = new List<string>
                 {
+                    // ReSharper disable CommentTypo
                     //"o.nion",//No words start with "nion"
                     "on.ion", 
                     //"oni.on", //No word starts with 'oni'
                     //"onio.n", //
                     "on.i.on",  //double dot.
+                    // ReSharper restore CommentTypo
                 };
                 CollectionAssert.AreEquivalent(expectedStrings, results);
             }
@@ -123,10 +125,7 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             {
                 HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
                 List<string> results = puzzle.GenerateAllSplitableStrings("sock");
-                List<string> expectedStrings = new List<string>
-                {
-                };
-                CollectionAssert.AreEquivalent(expectedStrings, results);
+                CollectionAssert.AreEquivalent(new List<string>(), results);
             }
 
         }
@@ -181,8 +180,7 @@ Find the word, and then write the first letter of that word into the blanks belo
 1. Example Sentence
 Solution: _ _ .
 ";
-                HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {RandomSeed = 1};
-                puzzle.Solution = "ca.";
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle {RandomSeed = 1, Solution = "ca."};
                 puzzle.Sentences.Add("Example Sentence");
                 Assert.AreEqual(EXPECTED_TEXT, puzzle.FormatPuzzleAsText());
             }
@@ -197,8 +195,7 @@ Solution: _ _ .
             [Ignore("Takes more than 3 seconds.")]
             public void AIN_IncludesA()
             {
-                HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
-                puzzle.Solution = "domain";
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle {Solution = "domain"};
                 var results = puzzle.FindWordsAtTheStartOfThisString("ain");
                 CollectionAssert.Contains(results, "a");
             }
@@ -212,8 +209,7 @@ Solution: _ _ .
 
             public void DOMAIN_ReturnsExpectedResult()
             {
-                HiddenWordPuzzle puzzle = new HiddenWordPuzzle();
-                puzzle.Solution = "domain";
+                HiddenWordPuzzle puzzle = new HiddenWordPuzzle {Solution = "domain"};
                 var splitableStrings = new List<string>();
                 puzzle.ProcessRemainingLetters("domain", "ain", new StringBuilder("dom."), splitableStrings);
                 CollectionAssert.Contains(splitableStrings, "dom.a.i.n")

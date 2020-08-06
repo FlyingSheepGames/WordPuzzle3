@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using WordPuzzles.Utility;
 
@@ -23,7 +24,9 @@ namespace WordPuzzlesTest.Utility
             public void ExampleWithNoResults_ReturnsEmptyList()
             {
                 AnagramFinder finder = new AnagramFinder();
+                // ReSharper disable StringLiteralTypo
                 List<string> results = finder.FindAnagram("hitittttt");
+                // ReSharper restore StringLiteralTypo
 
                 Assert.AreEqual(0, results.Count);
             }
@@ -49,6 +52,7 @@ namespace WordPuzzlesTest.Utility
         public class ParseResponse
         {
             [Test]
+            [SuppressMessage("ReSharper", "StringLiteralTypo")]
             public void Example_ReturnsExpectedList()
             {
                 #region const string EXAMPLE_HTML = @"....

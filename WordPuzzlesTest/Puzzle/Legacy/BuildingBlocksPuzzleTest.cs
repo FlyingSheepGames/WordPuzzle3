@@ -15,8 +15,7 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             [Ignore("Takes more than 3 seconds.")]
             public void GeneratesListOf6LetterWords()
             {
-                BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();
-                puzzle.RandomSeed = 1;
+                BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle {RandomSeed = 1};
                 const string SOLUTION = "word";
                 puzzle.PlaceSolution(SOLUTION);
                 Assert.AreEqual(2, puzzle.ColumnContainingSolution);//Third column should spell out the word.
@@ -34,8 +33,7 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             [Ignore("Takes more than 3 seconds.")]
             public void CreatesExpectedBlocks()
             {
-                BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();
-                puzzle.RandomSeed = 1;
+                BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle {RandomSeed = 1};
                 const string SOLUTION = "word";
                 puzzle.PlaceSolution(SOLUTION);
 
@@ -64,8 +62,7 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             [Ignore("Takes more than 3 seconds.")]
             public void ReturnsExpectedString()
             {
-                BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle();
-                puzzle.RandomSeed = 1;
+                BuildingBlocksPuzzle puzzle = new BuildingBlocksPuzzle {RandomSeed = 1};
                 const string SOLUTION = "word";
                 puzzle.PlaceSolution(SOLUTION);
                 const string EXPECTED_HTML =

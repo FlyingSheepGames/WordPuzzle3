@@ -98,10 +98,8 @@ namespace WordPuzzlesTest.Utility
 
             public void AllWords_ContainsSpecificWords(string word)
             {
-                const string ALL_WORDS_FILE =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json";
                 ClueRepository clues = new ClueRepository();
-                clues.ReadFromDisk(ALL_WORDS_FILE);
+                clues.ReadFromDisk();
                 var cluesForWord = clues.GetCluesForWord(word);
                 foreach (var clueForWord in cluesForWord)
                 {
@@ -122,7 +120,9 @@ namespace WordPuzzlesTest.Utility
             public void EmptyRepository_CreatesExpectedFile()
             {
                 ClueRepository repository = new ClueRepository();
+                // ReSharper disable StringLiteralTypo
                 repository.WriteToDisk(@"data\actual_empty_clue_repository.json");
+                // ReSharper restore StringLiteralTypo
 
                 var expectedLines= File.ReadAllLines(@"data\expected_empty_clue_repository.json");
                 var actualLines = File.ReadAllLines(@"data\actual_empty_clue_repository.json");
@@ -142,7 +142,9 @@ namespace WordPuzzlesTest.Utility
 
                 repository.AddClue("Lego", "A small colorful brick.", ClueSource.ClueSourceChip);
 
+                // ReSharper disable StringLiteralTypo
                 repository.WriteToDisk(@"data\actual_nonempty_clue_repository.json");
+                // ReSharper restore StringLiteralTypo
 
                 var expectedLines = File.ReadAllLines(@"data\expected_nonempty_clue_repository.json");
                 var actualLines = File.ReadAllLines(@"data\actual_nonempty_clue_repository.json");

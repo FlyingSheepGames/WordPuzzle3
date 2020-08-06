@@ -46,7 +46,9 @@ namespace WordPuzzlesTest.Puzzle
             [Ignore("Takes more than 3 seconds.")]
             public void WHICH_FindsWord()
             {
+                // ReSharper disable StringLiteralTypo
                 Anacrostic  anacrostic = new Anacrostic("whic h");
+                // ReSharper restore StringLiteralTypo
                 Assert.AreEqual("which", anacrostic.FindNextWord());
             }
 
@@ -62,7 +64,9 @@ namespace WordPuzzlesTest.Puzzle
             [Ignore("Takes more than 3 seconds.")]
             public void SimpleExample_FindsKEEPS()
             {
+                // ReSharper disable StringLiteralTypo
                 Anacrostic anacrostic = new Anacrostic("kbpmmurrhhstttttteeee");
+                // ReSharper restore StringLiteralTypo
                 anacrostic.WordsFoundSoFar.Add("there");
                 Assert.AreEqual("keeps", anacrostic.FindNextWord());
             }
@@ -130,9 +134,13 @@ namespace WordPuzzlesTest.Puzzle
         public class RemainingLetters
         {
             [Test]
+            // ReSharper disable IdentifierTypo
+            // ReSharper disable StringLiteralTypo
             public void WHICHZ_HasZLeft()
             {
                 Anacrostic anacrostic = new Anacrostic("whichz");
+                // ReSharper restore StringLiteralTypo
+                // ReSharper restore IdentifierTypo
                 anacrostic.RemoveWord("which");
                 Assert.AreEqual("z", anacrostic.RemainingLetters());
             }
@@ -143,9 +151,13 @@ namespace WordPuzzlesTest.Puzzle
         {
             [Test]
             [Ignore("Takes more than 3 seconds.")]
+            // ReSharper disable IdentifierTypo
+            // ReSharper disable StringLiteralTypo
             public void WHICHZ_HasZLeft()
             {
                 Anacrostic anacrostic = new Anacrostic("whichz");
+                // ReSharper restore StringLiteralTypo
+                // ReSharper restore IdentifierTypo
                 anacrostic.FindNextWord();
                 anacrostic.RemoveWord("which");
                 Assert.AreEqual("z", anacrostic.RemainingLetters());
@@ -161,9 +173,14 @@ z B6
         {
             [Test]
             [Ignore("Takes more than 3 seconds.")]
+            // ReSharper disable IdentifierTypo
+            // ReSharper disable StringLiteralTypo
             public void WHICHZ_ReturnsExpectedResults()
             {
                 Anacrostic anacrostic = new Anacrostic("whichz");
+                // ReSharper restore StringLiteralTypo
+                // ReSharper restore IdentifierTypo
+
                 anacrostic.FindNextWord();
                 anacrostic.RemoveWord("which");
                 Assert.AreEqual("z", anacrostic.RemainingLetters());
@@ -176,9 +193,14 @@ A1	A2	A3	A4	A5		B6
             }
             [Test]
             [Ignore("Takes more than 3 seconds.")]
+            // ReSharper disable IdentifierTypo
+            // ReSharper disable StringLiteralTypo
             public void ThreeWords_ReturnsExpectedResults()
             {
                 Anacrostic anacrostic = new Anacrostic("whichzonepretty");
+                // ReSharper restore StringLiteralTypo
+                // ReSharper restore IdentifierTypo
+
                 anacrostic.FindNextWord();
                 anacrostic.RemoveWord("which");
                 anacrostic.RemoveWord("zone");
@@ -227,14 +249,13 @@ C10	C11	C12	C13	C14	C15
 
                 foreach (var clue in anacrostic.Puzzle.Clues)
                 {
-                    string currentWord;
                     StringBuilder builder = new StringBuilder();
                     foreach (var letter in clue.Letters)
                     {
                         builder.Append(letter.ActualLetter);
                     }
 
-                    currentWord = builder.ToString();
+                    var currentWord = builder.ToString();
                     switch (currentWord)
                     {
                         case "place":
@@ -313,14 +334,13 @@ C10	C11	C12	C13	C14	C15
 
                 foreach (var clue in anacrostic.Puzzle.Clues)
                 {
-                    string currentWord;
                     StringBuilder builder = new StringBuilder();
                     foreach (var letter in clue.Letters)
                     {
                         builder.Append(letter.ActualLetter);
                     }
 
-                    currentWord = builder.ToString();
+                    var currentWord = builder.ToString();
                     switch (currentWord)
                     {
                         case "talk":

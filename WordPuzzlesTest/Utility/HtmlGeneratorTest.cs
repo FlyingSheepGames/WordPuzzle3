@@ -261,8 +261,10 @@ L 13 <-> 5
                 puzzle.PlaceLetters();
                 generator.Puzzle = puzzle;
 
+                // ReSharper disable StringLiteralTypo
                 const string TEST_PUZZLE_FILENAME = "test_puzzle_withoutkey.html";
                 const string EXPECTED_RESULTS_FILENAME = @"data\puzzle_withoutkey.html";
+                // ReSharper restore StringLiteralTypo
 
                 string actualHtml = generator.GenerateHtmlFile(TEST_PUZZLE_FILENAME, false);
 

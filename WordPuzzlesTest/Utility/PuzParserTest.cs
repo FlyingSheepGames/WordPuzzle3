@@ -221,25 +221,21 @@ namespace WordPuzzlesTest.Utility
             public void SortThreeWords()
             {
                 PuzParser parser = new PuzParser();
-                var wordsToSort = new List<CrosswordPuzzleEntry>();
-                wordsToSort.Add(new CrosswordPuzzleEntry()
+                var wordsToSort = new List<CrosswordPuzzleEntry>
                 {
-                    IndexInSingleString = 1,
-                    Direction = CrosswordDirection.Across,
-                    Word = "third"
-                });
-                wordsToSort.Add(new CrosswordPuzzleEntry()
-                {
-                    IndexInSingleString = 0,
-                    Direction = CrosswordDirection.Down,
-                    Word = "second"
-                });
-                wordsToSort.Add(new CrosswordPuzzleEntry()
-                {
-                    IndexInSingleString = 0,
-                    Direction = CrosswordDirection.Across,
-                    Word = "first"
-                });
+                    new CrosswordPuzzleEntry()
+                    {
+                        IndexInSingleString = 1, Direction = CrosswordDirection.Across, Word = "third"
+                    },
+                    new CrosswordPuzzleEntry()
+                    {
+                        IndexInSingleString = 0, Direction = CrosswordDirection.Down, Word = "second"
+                    },
+                    new CrosswordPuzzleEntry()
+                    {
+                        IndexInSingleString = 0, Direction = CrosswordDirection.Across, Word = "first"
+                    }
+                };
 
                 var actualSortedWords = parser.NumberWordsFromGrid(wordsToSort);
                 Assert.AreEqual("first", actualSortedWords[0].Word);
@@ -301,15 +297,16 @@ namespace WordPuzzlesTest.Utility
             const string DIRECTORY_WITH_PUZ_FILES =
                 @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ";
 
-            PuzParser parser = new PuzParser();
             ClueRepository clues = new ClueRepository();
-            clues.ReadFromDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
+            clues.ReadFromDisk();
             foreach (string file in Directory.EnumerateFiles(DIRECTORY_WITH_PUZ_FILES, "*.json"))
             {
                 Console.WriteLine($"Adding {file}, words so far {clues.CountOfWordWithClues}.");
                 clues.ReadFromDisk(file);
             }
+            // ReSharper disable StringLiteralTypo
             clues.WriteToDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
+            // ReSharper restore StringLiteralTypo
         }
 
         [Test]
@@ -322,15 +319,16 @@ namespace WordPuzzlesTest.Utility
             const string DIRECTORY_WITH_SO_FILES =
                 @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\dataFromSO";
 
-            PuzParser parser = new PuzParser();
             ClueRepository clues = new ClueRepository();
-            clues.ReadFromDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
+            clues.ReadFromDisk();
             foreach (string file in Directory.EnumerateFiles(DIRECTORY_WITH_SO_FILES, "*.json"))
             {
                 Console.WriteLine($"Adding {file}, words so far {clues.CountOfWordWithClues}.");
                 clues.ImportStackOverflowFormatFile(file);
             }
+            // ReSharper disable StringLiteralTypo
             clues.WriteToDisk(DIRECTORY_WITH_PUZ_FILES + @"\allclues.json");
+            // ReSharper restore StringLiteralTypo
         }
 
     }

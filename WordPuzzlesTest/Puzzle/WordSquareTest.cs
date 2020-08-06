@@ -63,7 +63,9 @@ ey__e", square.ToString());
         }
 
         [Test]
+        // ReSharper disable IdentifierTypo
         public void epszq_2_ReturnsExpectedResults()
+            // ReSharper restore IdentifierTypo
         {
             WordSquare square = new WordSquare("taste");
             square.SetWordAtIndex("there", 0);
@@ -83,6 +85,7 @@ ey__e", square.ToString());
 
             int indexToSet = 2;
 
+            // ReSharper disable StringLiteralTypo
             square.SetWordAtIndex("epszq", indexToSet);
             Assert.AreEqual(
                 @"there
@@ -90,10 +93,13 @@ happy
 epszq
 rpzt_
 eyq_e", square.ToString());
+            // ReSharper restore StringLiteralTypo
         }
 
         [Test]
+        // ReSharper disable IdentifierTypo
         public void rpztj_3_ReturnsExpectedResults()
+            // ReSharper restore IdentifierTypo
         {
             WordSquare square = new WordSquare("taste");
             square.SetWordAtIndex("there", 0);
@@ -113,6 +119,7 @@ ey__e", square.ToString());
 
             int indexToSet = 2;
 
+            // ReSharper disable StringLiteralTypo
             square.SetWordAtIndex("epszq", indexToSet);
             Assert.AreEqual(
                 @"there
@@ -128,6 +135,7 @@ happy
 epszq
 rpztj
 eyqje", square.ToString());
+            // ReSharper restore StringLiteralTypo
 
         }
     }

@@ -17,8 +17,10 @@ namespace WordPuzzlesTest.Puzzle.Legacy
                 List<VowelMovement> vowelMovements = puzzle.FindPuzzle("r", "d");
                 Assert.IsNotEmpty(vowelMovements);
                 puzzle = vowelMovements[0];
+                // ReSharper disable StringLiteralTypo
                 Assert.AreEqual("It's * to just * away in your * sports car after you * my refridgerator.", puzzle.Clue);
                 Assert.AreEqual("It's RUDE to just RIDE away in your RED sports car after you RAID my refridgerator.", puzzle.Solution);
+                // ReSharper restore StringLiteralTypo
             }
 
             [Test]

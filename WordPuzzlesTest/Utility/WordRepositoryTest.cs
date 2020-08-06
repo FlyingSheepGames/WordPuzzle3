@@ -313,7 +313,7 @@ third
 
             [Test]
             [Ignore("Takes more than 3 seconds.")]
-            public void OnlySingleLetterWordsAreAandI()
+            public void OnlySingleLetterWordsAreAAndI()
             {
                 WordRepository repository = new WordRepository();
                 Assert.IsTrue(repository.IsAWord("a"));
@@ -399,7 +399,9 @@ third
             }
 
             [Test]
+            // ReSharper disable IdentifierTypo
             public void ZZZZ_IsNotAWord()
+                // ReSharper restore IdentifierTypo
             {
                 WordRepository repository = new WordRepository();
                 Assert.AreEqual(WordCategory.NotAWord, repository.CategorizeWord("zzzz"));

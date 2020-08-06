@@ -96,7 +96,9 @@ namespace WordPuzzlesTest.Puzzle
         public void Example_ReturnsExpectedName()
         {
             PuzzleCollection collection = new PuzzleCollection();
+            // ReSharper disable StringLiteralTypo
             Assert.AreEqual("FirstCollection", collection.ParseNameFromFileName(@"C:\utilities\WordSquare\data\basic\collections\FirstCollection.json"));
+            // ReSharper restore StringLiteralTypo
         }
     }
 

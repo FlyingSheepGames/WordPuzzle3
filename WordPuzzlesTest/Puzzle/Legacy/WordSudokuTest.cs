@@ -312,7 +312,9 @@ Then read the solution to the puzzle from the highlighted squares.
             {
                 for (int i = 2; i < 9; i++)
                 {
+                    // ReSharper disable StringLiteralTypo
                     var substring = "abcdefghij".Substring(i);
+                    // ReSharper restore StringLiteralTypo
                     Console.WriteLine($"Creating puzzle of length {substring.Length}");
                     var puzzle =  new WordSudoku(substring, 1);
                     Assert.IsNotNull(puzzle);

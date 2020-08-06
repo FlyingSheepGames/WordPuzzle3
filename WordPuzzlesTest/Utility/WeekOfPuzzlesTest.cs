@@ -11,7 +11,7 @@ namespace WordPuzzlesTest.Utility
     [TestFixture]
     public class WeekOfPuzzlesTest
     {
-        private static readonly string ExpectedText = @"<?xml version=""1.0"" encoding=""utf-8""?>
+        private const string EXPECTED_TEXT = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <WeekOfPuzzles xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <MondayWordSquare>
     <IsWordSquare>true</IsWordSquare>
@@ -57,6 +57,7 @@ namespace WordPuzzlesTest.Utility
   <Theme>WeeklyTheme</Theme>
   <MondayOfWeekPosted>0001-01-01</MondayOfWeekPosted>
 </WeekOfPuzzles>";
+
         [TestFixture]
         public class Serialize
         {
@@ -163,7 +164,7 @@ namespace WordPuzzlesTest.Utility
 
                 var actualText = File.ReadAllText(fileName);
                 Console.WriteLine(actualText);
-                Assert.AreEqual(ExpectedText,actualText);
+                Assert.AreEqual(EXPECTED_TEXT,actualText);
 
             }
         }
@@ -177,7 +178,7 @@ namespace WordPuzzlesTest.Utility
                 string fileName = $"testcase_{Process.GetCurrentProcess().Id}.xml";
                 if (!File.Exists(fileName))
                 {
-                    File.WriteAllText(fileName, ExpectedText);
+                    File.WriteAllText(fileName, EXPECTED_TEXT);
                 }
                 WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
                 weekOfPuzzles.Deserialize(fileName);
@@ -194,7 +195,7 @@ namespace WordPuzzlesTest.Utility
                 string fileName = $"testcase_{Process.GetCurrentProcess().Id}.xml";
                 if (!File.Exists(fileName))
                 {
-                    File.WriteAllText(fileName, ExpectedText);
+                    File.WriteAllText(fileName, EXPECTED_TEXT);
                 }
                 WeekOfPuzzles weekOfPuzzles = new WeekOfPuzzles();
                 weekOfPuzzles.Deserialize(fileName);

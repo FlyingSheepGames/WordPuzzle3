@@ -35,7 +35,7 @@ namespace WordPuzzlesTest.Puzzle
             public void SpacesInPhrase_CreatesExpectedPuzzle()
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "cats and dogs"};
-                var puzzleSolution = "catsanddogs";
+                var puzzleSolution = "catsAndDogs".ToLowerInvariant();
 
                 puzzle.PopulateWords();
 
@@ -52,11 +52,10 @@ namespace WordPuzzlesTest.Puzzle
             [Ignore("Takes more than 3 seconds.")]
             public void SpecialCharacter_IncludedInEachWord()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
-                puzzle.RandomSeed = 42;
-                puzzle.SpecialCharacter = 'M';
-                puzzle.Solution = "claw";
-                puzzle.NumberOfWordsToInclude = 1;
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle
+                {
+                    RandomSeed = 42, SpecialCharacter = 'M', Solution = "claw", NumberOfWordsToInclude = 1
+                };
                 puzzle.PopulateWords();
 
                 foreach (string word in puzzle.Words)
@@ -81,27 +80,21 @@ namespace WordPuzzlesTest.Puzzle
                 const string SOURCE_DIRECTORY =
                     @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\ReadDownColumn";
                 ClueRepository clueRepository = new ClueRepository();
-                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+                clueRepository.ReadFromDisk();
 
-                var puzzle = new ReadDownColumnPuzzle()
+                var puzzle = new ReadDownColumnPuzzle
                 {
-                    Solution = "XRAY", 
-                    Words =
+                    Solution = "XRAY",
+                    Words = {"boxing", "parent", "brazen", "joyful"},
+                    Clues = new List<string>
                     {
-                        "boxing", 
-                        "parent",
-                        "brazen",
-                        "joyful"
+                        clueRepository.GetCluesForWord("boxing")[0].ClueText,
+                        clueRepository.GetCluesForWord("parent")[0].ClueText,
+                        clueRepository.GetCluesForWord("brazen")[0].ClueText,
+                        clueRepository.GetCluesForWord("joyful")[0].ClueText,
                     }
                 };
 
-                puzzle.Clues = new List<string>
-                {
-                    clueRepository.GetCluesForWord("boxing")[0].ClueText,
-                    clueRepository.GetCluesForWord("parent")[0].ClueText,
-                    clueRepository.GetCluesForWord("brazen")[0].ClueText,
-                    clueRepository.GetCluesForWord("joyful")[0].ClueText,
-                };
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
 
@@ -159,26 +152,20 @@ namespace WordPuzzlesTest.Puzzle
                 const string SOURCE_DIRECTORY =
                     @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\ReadDownColumn";
                 ClueRepository clueRepository = new ClueRepository();
-                clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+                clueRepository.ReadFromDisk();
 
-                var puzzle = new ReadDownColumnPuzzle()
+                var puzzle = new ReadDownColumnPuzzle
                 {
                     Solution = "XRAY",
-                    Words =
+                    Words = {"boxing", "parent", "brazen", "joyful"},
+                    SpecialCharacter = 'E',
+                    Clues = new List<string>
                     {
-                        "boxing",
-                        "parent",
-                        "brazen",
-                        "joyful"
+                        clueRepository.GetCluesForWord("boxing")[0].ClueText,
+                        clueRepository.GetCluesForWord("parent")[0].ClueText,
+                        clueRepository.GetCluesForWord("brazen")[0].ClueText,
+                        clueRepository.GetCluesForWord("joyful")[0].ClueText,
                     }
-                };
-                puzzle.SpecialCharacter = 'E';
-                puzzle.Clues = new List<string>
-                {
-                    clueRepository.GetCluesForWord("boxing")[0].ClueText,
-                    clueRepository.GetCluesForWord("parent")[0].ClueText,
-                    clueRepository.GetCluesForWord("brazen")[0].ClueText,
-                    clueRepository.GetCluesForWord("joyful")[0].ClueText,
                 };
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
@@ -236,9 +223,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void ReturnsExpectedResults()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
-                puzzle.SpecialCharacter = 'm';
-                puzzle.RandomSeed = 42;
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {SpecialCharacter = 'm', RandomSeed = 42};
 
                 var results = puzzle.InsertSpecialCharacterInPattern("__x___");
                 Assert.AreEqual("m_x___", results[0]);

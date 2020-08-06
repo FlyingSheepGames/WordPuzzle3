@@ -16,6 +16,7 @@ namespace WordPuzzlesTest.Puzzle
         public class StringConstructor
         {
             [Test]
+            // ReSharper disable StringLiteralTypo
             [TestCase(3, "abc")]
             [TestCase(3, "abcdefg")]
             [TestCase(4, "abcdefghi")]
@@ -25,6 +26,7 @@ namespace WordPuzzlesTest.Puzzle
             [TestCase(6, "abcdefghijklmnopqrs")] //19
             [TestCase(6, "abcdefghijklmnopqrstuvwx")] //24
             [TestCase(7, "abcdefghijklmnopqrstuvwxy")] //25
+            // ReSharper restore StringLiteralTypo
             [Ignore("Sometimes this test fails. ")]
             public void SetsAppropriateSize(int expectedSize, string solution)
             {
@@ -35,10 +37,13 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void TooLong_ThrowsException()
             {
+                // ReSharper disable ObjectCreationAsStatement
                 Assert.Throws<ArgumentException>(()=> new LettersAndArrowsPuzzle("abcdefghijklmnopqrstuvwxyz123456"));
+                // ReSharper restore ObjectCreationAsStatement
             }
 
             [Test]
+            // ReSharper disable StringLiteralTypo
             [TestCase("abc")]
             [TestCase("abcdef")]
             [TestCase("abcdefg")]
@@ -47,6 +52,7 @@ namespace WordPuzzlesTest.Puzzle
             [TestCase("abcdefghijklmnopqrst")]
             [TestCase("abcdefghijklmnopqrstu")]
             [Ignore("This something fails.")]
+            // ReSharper restore StringLiteralTypo
             public void PopulatesExpectedLetters(string solution)
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(solution);
@@ -237,10 +243,14 @@ namespace WordPuzzlesTest.Puzzle
             }
 
             [Test]
+            // ReSharper disable IdentifierTypo
             public void ABCD_ReturnsExpectedGrid()
+                // ReSharper restore IdentifierTypo
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(2);
+                // ReSharper disable StringLiteralTypo
                 puzzle.PlaceSolution("abcd");
+                // ReSharper restore StringLiteralTypo
 
                 /*
                  * A D

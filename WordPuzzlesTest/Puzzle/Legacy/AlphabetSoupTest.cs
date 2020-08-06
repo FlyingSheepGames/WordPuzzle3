@@ -28,10 +28,11 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             [Test]
             public void ExampleThatStartsInSecondPosition()
             {
-                AlphabetSoup puzzle = new AlphabetSoup(Repository);
-                puzzle.RandomSeed = 1;
+                AlphabetSoup puzzle = new AlphabetSoup(Repository) {RandomSeed = 1};
+                // ReSharper disable StringLiteralTypo
                 Assert.AreEqual("allayam", puzzle.GenerateSingleLine('a', 'a'));
                 Assert.AreEqual("alabout", puzzle.GenerateSingleLine('a', 'b'));
+                // ReSharper restore StringLiteralTypo
             }
 
         }
@@ -44,7 +45,9 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             public void CreatesExpectedPuzzle()
             {
                 AlphabetSoup puzzle = new AlphabetSoup(Repository);
+                // ReSharper disable StringLiteralTypo
                 const string SOLUTION = "greenredyellowpurpleorange";
+                // ReSharper restore StringLiteralTypo
                 List<string> lines = puzzle.GeneratePuzzle(SOLUTION);
                 Assert.AreEqual(26, lines.Count);
                 StringBuilder builder = new StringBuilder();
@@ -179,8 +182,9 @@ namespace WordPuzzlesTest.Puzzle.Legacy
         [Ignore("Takes too long to run")]
         public void PopulatesExpectedLine()
         {
-            AlphabetSoup puzzle = new AlphabetSoup();
-            puzzle.Solution = "abcdefghijklmnopqrstuvwxyz";
+            // ReSharper disable StringLiteralTypo
+            AlphabetSoup puzzle = new AlphabetSoup {Solution = "abcdefghijklmnopqrstuvwxyz"};
+            // ReSharper restore StringLiteralTypo
             puzzle.GenerateLineAtIndex(0);
             Assert.AreEqual('a', puzzle.Lines[0][3], "Fourth character of this line should be 'a'");
         }
@@ -193,8 +197,9 @@ namespace WordPuzzlesTest.Puzzle.Legacy
         [Ignore("Takes more than 3 seconds.")]
         public void MovesSingleLine()
         {
-            AlphabetSoup puzzle = new AlphabetSoup();
-            puzzle.Solution = "abcdefghijklmnopqrstuvwxyz";
+            // ReSharper disable StringLiteralTypo
+            AlphabetSoup puzzle = new AlphabetSoup {Solution = "abcdefghijklmnopqrstuvwxyz"};
+            // ReSharper restore StringLiteralTypo
             puzzle.GenerateLineAtIndex(0);
             puzzle.ScrambleLines();
             bool foundSingleNonNullLine = false;

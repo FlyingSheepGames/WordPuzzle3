@@ -20,7 +20,9 @@ namespace WordPuzzlesTest.Utility
                 Assert.AreEqual(31, players.Count);
 
                 Player firstPlayer = players[0];
+                // ReSharper disable StringLiteralTypo
                 Assert.AreEqual("ossiangrr", firstPlayer.TwitterHandle);
+                // ReSharper restore StringLiteralTypo
                 Assert.AreEqual(25, firstPlayer.TotalScore);
                 Assert.AreEqual(9, firstPlayer.ALittleAlliterationScore);
                 Assert.AreEqual(5, firstPlayer.MagicWordSquareScore);

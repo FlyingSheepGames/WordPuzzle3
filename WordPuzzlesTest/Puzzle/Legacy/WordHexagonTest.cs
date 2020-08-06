@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle.Legacy;
@@ -264,6 +265,7 @@ Unique words: night, angel, ante
                 {
                     Lines =
                     {
+                        // ReSharper disable StringLiteralTypo
                         [0] = "abc",
                         [1] = "defg",
                         [2] = "hijkl",
@@ -277,6 +279,7 @@ Unique words: night, angel, ante
                 Assert.AreEqual("aejos", hexagon.CalculateDiagonalWordPattern(2));
                 Assert.AreEqual("bfkp", hexagon.CalculateDiagonalWordPattern(3));
                 Assert.AreEqual("cgl", hexagon.CalculateDiagonalWordPattern(4));
+                // ReSharper restore StringLiteralTypo
 
             }
         }
@@ -609,6 +612,7 @@ Unique words: night, angel, ante
 
             [Test]
             [Ignore("Takes more than 3 seconds.")]
+            [SuppressMessage("ReSharper", "IdentifierTypo")]
             public void KNIGHT_KABOO_ASHED_FindsExpectedLines()
             {
                 WordHexagon hexagon = new WordHexagon(4);
@@ -724,6 +728,7 @@ Unique words: knight, kaboo, ashed
                 {
                     Lines =
                     {
+                        // ReSharper disable StringLiteralTypo
                         [0] = "abcd",
                         [1] = "efghi",
                         [2] = "jklmno",
@@ -742,6 +747,7 @@ Unique words: knight, kaboo, ashed
                 Assert.AreEqual("bgmry4", hexagon.CalculateDiagonalWordPattern(5));
                 Assert.AreEqual("chnsz", hexagon.CalculateDiagonalWordPattern(6));
                 Assert.AreEqual("diot", hexagon.CalculateDiagonalWordPattern(7));
+                // ReSharper restore StringLiteralTypo
 
             }
         }
@@ -785,6 +791,7 @@ Unique words: knight, kaboo, ashed
             }
 
             [Test]
+            // ReSharper disable StringLiteralTypo
             [TestCase(0, "xale")]
             [TestCase(1, "xalad")]
             [TestCase(2, "xnight")]
@@ -792,6 +799,7 @@ Unique words: knight, kaboo, ashed
             [TestCase(4, "xnight")]
             [TestCase(5, "xalad")]
             [TestCase(6, "xale")]
+            // ReSharper restore StringLiteralTypo
             [Ignore("Takes more than 3 seconds.")]
             public void SingleInvalidLine_ReturnsFalse(int index, string line)
             {
@@ -827,6 +835,7 @@ Unique words: knight, kaboo, ashed
             }
 
             [Test]
+            // ReSharper disable StringLiteralTypo
             [TestCase(0, "xale")]
             [TestCase(1, "xalad")]
             [TestCase(2, "xnight")]
@@ -835,6 +844,7 @@ Unique words: knight, kaboo, ashed
             [TestCase(5, "xnight")]
             [TestCase(6, "xalad")]
             [TestCase(7, "xale")]
+            // ReSharper restore StringLiteralTypo
             [Ignore("Takes more than 3 seconds.")]
 
             public void SingleInvalidLine_ReturnsFalse(int index, string word)

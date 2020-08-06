@@ -222,10 +222,8 @@ namespace WordPuzzlesTest.Puzzle
                 const string PHRASE = "The fat cat sat on the bat.";
                 PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle
                 {
-                    Phrase = PHRASE,
-                    Author = AUTHOR
+                    Phrase = PHRASE, Author = AUTHOR, RandomSeed = 42
                 };
-                puzzle.RandomSeed = 42;
                 puzzle.PlacePhrase();
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
@@ -288,10 +286,8 @@ namespace WordPuzzlesTest.Puzzle
                 const string PHRASE = "In some parts of the world, students are going to school every day. It's their normal life. But in other part of the world, we are starving for education... it's like a precious gift. It's like a diamond.";
                 PhraseSegmentPuzzle puzzle = new PhraseSegmentPuzzle
                 {
-                    Phrase = PHRASE,
-                    Author = AUTHOR
+                    Phrase = PHRASE, Author = AUTHOR, RandomSeed = 42
                 };
-                puzzle.RandomSeed = 42;
 
                 puzzle.PlacePhrase();
 
@@ -379,7 +375,9 @@ namespace WordPuzzlesTest.Puzzle
                 {
                     Fragments =  new List<string>()
                 };
+                // ReSharper disable StringLiteralTypo
                 PhraseSegmentPuzzle.AddFragments(newBlock, "lot's and lot's of a'pos'tr'o'phe's.");
+                // ReSharper restore StringLiteralTypo
                 foreach (string fragment in newBlock.Fragments)
                 {
                     Console.WriteLine(fragment);

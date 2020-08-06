@@ -21,7 +21,9 @@ namespace WordPuzzlesTest.Puzzle.Legacy
                 Assert.IsNotEmpty( aLittleAlliterations);
                 aLittleAlliteration = aLittleAlliterations[0];
                 Assert.AreEqual("billionaire's bile bill",  aLittleAlliteration.Solution);
+                // ReSharper disable StringLiteralTypo
                 Assert.AreEqual("reciept for rich person's bodily fluid", aLittleAlliteration.Clue);
+                // ReSharper restore StringLiteralTypo
             }
 
             [Test]
@@ -34,7 +36,9 @@ namespace WordPuzzlesTest.Puzzle.Legacy
                 Assert.IsNotEmpty(aLittleAlliterations);
                 aLittleAlliteration = aLittleAlliterations[0];
                 Assert.AreEqual("billionaire's bile bill", aLittleAlliteration.Solution);
+                // ReSharper disable StringLiteralTypo
                 Assert.AreEqual("reciept for rich person's bodily fluid", aLittleAlliteration.Clue);
+                // ReSharper restore StringLiteralTypo
             }
 
 
@@ -100,9 +104,11 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             [Test]
             public void Example_GeneratesExpectedText()
             {
-                ALittleAlliteration aLittleAlliteration = new ALittleAlliteration();
-                aLittleAlliteration.Clue = "What color was the emergency vehicle that was unexpectedly attacked?";
-                aLittleAlliteration.Solution = "Ambush Amber Ambulance";
+                ALittleAlliteration aLittleAlliteration = new ALittleAlliteration
+                {
+                    Clue = "What color was the emergency vehicle that was unexpectedly attacked?",
+                    Solution = "Ambush Amber Ambulance"
+                };
                 const string EXPECTED_STRING = @"What color was the emergency vehicle that was unexpectedly attacked?
 
 #HowToPlay: https://t.co/rSa0rUCvRC
@@ -113,10 +119,12 @@ namespace WordPuzzlesTest.Puzzle.Legacy
             [Test]
             public void HashtagTheme_GeneratesExpectedText()
             {
-                ALittleAlliteration aLittleAlliteration = new ALittleAlliteration();
-                aLittleAlliteration.Clue = "What color was the emergency vehicle that was unexpectedly attacked?";
-                aLittleAlliteration.Solution = "Ambush Amber Ambulance";
-                aLittleAlliteration.Theme = "#ThemeWeek";
+                ALittleAlliteration aLittleAlliteration = new ALittleAlliteration
+                {
+                    Clue = "What color was the emergency vehicle that was unexpectedly attacked?",
+                    Solution = "Ambush Amber Ambulance",
+                    Theme = "#ThemeWeek"
+                };
                 const string EXPECTED_STRING = @"#ThemeWeek
 What color was the emergency vehicle that was unexpectedly attacked?
 
@@ -128,10 +136,12 @@ What color was the emergency vehicle that was unexpectedly attacked?
             [Test]
             public void NoHashtagTheme_GeneratesExpectedText()
             {
-                ALittleAlliteration aLittleAlliteration = new ALittleAlliteration();
-                aLittleAlliteration.Clue = "What color was the emergency vehicle that was unexpectedly attacked?";
-                aLittleAlliteration.Solution = "Ambush Amber Ambulance";
-                aLittleAlliteration.Theme = "NoHashtag";
+                ALittleAlliteration aLittleAlliteration = new ALittleAlliteration
+                {
+                    Clue = "What color was the emergency vehicle that was unexpectedly attacked?",
+                    Solution = "Ambush Amber Ambulance",
+                    Theme = "NoHashtag"
+                };
                 const string EXPECTED_STRING = @"What color was the emergency vehicle that was unexpectedly attacked?
 
 #HowToPlay: https://t.co/rSa0rUCvRC
@@ -224,7 +234,9 @@ What color was the emergency vehicle that was unexpectedly attacked?
                 Assert.IsTrue(words.Contains("child"), "Expected 'child' to be included.");
 
                 Assert.IsFalse(words.Contains("chips"), "Expected 'chips' to be excluded.");
+                // ReSharper disable StringLiteralTypo
                 Assert.IsFalse(words.Contains("chil"), "Expected 'chil' to be excluded.");
+                // ReSharper restore StringLiteralTypo
                 Assert.IsFalse(words.Contains("childish"), "Expected 'childish' to be excluded.");
                 Assert.IsFalse(words.Contains("chives"), "Expected 'chives' to be excluded.");
 
@@ -246,14 +258,14 @@ What color was the emergency vehicle that was unexpectedly attacked?
             public void DoubleEndingExample()
             {
                 const string ROOT_WORD = "chip";
-                const string DERRIVED_WORD = "chipped";
+                const string DERIVED_WORD = "chipped";
 
                 var currentWords = new List<string>() {ROOT_WORD};
-                ALittleAlliteration.AddIfDistinct(DERRIVED_WORD, currentWords);
+                ALittleAlliteration.AddIfDistinct(DERIVED_WORD, currentWords);
                 Assert.AreEqual(1, currentWords. Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
 
-                currentWords = new List<string>() { DERRIVED_WORD };
+                currentWords = new List<string>() { DERIVED_WORD };
                 ALittleAlliteration.AddIfDistinct(ROOT_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
@@ -264,14 +276,14 @@ What color was the emergency vehicle that was unexpectedly attacked?
             public void EndingWithY_RemovesIES()
             {
                 const string ROOT_WORD = "artery";
-                const string DERRIVED_WORD = "arteries";
+                const string DERIVED_WORD = "arteries";
 
                 var currentWords = new List<string>() { ROOT_WORD };
-                ALittleAlliteration.AddIfDistinct(DERRIVED_WORD, currentWords);
+                ALittleAlliteration.AddIfDistinct(DERIVED_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
 
-                currentWords = new List<string>() { DERRIVED_WORD };
+                currentWords = new List<string>() { DERIVED_WORD };
                 ALittleAlliteration.AddIfDistinct(ROOT_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
@@ -281,14 +293,14 @@ What color was the emergency vehicle that was unexpectedly attacked?
             public void EndingWithY_RemovesIAL()
             {
                 const string ROOT_WORD = "artery";
-                const string DERRIVED_WORD = "arterial";
+                const string DERIVED_WORD = "arterial";
 
                 var currentWords = new List<string>() { ROOT_WORD };
-                ALittleAlliteration.AddIfDistinct(DERRIVED_WORD, currentWords);
+                ALittleAlliteration.AddIfDistinct(DERIVED_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
 
-                currentWords = new List<string>() { DERRIVED_WORD };
+                currentWords = new List<string>() { DERIVED_WORD };
                 ALittleAlliteration.AddIfDistinct(ROOT_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
@@ -298,14 +310,14 @@ What color was the emergency vehicle that was unexpectedly attacked?
             public void Removes_Ful_Ending()
             {
                 const string ROOT_WORD = "art";
-                const string DERRIVED_WORD = "artful";
+                const string DERIVED_WORD = "artful";
 
                 var currentWords = new List<string>() { ROOT_WORD };
-                ALittleAlliteration.AddIfDistinct(DERRIVED_WORD, currentWords);
+                ALittleAlliteration.AddIfDistinct(DERIVED_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);
 
-                currentWords = new List<string>() { DERRIVED_WORD };
+                currentWords = new List<string>() { DERIVED_WORD };
                 ALittleAlliteration.AddIfDistinct(ROOT_WORD, currentWords);
                 Assert.AreEqual(1, currentWords.Count);
                 Assert.AreEqual(ROOT_WORD, currentWords[0]);

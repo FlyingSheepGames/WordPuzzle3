@@ -9,11 +9,10 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-
 R# warnings
+	puzzle.Legacy (and tests)
 	Puzzle (and tests)
 	Utility (and tests)
-	puzzle.Legacy (and tests)
 
 Check for code coverage
  
@@ -85,6 +84,9 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+R# warnings
+	puzzle.Legacy
+
 Add property to each IPuzzle implementation to indicate which type of puzzle it is 
 public bool IsAcrostic = true;
 And update Puzzle Converter
