@@ -252,15 +252,6 @@ third
                 Assert.IsTrue(wordRepository.IsAWord("zooms")); 
             }
 
-            [Test]
-            [Ignore("Takes more than 3 seconds.")]
-
-            public void PopulatesClues()
-            {
-                WordRepository wordRepository = new WordRepository();
-                wordRepository.LoadAllWords();
-                Assert.AreEqual("Rising agent", wordRepository.FindClueFor("yeast")); 
-            }
 
         }
 
@@ -434,19 +425,7 @@ third
             }
         }
 
-        [TestFixture]
-        public class FindClueFor
-        {
-            [Test]
-            [Ignore("Takes more than 3 seconds.")]
-            public void LoadsWordsFirst()
-            {
-                WordRepository repository = new  WordRepository();
-                Assert.IsFalse(repository.AlreadyLoaded);
-                repository.FindClueFor("ask");
-                Assert.IsTrue(repository.AlreadyLoaded);
-            }
-        }
+
 
         [TestFixture]
         public class FindThemesForWord

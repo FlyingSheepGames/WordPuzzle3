@@ -262,21 +262,6 @@ namespace WordPuzzles.Utility
             return listOfWords[randomIndex];
         }
 
-        public string FindClueFor(string clueAsString)
-        {
-            if (!AlreadyLoaded)
-            {
-                LoadAllWords();
-            }
-
-            if (DictionaryOfClues.ContainsKey(clueAsString))
-            {
-                return DictionaryOfClues[clueAsString];
-            }
-
-            return null;
-        }
-
         public List<string> GetRelatedWordsForTheme(string theme)
         {
             return _themeRepository.FindWordsForTheme(theme);

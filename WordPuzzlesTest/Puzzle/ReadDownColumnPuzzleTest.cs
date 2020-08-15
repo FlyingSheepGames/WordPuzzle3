@@ -14,7 +14,7 @@ namespace WordPuzzlesTest.Puzzle
         public class PopulateWords
         {
             [Test]
-            [Ignore("Takes more than 3 seconds.")]
+            //[Ignore("Takes more than 3 seconds.")] //needed for coverage
             public void CreatesExpectedPuzzle()
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle {Solution = "cat"};
@@ -231,6 +231,29 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual("__xm__", results[2]);
                 Assert.AreEqual("__x_m_", results[3]);
                 Assert.AreEqual("__x__m", results[4]);
+            }
+        }
+
+        [TestFixture]
+        public class GetOrdinalOfColumnWithSolution
+        {
+            [Test]
+            public void ReturnsExpectedWord()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.ZeroBasedIndexOfSolution = 0;
+                Assert.AreEqual("first", puzzle.GetOrdinalOfColumnWithSolution());
+                puzzle.ZeroBasedIndexOfSolution = 1;
+                Assert.AreEqual("second", puzzle.GetOrdinalOfColumnWithSolution());
+                puzzle.ZeroBasedIndexOfSolution = 2;
+                Assert.AreEqual("third", puzzle.GetOrdinalOfColumnWithSolution());
+                puzzle.ZeroBasedIndexOfSolution = 3;
+                Assert.AreEqual("fourth", puzzle.GetOrdinalOfColumnWithSolution());
+                puzzle.ZeroBasedIndexOfSolution = 4;
+                Assert.AreEqual("fifth", puzzle.GetOrdinalOfColumnWithSolution());
+                puzzle.ZeroBasedIndexOfSolution = 5;
+                Assert.AreEqual("last", puzzle.GetOrdinalOfColumnWithSolution());
+
             }
         }
     }

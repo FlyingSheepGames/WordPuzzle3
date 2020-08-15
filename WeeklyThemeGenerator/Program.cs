@@ -228,7 +228,11 @@ namespace WeeklyThemeGenerator
                     wordsAdded.Add(word.ToLower());
                     Console.Write(".");
 
-                    string hint = WordRepository.FindClueFor(word);
+                    string hint = "";
+                    var list = ClueRepository.GetCluesForWord(word);
+                    if (0 < list.Count) {
+                        hint = list[0].ClueText; // WordRepository.FindClueFor(word);
+                    }
                     string databaseRow = string.Join("\t", word, category.ToString(), word.Length.ToString(), hint);
                     rowsToAdd.AppendLine(databaseRow);
                     wordCount++;

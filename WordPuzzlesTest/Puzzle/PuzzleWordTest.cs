@@ -15,6 +15,7 @@ namespace WordPuzzlesTest.Puzzle
             {
                 PuzzleWord word = new PuzzleWord("as", 1, 'A');
                 PuzzleLetter firstLetter = word.Letters[0];
+                Assert.AreEqual("A1", firstLetter.ToString(), "Unexpected result from ToString override.");
                 Assert.AreEqual('a', firstLetter.ActualLetter);
                 Assert.AreEqual(1, firstLetter.NumericIndex);
                 Assert.AreEqual('A', firstLetter.AlphabeticIndex);

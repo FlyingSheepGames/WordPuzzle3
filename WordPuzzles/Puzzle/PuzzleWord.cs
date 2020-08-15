@@ -9,6 +9,7 @@ namespace WordPuzzles.Puzzle
 
         public PuzzleWord(string word, int startingIndex, char wordIndex)
         {
+            if (word == null) return; //TODO: Figure out why this would be when deserializing. Use WelcomeHomeEve as an example.
             _originalWord = word;
             foreach (char character in word)
             {

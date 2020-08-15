@@ -22,38 +22,10 @@ namespace WordPuzzles.Puzzle
             SortLettersByReverseFrequency(phrase);
         }
 
-        public string GetEncodedPhraseForGoogle()
-        {
-            int maxLineLength = 10;
-            PreparePuzzle();
-            StringBuilder phraseEncodedForGoogle = new StringBuilder();
-            int lineLength = 0;
-            foreach (var puzzleLetter in Puzzle.Phrase)
-            {
-                lineLength++;
-                var letter = puzzleLetter;
-                phraseEncodedForGoogle.Append(letter);
-                if (maxLineLength < lineLength && (letter.ActualLetter == ' '))
-                {
-                    phraseEncodedForGoogle.Append("\r\n");
-                    lineLength = 0;
-                }
-                else
-                {
-                    phraseEncodedForGoogle.Append("\t");
-                }
-            }
-            Console.WriteLine(phraseEncodedForGoogle.ToString());
-            return phraseEncodedForGoogle.ToString();
-        }
         public int LineLength { get; set; }
 
         private void SortLettersByReverseFrequency(string phrase)
         {
-            if (56 < phrase.Length)
-            {
-                //throw new Exception("Phrases of length 57 or more are not supported (line length doesn't fit in the 8 - 14 range without 3 or more black spaces in the final row).");
-            }
             OriginalPhrase = phrase.ToLower();
             foreach (string word in phrase.Split(new [] { " "}, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -80,7 +52,6 @@ namespace WordPuzzles.Puzzle
                 }
             }
 
-            //EncodedPhraseForGoogle = encodedPhraseForGoogle.ToString();
             EncodedPhrase = encodedPhraseForGoogle.ToString();
             for (int i = 0; i < 26; i++)
             {

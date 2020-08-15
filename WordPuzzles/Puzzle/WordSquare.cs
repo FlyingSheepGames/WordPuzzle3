@@ -64,11 +64,6 @@ namespace WordPuzzles.Puzzle
             Lines[indexToSet] = wordToSet;
         }
 
-        public List<string> GetFirstWordCandidates()
-        {
-            return GetWordCandidates(0);
-        }
-
         public List<string> GetWordCandidates(int index)
         {
             return Repository.WordsStartingWith(Lines[index].Trim('_'), Size);

@@ -66,7 +66,7 @@ namespace WordPuzzlesTest.Puzzle
             {
                 const string HTML_DIRECTORY = @"html\HiddenRelatedWords\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\HiddenRelatedWords";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\HiddenRelatedWords";
 
                 HiddenRelatedWordsPuzzle puzzle = new HiddenRelatedWordsPuzzle();
                 puzzle.AddWord(new HiddenWord()
@@ -127,11 +127,11 @@ namespace WordPuzzlesTest.Puzzle
                         actualLine = actualLines[index];
                     }
 
-                    if (expectedLine != actualLine)
+                    if (!expectedLine.Equals(actualLine, StringComparison.InvariantCultureIgnoreCase))
                     {
                         anyLinesDifferent = true;
                         Console.WriteLine($"Expected Line {index}:{expectedLine}");
-                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{actualLine}");
                     }
                 }
 

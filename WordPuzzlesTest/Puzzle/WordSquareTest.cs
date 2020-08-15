@@ -68,6 +68,7 @@ ey__e", square.ToString());
             // ReSharper restore IdentifierTypo
         {
             WordSquare square = new WordSquare("taste");
+
             square.SetWordAtIndex("there", 0);
             Assert.AreEqual(
                 @"there
@@ -75,6 +76,10 @@ ha___
 e_s__
 r__t_
 e___e", square.ToString());
+
+            var results = square.GetWordCandidates(0);
+            Assert.LessOrEqual(0, results.Count, "Expected at least one word in first row.");
+
             square.SetWordAtIndex("happy", 1);
             Assert.AreEqual(
                 @"there
@@ -85,6 +90,7 @@ ey__e", square.ToString());
 
             int indexToSet = 2;
 
+
             // ReSharper disable StringLiteralTypo
             square.SetWordAtIndex("epszq", indexToSet);
             Assert.AreEqual(
@@ -94,6 +100,8 @@ epszq
 rpzt_
 eyq_e", square.ToString());
             // ReSharper restore StringLiteralTypo
+
+            Assert.IsFalse(square.IsLastLineAWord(), "Last line is not a word.");
         }
 
         [Test]
@@ -140,18 +148,6 @@ eyqje", square.ToString());
         }
     }
 
-    [TestFixture]
-    public class GetFirstWordCandidates
-    {
-        [Test]
-        [Ignore("Takes more than 3 seconds.")]
-        public void Taste_ReturnsExpectedNumberOfCandidates()
-        {
-            WordSquare square = new WordSquare("taste");
-            List<string> result = square.GetFirstWordCandidates();
-            Assert.LessOrEqual(300, result.Count);
-        }
-    }
 
     [TestFixture]
     public class CopyConstructor
@@ -321,7 +317,7 @@ Thing that hangs above your throat
         }
 
         [Test]
-        [Ignore("Takes more than 3 seconds.")]
+        //[Ignore("Takes more than 3 seconds.")] //Covers a lot of the class.
         public void CanReadSize4File()
         {
             var results = WordSquare.ReadAllWordSquaresFromFile(@"data\area.txt", 4);

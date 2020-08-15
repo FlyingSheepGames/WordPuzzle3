@@ -216,7 +216,7 @@ namespace WordPuzzlesTest.Puzzle
             {
                 const string HTML_DIRECTORY = @"html\PhraseSegment\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\PhraseSegment";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\PhraseSegment";
 
                 const string AUTHOR = "Chip";
                 const string PHRASE = "The fat cat sat on the bat.";
@@ -280,7 +280,7 @@ namespace WordPuzzlesTest.Puzzle
             {
                 const string HTML_DIRECTORY = @"html\PhraseSegment\";
                 const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\html\PhraseSegment";
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\PhraseSegment";
 
                 const string AUTHOR = "Malala Yousafzai";
                 const string PHRASE = "In some parts of the world, students are going to school every day. It's their normal life. But in other part of the world, we are starving for education... it's like a precious gift. It's like a diamond.";

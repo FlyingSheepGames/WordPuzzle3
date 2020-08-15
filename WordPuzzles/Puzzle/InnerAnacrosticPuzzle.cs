@@ -236,19 +236,13 @@ namespace WordPuzzles.Puzzle
                 int maxNumberOfOptions;
                 if (!PlaceForcedLetters(out maxNumberOfOptions))
                 {
-                    //Console.WriteLine(countOfRemainingNulls);
                     for ( int threshold = 2; threshold <= maxNumberOfOptions; threshold++)
                     {
-                        //Console.WriteLine($"Didn't place any letters. Will take first of {threshold}/ {maxNumberOfOptions} options when available");
                         if (PlaceForcedLetters(out maxNumberOfOptions, threshold))
                         {
                             break;
                         }
 
-                        if (threshold == maxNumberOfOptions - 1)
-                        {
-
-                        }
                     }
                 }
 

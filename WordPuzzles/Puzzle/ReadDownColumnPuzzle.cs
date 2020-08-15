@@ -204,7 +204,7 @@ namespace WordPuzzles.Puzzle
             return builder.ToString();
         }
 
-        private string GetOrdinalOfColumnWithSolution()
+        internal string GetOrdinalOfColumnWithSolution()
         {
             if (ZeroBasedIndexOfSolution == (Size - 1))
             {

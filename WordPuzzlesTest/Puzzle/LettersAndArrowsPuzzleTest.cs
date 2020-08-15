@@ -163,6 +163,20 @@ namespace WordPuzzlesTest.Puzzle
 
                 CollectionAssert.AreEquivalent(expectedNumbers, puzzle.GetAvailableHorizontalCells(2, 2));
             }
+
+            [Test]
+            public void RowsMustFormWords_ReturnsCorrectNumbers()
+            {
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("CAMP", true, 0, 42);
+
+                var words = puzzle.GetWords();
+
+                Assert.AreEqual("COLD", words[0], "Unexpected first word");
+                Assert.AreEqual("APEX", words[1], "Unexpected second word");
+                Assert.AreEqual("BALE", words[2], "Unexpected third word");
+                Assert.AreEqual("AMID", words[3], "Unexpected fourth word");
+            }
+
         }
 
         [TestFixture]

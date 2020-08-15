@@ -130,54 +130,17 @@ namespace WordPuzzlesTest.Puzzle
             }
         }
 
-        [TestFixture]
-        public class RemainingLetters
-        {
-            [Test]
-            // ReSharper disable IdentifierTypo
-            // ReSharper disable StringLiteralTypo
-            public void WHICHZ_HasZLeft()
-            {
-                Anacrostic anacrostic = new Anacrostic("whichz");
-                // ReSharper restore StringLiteralTypo
-                // ReSharper restore IdentifierTypo
-                anacrostic.RemoveWord("which");
-                Assert.AreEqual("z", anacrostic.RemainingLetters());
-            }
-        }
-
-        [TestFixture]
-        public class WordsWithNumberedBlanks
-        {
-            [Test]
-            [Ignore("Takes more than 3 seconds.")]
-            // ReSharper disable IdentifierTypo
-            // ReSharper disable StringLiteralTypo
-            public void WHICHZ_HasZLeft()
-            {
-                Anacrostic anacrostic = new Anacrostic("whichz");
-                // ReSharper restore StringLiteralTypo
-                // ReSharper restore IdentifierTypo
-                anacrostic.FindNextWord();
-                anacrostic.RemoveWord("which");
-                Assert.AreEqual("z", anacrostic.RemainingLetters());
-                Assert.AreEqual(
-@"which A1 A2 A3 A4 A5 
-z B6 
-", anacrostic.WordsWithNumberedBlanks());
-            }
-        }
 
         [TestFixture]
         public class WordsFormattedForGoogleDocs
         {
             [Test]
-            [Ignore("Takes more than 3 seconds.")]
+            //[Ignore("Takes more than 3 seconds.")] //Takes more than 3 seconds, but covers most of the class.
             // ReSharper disable IdentifierTypo
             // ReSharper disable StringLiteralTypo
             public void WHICHZ_ReturnsExpectedResults()
             {
-                Anacrostic anacrostic = new Anacrostic("whichz");
+                Anacrostic anacrostic = new Anacrostic("whichZ".ToLowerInvariant());
                 // ReSharper restore StringLiteralTypo
                 // ReSharper restore IdentifierTypo
 
@@ -190,6 +153,11 @@ W	H	I	C	H		Z
 A1	A2	A3	A4	A5		B6		
 
 ", anacrostic.WordsFormattedForGoogleDocs());
+                Assert.AreEqual(
+                    @"which A1 A2 A3 A4 A5 
+z B6 
+", anacrostic.WordsWithNumberedBlanks());
+
             }
             [Test]
             [Ignore("Takes more than 3 seconds.")]
@@ -216,6 +184,9 @@ P	R	E	T	T	Y
 C10	C11	C12	C13	C14	C15		
 
 ", anacrostic.WordsFormattedForGoogleDocs());
+
+                Assert.AreEqual(
+                    @"A1A2A3A4A5B6", anacrostic.EncodedPhrase);
             }
 
         }
@@ -412,53 +383,6 @@ C10	C11	C12	C13	C14	C15
 
         }
 
-        [TestFixture]
-        public class EncodedPhrase
-        {
-            [Test]
-            [Ignore("Takes more than 3 seconds.")]
-            public void WHICHZ_ReturnsExpectedResults()
-            {
-                Anacrostic anacrostic = new Anacrostic("whichz");
-                anacrostic.FindNextWord();
-                anacrostic.RemoveWord("which");
-                Assert.AreEqual("z", anacrostic.RemainingLetters());
-                anacrostic.WordsFormattedForGoogleDocs();
-                Assert.AreEqual(
-                    @"A1A2A3A4A5B6", anacrostic.EncodedPhrase);
-                Assert.AreEqual(
-                    "A1\tA5\tA3\tA4\tA2\tB6\t", anacrostic.GetEncodedPhraseForGoogle());
-
-            }
-
-            [Test]
-            public void LongerPhrase_ReturnsExpectedResults()
-            {
-                Anacrostic anacrostic = new Anacrostic("this longer phrase has at least twenty characters");
-
-                anacrostic.RemoveWord("place");
-                anacrostic.RemoveWord("years");
-                anacrostic.RemoveWord("great");
-                anacrostic.RemoveWord("which");
-                anacrostic.RemoveWord("rates");
-                anacrostic.RemoveWord("later");
-                anacrostic.RemoveWord("hosts");
-                anacrostic.RemoveWord("hats");
-
-                Assert.AreEqual("nnt", anacrostic.RemainingLetters());
-                anacrostic.WordsFormattedForGoogleDocs();
-                Assert.AreEqual(
-@"C15	D17	D18	B10	 	A2	G32	I40	C11	A5	B9	 
-A1	D20	C12	A3	E25	B7	 	G31	B8	G33	 
-C14	E23	 	F26	C13	E22	G35	F28	 	G34	D16	E24	I41	H38	B6	 
-A4	H36	F27	E21	H37	D19	I42	F29	F30	H39	", 
-                    anacrostic.EncodedPhrase);
-
-       
-
-            }
-
-        }
 
         [TestFixture]
         public class LineLengthProperty

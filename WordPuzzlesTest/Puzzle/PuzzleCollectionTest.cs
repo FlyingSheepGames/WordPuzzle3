@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 
@@ -18,6 +19,10 @@ namespace WordPuzzlesTest.Puzzle
 
                 IPuzzle actualPuzzle = collection.RetrievePuzzleAtIndex(0);
                 Assert.IsInstanceOf<WordSquare>(actualPuzzle, "Expected a Word Square as first puzzle");
+                foreach (var puzzle in (IEnumerable) collection) //Exercise enumerator
+                {
+                    Assert.IsInstanceOf<WordSquare>(puzzle);
+                }
             }
         }
 

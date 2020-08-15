@@ -10,6 +10,8 @@ namespace WordPuzzles.Puzzle
         public bool IsHiddenRelatedWordsPuzzle = true; //For deserialization
         readonly List<HiddenWord> _hiddenWords = new List<HiddenWord>();
         private HtmlGenerator _htmlGenerator = new HtmlGenerator();
+        private const string INSTRUCTIONS = @"Find the word hiding in each of the setences below. 
+The hidden word willl be made of consecutive letters in two or more adjacent words";
 
         public int CombinedKeyIndex
         {
@@ -59,9 +61,11 @@ namespace WordPuzzles.Puzzle
                 _htmlGenerator.AppendHtmlHeader(builder);
             }
 
+            builder.AppendLine(INSTRUCTIONS);
             StringBuilder tableBuilder = new StringBuilder();
             StringBuilder clueBuilder = new StringBuilder();
             tableBuilder.AppendLine("<table>");
+
             clueBuilder.AppendLine("<ol>");
             for (var index = 0; index < _hiddenWords.Count; index++)
             {
