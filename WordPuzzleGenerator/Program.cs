@@ -29,7 +29,11 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
+
+            //CalculateStatisticsForThreeLetterWords();
+
             ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+
 
             //FindAllTakeOneClues();
             //FindAllTakeTwoClues();
@@ -93,6 +97,67 @@ namespace WordPuzzleGenerator
 
             SavePuzzleCollection(collection);
         }
+        /*
+         * Discoveries:
+         * 1. J is almost always the first letter of a three letter word containing it.
+         * 2. IOU are almost always the middle letter of words in which they appear.
+         * 3. X is almost always the last letter of any three letter word containing it. 
+         *
+         */
+
+        private static void CalculateStatisticsForThreeLetterWords()
+        {
+            int[,] letterFrequency = new int[26,3];
+            for (int letter = 'a' -'a'; letter < 'z'-'a'; letter++)
+            {
+                for (int wordIndex = 0; wordIndex < 3; wordIndex++)
+                {
+                    letterFrequency[letter, wordIndex] = 0;
+                }
+            }
+
+            foreach (string word in WordRepository.WordsMatchingPattern("___"))
+            {
+                for (var indexOfLetterInWord = 0; indexOfLetterInWord < word.ToLowerInvariant().Length; indexOfLetterInWord++)
+                {
+                    char letter = word.ToLowerInvariant()[indexOfLetterInWord];
+                    letterFrequency[letter - 'a', indexOfLetterInWord]++;
+                }
+            }
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("LETTER\tSTART\tMIDDLE\tEND");
+            for (int letter = 'a' - 'a'; letter < 'z' - 'a'; letter++)
+            {
+                int startCount = letterFrequency[letter, 0];
+                int middleCount = letterFrequency[letter, 1];
+                int endCount = letterFrequency[letter, 2];
+                int totalCount = startCount + middleCount + endCount;
+                if (totalCount == 0) continue;
+                int startOfTen = (startCount*10)/totalCount;
+                int middleOfTen = (middleCount * 10) / totalCount;
+                int endOfTen = (endCount * 10) / totalCount;
+                middleOfTen = 10 - (startOfTen + endOfTen);
+                Console.Write($"{(char) (letter + 'A')}\t");//{startOfTen}\t{middleOfTen}\t{endOfTen}");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write( new string('#', startOfTen));
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(new string('#', middleOfTen));
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(new string('#', endOfTen));
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                Console.WriteLine();
+                for (int wordIndex = 0; wordIndex < 3; wordIndex++)
+                {
+                    letterFrequency[letter, wordIndex] = 0;
+                }
+            }
+
+            Console.ReadKey();
+        }
+
         /*
          *Results
          * Found 99 clues.

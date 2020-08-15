@@ -9,14 +9,14 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-R# warnings
-	puzzle.Legacy (and tests)
-	Puzzle (and tests)
-	Utility (and tests)
+Group puzzles into months
+	Collection: Year of puzzles (Dictionary<dateTime, IPuzzle>)
+	Placeholders for days where we know the solution, but not the puzzle? Null puzzle type? 
+	"Which month do you want to work on?" "Ok, which day?" "Ok, is <> still the solution for that day?"
+	Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
+	Capture partially-filled month of puzzles. 
+	Placeholder for month or year-long puzzle solutions (e.g. fill in the blanks for Days of week, phases of moon, etc.)
 
-Check for code coverage
- 
----------
 Add instructions to PhraseSegmentPuzzle
 Add instructions to HiddenRelatedWords
 
@@ -24,18 +24,15 @@ Add method to Clue Repository for Deleting a clue.
 	Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
 	Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
 
-Group puzzles into months
-	Placeholders for days where we know the solution, but not the puzzle.
-	Multiple possible puzzles for the same day (This is a bad idea)
-	Replace or add puzzle to specific day (See why above is a bad idea?)
-	"Which month do you want to work on?" "Ok, which day?" "Ok, is <> still the word for that day?"
-	Update WordPuzzleGenerator to produce month of puzzles (and month of solutions)
-	Capture partially-filled month of puzzles. 
-	Placeholder for month or year-long puzzle solutions (e.g. fill in the blanks for Days of week, phases of moon, etc.)
 
 Add new puzzle types.
 NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
 	e.g. (Adding A): "Don't try to carry everything without a platter: _ _ A _" Solution: TRAY (anagram try)
+
+NEW PUZZLE: Print out strips of letters, cut them into bands, and rotate and arrange them until 
+they form 3-letter words. Papercraft puzzle. Check to see how difficult/interesting it is. 
+
+Puzzle idea: overlapping tents of letters and holes. 
 
 Tests probably take a long time because of initializing the various Repositories. 
 	Create a single repository of each type for all tests could share.
@@ -84,8 +81,19 @@ List of tests that occassionally fail.
 --- DONE (most recent on top)
 
 ----------------------------------
+Group puzzles into months
+	Multiple possible puzzles for the same day (This is a bad idea)
+	Replace or add puzzle to specific day (See why above is a bad idea?)
+
 R# warnings
 	puzzle.Legacy
+R# warnings
+	puzzle.Legacy (and tests)
+	Puzzle (and tests)
+	Utility (and tests)
+
+Check for code coverage
+
 
 Add property to each IPuzzle implementation to indicate which type of puzzle it is 
 public bool IsAcrostic = true;
