@@ -6,6 +6,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using WordPuzzles;
+using WordPuzzles.Puzzle;
+using WordPuzzles.Puzzle.Legacy;
+using WordPuzzles.Utility;
+
 // ReSharper disable UnusedMember.Local
 // A lot of methods are only called on an ad-hoc basis. 
 //TODO: Clean this up and offer a menu of actions. 
@@ -18,7 +22,7 @@ namespace WeeklyThemeGenerator
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
         private static readonly WordSquareHistory History = new WordSquareHistory();
-        static readonly ClueRepository _clueRepository = new ClueRepository();
+        static readonly ClueRepository ClueRepository = new ClueRepository();
 
         // ReSharper disable once UnusedMember.Local
         private static readonly string[] Themes = {
@@ -49,7 +53,7 @@ namespace WeeklyThemeGenerator
         [STAThread]
         static void Main()
         {
-            _clueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+            ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
             string monthToScore = "May 2019";
             Console.WriteLine("Enter a month (e.g. May 2019) to generate scoring tweets for that month. Or just hit enter to continue.");
@@ -168,14 +172,14 @@ namespace WeeklyThemeGenerator
 
                 GenerateTweetsForSelectedPuzzles(weekOfPuzzles);
             }
-            _clueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest.NetFramework\data\PUZ\allclues.json");
+            ClueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
         }
 
         private static string CalculateFileNameForTheme(string theme) //TODO: Probably move this to WeekOfPuzzles class.
         {
-            string DIRECTORY = $"{ConfigurationManager.AppSettings["BaseDirectory"]}PuzzlesSets\\";
-            string fileName = DIRECTORY + $"{theme.Replace("#", "")}.xml";
+            string directory = $"{ConfigurationManager.AppSettings["BaseDirectory"]}PuzzlesSets\\";
+            string fileName = directory + $"{theme.Replace("#", "")}.xml";
             return fileName;
         }
 
@@ -224,7 +228,11 @@ namespace WeeklyThemeGenerator
                     wordsAdded.Add(word.ToLower());
                     Console.Write(".");
 
-                    string hint = WordRepository.FindClueFor(word);
+                    string hint = "";
+                    var list = ClueRepository.GetCluesForWord(word);
+                    if (0 < list.Count) {
+                        hint = list[0].ClueText; // WordRepository.FindClueFor(word);
+                    }
                     string databaseRow = string.Join("\t", word, category.ToString(), word.Length.ToString(), hint);
                     rowsToAdd.AppendLine(databaseRow);
                     wordCount++;
@@ -620,8 +628,8 @@ namespace WeeklyThemeGenerator
             Console.WriteLine("When should these puzzles be posted?");
             Console.WriteLine($"A: Next Monday {closestFutureMonday}");
             Console.WriteLine($"B: A week later {oneWeekLater}");
-            Console.WriteLine($"C: Enter my own time");
-            Console.WriteLine($"D: Ask me later.");
+            Console.WriteLine("C: Enter my own time");
+            Console.WriteLine("D: Ask me later.");
 
             var key = Console.ReadKey();
             switch (key.KeyChar.ToString().ToLower())
@@ -1197,7 +1205,7 @@ namespace WeeklyThemeGenerator
                 //Then, find or create a word square.
                 if (relatedWord.Length == 5 && weekOfPuzzles.MondayWordSquare == null)
                 {
-                    Console.WriteLine($"Starting to create a word square.");
+                    Console.WriteLine("Starting to create a word square.");
                     weekOfPuzzles.MondayWordSquare = InteractiveFindWordSquare(relatedWord);
                     if (weekOfPuzzles.MondayWordSquare != null)
                     {
@@ -1210,7 +1218,7 @@ namespace WeeklyThemeGenerator
                 //Then, find the Vowel Movements clues.
                 if (weekOfPuzzles.ThursdayVowelMovement == null)
                 {
-                    Console.WriteLine($"Starting to create a vowel movement puzzle.");
+                    Console.WriteLine("Starting to create a vowel movement puzzle.");
                     string startConsonant;
                     string endConsonant;
                     if (WordRepository.IsSingleSyllable(relatedWord, out startConsonant, out endConsonant))
@@ -1241,7 +1249,7 @@ namespace WeeklyThemeGenerator
                 //Finally, find the A Little Alliteration clues.
                 if (weekOfPuzzles.FridayALittleAlliteration == null)
                 {
-                    Console.WriteLine($"Starting to create an A Little Alliteration Puzzle.");
+                    Console.WriteLine("Starting to create an A Little Alliteration Puzzle.");
                     string firstThreeLetters = relatedWord.Substring(0, 3);
                     if (!threeLetterCombinationsAlreadyTried.Contains(firstThreeLetters))
                     {
@@ -1292,7 +1300,7 @@ namespace WeeklyThemeGenerator
                 $"Attempting to find A Little Alliteration puzzle for single syllable word {relatedWord} ...");
             ALittleAlliteration puzzleToReturn = new ALittleAlliteration();
             List<ALittleAlliteration> aLittleAlliterations = puzzleToReturn.FindPuzzle(firstThreeLetters);
-            Console.WriteLine($"Found puzzle");
+            Console.WriteLine("Found puzzle");
             for (int i = 0; i < aLittleAlliterations.Count; i++)
             {
                 if (10 < i) break;
@@ -1329,7 +1337,7 @@ namespace WeeklyThemeGenerator
             Console.WriteLine($"Here are {suggestedWordsCount} words that will help if you want to create your own.");
             Console.WriteLine(suggestedWordsGrid);
             Console.WriteLine(
-                $"Enter the number for the one you'd like to use or 'n' for none. Or create your own (solution = clue).");
+                "Enter the number for the one you'd like to use or 'n' for none. Or create your own (solution = clue).");
             string userResponse = Console.ReadLine();
             int userSelectedIndex;
             if (int.TryParse(userResponse, out userSelectedIndex))
@@ -1379,13 +1387,13 @@ namespace WeeklyThemeGenerator
             List<VowelMovement> vowelMovements = puzzleToReturn.FindPuzzle(startConsonant, endConsonant);
             if (0 < vowelMovements.Count)
             {
-                Console.WriteLine($"Found puzzles");
+                Console.WriteLine("Found puzzles");
                 for (int i = 0; i < vowelMovements.Count; i++)
                 {
                     Console.WriteLine($"{i}: {vowelMovements[i].Solution}");
                 }
 
-                Console.WriteLine($"Enter the number for the one you'd like to use or 'n' for none. Or create your own.");
+                Console.WriteLine("Enter the number for the one you'd like to use or 'n' for none. Or create your own.");
                 string userResponse = Console.ReadLine();
                 int userSelectedIndex;
                 if (int.TryParse(userResponse, out userSelectedIndex))
@@ -1456,7 +1464,7 @@ namespace WeeklyThemeGenerator
             {
                 squareIndex++;
                 Console.WriteLine($"0: accept this square. {squareIndex} / {availableSquareCount}");
-                Console.WriteLine($"Or enter 'z' to skip to the next word.");
+                Console.WriteLine("Or enter 'z' to skip to the next word.");
 
                 Console.WriteLine(availableWordSquare);
                 Console.WriteLine($"Score: {History.CalculateScore(availableWordSquare)}");
@@ -1479,7 +1487,7 @@ namespace WeeklyThemeGenerator
                         Console.Clear();
                         string currentLine = currentLines[currentLineIndex];
 
-                        var clues = _clueRepository.GetCluesForWord(currentLine);
+                        var clues = ClueRepository.GetCluesForWord(currentLine);
 
                         Console.WriteLine($"Enter a clue for {currentLine.ToUpperInvariant()} OR select an index from the following options:");
                         for (var index = 0; index < clues.Count; index++)
@@ -1497,7 +1505,7 @@ namespace WeeklyThemeGenerator
                         }
                         else
                         {
-                            _clueRepository.AddClue(currentLine, suggestedClue, ClueSource.CLUE_SOURCE_CHIP);
+                            ClueRepository.AddClue(currentLine, suggestedClue, ClueSource.ClueSourceChip);
                         }
                         selectedSquare.Clues[currentLineIndex] = suggestedClue;
                     }

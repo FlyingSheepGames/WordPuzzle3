@@ -1,0 +1,260 @@
+<html>
+
+<head>
+<style type="text / css">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+    	.centered {
+	        text-align: center
+	    }
+    	.black {
+	        background-color:#000000
+	    }
+    	.grey {
+	        background-color:#AAAAAA
+	    }
+
+</style>
+</head>
+<body>
+Find the word hiding in each of the setences below. 
+The hidden word willl be made of consecutive letters in two or more adjacent words
+<ol>
+<li>You'll have to hold ermine and skunks in this job.
+<li>He wasn't able to keep his foxes straight.
+<li>I lived somewhere between east and west.
+<li>You'd better acknowledge my superiority in this matter.
+</ol>
+<br />
+<table>
+<tr>
+<td class="normal centered" width="30"> 1 </td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="bold centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+</tr>
+<tr>
+<td class="normal centered" width="30"> 2 </td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="bold centered" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+</tr>
+<tr>
+<td class="normal centered" width="30"> 3 </td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="bold centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+</tr>
+<tr>
+<td class="normal centered" width="30"> 4 </td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="normal centered" width="30">&nbsp;</td>
+<td class="bold centered" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+<td class="hollow" width="30">&nbsp;</td>
+</tr>
+</table>
+</body>
+</html>

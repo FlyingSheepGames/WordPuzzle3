@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using WordPuzzles;
+using WordPuzzles.Utility;
 
 namespace WordDrMario
 {

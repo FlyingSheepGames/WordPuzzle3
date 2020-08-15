@@ -113,6 +113,7 @@ namespace WordDrMarioTest
         public class FindHorizontalWords
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SET_FindsExpectedWord()
             {
                 WordGrid grid = new WordGrid(6);
@@ -125,6 +126,7 @@ namespace WordDrMarioTest
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void Repeated_DoesNotAddAdditionalWords()
             {
                 WordGrid grid = new WordGrid(6);
@@ -141,6 +143,7 @@ namespace WordDrMarioTest
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void RightAligned_SET_FindsExpectedWord()
             {
                 WordGrid grid = new WordGrid(6);
@@ -152,6 +155,7 @@ namespace WordDrMarioTest
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void AND_SET_FindsExpectedWord()
             {
                 WordGrid grid = new WordGrid(6);
@@ -170,6 +174,7 @@ namespace WordDrMarioTest
         public class FindVerticalWords
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SET_FindsExpectedWord()
             {
                 WordGrid grid = new WordGrid(6);
@@ -194,6 +199,7 @@ namespace WordDrMarioTest
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void SET_Returns3()
             {
                 WordGrid grid = new WordGrid(6);
@@ -207,6 +213,8 @@ namespace WordDrMarioTest
             }
 
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
+
             public void SET_And_TEST_Returns8()
             {
                 WordGrid grid = new WordGrid(6);
@@ -274,6 +282,7 @@ namespace WordDrMarioTest
         public class DeleteFoundWords
         {
             [Test]
+            [Ignore("Takes more than 3 seconds.")]
             public void ClearsAsExpected()
             {
                 WordGrid grid = new WordGrid(6);

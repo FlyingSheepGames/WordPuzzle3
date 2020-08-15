@@ -1,5 +1,6 @@
 using System;
 using WordPuzzles;
+using WordPuzzles.Utility;
 
 namespace WordDrMario
 {
