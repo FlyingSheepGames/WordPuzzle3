@@ -43,5 +43,18 @@ namespace WordPuzzles
         {
             return _dictionary[dateToRetrieve];
         }
+
+        public DateTime NextOpenDate()
+        {
+            var nextOpenDate = new DateTime(2020, 12,31);
+            foreach (var date in _dictionary.Keys)
+            {
+                if (nextOpenDate < date)
+                {
+                    nextOpenDate = date;
+                }
+            }
+            return nextOpenDate.AddDays(1);
+        }
     }
 }
