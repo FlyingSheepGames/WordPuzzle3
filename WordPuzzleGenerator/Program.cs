@@ -14,7 +14,7 @@ namespace WordPuzzleGenerator
 {
     class Program
     {
-        private const ConsoleColor CONSOLE_COLOR_ERROR = ConsoleColor.DarkRed;
+        private const ConsoleColor ERROR_CONSOLE_COLOR = ConsoleColor.DarkRed;
 
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
@@ -25,6 +25,7 @@ namespace WordPuzzleGenerator
         static readonly ClueRepository ClueRepository = new ClueRepository();
         private static readonly StringBuilder PuzzleBuilder = new StringBuilder();
         private static readonly StringBuilder SolutionBuilder = new StringBuilder();
+        private static DateTime TIME_TO_QUIT = DateTime.MaxValue;
 
         [STAThread]
         static void Main()
@@ -48,12 +49,40 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
+            ProgramMode programMode = ProgramMode.UNDEFINED;
+            programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
+            while (programMode == ProgramMode.UNDEFINED)
+            {
+                programMode = InteractiveGetProgramMode();
+            }
+
+            if (programMode == ProgramMode.COLLECTION)
+            {
+                RunInCollectionMode();
+            }
+
+            if (programMode == ProgramMode.PATTERN_MATCH)
+            {
+                InterativelyCreatesWordsWithSelectedPattern();
+            }
+
+            if (programMode == ProgramMode.YEAR)
+            {
+                RunInYearMode();
+            }
+
+        }
+
+        private static void RunInCollectionMode()
+        {
             PuzzleCollection collection = InteractiveSelectPuzzleCollection();
             if (0 < collection.PuzzleCount)
             {
                 InteractiveDeletePuzzles(collection);
             }
+
             HtmlGenerator htmlGenerator = new HtmlGenerator();
+
             htmlGenerator.AppendHtmlHeader(PuzzleBuilder);
             htmlGenerator.AppendHtmlHeader(SolutionBuilder);
 
@@ -62,6 +91,7 @@ namespace WordPuzzleGenerator
             {
                 Console.Clear();
                 Console.WriteLine("Enter the word or phrase you'd like to create a puzzle for.");
+
                 solution = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(solution))
                 {
@@ -72,22 +102,24 @@ namespace WordPuzzleGenerator
 
                 List<string> solutionThemes = InteractiveFindThemesForWord(solution);
                 WordPuzzleType
-                    userPuzzleSelection = WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
+                    userPuzzleSelection =
+                        WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
                 Dictionary<WordPuzzleType, bool> availablePuzzleTypes =
                     CalculateAvailablePuzzleTypes(solution, solutionThemes);
 
                 while (userPuzzleSelection != 0)
                 {
                     userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solution, availablePuzzleTypes);
-                    IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection, solutionLength, solution,
+                    IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection,
+                        solutionLength, solution,
                         solutionThemes);
                     AddPuzzleToCollection(createdPuzzle, collection, PuzzleBuilder, SolutionBuilder);
                 }
             }
 
-            InterativelyCreatesWordsWithSelectedPattern();
 
-            ClueRepository.WriteToDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+            ClueRepository.WriteToDisk(
+                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
             htmlGenerator.AppendHtmlFooter(PuzzleBuilder);
             htmlGenerator.AppendHtmlFooter(SolutionBuilder);
@@ -96,6 +128,145 @@ namespace WordPuzzleGenerator
             File.WriteAllText($"{ticks}_solutions.html", SolutionBuilder.ToString());
 
             SavePuzzleCollection(collection);
+        }
+
+        private static void RunInYearMode()
+        {
+            YearOfPuzzles yearOfPuzzles = new YearOfPuzzles();
+            //Load year
+            string pathToYearOfPuzzlesFile = LoadExistingPuzzles(yearOfPuzzles);
+
+            bool continueMainLoop = true;
+
+            while (continueMainLoop)
+            {
+                //Select Date to work on
+                DateTime userSelectedDate = DateTime.MinValue;
+                while (userSelectedDate == DateTime.MinValue)
+                {
+                    userSelectedDate = InteractiveGetDateToWorkOn(yearOfPuzzles.NextOpenDate());
+                }
+
+                if (userSelectedDate == TIME_TO_QUIT)
+                {
+                    return;
+                }
+
+                string solution = "Placeholder that is not empty";
+                while (!string.IsNullOrWhiteSpace(solution))
+                {
+                    ClearConsoleInputAndOutput();
+                    Console.WriteLine($"What is the solution for the puzzle on {userSelectedDate.ToLongDateString()}?");
+                    Console.WriteLine("Or enter '111' to create a quotation puzzle for this date.");
+                    Console.WriteLine("Or hit enter to quit. ");
+
+                    solution = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(solution))
+                    {
+                        break;
+                    }
+
+                    if (solution == "111")
+                    {
+                        var puzzle = InteractiveGetQuotationPuzzleForDate(userSelectedDate);
+                        if (puzzle != null)
+                        {
+                            yearOfPuzzles.Add(puzzle, userSelectedDate);
+                        }
+                        yearOfPuzzles.Serialize(pathToYearOfPuzzlesFile);
+                        break;
+                    }
+
+                    int solutionLength = solution.Length;
+
+                    WordPuzzleType
+                        userPuzzleSelection =
+                            WordPuzzleType.WordSquare; //Doesn't matter what it is as long as it isn't 0.
+                    Dictionary<WordPuzzleType, bool> availablePuzzleTypes =
+                        CalculateAvailableIPuzzleTypes(solution);
+
+                    while (userPuzzleSelection != 0)
+                    {
+                        userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solution, availablePuzzleTypes);
+                        IPuzzle createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection,
+                            solutionLength, solution,
+                            null);
+                        if (createdPuzzle != null)
+                        {
+                            yearOfPuzzles.Add(createdPuzzle, userSelectedDate);
+                            solution = ""; //reset solution to jump out of loop.
+                        }
+
+                    }
+                }
+
+
+                ClueRepository.WriteToDisk(
+                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+
+                //todo: persist year
+                yearOfPuzzles.Serialize(pathToYearOfPuzzlesFile);
+
+                ClearConsoleInputAndOutput();
+                Console.WriteLine("Files updated. Press 'z' to quit, any other key to continue with the next date.");
+                var keyPressed = Console.ReadKey();
+                continueMainLoop = (keyPressed.KeyChar != 'z');
+            }
+            //todo: use HTML Generator if prompted by user.
+
+        }
+
+        private static DateTime InteractiveGetDateToWorkOn(DateTime defaultDate)
+        {
+            ClearConsoleInputAndOutput();
+            Console.WriteLine("Please enter a date to work with. ");
+            Console.WriteLine($"Just hit enter to work with {defaultDate} ");
+            Console.WriteLine($"Enter 'z' to quit. "); //can actually enter anything to quit. 
+
+            string userInput = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(userInput))
+            {
+                return defaultDate;
+            }
+
+            DateTime userEntereDateTime;
+
+            if (DateTime.TryParse(userInput, out userEntereDateTime))
+            {
+                return userEntereDateTime;
+            }
+
+            return TIME_TO_QUIT;
+        }
+
+        private static string LoadExistingPuzzles(YearOfPuzzles yearOfPuzzles)
+        {
+            string directory = Path.Combine(BASE_DIRECTORY, "year");
+            Directory.CreateDirectory(directory);
+            string yearPath = $@"{directory}\2021.json";
+            if (File.Exists(yearPath))
+            {
+                yearOfPuzzles.Deserialize(yearPath);
+            }
+
+            return yearPath;
+        }
+
+        private static ProgramMode InteractiveGetProgramMode()
+        {
+            ClearConsoleInputAndOutput();
+            Console.WriteLine("What would you like to do? ");
+            Console.WriteLine($"{ProgramMode.COLLECTION}: Work with a collection of puzzles. ");
+            Console.WriteLine($"{ProgramMode.YEAR}: Work with a year of puzzles. ");
+            Console.WriteLine($"{ProgramMode.PATTERN_MATCH}: Match some arbitrary patterns. ");
+            string userInputAsString =  Console.ReadLine();
+            int userInput;
+            if (int.TryParse(userInputAsString, out userInput))
+            {
+                return (ProgramMode) userInput;
+            }
+
+            return ProgramMode.UNDEFINED;
         }
         /*
          * Discoveries:
@@ -363,7 +534,7 @@ z has 5 clue pairs.
             SolutionBuilder.Append(puzzleToAdd.FormatHtmlForGoogle(true, true));
         }
 
-        private static PhraseSegmentPuzzle InteractiveGetPuzzleForDate(DateTime date)
+        private static PhraseSegmentPuzzle InteractiveGetQuotationPuzzleForDate(DateTime date)
         {
             Console.Clear();
             Console.WriteLine("Finding people born on this day.");
@@ -471,44 +642,77 @@ z has 5 clue pairs.
             return selectedCollection;
         }
 
-        private static WordPuzzleType DisplayMenuOfAvailablePuzzles(string solution, Dictionary<WordPuzzleType, bool> availablePuzzleTypes)
+        private static WordPuzzleType DisplayMenuOfAvailablePuzzles(string solution,
+            Dictionary<WordPuzzleType, bool> availablePuzzleTypes)
         {
             WordPuzzleType userPuzzleSelection;
-            
+
             ClearConsoleInputAndOutput();
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"Which type of puzzle would you like to create for '{solution.ToUpperInvariant()}'?");
             Console.WriteLine("0. None. Enter the next word or phrase.");
-            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordSquare]
+                ? ConsoleColor.Gray
+                : ERROR_CONSOLE_COLOR;
             Console.WriteLine("1. * Word Square");
-            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("2. Sudoku");
-            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.Sudoku))
+            {
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Sudoku]
+                    ? ConsoleColor.Gray
+                    : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("2. Sudoku");
+            }
+
+            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.Anacrostic]
+                ? ConsoleColor.Gray
+                : ERROR_CONSOLE_COLOR;
             Console.WriteLine("3. * Anacrostic");
-            Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("4. Word Ladder");
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.WordLadder))
+            {
+                Console.ForegroundColor = availablePuzzleTypes[WordPuzzleType.WordLadder]
+                    ? ConsoleColor.Gray
+                    : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("4. Word Ladder");
+            }
+
             Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+                availablePuzzleTypes[WordPuzzleType.LettersAndArrows] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
             Console.WriteLine("5. * Letters and Arrows");
             Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+                availablePuzzleTypes[WordPuzzleType.ReadDownColumn] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
             Console.WriteLine("6. * Read Down Column");
             Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.HiddenRelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
+                availablePuzzleTypes[WordPuzzleType.HiddenRelatedWords] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
             Console.WriteLine("7. * Hidden Related Words");
-            Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("8. Building Blocks");
-            Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("9. Related Words");
-            Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("Q. Missing Letters");
-            Console.ForegroundColor =
-                availablePuzzleTypes[WordPuzzleType.PuzzleForDate] ? ConsoleColor.Gray : CONSOLE_COLOR_ERROR;
-            Console.WriteLine("W. Puzzle For Date");
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.BuildingBlocks))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.BuildingBlocks] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("8. Building Blocks");
+            }
+
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.RelatedWords))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.RelatedWords] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("9. Related Words");
+            }
+
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.MissingLetters))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.MissingLetters] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("Q. Missing Letters");
+            }
+
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.PuzzleForDate))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.PuzzleForDate] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("W. Puzzle For Date");
+            }
+
             Console.ForegroundColor = ConsoleColor.Gray;
 
             var userPuzzleSelectionInput = Console.ReadKey();
@@ -753,7 +957,7 @@ z has 5 clue pairs.
                 }
                     break;
                 case WordPuzzleType.PuzzleForDate:
-                    generatedPuzzle = InteractiveGetPuzzleForDate(DateTime.Now);
+                    generatedPuzzle = InteractiveGetQuotationPuzzleForDate(DateTime.Now);
                     break;
             }
 
@@ -1101,6 +1305,27 @@ z has 5 clue pairs.
             return availablePuzzleTypes;
         }
 
+        private static Dictionary<WordPuzzleType, bool> CalculateAvailableIPuzzleTypes(string solution)
+        {
+            int solutionLength = solution.Length;
+            var availablePuzzleTypes = new Dictionary<WordPuzzleType, bool>();
+
+
+            availablePuzzleTypes.Add(WordPuzzleType.WordSquare, (3 < solutionLength && solutionLength < 7));
+            //availablePuzzleTypes.Add(WordPuzzleType.Sudoku, !WordSudoku.ContainsDuplicateLetters(solution));
+            availablePuzzleTypes.Add(WordPuzzleType.Anacrostic, (7 < solutionLength && solutionLength < 57));
+            //availablePuzzleTypes.Add(WordPuzzleType.WordLadder, (2 < solutionLength && solutionLength < 7));
+            availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (7 < solutionLength && solutionLength < 30));
+            availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
+            availablePuzzleTypes.Add(WordPuzzleType.HiddenRelatedWords, (!solution.ToLower().Contains('x')));
+            //availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
+            //availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
+            //availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, (10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
+            //availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
+
+            return availablePuzzleTypes;
+        }
+
         private static void InteractiveCreateHiddenWordPuzzle(string solution)
         {
             HiddenWordPuzzle puzzle = new HiddenWordPuzzle() {Solution = solution};
@@ -1301,9 +1526,17 @@ z has 5 clue pairs.
 
         private static IPuzzle InteractiveFindReadDownColumnPuzzle(string solution)
         {
+            char specialCharacter;
+            string reasonForSpecialCharacter;
+            InteractiveGetSpecialCharacterAndReason(out specialCharacter, out reasonForSpecialCharacter);
+
             ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
             puzzle.Solution = solution;
-            //puzzle.PopulateWords();
+            if (char.IsLetter(specialCharacter) && !string.IsNullOrWhiteSpace(reasonForSpecialCharacter))
+            {
+                puzzle.SpecialCharacter = specialCharacter;
+                puzzle.ReasonForSpecialCharacter = reasonForSpecialCharacter;
+            }
             for (var index = 0; index < solution.Length; index++)
             {
                 char letter = solution[index];
@@ -1366,6 +1599,19 @@ z has 5 clue pairs.
             }
 
             return puzzle;
+        }
+
+        private static void InteractiveGetSpecialCharacterAndReason(out char specialCharacter, out string reasonForSpecialCharacter)
+        {
+            reasonForSpecialCharacter = null;
+            ClearConsoleInputAndOutput();
+            Console.WriteLine("If there is a special character for this date, press the key of that character (otherwise, hit the space bar.)");
+            var keyPressed = Console.ReadKey();
+            specialCharacter = keyPressed.KeyChar;
+            if (!char.IsLetter(specialCharacter)) return;
+            Console.WriteLine("Ok, what is the reason this letter is special? (e.g. 'Because it is the second of May' the rest of the sentence will be added. ):");
+            reasonForSpecialCharacter = Console.ReadLine();
+
         }
 
 
@@ -2014,6 +2260,15 @@ Enter 0 for none.");
             Console.WriteLine(listOfWords.ToString());
             return anacrostic;
         }
+    }
+
+    internal enum ProgramMode
+    {
+        UNDEFINED = 0, 
+        COLLECTION = 1, //Work with a collection of puzzles
+        YEAR = 2, //Work with a year of puzzles
+        PATTERN_MATCH = 3, //Just get words that match a given pattern
+
     }
 
     internal class TakeTwoClue

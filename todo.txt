@@ -24,6 +24,7 @@ Add method to Clue Repository for Deleting a clue.
 	Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
 	Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
 
+Should add support for SpecialCharacter (and Reason) to other puzzles, too. 
 
 Add new puzzle types.
 NEW PUZZLE: Remove the letter A from a word, anagram the remaining letters, and use it a clue for the original word. 
