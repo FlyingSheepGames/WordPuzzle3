@@ -49,6 +49,10 @@ Q. Missing Letters
 7. Hidden Words (see new puzzle)
 4. Word Ladder
 
+Maybe Word Ladder is a better puzzle than I thought. 
+
+Read Down Columns should be updated to be any length (4-7?) and the solution can be hidden in any column. 
+
 Review todo below this line.
 
 HTMLFormatter (common code)

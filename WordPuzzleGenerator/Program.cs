@@ -194,7 +194,7 @@ namespace WordPuzzleGenerator
                         if (createdPuzzle != null)
                         {
                             yearOfPuzzles.Add(createdPuzzle, userSelectedDate);
-                            solution = ""; //reset solution to jump out of loop.
+                            userPuzzleSelection = 0; //reset solution to jump out of loop.
                         }
 
                     }
