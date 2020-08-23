@@ -11,6 +11,9 @@ namespace WordPuzzles.Puzzle
         public bool IsPhraseSegmentPuzzle = true;//Used when deserializing.
         public string Phrase { get; set; }
         public string Author { get; set; }
+
+        public DateTime AuthorBirthday { get; set; }
+
         public int CompleteLength { get; set; }
 
         private Random _randomNumberGenerator;
@@ -182,6 +185,8 @@ namespace WordPuzzles.Puzzle
                 _htmlGenerator.AppendHtmlHeader(builder);
             }
 
+            builder.AppendLine(GetInstructions());
+
             if (SubPuzzles == null)
             {
                 AppendPuzzleTable(includeSolution, builder);
@@ -200,6 +205,17 @@ namespace WordPuzzles.Puzzle
             }
 
             return builder.ToString();
+        }
+
+        private string GetInstructions()
+        {
+            string instructions = $@"Oh no! The letters have fallen out of the grid below in consecutive clumps. 
+Return the letters into the grid above them. The author of the quote appears at the end. ";
+            if (AuthorBirthday != default)
+            {
+                instructions += $@"Note that the source of this quote was born on {AuthorBirthday.ToLongDateString()}.";
+            }
+            return instructions;
         }
 
         private void AppendPuzzleTable(bool includeSolution, StringBuilder builder)
