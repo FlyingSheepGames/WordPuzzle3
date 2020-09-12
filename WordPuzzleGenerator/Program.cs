@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using WordPuzzles;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Puzzle.Legacy;
@@ -465,9 +466,11 @@ z has 5 clue pairs.
             {
                 countPerLetterRemoved[i] = 0;
             }
-            var findAllTakeTwoClues = new List<TakeTwoClue>();
+            var takeOneCluesAsList = new List<TakeTwoClue>();
+            var takeOneCluesAsDictionary = new Dictionary<char, List<TakeTwoClue>>();
             for (char letterToPlace = 'a'; letterToPlace <= 'z'; letterToPlace++)
             {
+                takeOneCluesAsDictionary.Add(letterToPlace, new List<TakeTwoClue>());
                 for (int wordLength = 4; wordLength < 9; wordLength++)
                 {
                     for (int firstLetterIndex = 0; firstLetterIndex < wordLength; firstLetterIndex++)
@@ -500,13 +503,14 @@ z has 5 clue pairs.
                                 if (shorterWord.Length + 1 == longerWord.Length) //exactly two letters were removed
                                 {
                                     countPerLetterRemoved[letterToPlace - 'a']++;
-                                    findAllTakeTwoClues.Add(
-                                        new TakeTwoClue()
-                                        {
-                                            LongerWord = longerWord,
-                                            ShorterWord = shorterWord,
-                                            LetterRemoved = letterToPlace
-                                        });
+                                    var clueToAdd = new TakeTwoClue()
+                                    {
+                                        LongerWord = longerWord,
+                                        ShorterWord = shorterWord,
+                                        LetterRemoved = letterToPlace
+                                    };
+                                    takeOneCluesAsList.Add(clueToAdd);
+                                    takeOneCluesAsDictionary[letterToPlace].Add(clueToAdd);
                                     Console.WriteLine($"Found a pair: {longerWord} and {shorterWord}.");
                                     //Console.ReadKey();
                                 }
@@ -515,15 +519,19 @@ z has 5 clue pairs.
                     }
                 }
             }
-            Console.WriteLine($"Found {findAllTakeTwoClues.Count} clues.");
+            Console.WriteLine($"Found {takeOneCluesAsList.Count} clues.");
             for (int i = 0; i < 26; i++)
             {
                 int cluesForThisLetter = countPerLetterRemoved[i];
                 if (cluesForThisLetter == 0) continue;
                 Console.WriteLine($"{(char)(i + 'a')} has {cluesForThisLetter} clue pairs.");
             }
+
+            var serializedDictionary = JsonConvert.SerializeObject(takeOneCluesAsDictionary);
+            File.WriteAllText(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\AddALetter\dictionary.json", serializedDictionary);
+
             Console.ReadKey();
-            return findAllTakeTwoClues;
+            return takeOneCluesAsList;
         }
 
         private static void AddPuzzleToCollection(IPuzzle puzzleToAdd, PuzzleCollection collection, StringBuilder puzzleBuilder, StringBuilder solutionBuilder)
