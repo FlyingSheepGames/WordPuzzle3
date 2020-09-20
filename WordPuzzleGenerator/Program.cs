@@ -2278,11 +2278,4 @@ Enter 0 for none.");
         PATTERN_MATCH = 3, //Just get words that match a given pattern
 
     }
-
-    internal class TakeTwoClue
-    {
-        public string LongerWord;
-        public string ShorterWord;
-        public char LetterRemoved;
-    }
 }
