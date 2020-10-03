@@ -37,7 +37,7 @@ namespace WordPuzzleGenerator
             ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
 
-            //FindAllTakeOneClues();
+            FindAllTakeOneClues();
             //FindAllTakeTwoClues();
             //LoadSevenLetterWords();
             //FindWordsThatMakeDigits();
@@ -457,6 +457,35 @@ y has 68 clue pairs.
 z has 5 clue pairs.
 
          */
+
+        /* being picky
+         a has 32 clue pairs.
+b has 17 clue pairs.
+c has 29 clue pairs.
+d has 15 clue pairs.
+e has 56 clue pairs.
+f has 16 clue pairs.
+g has 20 clue pairs.
+h has 35 clue pairs.
+i has 32 clue pairs.
+j has 5 clue pairs.
+k has 26 clue pairs.
+l has 89 clue pairs.
+m has 33 clue pairs.
+n has 56 clue pairs.
+o has 33 clue pairs.
+p has 35 clue pairs.
+r has 107 clue pairs.
+s has 54 clue pairs.
+t has 48 clue pairs.
+u has 29 clue pairs.
+v has 15 clue pairs.
+w has 23 clue pairs.
+x has 4 clue pairs.
+y has 8 clue pairs.
+z has 5 clue pairs.
+
+         */*/
         private static List<TakeTwoClue> FindAllTakeOneClues()
         {
             StringBuilder pattern = new StringBuilder();
@@ -468,13 +497,22 @@ z has 5 clue pairs.
             }
             var takeOneCluesAsList = new List<TakeTwoClue>();
             var takeOneCluesAsDictionary = new Dictionary<char, List<TakeTwoClue>>();
+            bool bePicky = false;
             for (char letterToPlace = 'a'; letterToPlace <= 'z'; letterToPlace++)
             {
+                bePicky = false;
                 takeOneCluesAsDictionary.Add(letterToPlace, new List<TakeTwoClue>());
                 for (int wordLength = 4; wordLength < 9; wordLength++)
                 {
                     for (int firstLetterIndex = 0; firstLetterIndex < wordLength; firstLetterIndex++)
                     {
+                        if (bePicky)
+                        {
+                            if (firstLetterIndex == 0 || firstLetterIndex == (wordLength - 1))
+                            {
+                                continue;//Skip the ones where the letter is at the start or end of the word. 
+                            }
+                        }
                         var placeLetterAtTheseIndicies = new List<int>() {firstLetterIndex};
                         pattern.Clear();
                         for (int patternIndex = 0; patternIndex < wordLength; patternIndex++)
@@ -503,6 +541,10 @@ z has 5 clue pairs.
                                 if (shorterWord.Length + 1 == longerWord.Length) //exactly two letters were removed
                                 {
                                     countPerLetterRemoved[letterToPlace - 'a']++;
+                                    if (5 < countPerLetterRemoved[letterToPlace - 'a'])
+                                    {
+                                        bePicky = true;
+                                    }
                                     var clueToAdd = new TakeTwoClue()
                                     {
                                         LongerWord = longerWord,
