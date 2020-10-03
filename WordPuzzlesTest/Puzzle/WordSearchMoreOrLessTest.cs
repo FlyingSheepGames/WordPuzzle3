@@ -604,6 +604,25 @@ namespace WordPuzzlesTest.Puzzle
             }
         }
 
+
+        [TestFixture]
+        public class FindForbiddenWords
+        {
+            [Test]
+            public void ReturnsPoop()
+            {
+                WordSearchMoreOrLess wordSearchWithForbiddenWords = new WordSearchMoreOrLess();
+                wordSearchWithForbiddenWords.Size = 4;
+                wordSearchWithForbiddenWords.RandomGeneratorSeed = 42;
+
+                wordSearchWithForbiddenWords.PlaceStringInGrid("poop", 0, 0, CardinalDirection.East);
+
+                List<HiddenWordInGrid> forbiddenWords = wordSearchWithForbiddenWords.FindForbiddenWords();
+                Assert.AreEqual(2, forbiddenWords.Count, "Found a forbidden word");
+                var firstForbiddenWord = forbiddenWords[0];
+                Assert.AreEqual("poop", firstForbiddenWord.HiddenWord);
+            }
+        }
     }
 
 

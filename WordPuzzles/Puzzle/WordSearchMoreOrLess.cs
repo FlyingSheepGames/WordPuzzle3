@@ -14,6 +14,7 @@ namespace WordPuzzles.Puzzle
         private Random _randomNumberGenerator;
         public List<HiddenWordInGrid> HiddenWords = new List<HiddenWordInGrid>();
         private int _size;
+        private Dictionary<int, List<string>> forbiddenWordsIndexedByLength;
         public int RandomGeneratorSeed { get; set; } = 0;
 
         public Dictionary<char, List<TakeTwoClue>> DictionaryOfClues
@@ -56,6 +57,39 @@ namespace WordPuzzles.Puzzle
                 _size = value;
                 InitializeGrid();
             }
+        }
+
+        public Dictionary<int, List<string>> ForbiddenWordsIndexedByLength
+        {
+            get
+            {
+                if (forbiddenWordsIndexedByLength == null)
+                {
+                    forbiddenWordsIndexedByLength = InitializeListOfForbiddenWords();
+                }
+                return forbiddenWordsIndexedByLength;
+            }
+
+        }
+
+        private Dictionary<int, List<string>> InitializeListOfForbiddenWords()
+        {
+            var forbiddenWords = new Dictionary<int, List<string>>();
+            AddForbiddenWord(forbiddenWords, "poop");
+            AddForbiddenWord(forbiddenWords, "fuck");
+            AddForbiddenWord(forbiddenWords, "cunt");
+            AddForbiddenWord(forbiddenWords, "pussy");
+            return forbiddenWords;
+        }
+
+        private void AddForbiddenWord(Dictionary<int, List<string>> forbiddenWords, string wordToAdd)
+        {
+            int wordLength = wordToAdd.Length;
+            if (!forbiddenWords.ContainsKey(wordLength))
+            {
+                forbiddenWords[wordLength] = new List<string>();
+            }
+            forbiddenWords[wordLength].Add(wordToAdd);
         }
 
 
@@ -330,6 +364,38 @@ namespace WordPuzzles.Puzzle
             }
 
         }
+
+        public List<HiddenWordInGrid> FindForbiddenWords()
+        {
+            var forbiddenWordsFound = new List<HiddenWordInGrid>();
+            foreach (int currentLength in ForbiddenWordsIndexedByLength.Keys)
+            {
+                List<string> forbiddenWordsOfCurrentLength = ForbiddenWordsIndexedByLength[currentLength];
+                for (int x = 0; x < Size; x++)
+                {
+                    for (int y = 0; y < Size; y++)
+                    {
+                        foreach (var directionToCheck in GetPossibleDirections(x, y, currentLength))
+                        {
+                            var wordToCheck = FindStringInGrid(x, y, directionToCheck, currentLength);
+                            if (forbiddenWordsOfCurrentLength.Contains(wordToCheck))
+                            {
+                                forbiddenWordsFound.Add(
+                                    new HiddenWordInGrid()
+                                    {
+                                        Direction = directionToCheck, 
+                                        XCoordinate =  x, 
+                                        YCoordinate = y, 
+                                        HiddenWord = wordToCheck,
+
+                                    });
+                            }
+                        }
+                    }
+                }
+            }
+            return forbiddenWordsFound;
+        }
     }
 
     public class HiddenWordInGrid
@@ -338,6 +404,10 @@ namespace WordPuzzles.Puzzle
         public string HiddenWord;
         public char LetterAddedOrRemoved;
 
+        public HiddenWordInGrid()
+        {
+            
+        }
         public HiddenWordInGrid(TakeTwoClue clue, bool addLetter)
         {
             LetterAddedOrRemoved = clue.LetterRemoved;
