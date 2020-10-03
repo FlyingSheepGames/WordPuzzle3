@@ -10,10 +10,8 @@ E. Rafactorings
 TASKS
 ------------------------------
 WordSearchMoreOrLess
-	Fill in the rest of the grid
-	Look for Forbidden words
-	Implement IPuzzle
 	Add to Program menu
+	Add preference for CardinalDirections - e.g. the more clues are hidden North/South, the more likely other directions should be. 
 
 MultipleClues
 	Each word will have multiple numbered clues. The word will be indexed by the sum of these clues.
