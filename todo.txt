@@ -9,6 +9,18 @@ E. Rafactorings
 
 TASKS
 ------------------------------
+WordSearchMoreOrLess
+	Fill in the rest of the grid
+	Look for Forbidden words
+	Implement IPuzzle
+	Add to Program menu
+
+MultipleClues
+	Each word will have multiple numbered clues. The word will be indexed by the sum of these clues.
+	Make sure each word has a unique sum (or length)
+	Implement IPuzzle
+	Add to Program menu
+
 Group puzzles into months
 	Collection: Year of puzzles (Dictionary<dateTime, IPuzzle>)
 	Placeholders for days where we know the solution, but not the puzzle? Null puzzle type? 

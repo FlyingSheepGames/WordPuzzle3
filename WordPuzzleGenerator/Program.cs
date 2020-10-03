@@ -485,7 +485,7 @@ x has 4 clue pairs.
 y has 8 clue pairs.
 z has 5 clue pairs.
 
-         */*/
+         */
         private static List<TakeTwoClue> FindAllTakeOneClues()
         {
             StringBuilder pattern = new StringBuilder();

@@ -574,6 +574,36 @@ namespace WordPuzzlesTest.Puzzle
         }
 
 
+        [TestFixture]
+        public class FillInRemainingGrid
+        {
+            [Test]
+            public void CreatesExpectedGrid()
+            {
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess();
+                wordSearch.RandomGeneratorSeed = 42;
+                wordSearch.Size = 5;
+                wordSearch.Grid = new List<string>()
+                {
+                    "sep__",
+                    "tsas_",
+                    "erie_",
+                    "wona_",
+                    "_htt_",
+                };
+                var expectedGrid = new List<string>()
+                {
+                    "sepdd",
+                    "tsasn",
+                    "eriee",
+                    "wonag",
+                    "rhtts",
+                };
+                wordSearch.FillInRemainingGrid();
+                Assert.AreEqual(expectedGrid, wordSearch.Grid);
+            }
+        }
+
     }
 
 

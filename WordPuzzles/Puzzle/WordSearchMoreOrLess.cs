@@ -314,6 +314,22 @@ namespace WordPuzzles.Puzzle
 
             return possibleDirections;
         }
+
+        public void FillInRemainingGrid()
+        {
+            for (int x = 0; x < Size; x++)
+            {
+                for (int y = 0; y < Size; y++)
+                {
+                    if (GetLetterAtCoordinates(x, y) == '_')
+                    {
+                        char randomLetter = (char) ('a' + RandomNumberGenerator.Next(26));
+                        PlaceLetterAtCoordinates(randomLetter, x, y);
+                    }
+                }
+            }
+
+        }
     }
 
     public class HiddenWordInGrid
