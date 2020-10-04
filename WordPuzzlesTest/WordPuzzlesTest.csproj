@@ -73,6 +73,7 @@
     <Compile Include="Puzzle\Legacy\AlphabetSoupTest.cs" />
     <Compile Include="Puzzle\AnacrosticParameterSetTest.cs" />
     <Compile Include="Puzzle\AnacrosticTest.cs" />
+    <Compile Include="Puzzle\MultipleCluesPuzzleTest.cs" />
     <Compile Include="Puzzle\WordSearchMoreOrLessTest.cs" />
     <Compile Include="Puzzle\YearOfPuzzlesTest.cs" />
     <Compile Include="Utility\AnagramFinderTest.cs" />
