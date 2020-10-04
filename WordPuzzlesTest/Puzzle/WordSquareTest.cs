@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
@@ -354,8 +355,7 @@ Thing that hangs above your throat
         public void SHOE_ReturnsExpectedResult()
         {
             const string HTML_DIRECTORY = @"html\WordSquares\";
-            const string SOURCE_DIRECTORY =
-                @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\WordSquares";
+            string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "WordSquares";
 
             WordSquare square = new WordSquare("____");
             square.SetWordAtIndex("shoe", 0);

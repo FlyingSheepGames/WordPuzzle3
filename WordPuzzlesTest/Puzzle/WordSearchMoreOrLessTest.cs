@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
@@ -23,18 +24,18 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual(1, wordSearch.HiddenWords.Count, "Expected one hidden word before processing a letter.");
                 var firstHiddenWord = wordSearch.HiddenWords[0];
                 Assert.AreEqual('a', firstHiddenWord.LetterAddedOrRemoved, "Expected A as first letter removed.");
-                Assert.AreEqual("paint", firstHiddenWord.HiddenWord, "Expected hidden word");
-                Assert.AreEqual("pint", firstHiddenWord.DisplayedWord, "Expected displayed word");
+                Assert.AreEqual("pint", firstHiddenWord.HiddenWord, "Expected hidden word");
+                Assert.AreEqual("paint", firstHiddenWord.DisplayedWord, "Expected displayed word");
                 Assert.AreEqual(2, firstHiddenWord.XCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(0, firstHiddenWord.YCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(CardinalDirection.South, firstHiddenWord.Direction, "Unexpected XCoordinate ");
+                Assert.AreEqual(3, firstHiddenWord.YCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(CardinalDirection.North, firstHiddenWord.Direction, "Unexpected XCoordinate ");
                 List<string> expectedGrid = new List<string>()
                 {
-                    "__p__",
-                    "__a__",
-                    "__i__",
-                    "__n__",
                     "__t__",
+                    "__n__",
+                    "__i__",
+                    "__p__",
+                    "_____",
                 };
                 Assert.AreEqual(expectedGrid,wordSearch.Grid);
 
@@ -42,18 +43,18 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual(2, wordSearch.HiddenWords.Count, "Expected one hidden word before processing a letter.");
                 var secondHiddenWord = wordSearch.HiddenWords[1];
                 Assert.AreEqual('r', secondHiddenWord.LetterAddedOrRemoved, "Expected A as first letter removed.");
-                Assert.AreEqual("horse", secondHiddenWord.HiddenWord, "Expected hidden word");
-                Assert.AreEqual("hose", secondHiddenWord.DisplayedWord, "Expected displayed word");
+                Assert.AreEqual("hose", secondHiddenWord.HiddenWord, "Expected hidden word");
+                Assert.AreEqual("horse", secondHiddenWord.DisplayedWord, "Expected displayed word");
                 Assert.AreEqual(1, secondHiddenWord.XCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(4, secondHiddenWord.YCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(3, secondHiddenWord.YCoordinate, "Unexpected XCoordinate ");
                 Assert.AreEqual(CardinalDirection.North, secondHiddenWord.Direction, "Unexpected XCoordinate ");
                 expectedGrid = new List<string>()
                 {
-                    "_ep__",
-                    "_sa__",
-                    "_ri__",
-                    "_on__",
-                    "_ht__",
+                    "_et__",
+                    "_sn__",
+                    "_oi__",
+                    "_hp__",
+                    "_____",
                 };
                 Assert.AreEqual(expectedGrid, wordSearch.Grid);
 
@@ -68,11 +69,11 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual(CardinalDirection.South, thirdHiddenWord.Direction, "Unexpected XCoordinate ");
                 expectedGrid = new List<string>()
                 {
-                    "sep__",
-                    "tsa__",
-                    "eri__",
-                    "won__",
-                    "_ht__",
+                    "set__",
+                    "tsn__",
+                    "eoi__",
+                    "whp__",
+                    "_____",
                 };
                 Assert.AreEqual(expectedGrid, wordSearch.Grid);
 
@@ -82,16 +83,16 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual('s', fourthHiddenWord.LetterAddedOrRemoved, "Expected A as first letter removed.");
                 Assert.AreEqual("seat", fourthHiddenWord.HiddenWord, "Expected hidden word");
                 Assert.AreEqual("eat", fourthHiddenWord.DisplayedWord, "Expected displayed word");
-                Assert.AreEqual(3, fourthHiddenWord.XCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(1, fourthHiddenWord.YCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(CardinalDirection.South, fourthHiddenWord.Direction, "Unexpected XCoordinate ");
+                Assert.AreEqual(1, fourthHiddenWord.XCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(4, fourthHiddenWord.YCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(CardinalDirection.East, fourthHiddenWord.Direction, "Unexpected XCoordinate ");
                 expectedGrid = new List<string>()
                 {
-                    "sep__",
-                    "tsas_",
-                    "erie_",
-                    "wona_",
-                    "_htt_",
+                    "set__",
+                    "tsn__",
+                    "eoi__",
+                    "whp__",
+                    "_seat",
                 };
                 Assert.AreEqual(expectedGrid, wordSearch.Grid);
 
@@ -637,8 +638,7 @@ namespace WordPuzzlesTest.Puzzle
             public void WithSpecialCharacter_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\WordSearchMoreOrLess\";
-                const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\WordSearchMoreOrLess";
+                 string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "WordSearchMoreOrLess";
 
                 var puzzle = new WordSearchMoreOrLess();
                 puzzle.RandomGeneratorSeed = 42;
