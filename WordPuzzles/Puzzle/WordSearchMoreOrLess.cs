@@ -7,7 +7,7 @@ using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
 {
-    public class WordSearchMoreOrLess
+    public class WordSearchMoreOrLess :IPuzzle
     {
         private Dictionary<char, List<TakeTwoClue>> dictionaryOfClues;
         private bool alreadyLoaded;
@@ -15,6 +15,12 @@ namespace WordPuzzles.Puzzle
         public List<HiddenWordInGrid> HiddenWords = new List<HiddenWordInGrid>();
         private int _size;
         private Dictionary<int, List<string>> forbiddenWordsIndexedByLength;
+        private const string INSTRUCTIONS = @"
+This is a word search, more or less. <p>
+Each word listed below is almost (give or take one letter) hidden in the grid. <p>
+For example if HEAR is given as a word, you might find HER in the grid, or you might find HEART. <p>
+Write the letter that was added (or removed) next to the word, and then read down the column of letters to solve the puzzle.<p>
+";
         public int RandomGeneratorSeed { get; set; } = 0;
 
         public Dictionary<char, List<TakeTwoClue>> DictionaryOfClues
@@ -395,6 +401,67 @@ namespace WordPuzzles.Puzzle
                 }
             }
             return forbiddenWordsFound;
+        }
+
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
+        {
+            HtmlGenerator generator = new HtmlGenerator();
+            var builder = new StringBuilder();
+            if (!isFragment)
+            {
+                generator.AppendHtmlHeader(builder);
+            }
+
+            builder.AppendLine("<p><h2>Instructions</h2>");
+            builder.AppendLine(INSTRUCTIONS);
+            //List words
+            builder.AppendLine("<p><h2>Word List</h2>");
+            builder.AppendLine("<table>");
+            foreach (var word in HiddenWords)
+            {
+                builder.Append(@"<tr><td class=""normal"" width=""30"">");
+                if (includeSolution)
+                {
+                    builder.Append(word.LetterAddedOrRemoved.ToString().ToUpperInvariant());
+                }
+                builder.Append(@"</td><td class=""open"" width=""250"">");
+                builder.Append(word.DisplayedWord.ToUpperInvariant());
+                builder.AppendLine("</td></tr>");
+            }
+            builder.AppendLine("</table>");
+            //Show puzzle. 
+            builder.AppendLine("<p><h2>Grid of Letters</h2>");
+            builder.AppendLine("<table>");
+            foreach (string line in Grid)
+            {
+                builder.Append("<tr>");
+                foreach (char character in line.ToUpperInvariant())
+                {
+                    builder.AppendLine($@"   <td class=""open"" width=""30"" >{character}</td>");
+                }
+                builder.AppendLine("</tr>");
+            }
+            builder.AppendLine("</table>");
+
+            if (!isFragment)
+            {
+                generator.AppendHtmlFooter(builder);
+            }
+            return builder.ToString();
+
+        }
+
+        public string Description => $"Word Search More Or Less with solution {Solution}";
+        public string Solution { get; private set; }
+
+        public void SetSolution(string solution)
+        {
+            Solution = solution;
+            foreach (char letter in solution.ToLowerInvariant())
+            {
+                if (!char.IsLetter(letter)) continue;
+                ProcessLetter(letter);
+            }
         }
     }
 
