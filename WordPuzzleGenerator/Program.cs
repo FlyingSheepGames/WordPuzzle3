@@ -37,7 +37,7 @@ namespace WordPuzzleGenerator
             ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
 
 
-            FindAllTakeOneClues();
+            //FindAllTakeOneClues();
             //FindAllTakeTwoClues();
             //LoadSevenLetterWords();
             //FindWordsThatMakeDigits();
@@ -763,10 +763,17 @@ z has 5 clue pairs.
                 Console.WriteLine("W. Puzzle For Date");
             }
 
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.WordSearchMoreOrLess))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.WordSearchMoreOrLess] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("E. Word Search More Or Less");
+            }
+
             Console.ForegroundColor = ConsoleColor.Gray;
 
             var userPuzzleSelectionInput = Console.ReadKey();
-            var userPuzzleSelectionString = userPuzzleSelectionInput.KeyChar.ToString();
+            var userPuzzleSelectionString = userPuzzleSelectionInput.KeyChar.ToString().ToLowerInvariant();
             if (userPuzzleSelectionString == "q")
             {
                 userPuzzleSelectionString = "10";
@@ -774,6 +781,10 @@ z has 5 clue pairs.
             if (userPuzzleSelectionString == "w")
             {
                 userPuzzleSelectionString = "11";
+            }
+            if (userPuzzleSelectionString == "e")
+            {
+                userPuzzleSelectionString = "12";
             }
 
             if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
@@ -828,6 +839,23 @@ z has 5 clue pairs.
             IPuzzle generatedPuzzle = null;
             switch (userPuzzleSelection)
             {
+                case WordPuzzleType.WordSearchMoreOrLess:
+                    if (3 < solutionLength && solutionLength < 11)
+                    {
+                        generatedPuzzle = InteractiveFindWordSearchMoreOrLess(solution);
+
+                        PuzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        SolutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} is not the right length for a Word Search More Or Less. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
                 case WordPuzzleType.WordSquare:
                     if (3 < solutionLength && solutionLength < 7)
                     {
@@ -1012,6 +1040,15 @@ z has 5 clue pairs.
             }
 
             return generatedPuzzle;
+        }
+
+        private static IPuzzle InteractiveFindWordSearchMoreOrLess(string solution)
+        {
+            var wordSearch = new WordSearchMoreOrLess();
+            wordSearch.Size = solution.Length;
+            wordSearch.SetSolution(solution);
+            wordSearch.FillInRemainingGrid();
+            return wordSearch;
         }
 
         private static void LoadSevenLetterWords()
@@ -1372,7 +1409,7 @@ z has 5 clue pairs.
             //availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
             //availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, (10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
             //availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
-
+            availablePuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, (3 < solutionLength && solutionLength < 11));
             return availablePuzzleTypes;
         }
 

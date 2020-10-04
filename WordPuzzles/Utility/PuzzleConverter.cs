@@ -23,6 +23,10 @@ namespace WordPuzzles.Utility
             {
                 return new WordSquare();
             }
+            if (FieldExists("IsWordSearchMoreOrLess", jObject))
+            {
+                return new WordSearchMoreOrLess();
+            }
 
             if (FieldExists("IsAnacrostic", jObject))
             {

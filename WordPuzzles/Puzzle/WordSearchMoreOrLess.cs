@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
 {
     public class WordSearchMoreOrLess :IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
+        public bool IsWordSearchMoreOrLess = true;
+
         private Dictionary<char, List<TakeTwoClue>> dictionaryOfClues;
         private bool alreadyLoaded;
         private Random _randomNumberGenerator;
@@ -23,6 +27,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
 ";
         public int RandomGeneratorSeed { get; set; } = 0;
 
+        [JsonIgnore]
         public Dictionary<char, List<TakeTwoClue>> DictionaryOfClues
         {
             get
@@ -64,7 +69,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
                 InitializeGrid();
             }
         }
-
+        [JsonIgnore]
         public Dictionary<int, List<string>> ForbiddenWordsIndexedByLength
         {
             get
@@ -103,7 +108,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
         {
             List<TakeTwoClue> clues = DictionaryOfClues[letterToAdd];
             clues.Shuffle(RandomNumberGenerator);
-            bool addLetter = 0 == RandomNumberGenerator.Next(1);
+            bool addLetter = 0 == RandomNumberGenerator.Next(2);
             bool wasAbleToPlace = false;
 
             HiddenWordInGrid hiddenWord =  null;

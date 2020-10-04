@@ -16,8 +16,10 @@
         RelatedWords,
         MissingLetters,
         PuzzleForDate,
+        WordSearchMoreOrLess,
         // ReSharper disable InconsistentNaming
         MAX_VALUE,
         // ReSharper restore InconsistentNaming
+
     }
 }
