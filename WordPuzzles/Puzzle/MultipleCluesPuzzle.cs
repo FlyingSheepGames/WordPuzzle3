@@ -5,11 +5,18 @@ using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
 {
-    public class MultipleCluesPuzzle
+    public class MultipleCluesPuzzle : IPuzzle
     {
+
+        // ReSharper disable once UnusedMember.Global
+        public bool IsMultipleCluesPuzzle = true;
         private Random _randomNumberGenerator;
         public List<WordWithClues> WordsWithClues = new List<WordWithClues>();
         internal int NextClueOrder = 1;
+        private string INSTRUCTIONS = @"
+Each word below matches at least two numbered clues. The number next to each word is the total of all of the clues to that word. <p>
+For example, if clues 1 and 4 describe the same word, that word will appear next to the number 5<p>
+After you have filled in all the words, read down the second column to get the solution.<p>";
 
         public WordRepository Repository { get; set; } = new WordRepository();
 
@@ -102,6 +109,88 @@ namespace WordPuzzles.Puzzle
                 ReorderClues(stackCounter+1);
             }
         }
+
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
+        {
+            HtmlGenerator generator = new HtmlGenerator();
+            var builder = new StringBuilder();
+            if (!isFragment)
+            {
+                generator.AppendHtmlHeader(builder);
+            }
+
+            builder.AppendLine("<p><h2>Instructions</h2>");
+            builder.AppendLine(INSTRUCTIONS);
+            //List words
+            builder.AppendLine("<p><h2>List of clues</h2>");
+            builder.AppendLine("<table>");
+            DisplayListOfClues(includeSolution, builder);
+            builder.AppendLine("</table>");
+            //Show puzzle. 
+            builder.AppendLine("<p><h2>List of words</h2>");
+            builder.AppendLine("<table>");
+            DisplayListOfWords(includeSolution, builder);
+            builder.AppendLine("</table>");
+
+            if (!isFragment)
+            {
+                generator.AppendHtmlFooter(builder);
+            }
+            return builder.ToString();
+        }
+
+        private void DisplayListOfWords(bool includeSolution, StringBuilder builder)
+        {
+            foreach (var word in WordsWithClues)
+            {
+                builder.Append("<tr>");
+                builder.Append($@"  <td width=""30"">{word.SumOfClueOrders}</td>");
+                for (var index = 0; index < word.WordText.ToUpperInvariant().Length; index++)
+                {
+                    char character = word.WordText.ToUpperInvariant()[index];
+                    builder.Append($@"   <td class=""");
+                    if (index == 1)
+                    {
+                        builder.Append($@"bold");
+                    }
+                    else
+                    {
+                        builder.Append($@"normal");
+                    }
+
+                    builder.Append($@""" width=""30"" >");
+                    if (includeSolution)
+                    {
+                        builder.Append($@"{character}");
+                    }
+
+                    builder.AppendLine($@"</td>");
+                }
+
+                builder.AppendLine("</tr>");
+            }
+        }
+
+        private void DisplayListOfClues(bool includeSolution, StringBuilder builder)
+        {
+            string[] cluesInOrder = new string[NextClueOrder];
+            foreach (var word in WordsWithClues)
+            {
+                foreach (var clue in word.Clues)
+                {
+                    cluesInOrder[clue.ClueOrder] = clue.ClueText;
+                }
+            }
+
+            for (int i = 1; i < NextClueOrder; i++)
+            {
+                builder.AppendLine($@"  <tr><td width=""30"">{i}.</td><td width=""250"">{cluesInOrder[i]}</td></tr>");
+            }
+        }
+
+        public string Description => $"Multiple Clues Puzzle with {Solution}";
+        public string Solution { get; set; }
+
     }
 
     public class OrderedClue
