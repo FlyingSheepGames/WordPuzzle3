@@ -9,8 +9,6 @@ E. Rafactorings
 
 TASKS
 ------------------------------
-Next source of clues: Idioms ("raining cats and ___")
-
 MultipleClues
 	Force clue swap between 0th index word and another random word (0th index doesn't always get swapped).
 
@@ -30,9 +28,7 @@ Group puzzles into months
 Add instructions to PhraseSegmentPuzzle
 Add instructions to HiddenRelatedWords
 
-Add method to Clue Repository for Deleting a clue. 
-	Update Puzzle Generator to allow user to delete clues as well. Maybe a special mode.
-	Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
+
 
 Should add support for SpecialCharacter (and Reason) to other puzzles, too. 
 
@@ -90,5 +86,8 @@ List of tests that occassionally fail.
 
 WordSearchMoreOrLess
 	CardinalDirections preference could be made stronger by starting with the desired direction, and then finding coordinates (if they exist) that support that direction. 
+
+Consider breaking "all_clues.json" into multiple files to make it easier to save, load, and see differences.
+	(Not in source control currently)
 
 

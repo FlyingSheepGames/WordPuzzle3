@@ -2447,31 +2447,48 @@ Enter 0 for none.");
 
         private static string InteractiveGetClueForWord(string currentWord)
         {
-            Console.Clear();
-            Console.WriteLine(
-                $"Enter customized clue for {currentWord.ToUpperInvariant()} or selected index from the following:");
-            var clues = ClueRepository.GetCluesForWord(currentWord);
-            for (var index = 0; index < clues.Count; index++)
+            bool repeat = true;
+            while (repeat)
             {
-                var clue = clues[index];
-                Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
-            }
+                repeat = false;
+                ClearConsoleInputAndOutput();
+                Console.WriteLine(
+                    $"Enter customized clue for {currentWord.ToUpperInvariant()} or selected index from the following:");
+                Console.WriteLine(
+                    $"Enter negative index (e.g. -7) to delete the clue at that index:");
+                var clues = ClueRepository.GetCluesForWord(currentWord);
+                for (var index = 0; index < clues.Count; index++)
+                {
+                    var clue = clues[index];
+                    Console.WriteLine($"{index}: {clue.ClueText} ({clue.ClueSource})");
+                }
 
-            string userEnteredHint = Console.ReadLine();
-            int selectedClueIndex;
-            if (int.TryParse(userEnteredHint, out selectedClueIndex))
-            {
-                userEnteredHint = clues[selectedClueIndex].ClueText;
-            }
-            else
-            {
+                string userEnteredHint = Console.ReadLine();
+                int selectedClueIndex;
+                if (int.TryParse(userEnteredHint, out selectedClueIndex))
+                {
+                    if (0 <= selectedClueIndex)
+                    {
+                        return clues[selectedClueIndex].ClueText;
+                    }
+
+                    int clueIndexToDelete = 0 - selectedClueIndex;
+                    ClueRepository.RemoveClue(currentWord, clues[clueIndexToDelete].ClueText);
+                    ClueRepository.WriteToDisk();
+                    repeat = true;
+                    continue;
+                }
+
                 if (!string.IsNullOrWhiteSpace(userEnteredHint))
                 {
                     ClueRepository.AddClue(currentWord, userEnteredHint, ClueSource.ClueSourceChip);
+                    ClueRepository.WriteToDisk();
+                    return userEnteredHint;
+
                 }
             }
 
-            return userEnteredHint;
+            return null;
         }
 
         private static Anacrostic CreateAnacrosticFromPuzzleSet(AnacrosticParameterSet parameterSet, List<string> wordsAlreadyUsed)
