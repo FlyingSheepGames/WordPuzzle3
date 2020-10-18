@@ -26,7 +26,7 @@ For example if HEAR is given as a word, you might find HER in the grid, or you m
 Write the letter that was added (or removed) next to the word, and then read down the column of letters to solve the puzzle.<p>
 ";
         public int RandomGeneratorSeed { get; set; } = 0;
-
+        private List<CardinalDirection> preferredDirections;
         [JsonIgnore]
         public Dictionary<char, List<TakeTwoClue>> DictionaryOfClues
         {
@@ -139,7 +139,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
             int selectedX = -1;
             int selectedY = -1;
             CardinalDirection selectedDirection = CardinalDirection.Unknown;
-            var canPlaceAllLetters = WordToHide(hiddenWord, out selectedX, out selectedY, out selectedDirection);
+            var canPlaceAllLetters = DetermineWhereToHideWord(hiddenWord, out selectedX, out selectedY, out selectedDirection);
 
             if (!canPlaceAllLetters)
             {
@@ -153,7 +153,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
             return true;
         }
 
-        private bool WordToHide(HiddenWordInGrid hiddenWord, out int selectedX, out int selectedY,
+        private bool DetermineWhereToHideWord(HiddenWordInGrid hiddenWordObject, out int selectedX, out int selectedY,
             out CardinalDirection selectedDirection)
         {
              selectedX = -1;
@@ -169,7 +169,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
 
             XCandidates.Shuffle(RandomNumberGenerator);
             YCandidates.Shuffle(RandomNumberGenerator);
-            string wordToHide = hiddenWord.HiddenWord;
+            string wordToHide = hiddenWordObject.HiddenWord;
 
             bool canPlaceAllLetters = false;
             foreach (int xToTry in XCandidates)
@@ -313,6 +313,20 @@ Write the letter that was added (or removed) next to the word, and then read dow
                 nextX = CalculateNextX(direction, nextX);
                 nextY = CalculateNextY(direction, nextY);
             }
+
+            MoveDirectionToEndOfList(direction);
+        }
+
+        private void MoveDirectionToEndOfList(CardinalDirection directionToBeMadeLast)
+        {
+            var replacementDirections = new List<CardinalDirection>();
+            foreach (var direction in PreferredDirections)
+            {
+                if (direction == directionToBeMadeLast) continue;
+                replacementDirections.Add(direction);
+            }
+            replacementDirections.Add(directionToBeMadeLast);
+            PreferredDirections = replacementDirections;
         }
 
         public List<CardinalDirection> GetPossibleDirections(int x, int y, int length)
@@ -357,7 +371,22 @@ Write the letter that was added (or removed) next to the word, and then read dow
                 possibleDirections.Remove(CardinalDirection.SouthEast);
             }
 
+            possibleDirections = OrderPossibleDirectionsPerPreferences(possibleDirections);
             return possibleDirections;
+        }
+
+        private List<CardinalDirection> OrderPossibleDirectionsPerPreferences(
+            List<CardinalDirection> possibleDirections)
+        {
+            var orderedPreferences = new List<CardinalDirection>();
+            foreach (var direction in PreferredDirections)
+            {
+                if (possibleDirections.Contains(direction))
+                {
+                    orderedPreferences.Add(direction);
+                }
+            }
+            return orderedPreferences;
         }
 
         public void FillInRemainingGrid()
@@ -458,6 +487,36 @@ Write the letter that was added (or removed) next to the word, and then read dow
 
         public string Description => $"Word Search More Or Less with solution {Solution}";
         public string Solution { get; private set; }
+
+        public List<CardinalDirection> PreferredDirections
+        {
+            get
+            {
+                if (preferredDirections == null)
+                {
+                    preferredDirections = InitializePreferredDirections();
+                }
+                return preferredDirections;
+            }
+            set => preferredDirections = value;
+        }
+
+        private List<CardinalDirection> InitializePreferredDirections()
+        {
+            var directions = new List<CardinalDirection>()
+            {
+                CardinalDirection.North, 
+                CardinalDirection.NorthEast, 
+                CardinalDirection.East, 
+                CardinalDirection.SouthEast,
+                CardinalDirection.South, 
+                CardinalDirection.SouthWest,
+                CardinalDirection.West, 
+                CardinalDirection.NorthWest,
+            };
+            directions.Shuffle(RandomNumberGenerator);
+            return directions;
+        }
 
         public void SetSolution(string solution)
         {

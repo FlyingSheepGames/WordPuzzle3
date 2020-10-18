@@ -43,18 +43,18 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual(2, wordSearch.HiddenWords.Count, "Expected one hidden word before processing a letter.");
                 var secondHiddenWord = wordSearch.HiddenWords[1];
                 Assert.AreEqual('r', secondHiddenWord.LetterAddedOrRemoved, "Expected A as first letter removed.");
-                Assert.AreEqual("hose", secondHiddenWord.HiddenWord, "Expected hidden word");
-                Assert.AreEqual("horse", secondHiddenWord.DisplayedWord, "Expected displayed word");
-                Assert.AreEqual(1, secondHiddenWord.XCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(3, secondHiddenWord.YCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(CardinalDirection.North, secondHiddenWord.Direction, "Unexpected XCoordinate ");
+                Assert.AreEqual("pat", secondHiddenWord.HiddenWord, "Expected hidden word");
+                Assert.AreEqual("part", secondHiddenWord.DisplayedWord, "Expected displayed word");
+                Assert.AreEqual(2, secondHiddenWord.XCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(4, secondHiddenWord.YCoordinate, "Unexpected YCoordinate ");
+                Assert.AreEqual(CardinalDirection.NorthEast, secondHiddenWord.Direction, "Unexpected Direction ");
                 expectedGrid = new List<string>()
                 {
-                    "_et__",
-                    "_sn__",
-                    "_oi__",
-                    "_hp__",
-                    "_____",
+                    "__t__",
+                    "__n__",
+                    "__i_t",
+                    "__pa_",
+                    "__p__",
                 };
                 Assert.AreEqual(expectedGrid, wordSearch.Grid);
 
@@ -62,18 +62,18 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual(3, wordSearch.HiddenWords.Count, "Expected one hidden word before processing a letter.");
                 var thirdHiddenWord = wordSearch.HiddenWords[2];
                 Assert.AreEqual('t', thirdHiddenWord.LetterAddedOrRemoved, "Expected A as first letter removed.");
-                Assert.AreEqual("stew", thirdHiddenWord.HiddenWord, "Expected hidden word");
-                Assert.AreEqual("sew", thirdHiddenWord.DisplayedWord, "Expected displayed word");
-                Assert.AreEqual(0, thirdHiddenWord.XCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(0, thirdHiddenWord.YCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(CardinalDirection.South, thirdHiddenWord.Direction, "Unexpected XCoordinate ");
+                Assert.AreEqual("sank", thirdHiddenWord.HiddenWord, "Expected hidden word");
+                Assert.AreEqual("stank", thirdHiddenWord.DisplayedWord, "Expected displayed word");
+                Assert.AreEqual(1, thirdHiddenWord.XCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(1, thirdHiddenWord.YCoordinate, "Unexpected YCoordinate ");
+                Assert.AreEqual(CardinalDirection.South, thirdHiddenWord.Direction, "Unexpected Direction ");
                 expectedGrid = new List<string>()
                 {
-                    "set__",
-                    "tsn__",
-                    "eoi__",
-                    "whp__",
-                    "_____",
+                    "__t__",
+                    "_sn__",
+                    "_ai_t",
+                    "_npa_",
+                    "_kp__",
                 };
                 Assert.AreEqual(expectedGrid, wordSearch.Grid);
 
@@ -81,18 +81,18 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.AreEqual(4, wordSearch.HiddenWords.Count, "Expected one hidden word before processing a letter.");
                 var fourthHiddenWord = wordSearch.HiddenWords[3];
                 Assert.AreEqual('s', fourthHiddenWord.LetterAddedOrRemoved, "Expected A as first letter removed.");
-                Assert.AreEqual("seat", fourthHiddenWord.HiddenWord, "Expected hidden word");
-                Assert.AreEqual("eat", fourthHiddenWord.DisplayedWord, "Expected displayed word");
-                Assert.AreEqual(1, fourthHiddenWord.XCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(4, fourthHiddenWord.YCoordinate, "Unexpected XCoordinate ");
-                Assert.AreEqual(CardinalDirection.East, fourthHiddenWord.Direction, "Unexpected XCoordinate ");
+                Assert.AreEqual("muter", fourthHiddenWord.HiddenWord, "Expected hidden word");
+                Assert.AreEqual("muster", fourthHiddenWord.DisplayedWord, "Expected displayed word");
+                Assert.AreEqual(4, fourthHiddenWord.XCoordinate, "Unexpected XCoordinate ");
+                Assert.AreEqual(4, fourthHiddenWord.YCoordinate, "Unexpected YCoordinate ");
+                Assert.AreEqual(CardinalDirection.North, fourthHiddenWord.Direction, "Unexpected Direction ");
                 expectedGrid = new List<string>()
                 {
-                    "set__",
-                    "tsn__",
-                    "eoi__",
-                    "whp__",
-                    "_seat",
+                    "__t_r",
+                    "_sn_e",
+                    "_ai_t",
+                    "_npau",
+                    "_kp_m",
                 };
                 Assert.AreEqual(expectedGrid, wordSearch.Grid);
 
@@ -426,7 +426,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 2;
                 var y = 2;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
 
@@ -446,7 +446,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 2;
                 var y = 1;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -465,7 +465,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 2;
                 var y = 3;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -484,7 +484,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 1;
                 var y = 2;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -503,7 +503,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 3;
                 var y = 2;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -520,7 +520,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 3;
                 var y = 1;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -537,7 +537,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 3;
                 var y = 3;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -554,7 +554,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 1;
                 var y = 3;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
             [Test]
@@ -571,7 +571,7 @@ namespace WordPuzzlesTest.Puzzle
                 var x = 1;
                 var y = 1;
                 var length = 3;
-                Assert.AreEqual(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
+                CollectionAssert.AreEquivalent(expectedDirections, wordSearch.GetPossibleDirections(x, y, length));
             }
 
         }
