@@ -70,9 +70,10 @@ After you have filled in all the words, read down the second column to get the s
 
         public void ReorderClues(int stackCounter = 0)
         {
-            if (3 < stackCounter)
+            const int STACK_LIMIT = 10;
+            if (STACK_LIMIT < stackCounter)
             {
-                throw new Exception("Tried to reorder clues at least 3 times.");
+                throw new Exception($"Tried to reorder clues at least {STACK_LIMIT} times.");
             }
             //Swap the order of a clue from two different words. Do this 5 times. 
             if (WordsWithClues.Count < 3) return;

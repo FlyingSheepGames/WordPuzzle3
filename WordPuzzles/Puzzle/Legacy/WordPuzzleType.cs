@@ -17,6 +17,7 @@
         MissingLetters,
         PuzzleForDate,
         WordSearchMoreOrLess,
+        MultipleClues,
         // ReSharper disable InconsistentNaming
         MAX_VALUE,
         // ReSharper restore InconsistentNaming

@@ -32,6 +32,9 @@ namespace WordPuzzleGenerator
         static void Main()
         {
 
+            //Console.WriteLine($"Is Coffee a word? {WordRepository.IsAWord("coffee")}.");
+
+            //FindWordsMatchingPattern("cvccvv");
             //CalculateStatisticsForThreeLetterWords();
 
             ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
@@ -51,7 +54,7 @@ namespace WordPuzzleGenerator
             Console.ReadKey();
             */
             ProgramMode programMode = ProgramMode.UNDEFINED;
-            programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
+            //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {
                 programMode = InteractiveGetProgramMode();
@@ -72,6 +75,59 @@ namespace WordPuzzleGenerator
                 RunInYearMode();
             }
 
+        }
+
+        private static void FindWordsMatchingPattern(string pattern)
+        {
+            var canidates = WordRepository.WordsMatchingPattern(new string('_', pattern.Length));
+            Console.WriteLine($"There are {canidates.Count} words to consider.");
+            foreach (var canidate in canidates)
+            {
+                if (DoesWordMatchPattern(canidate, pattern))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(canidate);
+                }
+                else
+                {
+                    Console.Write('.');
+                }
+
+            }
+            Console.WriteLine("We've looked at all the words.");
+            Console.ReadKey();
+        }
+
+        private static bool DoesWordMatchPattern(string canidate, string pattern)
+        {
+            for (var index = 0; index < canidate.Length; index++)
+            {
+                var letter = canidate[index];
+                if (letter == 'y') continue;
+                switch (pattern[index])
+                {
+                    case 'v':
+                        if (!IsVowel(letter)) return false;             
+                        break;
+                    case 'c':
+                        if (IsVowel(letter)) return false;
+                        break;
+                    default:
+                        throw new Exception("not c, not v");
+                }
+            }
+
+            return true;
+        }
+
+        private static bool IsVowel(char letter)
+        {
+            if (new List<char> {'a', 'e', 'i', 'o', 'u', 'y'}.Contains(letter))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static void RunInCollectionMode()
@@ -125,8 +181,8 @@ namespace WordPuzzleGenerator
             htmlGenerator.AppendHtmlFooter(PuzzleBuilder);
             htmlGenerator.AppendHtmlFooter(SolutionBuilder);
             long ticks = DateTime.Now.Ticks;
-            File.WriteAllText($"{ticks}_puzzles.html", PuzzleBuilder.ToString());
-            File.WriteAllText($"{ticks}_solutions.html", SolutionBuilder.ToString());
+            File.WriteAllText($"{BASE_DIRECTORY}{ticks}_puzzles.html", PuzzleBuilder.ToString());
+            File.WriteAllText($"{BASE_DIRECTORY}{ticks}_solutions.html", SolutionBuilder.ToString());
 
             SavePuzzleCollection(collection);
         }
@@ -770,6 +826,13 @@ z has 5 clue pairs.
                 Console.WriteLine("E. Word Search More Or Less");
             }
 
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.MultipleClues))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.MultipleClues] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("R. Multiple Clues");
+            }
+
             Console.ForegroundColor = ConsoleColor.Gray;
 
             var userPuzzleSelectionInput = Console.ReadKey();
@@ -785,6 +848,10 @@ z has 5 clue pairs.
             if (userPuzzleSelectionString == "e")
             {
                 userPuzzleSelectionString = "12";
+            }
+            if (userPuzzleSelectionString == "r")
+            {
+                userPuzzleSelectionString = "13";
             }
 
             if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
@@ -839,6 +906,25 @@ z has 5 clue pairs.
             IPuzzle generatedPuzzle = null;
             switch (userPuzzleSelection)
             {
+
+                case WordPuzzleType.MultipleClues:
+                    if (3 < solutionLength && solutionLength < 11)
+                    {
+                        generatedPuzzle = InteractiveFindMultipleCluesPuzzle(solution);
+
+                        PuzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                        SolutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine(
+                            $"{solution} is not the right length for a Multiple clues puzzle. Press anything to continue.");
+                        Console.ReadKey();
+                    }
+
+                    break;
+                
                 case WordPuzzleType.WordSearchMoreOrLess:
                     if (3 < solutionLength && solutionLength < 11)
                     {
@@ -1040,6 +1126,54 @@ z has 5 clue pairs.
             }
 
             return generatedPuzzle;
+        }
+
+        private static IPuzzle InteractiveFindMultipleCluesPuzzle(string solution)
+        {
+            var multipleCluesPuzzle = new MultipleCluesPuzzle()
+            {
+                Solution = solution
+            };
+            foreach (char letter in solution)
+            {
+                ClearConsoleInputAndOutput();
+                var candidates = multipleCluesPuzzle.GetCandidatesForLetter(letter);
+                candidates.Shuffle();
+                List<string> clues = new List<string>();
+                bool foundWordForCurrentLetter = false;
+                for (var index = 0; index < candidates.Count; index++)
+                {
+
+                    string candidate = candidates[index];
+                    clues.Clear();
+                    Console.WriteLine(
+                        $"Let's find or create some clues for {candidate.ToUpperInvariant()} ({index}/{candidates.Count -1}). We need at least two. Press enter to continue. ");
+                    Console.ReadKey();
+                    string selectedClue = InteractiveGetClueForWord(candidate);
+                    while (!string.IsNullOrEmpty(selectedClue))
+                    {
+                        clues.Add(selectedClue);
+                        selectedClue = InteractiveGetClueForWord(candidate);
+                    }
+
+                    if (1 < clues.Count)
+                    {
+                        multipleCluesPuzzle.AddWordWithClues(candidate, clues);
+                        foundWordForCurrentLetter = true;
+                        break;
+                    }
+                }
+
+                if (!foundWordForCurrentLetter)
+                {
+                    Console.WriteLine($"Sorry, you were unable to find a word for the letter {letter}. Press any key to return the menu. ");
+                    Console.ReadKey();
+                    ClearConsoleInputAndOutput();
+                    return null;
+                }
+            }
+            multipleCluesPuzzle.ReorderClues();
+            return multipleCluesPuzzle;
         }
 
         private static IPuzzle InteractiveFindWordSearchMoreOrLess(string solution)
@@ -1388,6 +1522,9 @@ z has 5 clue pairs.
             availablePuzzleTypes.Add(WordPuzzleType.RelatedWords, (0 < solutionThemes.Count));//Require that the word has at least one theme.
             availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, ( 10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
             availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
+            availablePuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, true);
+            availablePuzzleTypes.Add(WordPuzzleType.MultipleClues, true);
+
 
             return availablePuzzleTypes;
         }
@@ -1410,6 +1547,7 @@ z has 5 clue pairs.
             //availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, (10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
             //availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
             availablePuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, (3 < solutionLength && solutionLength < 11));
+            availablePuzzleTypes.Add(WordPuzzleType.MultipleClues, 3 < solutionLength && solutionLength < 10);
             return availablePuzzleTypes;
         }
 
