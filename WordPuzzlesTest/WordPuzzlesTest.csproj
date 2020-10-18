@@ -87,6 +87,7 @@
     <Compile Include="Utility\HtmlGeneratorTest.cs" />
     <Compile Include="Puzzle\LettersAndArrowsPuzzleTest.cs" />
     <Compile Include="Puzzle\Legacy\MissingLettersPuzzleTest.cs" />
+    <Compile Include="Utility\IdiomFinderTest.cs" />
     <Compile Include="Utility\MonthlyScoreKeeperTest.cs" />
     <Compile Include="Puzzle\PhraseSegmentPuzzleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

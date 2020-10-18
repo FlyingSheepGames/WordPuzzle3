@@ -59,7 +59,7 @@ namespace WordPuzzles.Utility
             return new List<Clue>();
         }
 
-        public void WriteToDisk(string fileLocation)
+        public void WriteToDisk(string fileLocation = @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json")
         {
             File.WriteAllText(fileLocation, JsonConvert.SerializeObject(_clues));
         }

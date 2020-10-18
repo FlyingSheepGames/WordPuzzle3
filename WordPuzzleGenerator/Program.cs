@@ -31,13 +31,13 @@ namespace WordPuzzleGenerator
         [STAThread]
         static void Main()
         {
-
             //Console.WriteLine($"Is Coffee a word? {WordRepository.IsAWord("coffee")}.");
 
             //FindWordsMatchingPattern("cvccvv");
             //CalculateStatisticsForThreeLetterWords();
 
-            ClueRepository.ReadFromDisk(@"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json");
+            ClueRepository.ReadFromDisk();
+            //AddIdiomClues();
 
 
             //FindAllTakeOneClues();
@@ -75,6 +75,32 @@ namespace WordPuzzleGenerator
                 RunInYearMode();
             }
 
+        }
+
+        private static void AddIdiomClues()
+        {
+            IdiomFinder idiomFinder = new IdiomFinder();
+            int counter = 0;
+            foreach (var idiom in idiomFinder.FindIdioms())
+            {
+                var cluesToAdd = idiomFinder.ExtractCluesFromIdiom(idiom);
+                foreach (var wordWithNewClue in cluesToAdd.Keys)
+                {
+                    Console.WriteLine($"{counter} {wordWithNewClue}: {cluesToAdd[wordWithNewClue].ClueText}");
+                    ClueRepository.AddClue(wordWithNewClue, cluesToAdd[wordWithNewClue].ClueText, ClueSource.ClueSourceIdiom);
+                    counter++;
+                    if (counter % 500 == 0)
+                    {
+                        Console.WriteLine("Press any key to continue.");
+                        Console.ReadKey();
+                    }
+                }
+            }
+            Console.WriteLine("Done. Press any key to continue and save.");
+            Console.ReadKey();
+            ClueRepository.WriteToDisk();
+            Console.WriteLine("Saved");
+            Console.ReadKey();
         }
 
         private static void FindWordsMatchingPattern(string pattern)
