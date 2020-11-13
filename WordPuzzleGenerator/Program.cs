@@ -37,6 +37,8 @@ namespace WordPuzzleGenerator
             //CalculateStatisticsForThreeLetterWords();
 
             ClueRepository.ReadFromDisk();
+
+            //ListFourLetterIdioms();
             //AddIdiomClues();
 
 
@@ -100,6 +102,37 @@ namespace WordPuzzleGenerator
             Console.ReadKey();
             ClueRepository.WriteToDisk();
             Console.WriteLine("Saved");
+            Console.ReadKey();
+        }
+
+        private static void ListFourLetterIdioms()
+        {
+            IdiomFinder idiomFinder = new IdiomFinder();
+            int counter = 0;
+            foreach (var idiom in idiomFinder.FindIdioms())
+            {
+                bool allFourLetterWords = true;
+                foreach (var word in idiom.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (word.Length != 4)
+                    {
+                        allFourLetterWords = false;
+                        break;
+                    }
+                }
+
+                if (allFourLetterWords)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(idiom);
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.Write(".");
+                }
+            }
+            Console.WriteLine("Done. Press any key to continue.");
             Console.ReadKey();
         }
 
