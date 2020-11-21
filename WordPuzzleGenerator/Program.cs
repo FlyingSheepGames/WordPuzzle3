@@ -55,7 +55,7 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-            ProgramMode programMode = ProgramMode.UNDEFINED;
+            ProgramMode programMode = ProgramMode.YEAR;
             //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {
@@ -253,6 +253,7 @@ namespace WordPuzzleGenerator
             string pathToYearOfPuzzlesFile = LoadExistingPuzzles(yearOfPuzzles);
 
             bool continueMainLoop = true;
+            GenerateWeekOfPuzzles(yearOfPuzzles, new DateTime(2021, 1, 1));
 
             while (continueMainLoop)
             {
@@ -330,6 +331,47 @@ namespace WordPuzzleGenerator
             }
             //todo: use HTML Generator if prompted by user.
 
+        }
+
+        private static void GenerateWeekOfPuzzles(YearOfPuzzles yearOfPuzzles, DateTime startDate)
+        {
+            
+            ClearConsoleInputAndOutput();
+            Console.WriteLine($"Generating files for a week of puzzles, starting on {startDate.ToShortDateString()}");
+            StringBuilder weekOfPuzzles = new StringBuilder();
+            StringBuilder weekOfPuzzlesWithSolutions = new StringBuilder();
+            bool includeHeader = true;
+            HtmlGenerator generator = new HtmlGenerator();
+            for (int dayIndex = 0; dayIndex < 7; dayIndex++)
+            {
+                DateTime dateToRetrieve = startDate.AddDays(dayIndex);
+                IPuzzle puzzleToWrite = yearOfPuzzles.Retrieve(dateToRetrieve);
+                if (puzzleToWrite == null)
+                {
+                    Console.WriteLine($"Skipping {dateToRetrieve}");
+                    continue;
+                }
+                Console.WriteLine($"Adding {puzzleToWrite.Description} for {dateToRetrieve}");
+                if (includeHeader)
+                {
+                    generator.AppendHtmlHeader(weekOfPuzzles);
+                    generator.AppendHtmlHeader(weekOfPuzzlesWithSolutions);
+                }
+
+                weekOfPuzzles.AppendLine($"<hr>Puzzle for {dateToRetrieve.ToLongDateString()} <br>");
+                weekOfPuzzlesWithSolutions.AppendLine($"<hr>Solution to puzzle for {dateToRetrieve.ToLongDateString()} <br>");
+
+                weekOfPuzzles.AppendLine(puzzleToWrite.FormatHtmlForGoogle(false, true));
+                weekOfPuzzlesWithSolutions.AppendLine(puzzleToWrite.FormatHtmlForGoogle(true, true));
+                includeHeader = false; //only include header on the first one.
+            }
+            generator.AppendHtmlFooter(weekOfPuzzles);
+            generator.AppendHtmlFooter(weekOfPuzzlesWithSolutions);
+ 
+            File.WriteAllText($@"{BASE_DIRECTORY}\year\{startDate.Month}_{startDate.Day}.html", weekOfPuzzles.ToString());
+            File.WriteAllText($@"{BASE_DIRECTORY}\year\{startDate.Month}_{startDate.Day}_solutions.html", weekOfPuzzlesWithSolutions.ToString());
+            Console.WriteLine("Files created. Press any key to continue.");
+            Console.ReadKey();
         }
 
         private static DateTime InteractiveGetDateToWorkOn(DateTime defaultDate)
