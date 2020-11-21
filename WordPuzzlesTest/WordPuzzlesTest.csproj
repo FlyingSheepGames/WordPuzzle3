@@ -73,6 +73,10 @@
     <Compile Include="Puzzle\Legacy\AlphabetSoupTest.cs" />
     <Compile Include="Puzzle\AnacrosticParameterSetTest.cs" />
     <Compile Include="Puzzle\AnacrosticTest.cs" />
+    <Compile Include="Puzzle\MultipleCluesPuzzleTest.cs" />
+    <Compile Include="Puzzle\WordSearchMoreOrLessTest.cs" />
+    <Compile Include="Puzzle\WordTentsTest.cs" />
+    <Compile Include="Puzzle\YearOfPuzzlesTest.cs" />
     <Compile Include="Utility\AnagramFinderTest.cs" />
     <Compile Include="Utility\BirthdayFinderTest.cs" />
     <Compile Include="Puzzle\Legacy\BuildingBlocksPuzzleTest.cs" />
@@ -84,6 +88,7 @@
     <Compile Include="Utility\HtmlGeneratorTest.cs" />
     <Compile Include="Puzzle\LettersAndArrowsPuzzleTest.cs" />
     <Compile Include="Puzzle\Legacy\MissingLettersPuzzleTest.cs" />
+    <Compile Include="Utility\IdiomFinderTest.cs" />
     <Compile Include="Utility\MonthlyScoreKeeperTest.cs" />
     <Compile Include="Puzzle\PhraseSegmentPuzzleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -150,7 +155,37 @@
     <Content Include="html\ReadDownColumn\expectedExampleWithSolution2.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="html\MultipleCluesPuzzle\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\MultipleCluesPuzzle\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordSearchMoreOrLess\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordSearchMoreOrLess\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\WordSquares\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordTents\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordTents\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordTents\expectedExampleWithSolution_cats.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordTents\expectedExampleWithSolution_funk.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordTents\expectedExampleWithSolution_most.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\WordTents\expectedExampleWithSolution_time.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="data\dataFromSO\DA.json">

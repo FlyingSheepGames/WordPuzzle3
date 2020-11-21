@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
@@ -77,8 +78,7 @@ namespace WordPuzzlesTest.Puzzle
             public void LongerPhrase_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\ReadDownColumn\";
-                const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\ReadDownColumn";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "ReadDownColumn";
                 ClueRepository clueRepository = new ClueRepository();
                 clueRepository.ReadFromDisk();
 
@@ -149,8 +149,7 @@ namespace WordPuzzlesTest.Puzzle
             public void WithSpecialCharacter_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\ReadDownColumn\";
-                const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\ReadDownColumn";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "ReadDownColumn";
                 ClueRepository clueRepository = new ClueRepository();
                 clueRepository.ReadFromDisk();
 

@@ -6,6 +6,7 @@
         ClueSourceChip = 1,
         ClueSourceCrossword = 2,
         ClueSourceStackoverflowMeaning = 3,
-        ClueSourceStackoverflowAntonym
+        ClueSourceStackoverflowAntonym,
+        ClueSourceIdiom
     }
 }

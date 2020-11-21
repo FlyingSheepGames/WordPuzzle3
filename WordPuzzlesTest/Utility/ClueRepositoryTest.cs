@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using NUnit.Framework;
 using WordPuzzles.Utility;
 
@@ -94,6 +95,7 @@ namespace WordPuzzlesTest.Utility
             [TestCase("faking")]
             [TestCase("weight")]
             [TestCase("eating")]
+            [TestCase("steed")]
             [Ignore("Takes more than 3 seconds.")]
 
             public void AllWords_ContainsSpecificWords(string word)
@@ -175,6 +177,24 @@ namespace WordPuzzlesTest.Utility
                 Assert.AreEqual("A small colorful brick.", cluesForLego[0].ClueText);
                 Assert.AreEqual(ClueSource.ClueSourceChip, cluesForLego[0].ClueSource);
             }
+        }
+
+        [TestFixture]
+        public class RemoveClue
+        {
+            [Test]
+            public void WordWithTwoClues_LeavesOne()
+            {
+                ClueRepository repository = new ClueRepository();
+                repository.AddClue("word", "A string of letters", ClueSource.ClueSourceChip);
+                repository.AddClue("word", "unit of meaning", ClueSource.ClueSourceIdiom);
+
+                Assert.AreEqual(2, repository.GetCluesForWord("word").Count, "Expected 2 clues before delete");
+                repository.RemoveClue("word", "unit of meaning");
+                Assert.AreEqual(1, repository.GetCluesForWord("word").Count, "Expected 1 clue after delete");
+
+            }
+
         }
     }
 }

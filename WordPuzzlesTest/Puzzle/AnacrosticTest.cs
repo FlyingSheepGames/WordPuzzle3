@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
@@ -201,8 +202,7 @@ C10	C11	C12	C13	C14	C15
             public void LongerPhrase_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\Anacrostics\";
-                const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\Anacrostics";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "Anacrostics";
 
                 Anacrostic anacrostic = new Anacrostic("this longer phrase has at least twenty characters");
 
@@ -292,8 +292,7 @@ C10	C11	C12	C13	C14	C15
             public void RatchetAndClank_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\Anacrostics\";
-                const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\Anacrostics";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "Anacrostics";
 
                 Anacrostic anacrostic = new Anacrostic("Ratchet and Clank");
 

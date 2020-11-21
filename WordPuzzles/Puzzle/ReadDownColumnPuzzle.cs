@@ -135,7 +135,11 @@ namespace WordPuzzles.Puzzle
             
             builder.AppendLine("<!--StartFragment-->");
             var ordinalOfColumnWithSolution = GetOrdinalOfColumnWithSolution();
-
+            if (char.IsLetter(SpecialCharacter) && !string.IsNullOrWhiteSpace(ReasonForSpecialCharacter))
+            {
+                builder.AppendLine(
+                    $"{ReasonForSpecialCharacter}, all {SpecialCharacter.ToString().ToUpperInvariant()}s have been revealed.");
+            }
             builder.AppendLine($"Fill in the clues below, and then read the solution down the {ordinalOfColumnWithSolution} column. ");
             builder.AppendLine(@"<table border=""1"">");
             for (var index = 0; index < Words.Count; index++)
@@ -251,6 +255,8 @@ namespace WordPuzzles.Puzzle
                 return _random;
             }
         }
+
+        public string ReasonForSpecialCharacter { get; set; }
 
         public List<string> Words = new List<string>();
     }

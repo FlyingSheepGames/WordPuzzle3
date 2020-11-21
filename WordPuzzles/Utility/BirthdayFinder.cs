@@ -8,11 +8,11 @@ namespace WordPuzzles.Utility
     public class BirthdayFinder
     {
         private const int MAX_QUOTES = 20;
+        private const string BRAINY_QUOTE_DOMAIN = @"https://www.brainyquote.com";
 
         public List<Person> FindPeopleForDate(int month, int date)
         {
             string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month).ToLower();
-            const string BRAINY_QUOTE_DOMAIN = @"https://www.brainyquote.com";
             string url = BRAINY_QUOTE_DOMAIN + $@"/birthdays/{monthName}_{date}";
             string page = WebRequestUtility.ReadHtmlPageFromUrl(url);
             bool alreadySkippedFirstOne = false;
@@ -25,26 +25,59 @@ namespace WordPuzzles.Utility
                     alreadySkippedFirstOne = true;
                     continue;
                 }
-                int indexOfAnchorCloseTag = pageFragment.IndexOf("</a>", StringComparison.Ordinal);
-                if (indexOfAnchorCloseTag < 0) continue;
-                string workingFragment = pageFragment.Substring(0, indexOfAnchorCloseTag);
-                int indexOfAnchorTagEnd = workingFragment.IndexOf(@""">", StringComparison.Ordinal);
-                if (indexOfAnchorTagEnd < 0) continue;
-                string currentName = workingFragment.Substring(indexOfAnchorTagEnd + 2);
-                //Console.WriteLine(workingFragment);
 
-                string quotesUrl = BRAINY_QUOTE_DOMAIN + workingFragment.Substring(0, indexOfAnchorTagEnd);
+                int year;
+                if (!GetNameAndUrlFromFragment(pageFragment, out var currentName, out var quotesUrl, out year))
+                {
+                    continue;
+                }
                 //Console.WriteLine(quotesUrl);
 
                 findPeopleForDate.Add(
                     new Person()
                     {
                         Name = currentName,
+                        Year = year,
                         Quotes = LoadQuotesFromUrl(quotesUrl),
                     });
             }
 
+            findPeopleForDate.Sort(SortPeopleByYear);
             return findPeopleForDate;
+        }
+
+        private int SortPeopleByYear(Person x, Person y)
+        {
+            return x.Year - y.Year;
+        }
+
+        internal bool GetNameAndUrlFromFragment(string pageFragment, out string currentName,
+            out string quotesUrl, out int year)
+        {
+            currentName = null;
+            quotesUrl = null;
+            year = 0;
+            var htmlSeperators = new[] {"<td>", "\">", "</"};
+            var parsedTokens = pageFragment.Split(htmlSeperators, StringSplitOptions.RemoveEmptyEntries);
+            for (var index = 0; index < parsedTokens.Length; index++)
+            {
+                var fragment = parsedTokens[index];
+                switch (index)
+                {
+                    case 0:
+                        quotesUrl = BRAINY_QUOTE_DOMAIN + fragment;
+                        break;
+                    case 1:
+                        currentName = fragment;
+                        break;
+                    case 6:
+                        int.TryParse(fragment, out year);
+                        break;
+                }
+            }
+
+            //quotesUrl = BRAINY_QUOTE_DOMAIN + workingFragment.Substring(0, indexOfAnchorTagEnd);
+            return true;
         }
 
         private List<string> LoadQuotesFromUrl(string quotesUrl)
@@ -76,5 +109,6 @@ namespace WordPuzzles.Utility
     {
         public string Name { get; set; }
         public List<string> Quotes { get; set; }
+        public int Year { get; set; }
     }
 }

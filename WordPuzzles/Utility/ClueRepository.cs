@@ -59,7 +59,7 @@ namespace WordPuzzles.Utility
             return new List<Clue>();
         }
 
-        public void WriteToDisk(string fileLocation)
+        public void WriteToDisk(string fileLocation = @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\data\PUZ\allclues.json")
         {
             File.WriteAllText(fileLocation, JsonConvert.SerializeObject(_clues));
         }
@@ -92,5 +92,19 @@ namespace WordPuzzles.Utility
             }
         }
 
+        public void RemoveClue(string word, string clueTextToRemove)
+        {
+            var canonicalWord = word.ToUpperInvariant();
+            if (!_clues.ContainsKey(canonicalWord)) return;
+            var cluesForWord = _clues[canonicalWord];
+            var replacementListOfClues = new List<Clue>() { };
+            foreach (var clue in cluesForWord)
+            {
+                if (clue.ClueText == clueTextToRemove) continue;
+                replacementListOfClues.Add(clue);
+            }
+
+            _clues[canonicalWord] = replacementListOfClues;
+        }
     }
 }

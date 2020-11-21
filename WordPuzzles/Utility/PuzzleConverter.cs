@@ -23,6 +23,15 @@ namespace WordPuzzles.Utility
             {
                 return new WordSquare();
             }
+            if (FieldExists("IsMultipleCluesPuzzle", jObject))
+            {
+                return new MultipleCluesPuzzle();
+            }
+
+            if (FieldExists("IsWordSearchMoreOrLess", jObject))
+            {
+                return new WordSearchMoreOrLess();
+            }
 
             if (FieldExists("IsAnacrostic", jObject))
             {

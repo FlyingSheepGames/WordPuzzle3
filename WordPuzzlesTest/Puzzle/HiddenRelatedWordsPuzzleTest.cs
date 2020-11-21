@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
@@ -65,8 +66,7 @@ namespace WordPuzzlesTest.Puzzle
             public void WithSpecialCharacter_ReturnsExpectedResult(bool includeSolution)
             {
                 const string HTML_DIRECTORY = @"html\HiddenRelatedWords\";
-                const string SOURCE_DIRECTORY =
-                    @"C:\Users\Chip\Source\Repos\WordPuzzle3\WordPuzzlesTest\html\HiddenRelatedWords";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "HiddenRelatedWords";
 
                 HiddenRelatedWordsPuzzle puzzle = new HiddenRelatedWordsPuzzle();
                 puzzle.AddWord(new HiddenWord()
