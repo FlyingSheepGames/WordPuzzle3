@@ -22,6 +22,8 @@ namespace WordPuzzlesTest.Utility
                 bool foundRichard = false;
                 foreach (var person in results)
                 {
+                    Assert.AreEqual(6, person.Month, "Unexpected Month");
+                    Assert.AreEqual(8, person.Day, "Unexpected Day");
                     Console.WriteLine(person.Year);
                     if (person.Name == "Richard Fleeshman")
                     {

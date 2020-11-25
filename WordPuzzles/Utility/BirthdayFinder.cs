@@ -39,6 +39,8 @@ namespace WordPuzzles.Utility
                         Name = currentName,
                         Year = year,
                         Quotes = LoadQuotesFromUrl(quotesUrl),
+                        Month = month, 
+                        Day = date,
                     });
             }
 
@@ -46,7 +48,7 @@ namespace WordPuzzles.Utility
             return findPeopleForDate;
         }
 
-        private int SortPeopleByYear(Person x, Person y)
+        public static int SortPeopleByYear(Person x, Person y)
         {
             return x.Year - y.Year;
         }
@@ -110,5 +112,7 @@ namespace WordPuzzles.Utility
         public string Name { get; set; }
         public List<string> Quotes { get; set; }
         public int Year { get; set; }
+        public int Month { get; set; }
+        public int Day { get; set; }
     }
 }

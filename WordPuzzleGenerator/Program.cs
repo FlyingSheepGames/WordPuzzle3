@@ -55,29 +55,296 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-            ProgramMode programMode = ProgramMode.YEAR;
+            ProgramMode programMode = ProgramMode.PUZZLE_PYRAMID;
             //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {
                 programMode = InteractiveGetProgramMode();
             }
 
-            if (programMode == ProgramMode.COLLECTION)
+            switch (programMode)
             {
-                RunInCollectionMode();
+                case ProgramMode.COLLECTION:
+                    RunInCollectionMode();
+                    break;
+                case ProgramMode.PATTERN_MATCH:
+                    InterativelyCreatesWordsWithSelectedPattern();
+                    break;
+                case ProgramMode.YEAR:
+                    RunInYearMode();
+                    break;
+                case ProgramMode.PUZZLE_PYRAMID:
+                    RunInPyramidMode();
+                    break;
+            }
+        }
+
+        private static void RunInPyramidMode()
+        {
+            PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
+            // First, we select a start date
+            puzzlePyramid.StartDate = new DateTime(2021, 1, 1);
+            string fileName =
+                $@"{BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
+            if (File.Exists(fileName))
+            {
+                puzzlePyramid = JsonConvert.DeserializeObject<PuzzlePyramid>(File.ReadAllText(fileName));
+                Console.WriteLine($"Loaded pyramid from file {fileName}. Press any key to continue.");
+                Console.ReadKey();
             }
 
-            if (programMode == ProgramMode.PATTERN_MATCH)
+            // Then we find someone quotable that was born within a week after the start date
+            if (puzzlePyramid.SelectedPerson == null)
             {
-                InterativelyCreatesWordsWithSelectedPattern();
+                if (SelectPersonToQuote(puzzlePyramid)) return;
             }
 
-            if (programMode == ProgramMode.YEAR)
+            //  Do the following 3 times
+            List<string> wordsToReplace;
+            if (puzzlePyramid.WordsToReplace == null)
             {
-                RunInYearMode();
+                wordsToReplace = SelectWordsToReplace(puzzlePyramid);
+                puzzlePyramid.WordsToReplace = wordsToReplace;
             }
+            else
+            {
+                wordsToReplace = puzzlePyramid.WordsToReplace;
+            }
+
+            //      Create a puzzle (with clues) with that word as the solution
+            if (puzzlePyramid.PuzzleJ == null)
+            {
+                CreatePuzzleJ(wordsToReplace, puzzlePyramid);
+            }
+
+            //      Do this 3 times
+            //          Pick one of the clues from this puzzle
+            //          Create a sub-puzzle (with or without clues) with that clue as the solution. 
+
+            // We should end up with
+            // QUOTE (missing word J, K, and L)
+            // To find the word J, solve a puzzle with missing clues A, B, and C
+            // To find the clue A, solve sub-puzzle A, etc. 
+            // To Find the word K, solve a puzzle with missing clues D, E, and F
+            // To find the word L, solve the puzzle with missing clues G, H, and I. 
+
+            string serializedPyramid = JsonConvert.SerializeObject(puzzlePyramid);
+            ClearConsoleInputAndOutput();
+            Console.WriteLine(serializedPyramid);
+            File.WriteAllText(fileName, serializedPyramid);
+            Console.WriteLine($"Wrote pyramid to {fileName}");
+            Console.WriteLine("Press any key to exit.");
+            Console.ReadKey();
 
         }
+
+        private static void CreatePuzzleJ(List<string> wordsToReplace, PuzzlePyramid puzzlePyramid)
+        {
+            string solutionToPuzzleJ = wordsToReplace[0];
+            var availablePuzzleTypes = CalculateAvailableIPuzzleTypes(solutionToPuzzleJ);
+            IPuzzle createdPuzzle = null;
+
+            while (createdPuzzle == null)
+            {
+                var userPuzzleSelection = DisplayMenuOfAvailablePuzzles(solutionToPuzzleJ, availablePuzzleTypes);
+                createdPuzzle = InteractivelyGenerateSelectedPuzzleType(userPuzzleSelection,
+                    solutionToPuzzleJ.Length, solutionToPuzzleJ, null);
+                if (createdPuzzle != null)
+                {
+                    puzzlePyramid.PuzzleJ = createdPuzzle;
+                }
+            }
+        }
+
+        private static List<string> SelectWordsToReplace(PuzzlePyramid puzzlePyramid)
+        {
+            List<string> wordsInQuote = new List<string>(
+                puzzlePyramid.SelectedQuote.Split(new[] {" ", ",", "."}, StringSplitOptions.RemoveEmptyEntries));
+            wordsInQuote = RemoveDuplicates(wordsInQuote);
+            List<string> wordsToReplace = new List<string>();
+            while (wordsToReplace.Count < 3)
+            {
+                //      Select a word from the quote 
+                int wordsToDisplay = 10;
+                if (wordsInQuote.Count < wordsToDisplay)
+                {
+                    wordsToDisplay = wordsInQuote.Count;
+                }
+
+                ClearConsoleInputAndOutput();
+                DisplayQuoteWithRemovedWords(puzzlePyramid.SelectedQuote, wordsToReplace);
+                Console.WriteLine($"Words already replaced: {string.Join(",", wordsToReplace)}");
+                for (int wordToRemoveIndex = 0; wordToRemoveIndex < wordsToDisplay; wordToRemoveIndex++)
+                {
+                    string currentWord = wordsInQuote[wordToRemoveIndex];
+                    if (wordsToReplace.Contains(currentWord.ToLowerInvariant()))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else
+                    {
+                        if (currentWord.Length < 4)
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                        }
+                    }
+
+                    Console.WriteLine($"{wordToRemoveIndex}: {currentWord}");
+                }
+
+                Console.WriteLine("Press a key indicating the next word that should be hidden (or un-hidden).");
+                bool wordSelected = false;
+                while (!wordSelected)
+                {
+                    var userInputWordToHide = Console.ReadKey();
+                    int indexOfWordToHide;
+                    if (int.TryParse(userInputWordToHide.KeyChar.ToString(), out indexOfWordToHide))
+                    {
+                        string selectedWord = wordsInQuote[indexOfWordToHide].ToLowerInvariant();
+                        if (wordsToReplace.Contains(selectedWord))
+                        {
+                            wordsToReplace.Remove(selectedWord);
+                        }
+                        else
+                        {
+                            wordsToReplace.Add(selectedWord);
+                        }
+
+                        wordSelected = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Didn't understand that input. Try again?");
+                    }
+                }
+            }
+
+            string selectedQuoteWithReplacedWords =
+                ReplaceWordsWithMarkers(puzzlePyramid.SelectedQuote, wordsToReplace);
+            ClearConsoleInputAndOutput();
+            Console.WriteLine(selectedQuoteWithReplacedWords);
+            puzzlePyramid.SelectedQuoteWithReplacedWords = selectedQuoteWithReplacedWords;
+            return wordsToReplace;
+        }
+
+        private static bool SelectPersonToQuote(PuzzlePyramid puzzlePyramid)
+        {
+            Person selectedPerson = null;
+            int countOfPeopleBornInThisTimeRange = puzzlePyramid.PeopleBornInRange.Count;
+            for (var index = 0; index < countOfPeopleBornInThisTimeRange; index++)
+            {
+                Person person = puzzlePyramid.PeopleBornInRange[index];
+                ClearConsoleInputAndOutput();
+                Console.WriteLine(
+                    $"{index}/{countOfPeopleBornInThisTimeRange}: {person.Name} ({person.Year}) has {person.Quotes.Count} quotes.");
+                Console.WriteLine($"{person.Quotes[0]}");
+                Console.WriteLine($"Press 'y' to select this person, any other key to go to the next person.");
+
+                var userInput = Console.ReadKey();
+                if (userInput.Key == ConsoleKey.Y)
+                {
+                    selectedPerson = person;
+                    ClearConsoleInputAndOutput();
+                    int numberOfQuotesToDisplay = 10;
+                    if (selectedPerson.Quotes.Count < numberOfQuotesToDisplay)
+                    {
+                        numberOfQuotesToDisplay = selectedPerson.Quotes.Count;
+                    }
+
+                    for (int quoteIndex = 0; quoteIndex < numberOfQuotesToDisplay; quoteIndex++)
+                    {
+                        Console.WriteLine($"{quoteIndex}: {selectedPerson.Quotes[quoteIndex]}");
+                    }
+
+                    Console.WriteLine(
+                        "Which quote would you like to use? Press the number, or any other key to go to the next person.");
+                    var userInputQuoteSelection = Console.ReadKey();
+                    int quoteIndexSelected;
+                    // Then we pick a quote from that person to be the ultimate solution in the puzzle. 
+                    if (int.TryParse(userInputQuoteSelection.KeyChar.ToString(), out quoteIndexSelected))
+                    {
+                        string selectedQuote = selectedPerson.Quotes[quoteIndexSelected];
+                        puzzlePyramid.SelectedPerson = selectedPerson;
+                        puzzlePyramid.SelectedQuote = selectedQuote;
+                        break;
+                    }
+                    else
+                    {
+                        selectedPerson = null;
+                    }
+                }
+            }
+
+            if (selectedPerson == null)
+            {
+                ClearConsoleInputAndOutput();
+                Console.WriteLine("Sorry you weren't able to find anyone you liked. Press any key to exit.");
+                Console.ReadKey();
+                return true;
+            }
+
+            return false;
+        }
+
+        private static string ReplaceWordsWithMarkers(string selectedQuote, List<string> wordsToReplace)
+        {
+            var replaceWordsWithMarkers = selectedQuote;
+            replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[0], "(SOLUTION TO PUZZLE J)");
+            replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[1], "(SOLUTION TO PUZZLE K)");
+            replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[2], "(SOLUTION TO PUZZLE L)");
+
+            return replaceWordsWithMarkers;
+        }
+
+        private static List<string> RemoveDuplicates(List<string> wordsInQuote)
+        {
+            List<string> removeDuplicates = new List<string>();
+            foreach (var word in wordsInQuote)
+            {
+                string currentWord = word.ToLowerInvariant();
+                if (removeDuplicates.Contains(currentWord)) continue;
+                removeDuplicates.Add(currentWord);
+
+            }
+            return removeDuplicates;
+        }
+
+        private static void DisplayQuoteWithRemovedWords(string selectedQuote, List<string> wordsToReplace)
+        {
+            foreach (string word in selectedQuote.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string currentWordWithoutPunctuation = RemovePunctuation(word);
+                if (wordsToReplace.Contains(currentWordWithoutPunctuation))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+                Console.Write(word);
+                Console.Write(" ");
+            }
+            Console.WriteLine();
+        }
+
+        private static string RemovePunctuation(string word)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (char letter in word)
+            {
+                if (char.IsLetter(letter))
+                {
+                    builder.Append(char.ToLowerInvariant(letter));
+                }
+            }
+            return builder.ToString();
+        }
+
 
         private static void AddIdiomClues()
         {
@@ -417,6 +684,7 @@ namespace WordPuzzleGenerator
             Console.WriteLine($"{ProgramMode.COLLECTION}: Work with a collection of puzzles. ");
             Console.WriteLine($"{ProgramMode.YEAR}: Work with a year of puzzles. ");
             Console.WriteLine($"{ProgramMode.PATTERN_MATCH}: Match some arbitrary patterns. ");
+            Console.WriteLine($"{ProgramMode.PUZZLE_PYRAMID}: Work with a puzzle pyramid. ");
             string userInputAsString =  Console.ReadLine();
             int userInput;
             if (int.TryParse(userInputAsString, out userInput))
@@ -2612,5 +2880,6 @@ Enter 0 for none.");
         YEAR = 2, //Work with a year of puzzles
         PATTERN_MATCH = 3, //Just get words that match a given pattern
 
+        PUZZLE_PYRAMID = 4, //Create a pyramid of puzzles (12 in all)
     }
 }
