@@ -9,6 +9,37 @@ E. Rafactorings
 
 TASKS
 ------------------------------
+Puzzle Pyramid
+	Which puzzle types have clues? 
+	Which puzzle types support phrases as solutions (instead of just individual words)
+PUZZLE TYPE	CLUES	SOLUTION (single word/phrase)
+1 Word Square	clues	single
+2 Anacrostic	clues	phrase
+2 Letters+Arrows	clues	phrase
+2 ReadDownColumn	clues	phrase
+3 WordSearch	no	single
+2 MultipleClues	clues	single
+HiddenRelated	(not sure)
+
+Add phrase support to Word Search
+
+Quote
+	Multiple Clues
+		WordSearch
+		Letters+Arrows
+		ReadDownColumn
+	Word Square
+		Anacrostic
+		WordSearch
+		ReadDownColumn
+	Multiple Clues
+		Anacrostic
+		Letters+Arrows
+		WordSearch
+	
+
+Add phrase support to Multiple Clues
+
 MultipleClues
 	Force clue swap between 0th index word and another random word (0th index doesn't always get swapped).
 

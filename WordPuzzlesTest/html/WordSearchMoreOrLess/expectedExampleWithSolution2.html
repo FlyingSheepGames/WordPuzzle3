@@ -1,0 +1,344 @@
+<html>
+
+<head>
+<style type="text / css">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+    	.centered {
+	        text-align: center
+	    }
+    	.black {
+	        background-color:#000000
+	    }
+    	.grey {
+	        background-color:#AAAAAA
+	    }
+
+</style>
+</head>
+<body>
+<p><h2>Instructions</h2>
+
+This is a word search, more or less. <p>
+Each word listed below is almost (give or take one letter) hidden in the grid. <p>
+For example if HEAR is given as a word, you might find HER in the grid, or you might find HEART. <p>
+Write the letter that was added (or removed) next to the word, and then read down the column of letters to solve the puzzle.<p>
+
+<p><h2>Word List</h2>
+<table>
+<tr><td class="normal" width="30">M</td><td class="open" width="250">SELL</td></tr>
+<tr><td class="normal" width="30">U</td><td class="open" width="250">ANTS</td></tr>
+<tr><td class="normal" width="30">L</td><td class="open" width="250">JOLT</td></tr>
+<tr><td class="normal" width="30">T</td><td class="open" width="250">DOE</td></tr>
+<tr><td class="normal" width="30">I</td><td class="open" width="250">NOSE</td></tr>
+<tr><td class="normal" width="30">P</td><td class="open" width="250">HUMS</td></tr>
+<tr><td class="normal" width="30">L</td><td class="open" width="250">BLARED</td></tr>
+<tr><td class="normal" width="30">E</td><td class="open" width="250">HEATS</td></tr>
+<tr><td class="normal" width="30">W</td><td class="open" width="250">SEAT</td></tr>
+<tr><td class="normal" width="30">O</td><td class="open" width="250">LUNGE</td></tr>
+<tr><td class="normal" width="30">R</td><td class="open" width="250">HATED</td></tr>
+<tr><td class="normal" width="30">D</td><td class="open" width="250">LENDS</td></tr>
+<tr><td class="normal" width="30">S</td><td class="open" width="250">PIN</td></tr>
+<tr><td class="normal" width="30">O</td><td class="open" width="250">LOITER</td></tr>
+<tr><td class="normal" width="30">L</td><td class="open" width="250">BEAT</td></tr>
+<tr><td class="normal" width="30">U</td><td class="open" width="250">HOUSE</td></tr>
+<tr><td class="normal" width="30">T</td><td class="open" width="250">BUNS</td></tr>
+<tr><td class="normal" width="30">I</td><td class="open" width="250">PANS</td></tr>
+<tr><td class="normal" width="30">O</td><td class="open" width="250">CANOE</td></tr>
+<tr><td class="normal" width="30">N</td><td class="open" width="250">POND</td></tr>
+</table>
+<p><h2>Grid of Letters</h2>
+<table>
+<tr>   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >Q</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >L</td>
+   <td class="open" width="30" >I</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >R</td>
+   <td class="open" width="30" >H</td>
+   <td class="open" width="30" >X</td>
+</tr>
+<tr>   <td class="open" width="30" >H</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >W</td>
+   <td class="open" width="30" >D</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >R</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >H</td>
+</tr>
+<tr>   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >O</td>
+   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >L</td>
+   <td class="open" width="30" >B</td>
+</tr>
+<tr>   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >R</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >H</td>
+   <td class="open" width="30" >O</td>
+   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >R</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >B</td>
+   <td class="open" width="30" >E</td>
+</tr>
+<tr>   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >G</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >D</td>
+   <td class="open" width="30" >D</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >S</td>
+</tr>
+<tr>   <td class="open" width="30" >U</td>
+   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >L</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >D</td>
+   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >I</td>
+</tr>
+<tr>   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >I</td>
+   <td class="open" width="30" >R</td>
+   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >T</td>
+   <td class="open" width="30" >O</td>
+   <td class="open" width="30" >J</td>
+   <td class="open" width="30" >C</td>
+   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >O</td>
+</tr>
+<tr>   <td class="open" width="30" >P</td>
+   <td class="open" width="30" >A</td>
+   <td class="open" width="30" >I</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >P</td>
+   <td class="open" width="30" >M</td>
+   <td class="open" width="30" >U</td>
+   <td class="open" width="30" >H</td>
+   <td class="open" width="30" >U</td>
+   <td class="open" width="30" >N</td>
+</tr>
+<tr>   <td class="open" width="30" >B</td>
+   <td class="open" width="30" >P</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >G</td>
+   <td class="open" width="30" >N</td>
+   <td class="open" width="30" >U</td>
+   <td class="open" width="30" >O</td>
+   <td class="open" width="30" >L</td>
+   <td class="open" width="30" >B</td>
+   <td class="open" width="30" >C</td>
+</tr>
+<tr>   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >S</td>
+   <td class="open" width="30" >M</td>
+   <td class="open" width="30" >E</td>
+   <td class="open" width="30" >L</td>
+   <td class="open" width="30" >L</td>
+   <td class="open" width="30" >W</td>
+   <td class="open" width="30" >D</td>
+   <td class="open" width="30" >X</td>
+   <td class="open" width="30" >J</td>
+</tr>
+</table>
+</body>
+</html>

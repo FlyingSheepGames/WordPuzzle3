@@ -692,6 +692,66 @@ namespace WordPuzzlesTest.Puzzle
 
             }
 
+            [Test]
+            [TestCase(true)]
+            [TestCase(false)]
+            public void Phrase_ReturnsExpectedResult(bool includeSolution)
+            {
+                const string HTML_DIRECTORY = @"html\WordSearchMoreOrLess\";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "WordSearchMoreOrLess";
+
+                var puzzle = new WordSearchMoreOrLess();
+                puzzle.RandomGeneratorSeed = 42;
+                puzzle.Size = 10;
+                puzzle.SetSolution("multiple word solution");
+                puzzle.FillInRemainingGrid();
+                string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample2.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution2.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample2.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution2.html";
+                }
+
+                string[] expectedLines = new[] { " " };// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (!expectedLine.Equals(actualLine, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{actualLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
+            }
+
         }
     }
 
