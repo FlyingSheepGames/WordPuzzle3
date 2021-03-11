@@ -75,6 +75,7 @@
     <Compile Include="Puzzle\AnacrosticTest.cs" />
     <Compile Include="Puzzle\MultipleCluesPuzzleTest.cs" />
     <Compile Include="Puzzle\PuzzlePyramidTest.cs" />
+    <Compile Include="Puzzle\TrisectedWordsTest.cs" />
     <Compile Include="Puzzle\WordSearchMoreOrLessTest.cs" />
     <Compile Include="Puzzle\WordTentsTest.cs" />
     <Compile Include="Puzzle\YearOfPuzzlesTest.cs" />
