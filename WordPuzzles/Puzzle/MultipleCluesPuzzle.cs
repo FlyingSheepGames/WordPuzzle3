@@ -12,7 +12,7 @@ namespace WordPuzzles.Puzzle
         public bool IsMultipleCluesPuzzle = true;
         private Random _randomNumberGenerator;
         public List<WordWithClues> WordsWithClues = new List<WordWithClues>();
-        internal int NextClueOrder = 1;
+        public int NextClueOrder = 1;
         private string INSTRUCTIONS = @"
 Each word below matches at least two numbered clues. The number next to each word is the total of all of the clues to that word. <p>
 For example, if clues 1 and 4 describe the same word, that word will appear next to the number 5<p>

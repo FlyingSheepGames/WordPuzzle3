@@ -8,7 +8,7 @@ namespace WordPuzzles.Puzzle
     {
         // ReSharper disable once UnusedMember.Global
         public bool IsHiddenRelatedWordsPuzzle = true; //For deserialization
-        readonly List<HiddenWord> _hiddenWords = new List<HiddenWord>();
+        public List<HiddenWord> HiddenWords = new List<HiddenWord>();
         private HtmlGenerator _htmlGenerator = new HtmlGenerator();
         private const string INSTRUCTIONS = @"Find the word hiding in each of the sentences below. 
 The hidden word will be made of consecutive letters in two or more adjacent words";
@@ -18,7 +18,7 @@ The hidden word will be made of consecutive letters in two or more adjacent word
             get
             {
                 int maxKeyIndexSoFar = -1;
-                foreach (var word in _hiddenWords)
+                foreach (var word in HiddenWords)
                 {
                     if (maxKeyIndexSoFar < word.KeyIndex)
                     {
@@ -35,7 +35,7 @@ The hidden word will be made of consecutive letters in two or more adjacent word
             get
             {
                 int maxLettersAfterIndex = -1;
-                foreach (var word in _hiddenWords)
+                foreach (var word in HiddenWords)
                 {
                     if (maxLettersAfterIndex < word.LettersAfterIndex)
                     {
@@ -48,7 +48,7 @@ The hidden word will be made of consecutive letters in two or more adjacent word
 
         public void AddWord(HiddenWord hiddenWordToAdd)
         {
-            _hiddenWords.Add(hiddenWordToAdd);
+            HiddenWords.Add(hiddenWordToAdd);
         }
 
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
@@ -67,9 +67,9 @@ The hidden word will be made of consecutive letters in two or more adjacent word
             tableBuilder.AppendLine("<table>");
 
             clueBuilder.AppendLine("<ol>");
-            for (var index = 0; index < _hiddenWords.Count; index++)
+            for (var index = 0; index < HiddenWords.Count; index++)
             {
-                var currentWord = _hiddenWords[index];
+                var currentWord = HiddenWords[index];
                 tableBuilder.AppendLine("<tr>");
                 tableBuilder.AppendLine($@"<td class=""normal centered"" width=""30""> {index+1} </td>");
                 AppendHiddenWord(tableBuilder, currentWord, includeSolution);

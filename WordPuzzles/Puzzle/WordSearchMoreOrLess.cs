@@ -66,7 +66,10 @@ Write the letter that was added (or removed) next to the word, and then read dow
             set
             {
                 _size = value;
-                InitializeGrid();
+                if (Grid?.Count != value)
+                {
+                    InitializeGrid();
+                }
             }
         }
         [JsonIgnore]
@@ -516,7 +519,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
         }
 
         public string Description => $"Word Search More Or Less with solution {Solution}";
-        public string Solution { get; private set; }
+        public string Solution { get; set; }
 
         public List<CardinalDirection> PreferredDirections
         {

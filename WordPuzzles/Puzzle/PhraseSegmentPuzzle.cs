@@ -10,7 +10,7 @@ namespace WordPuzzles.Puzzle
         // ReSharper disable once UnusedMember.Global
         public bool IsPhraseSegmentPuzzle = true;//Used when deserializing.
         public string Phrase { get; set; }
-        public string Author { get; set; }
+        public string Author { get; set; } = "Anonymous";
 
         public DateTime AuthorBirthday { get; set; }
 

@@ -23,7 +23,13 @@ namespace WordPuzzles.Puzzle
         public string Solution
         {
             get => _solution;
-            set => _solution = value.ToLower();
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _solution = value.ToLower();
+                }
+            }
         }
 
         public void PopulateWords()

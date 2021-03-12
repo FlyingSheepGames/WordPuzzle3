@@ -12,14 +12,14 @@ namespace WordPuzzles.Puzzle
         public bool IsLettersAndArrowsPuzzle = true;
         private Random _randomNumberGenerator;
         public int Size { get; set; }
-        private readonly Dictionary<string, LetterAndArrowCell> _grid = new Dictionary<string, LetterAndArrowCell>();
+        public Dictionary<string, LetterAndArrowCell> Grid = new Dictionary<string, LetterAndArrowCell>();
         private readonly HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         public LettersAndArrowsPuzzle(int size)
         {
             Size = size;
             InitializeGrid();
-            _clues = new string[size];
+            Clues = new string[size];
         }
 
         public WordRepository Repository;
@@ -30,7 +30,7 @@ namespace WordPuzzles.Puzzle
             {
                 for (int columnIndex = 0; columnIndex < Size; columnIndex++)
                 {
-                    _grid.Add(string.Concat(rowIndex, columnIndex), LetterAndArrowCell.EmptyCell);
+                    Grid.Add(string.Concat(rowIndex, columnIndex), LetterAndArrowCell.EmptyCell);
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace WordPuzzles.Puzzle
                 Size = sizeOverride;
             }
             InitializeGrid();
-            _clues = new string[Size];
+            Clues = new string[Size];
             PlaceSolution(solution);
             FillEmptyCells();
         }
@@ -94,7 +94,7 @@ namespace WordPuzzles.Puzzle
 
         public LetterAndArrowCell GetCellAtCoordinates(int row, int column)
         {
-            return _grid[string.Concat(row, column)];
+            return Grid[string.Concat(row, column)];
         }
 
         public List<int> GetAvailableHorizontalCells(int row, int column, char letterToInsert = '_')
@@ -204,7 +204,7 @@ namespace WordPuzzles.Puzzle
 
         public void SetCellAtCoordinates(int row, int column, LetterAndArrowCell cell)
         {
-            _grid[string.Concat(row, column)] = cell;
+            Grid[string.Concat(row, column)] = cell;
             if (!RowsVisited.Contains(row))
             {
                 RowsVisited.Add(row);
@@ -213,7 +213,7 @@ namespace WordPuzzles.Puzzle
 
         public void PlaceSolution(string solution)
         {
-            _solution = solution;
+            Solution = solution;
             int currentRow = 0;
             int currentColumn = 0;
 
@@ -313,8 +313,8 @@ namespace WordPuzzles.Puzzle
         }
 
         public List<int> RowsVisited = new List<int>();
-        private string _solution = "";
-        private readonly string[] _clues;
+        public string Solution = "";
+        public string[] Clues;
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             StringBuilder builder = new StringBuilder();
@@ -337,9 +337,9 @@ namespace WordPuzzles.Puzzle
                 }
 
                 string clueForThisRow = $@"Clue for {wordRow}";
-                if (!string.IsNullOrWhiteSpace(_clues[row]))
+                if (!string.IsNullOrWhiteSpace(Clues[row]))
                 {
-                    clueForThisRow = _clues[row];
+                    clueForThisRow = Clues[row];
                 }
                 builder.AppendLine(@"    <td width=""250"">" + clueForThisRow + @"</td>");
 
@@ -352,7 +352,7 @@ namespace WordPuzzles.Puzzle
             builder.AppendLine("</table>");
             builder.Append("<h2>");
             builder.Append("Solution: ");
-            for (var index = 0; index < _solution.Length; index++)
+            for (var index = 0; index < Solution.Length; index++)
             {
                 builder.Append("_ ");
             }
@@ -368,7 +368,7 @@ namespace WordPuzzles.Puzzle
             return builder.ToString();
         }
 
-        public string Description => "Letters and Arrows: " + _solution;
+        public string Description => "Letters and Arrows: " + Solution;
 
         public void FillEmptyCells()
         {
@@ -501,7 +501,7 @@ namespace WordPuzzles.Puzzle
 
         public void SetClueForRowIndex(int rowIndex, string clue)
         {
-            _clues[rowIndex] = clue;
+            Clues[rowIndex] = clue;
         }
 
 
