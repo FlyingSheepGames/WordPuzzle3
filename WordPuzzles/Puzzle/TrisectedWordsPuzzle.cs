@@ -7,8 +7,11 @@ using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
 {
-    public class TrisectedWordsPuzzle
+    public class TrisectedWordsPuzzle :IPuzzle
     {
+        // ReSharper disable once UnusedMember.Global
+        public bool IsTrisectedWordsPuzzle = true;
+
         WordRepository _repository = new WordRepository();
         public string Solution { get; set; }
 
@@ -218,6 +221,13 @@ namespace WordPuzzles.Puzzle
         }
 
         public List<string> WordSections { get; set; } = new List<string>();
+        public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
+        {
+            var stringBuilder = new StringBuilder();
+            return stringBuilder.ToString();
+        }
+
+        public string Description => $"Trisected Word puzzle for {Solution}.";
     }
 
     public class PatternAndTemplate 

@@ -57,6 +57,11 @@ namespace WordPuzzles.Utility
             {
                 return new LettersAndArrowsPuzzle(jObject["Size"].Value<int>());
             }
+            //IsTrisectedWordsPuzzle
+            if (FieldExists("IsTrisectedWordsPuzzle", jObject))
+            {
+                return new TrisectedWordsPuzzle();
+            }
 
             throw new Exception("Unable to determine type.");
         }

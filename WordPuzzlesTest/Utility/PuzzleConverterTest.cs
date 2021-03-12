@@ -289,6 +289,22 @@ namespace WordPuzzlesTest.Utility
                 Assert.AreEqual(originalHtml, deserializedHtml, "Unexpected differences in generated HTML");
             }
 
+
+            [Test]
+            public void TrisectedWordsPuzzle_Default_ReturnsExpectedObject()
+            {
+                TrisectedWordsPuzzle puzzleToSerialize = new TrisectedWordsPuzzle();
+
+                string serializedPuzzle = JsonConvert.SerializeObject(puzzleToSerialize);
+                Assert.LessOrEqual(serializedPuzzle.Length, 2000, "Expected less than 2 thousand characters.");
+
+                TrisectedWordsPuzzle deserializedPuzzle = JsonConvert.DeserializeObject<TrisectedWordsPuzzle>(serializedPuzzle);
+                Assert.AreEqual(puzzleToSerialize.Description, deserializedPuzzle.Description, "Unexpected difference in Description");
+
+                string originalHtml = puzzleToSerialize.FormatHtmlForGoogle(true, true);
+                string deserializedHtml = deserializedPuzzle.FormatHtmlForGoogle(true, true);
+                Assert.AreEqual(originalHtml, deserializedHtml, "Unexpected differences in generated HTML");
+            }
         }
     }
 }
