@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -251,5 +253,170 @@ namespace WordPuzzlesTest.Puzzle
                     }, trisectedWordsPuzzle.WordSections);
             }
         }
+
+
+        [TestFixture]
+        public class FormatHtmlForGoogle
+        {
+            [Test]
+            [TestCase(true)]
+            [TestCase(false)]
+            public void TWO_WORDS_ReturnsExpectedResult(bool includeSolution)
+            {
+                const string HTML_DIRECTORY = @"html\TrisectedWordsPuzzle\";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "TrisectedWordsPuzzle";
+
+                TrisectedWordsPuzzle puzzle = new TrisectedWordsPuzzle() { };
+                puzzle.Solution = "Two words.";
+
+                var foundWords = puzzle.GetNextWordCandidates();
+                var firstWord = foundWords[0];
+                firstWord.Clue = "More tawny.";
+                puzzle.AddClue(firstWord);
+
+                foundWords = puzzle.GetNextWordCandidates();
+                var secondWord = foundWords[0];
+                secondWord.Clue = "Use clothing until it's no longer needed.";
+                puzzle.AddClue(secondWord);
+
+                foundWords = puzzle.GetNextWordCandidates();
+                var thirdWord = foundWords[0];
+                thirdWord.Clue = "Pay too much on EBay";
+                puzzle.AddClue(thirdWord);
+
+                foundWords = puzzle.GetNextWordCandidates();
+                var fourthWord = foundWords[0];
+                fourthWord.Clue = "Relevant";
+                puzzle.AddClue(fourthWord);
+
+
+                string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample1.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution1.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample1.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution1.html";
+                }
+
+                string[] expectedLines = new[] { " " };// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (!expectedLine.Equals(actualLine, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{actualLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
+            }
+
+            [Test]
+            [TestCase(true)]
+            [TestCase(false)]
+            public void EightLetterClue_ReturnsExpectedResult(bool includeSolution)
+            {
+                const string HTML_DIRECTORY = @"html\TrisectedWordsPuzzle\";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "TrisectedWordsPuzzle";
+
+                TrisectedWordsPuzzle puzzle = new TrisectedWordsPuzzle() { };
+                puzzle.Solution = "Two words.";
+
+                var foundWords = puzzle.GetNextWordCandidates();
+                var firstWord = foundWords[0];
+                firstWord.Clue = "More tawny.";
+                puzzle.AddClue(firstWord);
+
+                foundWords = puzzle.GetNextWordCandidates();
+                var secondWord = foundWords[0];
+                secondWord.Clue = "Use clothing until it's no longer needed.";
+                puzzle.AddClue(secondWord);
+
+                foundWords = puzzle.GetNextWordCandidates();
+                var thirdWord = foundWords[0];
+                thirdWord.Clue = "Pay too much on EBay";
+                puzzle.AddClue(thirdWord);
+
+                foundWords = puzzle.GetNextWordCandidates();
+                var fourthWord = foundWords[1420];
+                fourthWord.Clue = "Using a sword";
+                puzzle.AddClue(fourthWord);
+
+
+                string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
+
+                var actualFileName = "actualExample2.html";
+                if (includeSolution)
+                {
+                    actualFileName = "actualExampleWithSolution2.html";
+                }
+                File.WriteAllText(HTML_DIRECTORY + actualFileName, generatedHtml);
+                var expectedFileName = "expectedExample2.html";
+                if (includeSolution)
+                {
+                    expectedFileName = "expectedExampleWithSolution2.html";
+                }
+
+                string[] expectedLines = new[] { " " };// need to have something to be different from generated file.
+                if (File.Exists(HTML_DIRECTORY + expectedFileName))
+                {
+                    expectedLines = File.ReadAllLines(HTML_DIRECTORY + expectedFileName);
+                }
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + actualFileName);
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (!expectedLine.Equals(actualLine, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{actualLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + $@"\{expectedFileName}", actualLines);
+                }
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+
+            }
+
+        }
+
     }
 }

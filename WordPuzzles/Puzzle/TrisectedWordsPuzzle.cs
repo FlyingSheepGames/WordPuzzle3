@@ -11,6 +11,7 @@ namespace WordPuzzles.Puzzle
     {
         // ReSharper disable once UnusedMember.Global
         public bool IsTrisectedWordsPuzzle = true;
+        private HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
         WordRepository _repository = new WordRepository();
         public string Solution { get; set; }
@@ -223,8 +224,103 @@ namespace WordPuzzles.Puzzle
         public List<string> WordSections { get; set; } = new List<string>();
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
-            var stringBuilder = new StringBuilder();
-            return stringBuilder.ToString();
+            var builder = new StringBuilder();
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlHeader(builder);
+            }
+
+            AppendInstructions(builder);
+
+            AppendMissingWords(builder, includeSolution);
+
+            AppendFragments(builder);
+            if (string.IsNullOrWhiteSpace(Solution))
+            {
+                Solution = "";
+            }
+            _htmlGenerator.AppendSolution(builder, Solution, includeSolution);
+
+            if (!isFragment)
+            {
+                _htmlGenerator.AppendHtmlFooter(builder);
+            }
+            return builder.ToString();
+        }
+
+        private void AppendFragments(StringBuilder builder)
+        {
+            if (WordSections.Count == 0 ) CalculateWordSections();
+
+            List<string> TwoLetterFragments = new List<string>();
+            List<string> ThreeLetterFragments = new List<string>();
+            foreach (string fragment in WordSections)
+            {
+                if (fragment.Length == 2)
+                {
+                    TwoLetterFragments.Add(fragment.ToUpperInvariant());
+                    continue;
+                }
+
+                if (fragment.Length == 3)
+                {
+                    ThreeLetterFragments.Add(fragment.ToUpperInvariant());
+                    continue;
+                }
+                throw new Exception($"Unexpected fragment length for {fragment}");
+            }
+            TwoLetterFragments.Sort();
+            ThreeLetterFragments.Sort();
+            builder.AppendLine(@"<H2>Fragments</H2>");
+            builder.AppendLine("<p />");
+            builder.AppendLine($@"Length 2: {string.Join(", ", TwoLetterFragments)}");
+            builder.AppendLine("<p />");
+            builder.AppendLine($@"Length 3: {string.Join(", ", ThreeLetterFragments)}");
+
+        }
+
+        private void AppendMissingWords(StringBuilder builder, bool includeSolution)
+        {
+            builder.AppendLine("<H2>Missing Words</H2>");
+            builder.AppendLine("<p />");
+            builder.AppendLine(@"<table border=""1"">");
+            foreach (var clue in Clues)
+            {
+                builder.AppendLine(@"<tr>");
+                builder.AppendLine($@"<td width=""175"">{clue.Clue}</td>");
+                for (var index = 0; index < clue.Word.Length; index++)
+                {
+                    var letter = clue.Word[index];
+                    string letterToDisplay = "&nbsp;";
+                    if (includeSolution)
+                    {
+                        letterToDisplay = letter.ToString().ToUpperInvariant();
+                    }
+
+                    var classAttribute = @"grey";
+                    if (clue.Pattern[index] == '_')
+                    {
+                        classAttribute = @"normal";
+                    }
+                    builder.AppendLine($@"<td width=""30"" class=""{classAttribute}"" >{letterToDisplay}</td > ");
+                }
+
+                builder.AppendLine(@"</tr>");
+            }
+
+            builder.AppendLine(@"</table>");
+
+        }
+
+        private void AppendInstructions(StringBuilder builder)
+        {
+            builder.AppendLine("<H2>Instructions</H2>");
+            builder.AppendLine("<p />");
+            builder.AppendLine("Construct the missing words by using the 2 or 3 three letter fragments below.");
+            builder.AppendLine("Each fragment will be used once.");
+            builder.AppendLine("<p />");
+            builder.AppendLine("Move the letters (in order) from the shaded boxes to the solution below.");
+            builder.AppendLine("<p />");
         }
 
         public string Description => $"Trisected Word puzzle for {Solution}.";

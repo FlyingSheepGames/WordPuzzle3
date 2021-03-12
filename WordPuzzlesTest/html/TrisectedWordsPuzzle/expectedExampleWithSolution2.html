@@ -1,0 +1,259 @@
+<html>
+
+<head>
+<style type="text / css">
+        table td, table th {
+            padding: 0
+        }
+       .bold {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 2.2pt;
+            border-right-width: 2.2pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 2.2pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 2.2pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-top-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 3pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-bottom-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 3pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-left {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 1pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 3pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .normal-right {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 1pt;
+            border-right-width: 3pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 1pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 1pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+        .hollow {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+
+        .open {
+            border-right-style: solid;
+            border-bottom-color: #000000;
+            border-top-width: 0pt;
+            border-right-width: 0pt;
+            border-left-color: #000000;
+            vertical-align: top;
+            border-right-color: #000000;
+            border-left-width: 0pt;
+            border-top-style: solid;
+            border-left-style: solid;
+            border-bottom-width: 0pt;
+            border-top-color: #000000;
+            border-bottom-style: solid
+        }
+    	.centered {
+	        text-align: center
+	    }
+    	.black {
+	        background-color:#000000
+	    }
+    	.grey {
+	        background-color:#AAAAAA
+	    }
+
+</style>
+</head>
+<body>
+<H2>Instructions</H2>
+<p />
+Construct the missing words by using the 2 or 3 three letter fragments below.
+Each fragment will be used once.
+<p />
+Move the letters (in order) from the shaded boxes to the solution below.
+<p />
+<H2>Missing Words</H2>
+<p />
+<table border="1">
+<tr>
+<td width="175">More tawny.</td>
+<td width="30" class="grey" >T</td > 
+<td width="30" class="normal" >A</td > 
+<td width="30" class="grey" >W</td > 
+<td width="30" class="normal" >N</td > 
+<td width="30" class="normal" >I</td > 
+<td width="30" class="normal" >E</td > 
+<td width="30" class="normal" >R</td > 
+</tr>
+<tr>
+<td width="175">Use clothing until it's no longer needed.</td>
+<td width="30" class="grey" >O</td > 
+<td width="30" class="normal" >U</td > 
+<td width="30" class="normal" >T</td > 
+<td width="30" class="grey" >W</td > 
+<td width="30" class="normal" >E</td > 
+<td width="30" class="normal" >A</td > 
+<td width="30" class="normal" >R</td > 
+</tr>
+<tr>
+<td width="175">Pay too much on EBay</td>
+<td width="30" class="grey" >O</td > 
+<td width="30" class="normal" >V</td > 
+<td width="30" class="normal" >E</td > 
+<td width="30" class="grey" >R</td > 
+<td width="30" class="normal" >B</td > 
+<td width="30" class="normal" >I</td > 
+<td width="30" class="grey" >D</td > 
+</tr>
+<tr>
+<td width="175">Using a sword</td>
+<td width="30" class="grey" >S</td > 
+<td width="30" class="normal" >A</td > 
+<td width="30" class="normal" >B</td > 
+<td width="30" class="normal" >E</td > 
+<td width="30" class="normal" >R</td > 
+<td width="30" class="normal" >I</td > 
+<td width="30" class="normal" >N</td > 
+<td width="30" class="normal" >G</td > 
+</tr>
+</table>
+<H2>Fragments</H2>
+<p />
+Length 2: ER, OU, OV, SA, TA, TW, WN
+<p />
+Length 3: BER, BID, EAR, IER, ING
+<p><h2>Solution</h2>
+<u>T</u> <u>W</u> <u>O</u> <br><u>W</u> <u>O</u> <u>R</u> <u>D</u> <u>S</u> .</body>
+</html>

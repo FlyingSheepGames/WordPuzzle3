@@ -544,5 +544,37 @@ function colorMeAndMyMatch(currentIndex, color) {
 </head>");
             builder.AppendLine("<body>");
         }
+
+        public void AppendSolution(StringBuilder builder, string solutionToAppend, bool includeSolution)
+        {
+            builder.AppendLine("<p><h2>Solution</h2>");
+            foreach (char character in solutionToAppend)
+            {
+                if (Char.IsLetter(character))
+                {
+                    if (includeSolution)
+                    {
+                        builder.Append("<u>");
+                        builder.Append(Char.ToUpperInvariant(character));
+                        builder.Append("</u> ");
+                    }
+                    else
+                    {
+                        builder.Append("_ ");
+                    }
+                }
+                else
+                {
+                    if (Char.IsWhiteSpace(character))
+                    {
+                        builder.Append("<br>");
+                    }
+                    else
+                    {
+                        builder.Append(character);
+                    }
+                }
+            }
+        }
     }
 }

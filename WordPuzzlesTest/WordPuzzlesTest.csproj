@@ -167,6 +167,18 @@
     <Content Include="html\MultipleCluesPuzzle\expectedExampleWithSolution1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="html\TrisectedWordsPuzzle\expectedExample2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\TrisectedWordsPuzzle\expectedExample1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\TrisectedWordsPuzzle\expectedExampleWithSolution2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html\TrisectedWordsPuzzle\expectedExampleWithSolution1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="html\WordSearchMoreOrLess\expectedExample1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

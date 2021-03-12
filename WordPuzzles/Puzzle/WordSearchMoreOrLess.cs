@@ -480,35 +480,7 @@ Write the letter that was added (or removed) next to the word, and then read dow
             }
             builder.AppendLine("</table>");
 
-            //Place for solution
-            builder.AppendLine("<p><h2>Solution</h2>");
-            foreach (char character in Solution)
-            {
-                if (char.IsLetter(character))
-                {
-                    if (includeSolution)
-                    {
-                        builder.Append("<u>");
-                        builder.Append(char.ToUpperInvariant(character));
-                        builder.Append("</u> ");
-                    }
-                    else
-                    {
-                        builder.Append("_ ");
-                    }
-                }
-                else
-                {
-                    if (char.IsWhiteSpace(character))
-                    {
-                        builder.Append("<br>");
-                    }
-                    else
-                    {
-                        builder.Append(character);
-                    }
-                }
-            }
+            generator.AppendSolution(builder, Solution, includeSolution);
 
             if (!isFragment)
             {
