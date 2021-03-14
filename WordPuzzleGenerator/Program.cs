@@ -55,7 +55,7 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-            ProgramMode programMode = ProgramMode.PUZZLE_PYRAMID;
+            ProgramMode programMode = ProgramMode.COLLECTION;
             //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {
@@ -1202,6 +1202,12 @@ z has 5 clue pairs.
                 Console.WriteLine("R. Multiple Clues");
             }
 
+            if (availablePuzzleTypes.ContainsKey(WordPuzzleType.TrisectedWords))
+            {
+                Console.ForegroundColor =
+                    availablePuzzleTypes[WordPuzzleType.TrisectedWords] ? ConsoleColor.Gray : ERROR_CONSOLE_COLOR;
+                Console.WriteLine("T. TrisectedWords");
+            }
             Console.ForegroundColor = ConsoleColor.Gray;
 
             var userPuzzleSelectionInput = Console.ReadKey();
@@ -1223,6 +1229,10 @@ z has 5 clue pairs.
                 userPuzzleSelectionString = "13";
             }
 
+            if (userPuzzleSelectionString == "t")
+            {
+                userPuzzleSelectionString = "14";
+            }
             if (Enum.TryParse(userPuzzleSelectionString, out userPuzzleSelection))
             {
             }
@@ -1293,7 +1303,15 @@ z has 5 clue pairs.
                     }
 
                     break;
-                
+
+                case WordPuzzleType.TrisectedWords:
+                    generatedPuzzle = InteractiveFindTrisectedWordsPuzzle(solution);
+
+                    PuzzleBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(false, true));
+                    SolutionBuilder.Append(generatedPuzzle?.FormatHtmlForGoogle(true, true));
+
+                    break;
+
                 case WordPuzzleType.WordSearchMoreOrLess:
                     if (3 < solutionLength && solutionLength < 11)
                     {
@@ -1495,6 +1513,40 @@ z has 5 clue pairs.
             }
 
             return generatedPuzzle;
+        }
+
+        private static IPuzzle InteractiveFindTrisectedWordsPuzzle(string solution)
+        {
+            var puzzle = new TrisectedWordsPuzzle();
+            puzzle.Repository = WordRepository;
+            puzzle.Solution = solution;
+            List<TrisectedWord> nextWordCandidates = puzzle.GetNextWordCandidates();
+            while (nextWordCandidates != null)
+            {
+                nextWordCandidates.Shuffle();
+                foreach (var candidate in nextWordCandidates)
+                {
+                    ClearConsoleInputAndOutput();
+                    string clue = InteractiveGetClueForWord(candidate.Word.ToUpperInvariant());
+                    if (string.IsNullOrWhiteSpace(clue)) continue;
+                    candidate.Clue = clue;
+                    puzzle.AddClue(candidate);
+                    break;
+                }
+                nextWordCandidates = puzzle.GetNextWordCandidates();
+            }
+            ClearConsoleInputAndOutput();
+            foreach (var clue in puzzle.Clues)
+            {
+                Console.WriteLine($"{clue.Word.ToUpperInvariant()} ({clue.Pattern.ToUpperInvariant()}): {clue.Clue} ");
+            }
+            Console.WriteLine("Press N if you do NOT want to use this puzzle. Any other key to continue.");
+            var keyPressed = Console.ReadKey();
+            if (keyPressed.KeyChar == 'n')
+            {
+                return null;
+            }
+            return puzzle;
         }
 
         private static IPuzzle InteractiveFindMultipleCluesPuzzle(string solution)
@@ -1893,6 +1945,7 @@ z has 5 clue pairs.
             availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
             availablePuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, true);
             availablePuzzleTypes.Add(WordPuzzleType.MultipleClues, true);
+            availablePuzzleTypes.Add(WordPuzzleType.TrisectedWords, true);
 
 
             return availablePuzzleTypes;
@@ -1917,6 +1970,7 @@ z has 5 clue pairs.
             //availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
             availablePuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, (3 < solutionLength && solutionLength < 11));
             availablePuzzleTypes.Add(WordPuzzleType.MultipleClues, 3 < solutionLength && solutionLength < 10);
+            availablePuzzleTypes.Add(WordPuzzleType.TrisectedWords, true);
             return availablePuzzleTypes;
         }
 

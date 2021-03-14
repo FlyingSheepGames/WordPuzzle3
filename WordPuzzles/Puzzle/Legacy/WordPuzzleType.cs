@@ -18,6 +18,7 @@
         PuzzleForDate,
         WordSearchMoreOrLess,
         MultipleClues,
+        TrisectedWords,
         // ReSharper disable InconsistentNaming
         MAX_VALUE,
         // ReSharper restore InconsistentNaming

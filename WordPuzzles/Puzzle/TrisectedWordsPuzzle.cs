@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Newtonsoft.Json;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -13,7 +14,8 @@ namespace WordPuzzles.Puzzle
         public bool IsTrisectedWordsPuzzle = true;
         private HtmlGenerator _htmlGenerator = new HtmlGenerator();
 
-        WordRepository _repository = new WordRepository();
+        [JsonIgnore]
+        public WordRepository Repository = new WordRepository();
         public string Solution { get; set; }
 
         public List<TrisectedWord> FindWordsContainingLetters(char firstLetter, char secondLetter, char thirdLetter)
@@ -32,7 +34,7 @@ namespace WordPuzzles.Puzzle
                 {
                     Console.WriteLine(pattern);
                 }
-                foreach (string foundWord in _repository.WordsMatchingPattern(pattern))
+                foreach (string foundWord in Repository.WordsMatchingPattern(pattern))
                 {
                     foundWords.Add(new TrisectedWord()
                     {
@@ -145,12 +147,18 @@ namespace WordPuzzles.Puzzle
             int lettersFoundSoFar = 0;
             int newCurrentIndexIfAllThreeAreUsed = 0;
             int newCurrentIndexIfFirstTwoAreUsed = 0;
+            int newCurrentIndexIfOnlyOneIsUsed = 0;
+
             for (int currentIndex = CurrentIndex; currentIndex < Solution.Length; currentIndex++)
             {
                 newCurrentIndexIfAllThreeAreUsed = currentIndex;
                 if (lettersFoundSoFar < 2)
                 {
                     newCurrentIndexIfFirstTwoAreUsed = currentIndex;
+                }
+                if (lettersFoundSoFar < 1)
+                {
+                    newCurrentIndexIfOnlyOneIsUsed = currentIndex;
                 }
                 char currentCharacter = Solution[currentIndex];
                 if (char.IsLetter(currentCharacter))
@@ -177,7 +185,17 @@ namespace WordPuzzles.Puzzle
                 CurrentIndex = newCurrentIndexIfFirstTwoAreUsed + 1;
                 return findWordsContainingLetters;
             }
-            throw new Exception($"Unable to and words that contain both {nextLetters[0]} and {nextLetters[1]}.");
+            
+            //If we can't use two letters (e.g. 'z' and 'z'), just use one. 
+            findWordsContainingLetters.AddRange(FindWordsContainingLetters('_', nextLetters[0], '_'));
+            findWordsContainingLetters.AddRange(FindWordsContainingLetters(nextLetters[0], '_', '_'));
+            findWordsContainingLetters.AddRange(FindWordsContainingLetters('_', '_', nextLetters[0]));
+            if (0 < findWordsContainingLetters.Count)
+            {
+                CurrentIndex = newCurrentIndexIfOnlyOneIsUsed + 1;
+                return findWordsContainingLetters;
+            }
+            throw new Exception($"Can't find any words with letter {nextLetters[0]}.");
         }
 
         public int CurrentIndex { get; set; } = 0;

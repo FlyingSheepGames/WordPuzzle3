@@ -157,6 +157,32 @@ namespace WordPuzzlesTest.Puzzle
 
                 Assert.IsNull(trisectedWordsPuzzle.GetNextWordCandidates(), "We should be at the end of the solution now.");
             }
+
+            [Test]
+            [TestCase("zz")]
+            [TestCase("z z")]
+            [TestCase(" z z ")]
+            [TestCase(".z...z.")]
+            public void ZZ_ReturnsExpectedResults(string solutionWithTwoZs)
+            {
+                TrisectedWordsPuzzle puzzle = new TrisectedWordsPuzzle();
+                puzzle.Repository = new WordRepository() {ExcludeAdvancedWords = true};
+
+                puzzle.Solution = solutionWithTwoZs;
+
+                var results = puzzle.GetNextWordCandidates();
+                Assert.Less(0, results.Count, "Expected at least one result.");
+                var firstResultForFirstZ = results[0];
+                Assert.AreEqual("haziest", firstResultForFirstZ.Word, "Unexpected word");
+                Assert.AreEqual("__z____", firstResultForFirstZ.Pattern, "Unexpected pattern");
+
+                 results = puzzle.GetNextWordCandidates();
+                Assert.Less(0, results.Count, "Expected at least one result.");
+                var firstResultForSecondZ = results[0];
+                Assert.AreEqual("zestful", firstResultForSecondZ.Word, "Unexpected word");
+                Assert.AreEqual("z______", firstResultForSecondZ.Pattern, "Unexpected pattern");
+
+            }
         }
 
         [TestFixture]
