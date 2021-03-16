@@ -131,6 +131,16 @@ The hidden word will be made of consecutive letters in two or more adjacent word
         }
 
         public string Description => $"Hidden Related Words puzzle for {Solution}";
+        public List<string> GetClues()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public string Solution { get; set; }
     }
 

@@ -234,6 +234,23 @@ namespace WordPuzzles.Puzzle
 
 
         public string Description => $"Read Down Column puzzle {Solution}";
+        public List<string> GetClues()
+        {
+            return Clues;
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            for (var index = 0; index < Clues.Count; index++)
+            {
+                var clue = Clues[index];
+                if (clue == clueToReplace)
+                {
+                    Clues[index] = newClue;
+                }
+            }
+        }
+
         public List<string> Clues = new List<string>();
 
         public char SpecialCharacter

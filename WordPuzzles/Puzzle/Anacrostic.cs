@@ -345,6 +345,33 @@ namespace WordPuzzles.Puzzle
         }
 
         public string Description => "Anacrostic: " + OriginalPhrase;
+        public List<string> GetClues()
+        {
+            var clues = new List<string>();
+            if (Puzzle != null)
+            {
+                foreach (var clue in Puzzle.Clues)
+                {
+                    clues.Add(clue.CustomizedClue);
+                }
+            }
+
+            return clues;
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            if (Puzzle != null)
+            {
+                foreach (var clue in Puzzle.Clues)
+                {
+                    if (clue.CustomizedClue == clueToReplace)
+                    {
+                        clue.CustomizedClue = newClue;
+                    }
+                }
+            }
+        }
 
         private void AppendEncodedMessageTable(StringBuilder builder, bool includeSolution = false)
         {

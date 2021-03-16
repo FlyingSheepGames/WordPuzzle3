@@ -190,6 +190,34 @@ After you have filled in all the words, read down the second column to get the s
         }
 
         public string Description => $"Multiple Clues Puzzle with {Solution}";
+        public List<string> GetClues()
+        {
+            var clues = new List<string>();
+            foreach (var wordWithClues in WordsWithClues)
+            {
+                foreach (var clue in wordWithClues.Clues)
+                {
+                    clues.Add(clue.ClueText);
+                }
+            }
+
+            return clues;
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            foreach (var wordWithClues in WordsWithClues)
+            {
+                foreach (var clue in wordWithClues.Clues)
+                {
+                    if (clue.ClueText == clueToReplace)
+                    {
+                        clue.ClueText = newClue;
+                    }
+                }
+            }
+        }
+
         public string Solution { get; set; }
 
     }

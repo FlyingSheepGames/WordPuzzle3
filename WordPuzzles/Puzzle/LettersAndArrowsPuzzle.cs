@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WordPuzzles.Utility;
 
@@ -369,6 +370,22 @@ namespace WordPuzzles.Puzzle
         }
 
         public string Description => "Letters and Arrows: " + Solution;
+        public List<string> GetClues()
+        {
+            return Clues.ToList();
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            for (var index = 0; index < Clues.Length; index++)
+            {
+                var clue = Clues[index];
+                if (clue == clueToReplace)
+                {
+                    Clues[index] = newClue;
+                }
+            }
+        }
 
         public void FillEmptyCells()
         {

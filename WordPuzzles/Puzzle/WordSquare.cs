@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Text;
 using WordPuzzles.Utility;
 
@@ -220,6 +221,23 @@ namespace WordPuzzles.Puzzle
                     line = Lines[0];
                 }
                 return "Word Square: " + line;
+            }
+        }
+
+        public List<string> GetClues()
+        {
+            return Clues.ToList();
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            for (var index = 0; index < Clues.Length; index++)
+            {
+                var clue = Clues[index];
+                if (clue == clueToReplace)
+                {
+                    Clues[index] = newClue;
+                }
             }
         }
     }

@@ -153,29 +153,7 @@ namespace WordPuzzlesTest.Puzzle
                 const string HTML_DIRECTORY = @"html\MultipleCluesPuzzle\";
                 string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "MultipleCluesPuzzle";
 
-                var puzzle = new MultipleCluesPuzzle();
-                puzzle.RandomGeneratorSeed = 42;
-                puzzle.AddWordWithClues("ace", new List<string>
-                {
-                    "Do well on a test",
-                    "Might be the high card?",
-                    "Fighter pilot"
-                });
-
-                puzzle.AddWordWithClues("hanger", new List<string>()
-                {
-                    "Word after cliff",
-                    "Something often found in closets",
-                    "Executioner?"
-                });
-
-
-                puzzle.AddWordWithClues("atom", new List<string>()
-                {
-                    "Anagram of a watery castle defense",
-                    "Basic chemical element"
-                });
-                puzzle.ReorderClues();
+                var puzzle = CreateMultipleCluesPuzzle();
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
 
@@ -225,5 +203,81 @@ namespace WordPuzzlesTest.Puzzle
             }
 
         }
+
+        private static MultipleCluesPuzzle CreateMultipleCluesPuzzle()
+        {
+            var puzzle = new MultipleCluesPuzzle();
+            puzzle.RandomGeneratorSeed = 42;
+            puzzle.AddWordWithClues("ace", new List<string>
+            {
+                "Do well on a test",
+                "Might be the high card?",
+                "Fighter pilot"
+            });
+
+            puzzle.AddWordWithClues("hanger", new List<string>()
+            {
+                "Word after cliff",
+                "Something often found in closets",
+                "Executioner?"
+            });
+
+
+            puzzle.AddWordWithClues("atom", new List<string>()
+            {
+                "Anagram of a watery castle defense",
+                "Basic chemical element"
+            });
+            puzzle.ReorderClues();
+            return puzzle;
+        }
+
+        [TestFixture]
+        public class GetClues
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateMultipleCluesPuzzle();
+                CollectionAssert.AreEqual(new List<string>()
+                    {
+                        "Do well on a test",
+                        "Might be the high card?",
+                        "Fighter pilot",
+                        "Word after cliff",
+                        "Something often found in closets",
+                        "Executioner?",
+                        "Anagram of a watery castle defense",
+                        "Basic chemical element",
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
+        [TestFixture]
+        public class ReplaceClue
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateMultipleCluesPuzzle();
+                puzzle.ReplaceClue("Fighter pilot", "updated clue");
+                CollectionAssert.AreEqual(
+                    new List<string>()
+                    {
+                        "Do well on a test",
+                        "Might be the high card?",
+                        "updated clue",
+                        "Word after cliff",
+                        "Something often found in closets",
+                        "Executioner?",
+                        "Anagram of a watery castle defense",
+                        "Basic chemical element",
+
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
     }
 }

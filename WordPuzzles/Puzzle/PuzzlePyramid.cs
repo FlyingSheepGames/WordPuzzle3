@@ -25,7 +25,19 @@ namespace WordPuzzles.Puzzle
         public Person SelectedPerson { get; set; }
         public string SelectedQuote { get; set; }
         public string SelectedQuoteWithReplacedWords { get; set; }
+        public IPuzzle PuzzleA { get; set; }
+        public IPuzzle PuzzleB { get; set; }
+        public IPuzzle PuzzleC { get; set; }
+        public IPuzzle PuzzleD { get; set; }
+        public IPuzzle PuzzleE { get; set; }
+        public IPuzzle PuzzleF { get; set; }
+        public IPuzzle PuzzleG { get; set; }
+        public IPuzzle PuzzleH { get; set; }
+        public IPuzzle PuzzleI { get; set; }
         public IPuzzle PuzzleJ { get; set; }
+        public IPuzzle PuzzleK { get; set; }
+        public IPuzzle PuzzleL { get; set; }
+
         public List<string> WordsToReplace { get; set; }
 
         internal List<Person> FindPeopleBornInRange(DateTime startDate, DateTime endDate)

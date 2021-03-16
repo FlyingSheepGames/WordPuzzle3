@@ -342,6 +342,26 @@ namespace WordPuzzles.Puzzle
         }
 
         public string Description => $"Trisected Word puzzle for {Solution}.";
+        public List<string> GetClues()
+        {
+            var clues = new List<string>();
+            foreach (var clue in Clues)
+            {
+                clues.Add(clue.Clue);
+            }
+            return clues;
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            foreach (var clue in Clues)
+            {
+                if (clue.Clue == clueToReplace)
+                {
+                    clue.Clue = newClue;
+                }
+            }
+        }
     }
 
     public class PatternAndTemplate 

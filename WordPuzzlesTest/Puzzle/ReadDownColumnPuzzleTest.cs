@@ -82,18 +82,7 @@ namespace WordPuzzlesTest.Puzzle
                 ClueRepository clueRepository = new ClueRepository();
                 clueRepository.ReadFromDisk();
 
-                var puzzle = new ReadDownColumnPuzzle
-                {
-                    Solution = "XRAY",
-                    Words = {"boxing", "parent", "brazen", "joyful"},
-                    Clues = new List<string>
-                    {
-                        clueRepository.GetCluesForWord("boxing")[0].ClueText,
-                        clueRepository.GetCluesForWord("parent")[0].ClueText,
-                        clueRepository.GetCluesForWord("brazen")[0].ClueText,
-                        clueRepository.GetCluesForWord("joyful")[0].ClueText,
-                    }
-                };
+                var puzzle = CreateXRayPuzzle(clueRepository);
 
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
@@ -142,6 +131,7 @@ namespace WordPuzzlesTest.Puzzle
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
 
             }
+
 
             [Test]
             [TestCase(true)]
@@ -216,6 +206,29 @@ namespace WordPuzzlesTest.Puzzle
 
         }
 
+        private static ReadDownColumnPuzzle CreateXRayPuzzle(ClueRepository clueRepository = null)
+        {
+            if (clueRepository == null)
+            {
+                clueRepository = new ClueRepository();
+                clueRepository.ReadFromDisk();
+            }
+
+            var puzzle = new ReadDownColumnPuzzle
+            {
+                Solution = "XRAY",
+                Words = { "boxing", "parent", "brazen", "joyful" },
+                Clues = new List<string>
+                {
+                    clueRepository.GetCluesForWord("boxing")[0].ClueText,
+                    clueRepository.GetCluesForWord("parent")[0].ClueText,
+                    clueRepository.GetCluesForWord("brazen")[0].ClueText,
+                    clueRepository.GetCluesForWord("joyful")[0].ClueText,
+                }
+            };
+            return puzzle;
+        }
+
         [TestFixture]
         public class InsertSpecialCharacterInPattern
         {
@@ -255,5 +268,44 @@ namespace WordPuzzlesTest.Puzzle
 
             }
         }
+
+        [TestFixture]
+        public class GetClues
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateXRayPuzzle();
+                CollectionAssert.AreEqual(new List<string>()
+                    {
+                        "Fighting with the fists",
+                        "Michelle or Barack, for Malia",
+                        "Face with defiance or impudence",
+                        "Full of or producing joy",
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
+        [TestFixture]
+        public class ReplaceClue
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateXRayPuzzle();
+                puzzle.ReplaceClue("Face with defiance or impudence", "updated clue");
+                CollectionAssert.AreEqual(
+                    new List<string>()
+                    {
+                        "Fighting with the fists",
+                        "Michelle or Barack, for Malia",
+                        "updated clue",
+                        "Full of or producing joy",
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
     }
 }

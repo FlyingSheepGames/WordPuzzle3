@@ -491,6 +491,16 @@ Write the letter that was added (or removed) next to the word, and then read dow
         }
 
         public string Description => $"Word Search More Or Less with solution {Solution}";
+        public List<string> GetClues()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            throw new NotImplementedException();
+        }
+
         public string Solution { get; set; }
 
         public List<CardinalDirection> PreferredDirections

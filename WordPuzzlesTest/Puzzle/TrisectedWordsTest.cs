@@ -371,28 +371,7 @@ namespace WordPuzzlesTest.Puzzle
                 const string HTML_DIRECTORY = @"html\TrisectedWordsPuzzle\";
                 string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "TrisectedWordsPuzzle";
 
-                TrisectedWordsPuzzle puzzle = new TrisectedWordsPuzzle() { };
-                puzzle.Solution = "Two words.";
-
-                var foundWords = puzzle.GetNextWordCandidates();
-                var firstWord = foundWords[0];
-                firstWord.Clue = "More tawny.";
-                puzzle.AddClue(firstWord);
-
-                foundWords = puzzle.GetNextWordCandidates();
-                var secondWord = foundWords[0];
-                secondWord.Clue = "Use clothing until it's no longer needed.";
-                puzzle.AddClue(secondWord);
-
-                foundWords = puzzle.GetNextWordCandidates();
-                var thirdWord = foundWords[0];
-                thirdWord.Clue = "Pay too much on EBay";
-                puzzle.AddClue(thirdWord);
-
-                foundWords = puzzle.GetNextWordCandidates();
-                var fourthWord = foundWords[1420];
-                fourthWord.Clue = "Using a sword";
-                puzzle.AddClue(fourthWord);
+                var puzzle = CreateTwoWordsPuzzle();
 
 
                 string generatedHtml = puzzle.FormatHtmlForGoogle(includeSolution);
@@ -444,5 +423,70 @@ namespace WordPuzzlesTest.Puzzle
 
         }
 
+        private static TrisectedWordsPuzzle CreateTwoWordsPuzzle()
+        {
+            TrisectedWordsPuzzle puzzle = new TrisectedWordsPuzzle() { };
+            puzzle.Solution = "Two words.";
+
+            var foundWords = puzzle.GetNextWordCandidates();
+            var firstWord = foundWords[0];
+            firstWord.Clue = "More tawny.";
+            puzzle.AddClue(firstWord);
+
+            foundWords = puzzle.GetNextWordCandidates();
+            var secondWord = foundWords[0];
+            secondWord.Clue = "Use clothing until it's no longer needed.";
+            puzzle.AddClue(secondWord);
+
+            foundWords = puzzle.GetNextWordCandidates();
+            var thirdWord = foundWords[0];
+            thirdWord.Clue = "Pay too much on EBay";
+            puzzle.AddClue(thirdWord);
+
+            foundWords = puzzle.GetNextWordCandidates();
+            var fourthWord = foundWords[1420];
+            fourthWord.Clue = "Using a sword";
+            puzzle.AddClue(fourthWord);
+            return puzzle;
+        }
+
+        [TestFixture]
+        public class GetClues
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateTwoWordsPuzzle();
+                CollectionAssert.AreEqual(new List<string>()
+                    {
+                        "More tawny.",
+                        "Use clothing until it's no longer needed.",
+                        "Pay too much on EBay",
+                        "Using a sword",
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
+        [TestFixture]
+        public class ReplaceClue
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateTwoWordsPuzzle();
+                puzzle.ReplaceClue("Pay too much on EBay", "updated clue");
+                CollectionAssert.AreEqual(
+                    new List<string>()
+                    {
+                        "More tawny.",
+                        "Use clothing until it's no longer needed.",
+                        "updated clue",
+                        "Using a sword",
+
+                    },
+                    puzzle.GetClues());
+            }
+        }
     }
 }

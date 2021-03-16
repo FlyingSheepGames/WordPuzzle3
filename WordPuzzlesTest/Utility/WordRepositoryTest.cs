@@ -131,6 +131,7 @@ namespace WordPuzzlesTest.Utility
         public class IsSingleSyllable
         {
             [Test]
+            [Ignore("Takes too long to run.")]
             [TestCase("beer")]
             [TestCase("beers")]
             [TestCase("gin")]

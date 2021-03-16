@@ -10,6 +10,20 @@ namespace WordPuzzlesTest.Puzzle
     [TestFixture]
     public class WordSquareTest
     {
+        internal static WordSquare CreateShoePuzzle()
+        {
+            WordSquare square = new WordSquare("____");
+            square.SetWordAtIndex("shoe", 0);
+            square.SetWordAtIndex("heal", 1);
+            square.SetWordAtIndex("oaks", 2);
+            square.SetWordAtIndex("else", 3);
+            square.Clues[0] = "Something you wear on your foot.";
+            square.Clues[1] = "Recover from an illness.";
+            square.Clues[2] = "Trees that grow from acorns.";
+            square.Clues[3] = "Clue for else.";
+            return square;
+        }
+
         [TestFixture]
         public class Constructor
         {
@@ -357,15 +371,7 @@ Thing that hangs above your throat
             const string HTML_DIRECTORY = @"html\WordSquares\";
             string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "WordSquares";
 
-            WordSquare square = new WordSquare("____");
-            square.SetWordAtIndex("shoe", 0);
-            square.SetWordAtIndex("heal", 1);
-            square.SetWordAtIndex("oaks", 2);
-            square.SetWordAtIndex("else", 3);
-            square.Clues[0] = "Something you wear on your foot.";
-            square.Clues[1] = "Recover from an illness.";
-            square.Clues[2] = "Trees that grow from acorns.";
-            square.Clues[3] = "Clue for else.";
+            var square = WordSquareTest.CreateShoePuzzle();
 
             string generatedHtml = square.FormatHtmlForGoogle();
 
@@ -398,6 +404,7 @@ Thing that hangs above your throat
             Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
 
         }
+
     }
 
     [TestFixture]
@@ -414,7 +421,43 @@ Thing that hangs above your throat
         }
     }
 
+    [TestFixture]
+    public class GetClues
+    {
+        [Test]
+        public void ReturnsExpectedResults()
+        {
+            var puzzle = WordSquareTest.CreateShoePuzzle();
+            CollectionAssert.AreEqual(new List<string>()
+                {
+                    "Something you wear on your foot.",
+                    "Recover from an illness.",
+                    "Trees that grow from acorns.",
+                    "Clue for else.",
+                }, puzzle.GetClues());
+        }
+    }
 
+    [TestFixture]
+    public class ReplaceClue
+    {
+        [Test]
+        public void ReturnsExpectedResults()
+        {
+            var puzzle = WordSquareTest.CreateShoePuzzle();
+            puzzle.ReplaceClue("Clue for else.", "updated clue");
+            CollectionAssert.AreEqual(
+                new List<string>()
+                {
+                    "Something you wear on your foot.",
+                    "Recover from an illness.",
+                    "Trees that grow from acorns.",
+                    "updated clue",
+                    
+                },
+                puzzle.GetClues());
+        }
+    }
 }
 
 

@@ -39,7 +39,7 @@ namespace WordPuzzlesTest.Puzzle
             public void TooLong_ThrowsException()
             {
                 // ReSharper disable ObjectCreationAsStatement
-                Assert.Throws<ArgumentException>(()=> new LettersAndArrowsPuzzle("abcdefghijklmnopqrstuvwxyz123456"));
+                Assert.Throws<ArgumentException>(() => new LettersAndArrowsPuzzle("abcdefghijklmnopqrstuvwxyz123456"));
                 // ReSharper restore ObjectCreationAsStatement
             }
 
@@ -75,6 +75,7 @@ namespace WordPuzzlesTest.Puzzle
                         }
                     }
                 }
+
                 CollectionAssert.IsSubsetOf(expectedLetters, actualLetters);
             }
 
@@ -149,7 +150,7 @@ namespace WordPuzzlesTest.Puzzle
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(5);
 
-                List<int> expectedNumbers = new List<int>() { -2, -1, 1, 2 };
+                List<int> expectedNumbers = new List<int>() {-2, -1, 1, 2};
 
                 CollectionAssert.AreEquivalent(expectedNumbers, puzzle.GetAvailableHorizontalCells(2, 2));
             }
@@ -160,7 +161,7 @@ namespace WordPuzzlesTest.Puzzle
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(5);
 
                 puzzle.SetCellAtCoordinates(2, 0, new LetterAndArrowCell() {Letter = 'A'});
-                List<int> expectedNumbers = new List<int>() { -1, 1, 2 };
+                List<int> expectedNumbers = new List<int>() {-1, 1, 2};
 
                 CollectionAssert.AreEquivalent(expectedNumbers, puzzle.GetAvailableHorizontalCells(2, 2));
             }
@@ -228,10 +229,10 @@ namespace WordPuzzlesTest.Puzzle
                     case Direction.Down:
                         expectedRowForB += offset;
                         break;
-                    case Direction.Right:   //always goes down, so this isn't necessary.
+                    case Direction.Right: //always goes down, so this isn't necessary.
                         expectedColumnForB += offset;
                         break;
-                    case Direction.Up:  
+                    case Direction.Up:
                         throw new Exception("Starting at 0, 0, the next direction should not be up.");
                     case Direction.Left:
                         throw new Exception("Starting at 0, 0, next direction should not be left.");
@@ -318,7 +319,7 @@ namespace WordPuzzlesTest.Puzzle
                 puzzle.FillEmptyCells();
                 string generateHtml = puzzle.FormatHtmlForGoogle();
 
-                File.WriteAllText(HTML_DIRECTORY + "actualExample1.html",  generateHtml);
+                File.WriteAllText(HTML_DIRECTORY + "actualExample1.html", generateHtml);
                 var expectedLines = File.ReadAllLines(HTML_DIRECTORY + "expectedExample1.html");
                 var actualLines = File.ReadAllLines(HTML_DIRECTORY + "actualExample1.html");
                 bool anyLinesDifferent = false;
@@ -344,6 +345,7 @@ namespace WordPuzzlesTest.Puzzle
                     Console.WriteLine("Updating source file. Will show up as a difference in source control.");
                     File.WriteAllLines(SOURCE_DIRECTORY + @"\expectedExample1.html", actualLines);
                 }
+
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
             }
         }
@@ -410,5 +412,58 @@ namespace WordPuzzlesTest.Puzzle
                 StringAssert.Contains("Optimist's feeling", puzzleAsHtml);
             }
         }
+
+
+
+        private static LettersAndArrowsPuzzle CreateFourByFourPuzzle()
+        {
+            LettersAndArrowsPuzzle fourByFourPuzzle = new LettersAndArrowsPuzzle("OHIO", true, 4, 42);
+
+            fourByFourPuzzle.SetClueForRowIndex(0, "Vending machine bills"); //ONES
+            fourByFourPuzzle.SetClueForRowIndex(1, "They have their pluses and minuses"); //IONS
+            fourByFourPuzzle.SetClueForRowIndex(2, "Try to gain favor by cringing or flattering"); //FAWN
+            fourByFourPuzzle.SetClueForRowIndex(3, "Optimist's feeling"); //HOPE
+
+            return fourByFourPuzzle;
+        }
+
+        [TestFixture]
+        public class GetClues
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateFourByFourPuzzle();
+                CollectionAssert.AreEqual(new List<string>()
+                    {
+                        "Vending machine bills",
+                        "They have their pluses and minuses",
+                        "Try to gain favor by cringing or flattering",
+                        "Optimist's feeling",
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
+        [TestFixture]
+        public class ReplaceClue
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateFourByFourPuzzle();
+                puzzle.ReplaceClue("Optimist's feeling", "updated clue");
+                CollectionAssert.AreEqual(
+                    new List<string>()
+                    {
+                        "Vending machine bills",
+                        "They have their pluses and minuses",
+                        "Try to gain favor by cringing or flattering",
+                        "updated clue",
+                    },
+                    puzzle.GetClues());
+            }
+        }
+
     }
 }

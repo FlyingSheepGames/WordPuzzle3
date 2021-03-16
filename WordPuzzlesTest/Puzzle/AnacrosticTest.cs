@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Text;
@@ -204,39 +205,8 @@ C10	C11	C12	C13	C14	C15
                 const string HTML_DIRECTORY = @"html\Anacrostics\";
                 string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "Anacrostics";
 
-                Anacrostic anacrostic = new Anacrostic("this longer phrase has at least twenty characters");
+                Anacrostic anacrostic = CreateLongAnacrostic();
 
-                anacrostic.RemoveWord("place");
-                anacrostic.RemoveWord("years");
-
-                anacrostic.RemoveWord("great");
-                anacrostic.RemoveWord("which");
-
-                anacrostic.RemoveWord("rates");
-                anacrostic.RemoveWord("later");
-
-                anacrostic.RemoveWord("hosts");
-                anacrostic.RemoveWord("hats");
-
-                foreach (var clue in anacrostic.Puzzle.Clues)
-                {
-                    StringBuilder builder = new StringBuilder();
-                    foreach (var letter in clue.Letters)
-                    {
-                        builder.Append(letter.ActualLetter);
-                    }
-
-                    var currentWord = builder.ToString();
-                    switch (currentWord)
-                    {
-                        case "place":
-                            clue.CustomizedClue = "Ace is the ___";
-                            break;
-                        default:
-                            Console.WriteLine($"No clue yet for {currentWord}");
-                            break;
-                    }
-                }
                 Assert.AreEqual("nnt", anacrostic.RemainingLetters());
                 CollectionAssert.AreEquivalent(anacrostic.EnumerateCellValues(), anacrostic.EnumerateCellValuesReplacement());
                 string generatedHtml = anacrostic.FormatHtmlForGoogle(includeSolution);
@@ -285,6 +255,7 @@ C10	C11	C12	C13	C14	C15
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
 
             }
+
 
             [Test]
             [TestCase(true)]
@@ -479,6 +450,69 @@ C10	C11	C12	C13	C14	C15
                     Console.WriteLine($"wordLengthStartingWithLetter.Add('{initialLetter}', \"{wordLengthsThatStartWithThisLetter}\");");
                 }
 
+            }
+        }
+
+        internal static Anacrostic CreateLongAnacrostic()
+        {
+            Anacrostic anacrostic = new Anacrostic("this longer phrase has at least twenty characters");
+
+            anacrostic.RemoveWord("place");
+            anacrostic.RemoveWord("years");
+
+            anacrostic.RemoveWord("great");
+            anacrostic.RemoveWord("which");
+
+            anacrostic.RemoveWord("rates");
+            anacrostic.RemoveWord("later");
+
+            anacrostic.RemoveWord("hosts");
+            anacrostic.RemoveWord("hats");
+
+            foreach (var clue in anacrostic.Puzzle.Clues)
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach (var letter in clue.Letters)
+                {
+                    builder.Append(letter.ActualLetter);
+                }
+
+                var currentWord = builder.ToString();
+                switch (currentWord)
+                {
+                    case "place":
+                        clue.CustomizedClue = "Ace is the ___";
+                        break;
+                    default:
+                        Console.WriteLine($"No clue yet for {currentWord}");
+                        break;
+                }
+            }
+
+            return anacrostic;
+        }
+
+
+        [TestFixture]
+        public class GetClues
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateLongAnacrostic();
+                CollectionAssert.AreEqual(new List<string> () { "Ace is the ___", null, null, null, null, null, null, null }, puzzle.GetClues());
+            }
+        }
+
+        [TestFixture]
+        public class ReplaceClue
+        {
+            [Test]
+            public void ReturnsExpectedResults()
+            {
+                var puzzle = CreateLongAnacrostic();
+                puzzle.ReplaceClue("Ace is the ___", "updated clue");
+                CollectionAssert.AreEqual(new List<string>() { "updated clue", null, null, null, null, null, null, null }, puzzle.GetClues());
             }
         }
 

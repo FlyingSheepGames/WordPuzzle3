@@ -252,6 +252,15 @@ Return the letters into the grid above them. The author of the quote appears at 
         }
 
         public string Description => $"PhraseSegmentPuzzle for phrase {Phrase} ";
+        public List<string> GetClues()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            throw new NotImplementedException();
+        }
 
         public Random RandomNumberGenerator
         {
