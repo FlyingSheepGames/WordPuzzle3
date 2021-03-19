@@ -55,7 +55,7 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-            ProgramMode programMode = ProgramMode.COLLECTION;
+            ProgramMode programMode = ProgramMode.PUZZLE_PYRAMID;
             //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {

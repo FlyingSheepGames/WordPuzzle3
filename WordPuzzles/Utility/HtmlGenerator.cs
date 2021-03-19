@@ -576,5 +576,12 @@ function colorMeAndMyMatch(currentIndex, color) {
                 }
             }
         }
+
+        public void AppendPageBreak(StringBuilder builder)
+        {
+            builder.AppendLine(@"<p style=""page-break-after: always;"">&nbsp;</p>");
+            builder.AppendLine(@"<p style=""page-break-before: always;"">&nbsp;</p>");
+            builder.AppendLine(@"<hr class=""pb"">");
+        }
     }
 }

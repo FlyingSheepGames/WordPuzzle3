@@ -305,6 +305,22 @@ namespace WordPuzzlesTest.Utility
                 string deserializedHtml = deserializedPuzzle.FormatHtmlForGoogle(true, true);
                 Assert.AreEqual(originalHtml, deserializedHtml, "Unexpected differences in generated HTML");
             }
+
+            [Test]
+            public void PuzzlePyramid_Default_ReturnsExpectedObject()
+            {
+                PuzzlePyramid puzzleToSerialize = new PuzzlePyramid();
+
+                string serializedPuzzle = JsonConvert.SerializeObject(puzzleToSerialize);
+                Assert.LessOrEqual(serializedPuzzle.Length, 2000, "Expected less than 2 thousand characters.");
+
+                PuzzlePyramid deserializedPuzzle = JsonConvert.DeserializeObject<PuzzlePyramid>(serializedPuzzle);
+
+                string originalHtml = puzzleToSerialize.FormatHtmlForGoogle(true, true);
+                string deserializedHtml = deserializedPuzzle.FormatHtmlForGoogle(true, true);
+                Assert.AreEqual(originalHtml, deserializedHtml, "Unexpected differences in generated HTML");
+            }
+
         }
     }
 }

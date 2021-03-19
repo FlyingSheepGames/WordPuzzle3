@@ -31,8 +31,14 @@ namespace WordPuzzles.Utility
             object existingValue,
             JsonSerializer serializer)
         {
+            if (reader.TokenType == JsonToken.Null)
+            {
+                return null;
+            }
             // Load JObject from stream
-            JObject jObject = JObject.Load(reader);
+            JObject jObject;
+            jObject = JObject.Load(reader);
+
 
             // Create target object based on JObject
             T target = Create(objectType, jObject);

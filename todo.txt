@@ -13,8 +13,8 @@ Puzzle Pyramid
 	Which puzzle types have clues? 
 	Which puzzle types support phrases as solutions (instead of just individual words)
 PUZZLE TYPE		CLUES	SOLUTION (single word/phrase)
-1 MultipleClues		clues	single
-1 Word Square		clues	single
+2 MultipleClues		clues	single
+0 Word Square		clues	single
 2 TrisectedWords	clues	phrase
 2 Anacrostic		clues	phrase
 2 Letters+Arrows	clues	phrase
@@ -27,19 +27,30 @@ Quote
 		A WordSearch
 		B Letters+Arrows
 		C ReadDownColumn
-	K Word Square
-		D Anacrostic
+	K Anacrostic
+		D Multiple Clues
 		E Trisected Words
 		F Letters+Arrows
 	L Trisected Words
 		G Anacrostic
 		H ReadDownColumn
 		I WordSearch
+
+
 In 9 IPuzzle Types
 	Implement         List<string> GetClues();
 	Implement        void ReplaceClue(string clueToReplace, string newClue);
 
 Add unit tests for (non-default) implementations
+
+NEXT: Change from pre-set list of puzzle types in pyramid to letting the user choose.
+	Keep a list of preferred options (random to start with, then move used puzzle types to the bottom)
+	Only display options appropriate to the solution (e.g. not anacrostic for short solutions)
+	Display which puzzle is being worked on. 
+	Allow user to skip puzzles (press enter)
+
+
+Fix bug with "wise" being replaced as a substring of "otherwise". 
 
 Add phrase support to Multiple Clues
 
