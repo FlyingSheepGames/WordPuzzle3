@@ -18,9 +18,11 @@ namespace WordPuzzleGenerator
 
         public void RunInPyramidMode()
         {
+            InitializeSortedListOfPuzzleTypes();
+
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 3, 13);
+            puzzlePyramid.StartDate = new DateTime(2021, 3, 14);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
 
@@ -66,7 +68,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleJ);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        CreatePuzzleAAsWordSearch(clueToReplace, puzzlePyramid);
+                        puzzlePyramid.PuzzleA = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleA != null)
                         {
                             puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, "(solve puzzle A)");
@@ -79,7 +81,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleJ);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        CreatePuzzleBAsLettersAndArrows(clueToReplace, puzzlePyramid);
+                        puzzlePyramid.PuzzleB = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleB != null)
                         {
                             puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, "(solve puzzle B)");
@@ -92,7 +94,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleJ);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleC = CreatePuzzleAsType(clueToReplace, WordPuzzleType.ReadDownColumn);
+                        puzzlePyramid.PuzzleC = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleC != null)
                         {
                             puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, "(solve puzzle C)");
@@ -104,7 +106,7 @@ namespace WordPuzzleGenerator
 
             if (puzzlePyramid.PuzzleK == null)
             {
-                puzzlePyramid.PuzzleK = CreatePuzzleAsType(wordsToReplace[1], WordPuzzleType.Anacrostic);
+                puzzlePyramid.PuzzleK = CreatePuzzleAsType(wordsToReplace[1]);
             }
 
             // To Find the word K, solve a puzzle with missing clues D, E, and F
@@ -115,7 +117,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleK);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleD = CreatePuzzleAsType(clueToReplace, WordPuzzleType.MultipleClues);
+                        puzzlePyramid.PuzzleD = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleD != null)
                         {
                             puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, "(solve puzzle D)");
@@ -128,7 +130,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleK);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleE = CreatePuzzleAsType(clueToReplace, WordPuzzleType.TrisectedWords);
+                        puzzlePyramid.PuzzleE = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleE != null)
                         {
                             puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, "(solve puzzle E)");
@@ -141,7 +143,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleK);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleF = CreatePuzzleAsType(clueToReplace, WordPuzzleType.LettersAndArrows);
+                        puzzlePyramid.PuzzleF = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleF != null)
                         {
                             puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, "(solve puzzle F)");
@@ -152,6 +154,11 @@ namespace WordPuzzleGenerator
             }
 
             // To find the word L, solve the puzzle with missing clues G, H, and I. 
+            if (puzzlePyramid.PuzzleL == null)
+            {
+                puzzlePyramid.PuzzleL = CreatePuzzleAsType(wordsToReplace[2]);
+            }
+
             if (puzzlePyramid.PuzzleL != null)
             {
                 if (puzzlePyramid.PuzzleG == null)
@@ -159,7 +166,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleL);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleG = CreatePuzzleAsType(clueToReplace, WordPuzzleType.Anacrostic);
+                        puzzlePyramid.PuzzleG = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleG != null)
                         {
                             puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, "(solve puzzle G)");
@@ -172,7 +179,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleL);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleH = CreatePuzzleAsType(clueToReplace, WordPuzzleType.ReadDownColumn);
+                        puzzlePyramid.PuzzleH = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleH != null)
                         {
                             puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, "(solve puzzle H)");
@@ -185,7 +192,7 @@ namespace WordPuzzleGenerator
                     var clueToReplace = SelectClueToReplace(puzzlePyramid.PuzzleL);
                     if (!string.IsNullOrWhiteSpace(clueToReplace))
                     {
-                        puzzlePyramid.PuzzleI = CreatePuzzleAsType(clueToReplace, WordPuzzleType.WordSearchMoreOrLess);
+                        puzzlePyramid.PuzzleI = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleI != null)
                         {
                             puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, "(solve puzzle I)");
@@ -279,13 +286,89 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static IPuzzle CreatePuzzleAsType(string solution, WordPuzzleType typeOfPuzzleToCreate)
+        private static IPuzzle CreatePuzzleAsType(string solution, WordPuzzleType typeOfPuzzleToCreate = WordPuzzleType.Undefined)
         {
+            if (typeOfPuzzleToCreate == WordPuzzleType.Undefined)
+            {
+                typeOfPuzzleToCreate = InteractivelySelectPuzzleType(solution);
+            }
+            if (typeOfPuzzleToCreate == WordPuzzleType.Undefined)
+            {
+                return null;
+            }
             var createdPuzzle = Program.InteractivelyGenerateSelectedPuzzleType(typeOfPuzzleToCreate,
                 solution.Length, solution, null);
-
+            if (createdPuzzle != null)
+            {
+                MovePuzzleTypeToEndOfList(typeOfPuzzleToCreate);
+            }
             return createdPuzzle;
         }
+
+        private static void MovePuzzleTypeToEndOfList(WordPuzzleType typeOfPuzzleToMoveToTheEnd)
+        {
+            List<WordPuzzleType> replacementList = new List<WordPuzzleType>();
+            foreach (var puzzleType in SortedListOfPuzzleTypes)
+            {
+                if (puzzleType != typeOfPuzzleToMoveToTheEnd)
+                {
+                    replacementList.Add(puzzleType);
+                }
+            }
+            replacementList.Add(typeOfPuzzleToMoveToTheEnd);
+            SortedListOfPuzzleTypes = replacementList.ToArray();
+        }
+
+        private static void InitializeSortedListOfPuzzleTypes()
+        {
+            List<WordPuzzleType> newList = new List<WordPuzzleType>();
+            newList.Add(WordPuzzleType.MultipleClues);
+            newList.Add(WordPuzzleType.WordSquare);
+            newList.Add(WordPuzzleType.TrisectedWords);
+            newList.Add(WordPuzzleType.Anacrostic);
+            newList.Add(WordPuzzleType.LettersAndArrows);
+            newList.Add(WordPuzzleType.ReadDownColumn);
+            newList.Add(WordPuzzleType.WordSearchMoreOrLess);
+            newList.Shuffle();
+            SortedListOfPuzzleTypes = newList.ToArray();
+        }
+
+        private static WordPuzzleType InteractivelySelectPuzzleType(string solution)
+        {
+            WordPuzzleType selectedPuzzleType = WordPuzzleType.Undefined;
+            var iPuzzleTypes = Program.CalculateAvailableIPuzzleTypes(solution);
+            List<WordPuzzleType> availableTypes = new List<WordPuzzleType>();
+            foreach (var key in iPuzzleTypes.Keys)
+            {
+                if (iPuzzleTypes[key])
+                {
+                    availableTypes.Add(key);
+                }
+            }
+
+            Program.ClearConsoleInputAndOutput();
+            Console.WriteLine($"Select puzzle type for {solution}, just hit the number, don't press enter.");
+            for (var index = 0; (index < SortedListOfPuzzleTypes.Length) && index < 10 ; index++)
+            {
+                WordPuzzleType puzzleType = SortedListOfPuzzleTypes[index];
+                if (availableTypes.Contains(puzzleType))
+                {
+                    Console.WriteLine($"{index}: {puzzleType}");
+                }
+            }
+            Console.Write(">>");
+
+            var userInput = Console.ReadKey();
+            int userInputIndex;
+            if (int.TryParse(userInput.KeyChar.ToString(), out userInputIndex))
+            {
+                 selectedPuzzleType = SortedListOfPuzzleTypes[userInputIndex];
+            }
+
+            return selectedPuzzleType;
+        }
+
+        public static WordPuzzleType[] SortedListOfPuzzleTypes { get; set; } 
 
         private void CreatePuzzleJ(List<string> wordsToReplace, PuzzlePyramid puzzlePyramid)
         {
@@ -404,7 +487,9 @@ namespace WordPuzzleGenerator
                     Console.WriteLine($"{wordToRemoveIndex}: {currentWord}");
                 }
 
-                Console.WriteLine("Press a key indicating the next word that should be hidden (or un-hidden).");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Press a key indicating the next word that should be hidden (or un-hidden). Hit ENTER to skip.");
+                Console.Write(">>");
                 bool wordSelected = false;
                 while (!wordSelected)
                 {

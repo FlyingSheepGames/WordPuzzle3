@@ -42,6 +42,7 @@ In 9 IPuzzle Types
 	Implement        void ReplaceClue(string clueToReplace, string newClue);
 
 Add unit tests for (non-default) implementations
+Fix bug - Original Word from InnerAnacrosticPuzzle.PuzzleWord is lost when serialized/deserialized.
 
 NEXT: Change from pre-set list of puzzle types in pyramid to letting the user choose.
 	Keep a list of preferred options (random to start with, then move used puzzle types to the bottom)
@@ -52,6 +53,7 @@ NEXT: Change from pre-set list of puzzle types in pyramid to letting the user ch
 
 Fix bug with "wise" being replaced as a substring of "otherwise". 
 
+Fix bug where text all shows as red if you select the last word in a quote (never resets to grey)
 Add phrase support to Multiple Clues
 
 MultipleClues
