@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -190,6 +191,8 @@ After you have filled in all the words, read down the second column to get the s
         }
 
         public string Description => $"Multiple Clues Puzzle with {Solution}";
+        public WordPuzzleType Type { get; } = WordPuzzleType.MultipleClues;
+
         public List<string> GetClues()
         {
             var clues = new List<string>();

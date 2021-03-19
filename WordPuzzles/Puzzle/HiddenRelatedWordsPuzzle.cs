@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -131,6 +132,8 @@ The hidden word will be made of consecutive letters in two or more adjacent word
         }
 
         public string Description => $"Hidden Related Words puzzle for {Solution}";
+        public WordPuzzleType Type { get; } = WordPuzzleType.HiddenRelatedWords;
+
         public List<string> GetClues()
         {
             throw new System.NotImplementedException();

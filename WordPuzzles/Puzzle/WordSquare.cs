@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -223,6 +224,8 @@ namespace WordPuzzles.Puzzle
                 return "Word Square: " + line;
             }
         }
+
+        public WordPuzzleType Type { get; } = WordPuzzleType.WordSquare;
 
         public List<string> GetClues()
         {

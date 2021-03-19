@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -9,6 +10,7 @@ namespace WordPuzzles.Puzzle
     {
         string FormatHtmlForGoogle(bool includeSolution = false, bool  isFragment = false);
         string Description { get;  }
+        WordPuzzleType Type { get; }
         List<string> GetClues();
         void ReplaceClue(string clueToReplace, string newClue);
     }

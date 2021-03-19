@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -234,6 +235,8 @@ namespace WordPuzzles.Puzzle
 
 
         public string Description => $"Read Down Column puzzle {Solution}";
+        public WordPuzzleType Type { get; } = WordPuzzleType.ReadDownColumn;
+
         public List<string> GetClues()
         {
             return Clues;

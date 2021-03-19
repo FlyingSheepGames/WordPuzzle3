@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -491,6 +492,8 @@ Write the letter that was added (or removed) next to the word, and then read dow
         }
 
         public string Description => $"Word Search More Or Less with solution {Solution}";
+        public WordPuzzleType Type { get; } = WordPuzzleType.WordSearchMoreOrLess;
+
         public List<string> GetClues()
         {
             throw new NotImplementedException();

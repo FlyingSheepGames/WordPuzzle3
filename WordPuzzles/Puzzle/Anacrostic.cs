@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -345,6 +346,8 @@ namespace WordPuzzles.Puzzle
         }
 
         public string Description => "Anacrostic: " + OriginalPhrase;
+        public WordPuzzleType Type { get; } = WordPuzzleType.Anacrostic;
+
         public List<string> GetClues()
         {
             var clues = new List<string>();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -252,6 +253,8 @@ Return the letters into the grid above them. The author of the quote appears at 
         }
 
         public string Description => $"PhraseSegmentPuzzle for phrase {Phrase} ";
+        public WordPuzzleType Type { get; } = WordPuzzleType.Undefined;
+
         public List<string> GetClues()
         {
             throw new NotImplementedException();

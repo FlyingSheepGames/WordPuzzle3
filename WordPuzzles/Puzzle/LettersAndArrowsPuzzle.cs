@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -370,6 +371,8 @@ namespace WordPuzzles.Puzzle
         }
 
         public string Description => "Letters and Arrows: " + Solution;
+        public WordPuzzleType Type { get; } = WordPuzzleType.LettersAndArrows;
+
         public List<string> GetClues()
         {
             return Clues.ToList();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Newtonsoft.Json;
+using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
 namespace WordPuzzles.Puzzle
@@ -342,6 +343,8 @@ namespace WordPuzzles.Puzzle
         }
 
         public string Description => $"Trisected Word puzzle for {Solution}.";
+        public WordPuzzleType Type { get; } = WordPuzzleType.TrisectedWords;
+
         public List<string> GetClues()
         {
             var clues = new List<string>();
