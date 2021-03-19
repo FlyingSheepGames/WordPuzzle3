@@ -5,12 +5,12 @@ namespace WordPuzzles.Puzzle
     public class PuzzleWord
     {
         public List<PuzzleLetter> Letters = new List<PuzzleLetter>();
-        private readonly string _originalWord;
+        public string OriginalWord;
 
         public PuzzleWord(string word, int startingIndex, char wordIndex)
         {
             if (word == null) return; //TODO: Figure out why this would be when deserializing. Use WelcomeHomeEve as an example.
-            _originalWord = word;
+            OriginalWord = word;
             foreach (char character in word)
             {
                 Letters.Add(
@@ -23,7 +23,7 @@ namespace WordPuzzles.Puzzle
             }
         }
 
-        public static implicit operator string(PuzzleWord v) { return v._originalWord; }
+        public static implicit operator string(PuzzleWord v) { return v.OriginalWord; }
 
         public string CustomizedClue { get; set; }
     }

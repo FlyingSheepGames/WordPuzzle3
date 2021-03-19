@@ -136,7 +136,8 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_NorthEast_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess();
+                wordSearch.RandomGeneratorSeed = 42; ;
                 wordSearch.Size = 5;
                 wordSearch.Grid = new List<string>()
                 {
@@ -152,7 +153,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_East_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess() {RandomGeneratorSeed = 42};
                 wordSearch.Size = 4;
                 wordSearch.Grid = new List<string>()
                 {
@@ -167,7 +168,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_SouthEast_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess() { RandomGeneratorSeed = 42 };
                 wordSearch.Size = 5;
                 wordSearch.Grid = new List<string>()
                 {
@@ -183,7 +184,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_South_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess() {RandomGeneratorSeed = 42};
                 wordSearch.Size = 5;
                 wordSearch.Grid = new List<string>()
                 {
@@ -199,7 +200,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_SouthWest_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess() { RandomGeneratorSeed = 42 };
                 wordSearch.Size = 5;
                 wordSearch.Grid = new List<string>()
                 {
@@ -215,7 +216,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_West_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess() { RandomGeneratorSeed = 42 };
                 wordSearch.Size = 5;
                 wordSearch.Grid = new List<string>()
                 {
@@ -230,7 +231,7 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void Simple_NorthWest_FindsExpectedWord()
             {
-                WordSearchMoreOrLess wordSearch = GetWordSearchMoreOrLess();
+                WordSearchMoreOrLess wordSearch = new WordSearchMoreOrLess() { RandomGeneratorSeed = 42 };
                 wordSearch.Size = 5;
                 wordSearch.Grid = new List<string>()
                 {

@@ -11,7 +11,7 @@ namespace WordPuzzles.Puzzle
         public bool IsAnacrostic = true;
         public InnerAnacrosticPuzzle Puzzle = new InnerAnacrosticPuzzle();
         public WordRepository Repository = new WordRepository();
-        private readonly int[] _remainingLetters = new int[26];
+        public int[] _remainingLetters = new int[26];
         internal HtmlGenerator HtmlGenerator = new HtmlGenerator();
 
         public List<string> WordsFoundSoFar = new List<string>();

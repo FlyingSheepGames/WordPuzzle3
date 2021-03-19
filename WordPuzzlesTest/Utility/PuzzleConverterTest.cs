@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 using Newtonsoft.Json;
+using WordPuzzlesTest.Puzzle;
 
 namespace WordPuzzlesTest.Utility
 {
@@ -133,6 +134,21 @@ namespace WordPuzzlesTest.Utility
                 Assert.AreEqual(puzzleToSerialize.Puzzle.Clues, deserializedPuzzle.Puzzle.Clues, "Unexpected difference in Puzzle.Clues");
                 Assert.AreEqual(puzzleToSerialize.Puzzle.Phrase, deserializedPuzzle.Puzzle.Phrase, "Unexpected difference in Puzzle.Phrase");
 
+
+                string originalHtml = puzzleToSerialize.FormatHtmlForGoogle(true, true);
+                string deserializedHtml = deserializedPuzzle.FormatHtmlForGoogle(true, true);
+                Assert.AreEqual(originalHtml, deserializedHtml, "Unexpected differences in generated HTML");
+            }
+
+            [Test]
+            public void Anacrostic_Custom_ReturnsExpectedObject()
+            {
+                Anacrostic puzzleToSerialize = AnacrosticTest.CreateLongAnacrostic();
+
+                string serializedPuzzle = JsonConvert.SerializeObject(puzzleToSerialize);
+                Assert.LessOrEqual(serializedPuzzle.Length, 5000, "Expected less than 5 thousand characters.");
+
+                Anacrostic deserializedPuzzle = JsonConvert.DeserializeObject<Anacrostic>(serializedPuzzle);
 
                 string originalHtml = puzzleToSerialize.FormatHtmlForGoogle(true, true);
                 string deserializedHtml = deserializedPuzzle.FormatHtmlForGoogle(true, true);
