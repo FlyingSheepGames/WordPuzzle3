@@ -74,9 +74,9 @@ namespace WordPuzzles.Puzzle
             var replaceWordsWithMarkers = selectedQuote;
             if (replaceWordsWithMarkers != null)
             {
-                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[0], "(SOLUTION TO PUZZLE J)");
-                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[1], "(SOLUTION TO PUZZLE K)");
-                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[2], "(SOLUTION TO PUZZLE L)");
+                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[0], "(solve puzzle J)");
+                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[1], "(solve puzzle K)");
+                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[2], "(solve puzzle L)");
             }
             return replaceWordsWithMarkers;
         }
@@ -88,8 +88,20 @@ namespace WordPuzzles.Puzzle
             StringBuilder builder = new StringBuilder();
             _generator.AppendHtmlHeader(builder);
 
-            builder.AppendLine($@"<h1>Puzzle Pyramid for {StartDate} </h1>");
-            builder.AppendLine(ReplaceWordsWithMarkers(SelectedQuote, WordsToReplace));
+            builder.AppendLine($@"<h1>Puzzle Pyramid for { StartDate.ToShortDateString()} </h1>");
+            builder.AppendLine($@"""{ReplaceWordsWithMarkers(SelectedQuote, WordsToReplace)}""");
+
+            if (SelectedPerson != null)
+            {
+                builder.AppendLine($@"<P>The above quote is attributed to {SelectedPerson.Name}, who was born on {SelectedPerson.Month}/{SelectedPerson.Day}/{SelectedPerson.Year}.");
+            }
+
+            builder.AppendLine($@"<P>This is a puzzle pyramid. ");
+            builder.AppendLine($@"<br>Solve puzzles A, B, and C to get the clues you need to solve puzzle J.");
+            builder.AppendLine($@"<br>Solve puzzles D, E, and F to get the clues you need to solve puzzle K.");
+            builder.AppendLine($@"<br>Solve puzzles G, H, and I to get the clues you need to solve puzzle L.");
+            builder.AppendLine($@"<br>Finally, solve puzzles J, K, and L to find the missing words in the quote above.");
+
             _generator.AppendPageBreak(builder);
 
             if (PuzzleA != null)

@@ -2002,7 +2002,7 @@ z has 5 clue pairs.
         {
             LettersAndArrowsPuzzle puzzle = null;
             string formatHtmlForGoogle = null;
-            for (int size = 4; size < 7; size++)
+            for (int size = 4; size < 9; size++)
             {
                 try
                 {

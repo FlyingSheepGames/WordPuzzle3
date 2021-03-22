@@ -15,10 +15,11 @@
         BuildingBlocks,
         RelatedWords,
         MissingLetters,
-        PuzzleForDate,
+        PuzzleForDate, //See PhraseSegmentPuzzle
         WordSearchMoreOrLess,
         MultipleClues,
         TrisectedWords,
+        PhraseSegmentPuzzle,
         // ReSharper disable InconsistentNaming
         MAX_VALUE,
         // ReSharper restore InconsistentNaming

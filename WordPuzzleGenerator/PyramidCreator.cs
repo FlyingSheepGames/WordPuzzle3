@@ -57,7 +57,7 @@ namespace WordPuzzleGenerator
             {
                  //CreatePuzzleJAsMultipleCluesPuzzle(wordsToReplace[0], puzzlePyramid);
                  Console.WriteLine($"Let's create puzzle J. The solution will be '{wordsToReplace[0]}' from the original quote.");
-                 puzzlePyramid.PuzzleJ = CreatePuzzleAsType(wordsToReplace[0]);
+                 puzzlePyramid.PuzzleJ = CreatePuzzleAsType(wordsToReplace[0], PuzzlesWithoutClues);
             }
 
             //puzzle J relies on three sub-puzzles (A, B, C)
@@ -108,7 +108,7 @@ namespace WordPuzzleGenerator
             if (puzzlePyramid.PuzzleK == null)
             {
                 Console.WriteLine($"Let's create puzzle K. The solution will be '{wordsToReplace[1]}' from the original quote.");
-                puzzlePyramid.PuzzleK = CreatePuzzleAsType(wordsToReplace[1]);
+                puzzlePyramid.PuzzleK = CreatePuzzleAsType(wordsToReplace[1], PuzzlesWithoutClues);
             }
 
             // To Find the word K, solve a puzzle with missing clues D, E, and F
@@ -159,7 +159,7 @@ namespace WordPuzzleGenerator
             if (puzzlePyramid.PuzzleL == null)
             {
                 Console.WriteLine($"Let's create puzzle L. The solution will be '{wordsToReplace[2]}' from the original quote.");
-                puzzlePyramid.PuzzleL = CreatePuzzleAsType(wordsToReplace[2]);
+                puzzlePyramid.PuzzleL = CreatePuzzleAsType(wordsToReplace[2], PuzzlesWithoutClues);
             }
 
             if (puzzlePyramid.PuzzleL != null)
@@ -213,6 +213,11 @@ namespace WordPuzzleGenerator
             Console.ReadKey();
 
         }
+
+        public List<WordPuzzleType> PuzzlesWithoutClues = new List<WordPuzzleType>()
+        {
+            WordPuzzleType.WordSearchMoreOrLess, WordPuzzleType.PhraseSegmentPuzzle
+        };
 
         private void GenerateHtmlFile(PuzzlePyramid puzzlePyramid, string fileNameForHtml)
         {
@@ -288,12 +293,9 @@ namespace WordPuzzleGenerator
             }
         }
 
-        private static IPuzzle CreatePuzzleAsType(string solution, WordPuzzleType typeOfPuzzleToCreate = WordPuzzleType.Undefined)
+        private static IPuzzle CreatePuzzleAsType(string solution, List<WordPuzzleType> puzzleTypesToSkip = null)
         {
-            if (typeOfPuzzleToCreate == WordPuzzleType.Undefined)
-            {
-                typeOfPuzzleToCreate = InteractivelySelectPuzzleType(solution);
-            }
+            var typeOfPuzzleToCreate = InteractivelySelectPuzzleType(solution, puzzleTypesToSkip);
             if (typeOfPuzzleToCreate == WordPuzzleType.Undefined)
             {
                 return null;
@@ -333,6 +335,7 @@ namespace WordPuzzleGenerator
             newList.Add(WordPuzzleType.WordSearchMoreOrLess);
             newList.Shuffle();
 
+            SortedListOfPuzzleTypes = newList.ToArray();
             //let's move existing types to the bottom. 
             foreach (IPuzzle puzzle in new List<IPuzzle>()
             {
@@ -356,16 +359,22 @@ namespace WordPuzzleGenerator
                     MovePuzzleTypeToEndOfList(puzzle.Type);
                 }
             }
-            SortedListOfPuzzleTypes = newList.ToArray();
+
         }
 
-        private static WordPuzzleType InteractivelySelectPuzzleType(string solution)
+        private static WordPuzzleType InteractivelySelectPuzzleType(string solution,
+            List<WordPuzzleType> puzzleTypesToSkip)
         {
+            if (puzzleTypesToSkip == null)
+            {
+                puzzleTypesToSkip = new List<WordPuzzleType>();
+            }
             WordPuzzleType selectedPuzzleType = WordPuzzleType.Undefined;
             var iPuzzleTypes = Program.CalculateAvailableIPuzzleTypes(solution);
             List<WordPuzzleType> availableTypes = new List<WordPuzzleType>();
             foreach (var key in iPuzzleTypes.Keys)
             {
+                if (puzzleTypesToSkip.Contains(key)) continue;
                 if (iPuzzleTypes[key])
                 {
                     availableTypes.Add(key);
