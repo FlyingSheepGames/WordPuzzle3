@@ -228,7 +228,6 @@ namespace WordPuzzles.Puzzle
                 var nextColumnOffset = 0;
                 var nextDirection = Direction.Undefined;
                 char letter = solutionWithoutSymbols.ToUpper()[index];
-                //if (!char.IsLetter(letter)) continue;
                 char nextLetter = '_';
                 if (solutionWithoutSymbols.Length > index + 1)
                 {
@@ -376,15 +375,12 @@ namespace WordPuzzles.Puzzle
                 builder.AppendLine("</tr>");
             }
             builder.AppendLine("</table>");
-            builder.Append("<h2>");
-            builder.Append("Solution: ");
-            for (var index = 0; index < Solution.Length; index++)
-            {
-                builder.Append("_ ");
-            }
-            builder.Append("</h2>");
+            builder.AppendLine();
+
+            _htmlGenerator.AppendSolution(builder, Solution, includeSolution);
 
             builder.AppendLine();
+
             builder.AppendLine("<!--EndFragment-->");
             if (!isFragment)
             {

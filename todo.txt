@@ -39,6 +39,7 @@ Add Support for Puzzle X - bonus puzzle, second quote by same person.
 
 Add qualifier for person (author, singer, writer, youTuber, etc.)
 
+Extract shared method from FormatHtmlForGoogle tests (to generate and compare files with and without solutions)
 
 
 Quote
