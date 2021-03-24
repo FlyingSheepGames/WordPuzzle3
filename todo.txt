@@ -22,6 +22,25 @@ PUZZLE TYPE		CLUES	SOLUTION (single word/phrase)
 2 WordSearch		no	phrase
 HiddenRelated		(not sure)
 
+
+
+
+BUG: Letters and Arrows puzzle doesn't support (e.g. ignore) spaces (non-letter characters). 
+ENHANCEMENT: Word Squares could support phrases (where each word is 5 letters or fewer) with multiple grids.
+
+Add PhraseSegment puzzle without a specific date and without "Anonymous"
+
+Add bool CanSupportSolution(string potentialSolution) to IPuzzle interface. Use lengths below
+
+HtmlGenerator.AppendSolution - use <nobr> tags and &nbsp;&nbsp;&nbsp;&nbsp; between words instead of <br>
+
+Fix replacement with subtrings issue. What if "solution" or "solve" were one of the replaced words?
+Add Support for Puzzle X - bonus puzzle, second quote by same person. 
+
+Add qualifier for person (author, singer, writer, youTuber, etc.)
+
+
+
 Quote
 	J Multiple Clues
 		A WordSearch
@@ -86,23 +105,6 @@ Most clues per puzzle = about 12
 	(minimum = 8 (4+4) rows * 4 columns = 32)
 	(no actual maximum size - will break into 100 letter subphrases as necessary)
 
-Add bool CanSupportSolution(string potentialSolution) to IPuzzle interface. 
-But we also need to consider bool HasMoreThenFourClues() to exclude PhraseSegment and WordSearch
-	- Actually, just explicitly exclude those two. 
-
-Add PhraseSegment puzzle without a specific date
-
-Fix replacement with subtrings issue. What if "solution" or "solve" were one of the replaced words?
-
-BUG: Letters and Arrows puzzle doesn't support (e.g. ignore) spaces (non-letter characters). 
-
-ENHANCEMENT: Word Squares could support phrases (where each word is 5 letters or fewer) with multiple grids.
-
-Add Support for Puzzle X - bonus puzzle, second quote by same person. 
-
-Add qualifier for person (author, singer, writer, youTuber, etc.)
-
-HtmlGenerator.AppendSolution - use <nobr> tags and &nbsp;&nbsp;&nbsp;&nbsp; between words instead of <br>
 
 In 9 IPuzzle Types
 	Implement         List<string> GetClues();

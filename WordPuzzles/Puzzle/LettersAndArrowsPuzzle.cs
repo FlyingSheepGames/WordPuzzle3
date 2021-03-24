@@ -216,20 +216,28 @@ namespace WordPuzzles.Puzzle
         public void PlaceSolution(string solution)
         {
             Solution = solution;
+            string solutionWithoutSymbols = RemoveSymbols(solution);
+
             int currentRow = 0;
             int currentColumn = 0;
 
-            var solutionLength = solution.Length;
+            var solutionLength = solutionWithoutSymbols.Length;
             for (var index = 0; index < solutionLength; index++)
             {
                 var nextRowOffset = 0;
                 var nextColumnOffset = 0;
                 var nextDirection = Direction.Undefined;
-                char letter = solution.ToUpper()[index];
+                char letter = solutionWithoutSymbols.ToUpper()[index];
+                //if (!char.IsLetter(letter)) continue;
                 char nextLetter = '_';
-                if (solution.Length > index + 1)
+                if (solutionWithoutSymbols.Length > index + 1)
                 {
-                    nextLetter = solution.ToLower()[index + 1];
+                    nextLetter = solutionWithoutSymbols.ToLower()[index + 1];
+                }
+
+                if (!char.IsLetter(nextLetter))
+                {
+                    nextLetter = '_';
                 }
                 if (index + 1 != solutionLength) //if we're not at the last letter...
                 {
@@ -284,6 +292,22 @@ namespace WordPuzzles.Puzzle
                 currentRow += nextRowOffset;
                 currentColumn += nextColumnOffset;
             }
+        }
+
+        private static string RemoveSymbols(string solution)
+        {
+            string solutionWithoutSymbols = "";
+            StringBuilder builder = new StringBuilder();
+            foreach (char currentLetter in solution)
+            {
+                if (char.IsLetter(currentLetter))
+                {
+                    builder.Append(currentLetter);
+                }
+            }
+
+            solutionWithoutSymbols = builder.ToString();
+            return solutionWithoutSymbols;
         }
 
         private int SelectVerticalOptionToMaximizeRowsVisited(List<int> verticalOptions, int currentRow)

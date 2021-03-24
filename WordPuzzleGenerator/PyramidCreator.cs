@@ -216,7 +216,9 @@ namespace WordPuzzleGenerator
 
         public List<WordPuzzleType> PuzzlesWithoutClues = new List<WordPuzzleType>()
         {
-            WordPuzzleType.WordSearchMoreOrLess, WordPuzzleType.PhraseSegmentPuzzle
+            WordPuzzleType.WordSearchMoreOrLess, 
+            WordPuzzleType.PhraseSegmentPuzzle, 
+            WordPuzzleType.WordSquare, //Technically, has some clues, but not many, if it's a single word.
         };
 
         private void GenerateHtmlFile(PuzzlePyramid puzzlePyramid, string fileNameForHtml)

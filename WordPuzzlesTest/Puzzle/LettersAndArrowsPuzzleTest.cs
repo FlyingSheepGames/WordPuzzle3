@@ -106,6 +106,83 @@ namespace WordPuzzlesTest.Puzzle
 
             }
 
+
+            [Test]
+            public void TrailingSymbol_RowsAsWords_CreatesWords()
+            {
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("hi!", true);
+                WordRepository repository = new WordRepository();
+                const int EXPECTED_SIZE = 4;
+
+                Assert.AreEqual(EXPECTED_SIZE, puzzle.Size);
+                StringBuilder builder = new StringBuilder();
+                for (int row = 0; row < EXPECTED_SIZE; row++)
+                {
+                    builder.Clear();
+                    for (int column = 0; column < EXPECTED_SIZE; column++)
+                    {
+                        builder.Append(puzzle.GetCellAtCoordinates(row, column).Letter);
+                    }
+
+                    string wordCandidate = builder.ToString().ToLower();
+                    Assert.IsTrue(repository.IsAWord(wordCandidate), $"Expected '{wordCandidate}' to be a word");
+                }
+
+                Console.WriteLine(puzzle.FormatHtmlForGoogle());
+
+            }
+
+
+            [Test]
+            public void LeadingSymbol_RowsAsWords_CreatesWords()
+            {
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("!hi", true);
+                WordRepository repository = new WordRepository();
+                const int EXPECTED_SIZE = 4;
+
+                Assert.AreEqual(EXPECTED_SIZE, puzzle.Size);
+                StringBuilder builder = new StringBuilder();
+                for (int row = 0; row < EXPECTED_SIZE; row++)
+                {
+                    builder.Clear();
+                    for (int column = 0; column < EXPECTED_SIZE; column++)
+                    {
+                        builder.Append(puzzle.GetCellAtCoordinates(row, column).Letter);
+                    }
+
+                    string wordCandidate = builder.ToString().ToLower();
+                    Assert.IsTrue(repository.IsAWord(wordCandidate), $"Expected '{wordCandidate}' to be a word");
+                }
+
+                Console.WriteLine(puzzle.FormatHtmlForGoogle());
+
+            }
+
+            [Test]
+            public void TwoWords_RowsAsWords_CreatesWords()
+            {
+                const int EXPECTED_SIZE = 5;
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("hi you!", true, EXPECTED_SIZE);
+                WordRepository repository = new WordRepository();
+
+                Assert.AreEqual(EXPECTED_SIZE, puzzle.Size);
+                StringBuilder builder = new StringBuilder();
+                for (int row = 0; row < EXPECTED_SIZE; row++)
+                {
+                    builder.Clear();
+                    for (int column = 0; column < EXPECTED_SIZE; column++)
+                    {
+                        builder.Append(puzzle.GetCellAtCoordinates(row, column).Letter);
+                    }
+
+                    string wordCandidate = builder.ToString().ToLower();
+                    Assert.IsTrue(repository.IsAWord(wordCandidate), $"Expected '{wordCandidate}' to be a word");
+                }
+
+                Console.WriteLine(puzzle.FormatHtmlForGoogle());
+
+            }
+
             [Test]
             public void OverwriteSize_HasThatSize()
             {
@@ -297,7 +374,7 @@ namespace WordPuzzlesTest.Puzzle
             public void FiveLetters_VisitsAllRows()
             {
                 LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle(3) {RandomSeed = 1};
-                puzzle.PlaceSolution("12345");
+                puzzle.PlaceSolution("abcde");
                 Console.WriteLine(puzzle.FormatHtmlForGoogle());
                 //The third box (in the center) should go down, not up. 
                 Assert.AreEqual(Direction.Down, puzzle.GetCellAtCoordinates(1, 1).Direction);
@@ -348,6 +425,47 @@ namespace WordPuzzlesTest.Puzzle
 
                 Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
             }
+
+            [Test]
+            public void WithSymbols_CreatesExpectedFile()
+            {
+                const string HTML_DIRECTORY = @"html\LettersAndArrows\";
+                string SOURCE_DIRECTORY = ConfigurationManager.AppSettings["SourceDirectory"] + "LettersAndArrows";
+
+                LettersAndArrowsPuzzle puzzle = new LettersAndArrowsPuzzle("hi you!", true, 5, 42);
+                puzzle.FillEmptyCells();
+                string generateHtml = puzzle.FormatHtmlForGoogle();
+
+                File.WriteAllText(HTML_DIRECTORY + "actualExample2.html", generateHtml);
+                var expectedLines = File.ReadAllLines(HTML_DIRECTORY + "expectedExample2.html");
+                var actualLines = File.ReadAllLines(HTML_DIRECTORY + "actualExample2.html");
+                bool anyLinesDifferent = false;
+                for (var index = 0; index < expectedLines.Length; index++)
+                {
+                    string expectedLine = expectedLines[index];
+                    string actualLine = "End of file already reached.";
+                    if (index >= 0 && actualLines.Length > index)
+                    {
+                        actualLine = actualLines[index];
+                    }
+
+                    if (expectedLine != actualLine)
+                    {
+                        anyLinesDifferent = true;
+                        Console.WriteLine($"Expected Line {index}:{expectedLine}");
+                        Console.WriteLine($"  Actual Line {index}:{expectedLine}");
+                    }
+                }
+
+                if (anyLinesDifferent)
+                {
+                    Console.WriteLine("Updating source file. Will show up as a difference in source control.");
+                    File.WriteAllLines(SOURCE_DIRECTORY + @"\expectedExample2.html", actualLines);
+                }
+
+                Assert.IsFalse(anyLinesDifferent, "Didn't expect any lines to be different.");
+            }
+
         }
 
         [TestFixture]
