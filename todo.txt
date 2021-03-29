@@ -24,23 +24,23 @@ HiddenRelated		(not sure)
 
 April 2nd - started at 1:21, completed at... 2:34? But not with all puzzles.
 
-Fixed FormatHTMLForGoogle (when includeSolution is true) for Letters and Arrows and WordSquares
-
-BUG: RemoveWord in Anacrostic should support uppercase words. 
-BUG: First letter in the first word in Anacrostic isn't replaced correctly. Is it because it's uppercase?
-Multiple Clues does not work with the letter "Y". (maybe because it was upper case?)
 Change heading in puzzle pyramid from "For <Date>" to "For week <date> - <date + 6>"
 ENHANCEMENT: Word Squares could support phrases (where each word is 5 letters or fewer) with multiple grids.
 
+HtmlGenerator.AppendSolution - use <nobr> tags and &nbsp;&nbsp;&nbsp;&nbsp; between words instead of <br>
+
+Fix replacement with subtrings issue. What if "solution" or "solve" were one of the replaced words?
+Also replace uppercase phrases "Living" vs "living"
+
 Add PhraseSegment puzzle without a specific date and without "Anonymous"
+Multiple Clues does not work with the letter "Y". (maybe because it was upper case?)
 
 Add bool CanSupportSolution(string potentialSolution) to IPuzzle interface. Use lengths below
 
-HtmlGenerator.AppendSolution - use <nobr> tags and &nbsp;&nbsp;&nbsp;&nbsp; between words instead of <br>
 
 Set a RandomNumberSeed for all puzzles inside a pyramid. Use it for the randomizer when constructing the puzzle set, too. 
 
-Fix replacement with subtrings issue. What if "solution" or "solve" were one of the replaced words?
+
 Add Support for Puzzle X - bonus puzzle, second quote by same person. 
 
 Add qualifier for person (author, singer, writer, youTuber, etc.)

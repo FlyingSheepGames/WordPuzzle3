@@ -20,7 +20,8 @@ namespace WordPuzzles.Puzzle
         public string EncodedPhrase;
         public Anacrostic(string phrase)
         {
-            SortLettersByReverseFrequency(phrase);
+            string lowercasePhrase = phrase.ToLowerInvariant();
+            SortLettersByReverseFrequency(lowercasePhrase);
         }
 
         public int LineLength { get; set; }
@@ -175,15 +176,19 @@ namespace WordPuzzles.Puzzle
 
         public void RemoveWord(string word)
         {
-            WordsFoundSoFar.Add(word);
+            string lowercaseWord = word.ToLowerInvariant();
+            WordsFoundSoFar.Add(lowercaseWord);
 
-            UpdateWordsWithNumberedBlanks(word);
+            UpdateWordsWithNumberedBlanks(lowercaseWord);
 
-            foreach (char letterInWordCandidate in word)
+            foreach (char letterInWordCandidate in lowercaseWord)
             {
-                _remainingLetters[GetAlphabetRank(letterInWordCandidate)]--;
+                if (char.IsLetter(letterInWordCandidate))
+                {
+                    _remainingLetters[GetAlphabetRank(letterInWordCandidate)]--;
+                }
             }
-            Puzzle.AddWordToClues(word);
+            Puzzle.AddWordToClues(lowercaseWord);
         }
 
         private void UpdateWordsWithNumberedBlanks(string word)

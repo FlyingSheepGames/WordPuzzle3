@@ -130,6 +130,18 @@ namespace WordPuzzlesTest.Puzzle
                     Assert.AreEqual(0, anacrostic.Remaining(letter));
                 }
             }
+
+            [Test]
+            public void UppercaseWithSymbols_WHICH_FindsWord()
+            {
+                Anacrostic anacrostic = new Anacrostic("which");
+                anacrostic.RemoveWord("WHICH !");
+                for (char letter = 'a'; letter <= 'z'; letter++)
+                {
+                    Assert.AreEqual(0, anacrostic.Remaining(letter));
+                }
+            }
+
         }
 
 
