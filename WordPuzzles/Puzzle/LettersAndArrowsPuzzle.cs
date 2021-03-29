@@ -370,7 +370,13 @@ namespace WordPuzzles.Puzzle
 
                 for (int column = 0; column < Size; column++)
                 {
-                    builder.AppendLine($@"    <td width=""20""><sup>{GetCellAtCoordinates(row, column)}</sup><br/>&nbsp;</td>");
+                    var letterAndArrowCell = GetCellAtCoordinates(row, column);
+                    string letterForThisCell = "&nbsp;";
+                    if (includeSolution)
+                    {
+                        letterForThisCell = letterAndArrowCell.Letter.ToString().ToUpperInvariant();
+                    }
+                    builder.AppendLine($@"    <td width=""20""><sup>{letterAndArrowCell}</sup><br/>{letterForThisCell}</td>");
                 }
                 builder.AppendLine("</tr>");
             }

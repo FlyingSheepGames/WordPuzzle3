@@ -185,6 +185,10 @@ namespace WordPuzzles.Puzzle
                 {
                     string letterInWord = @"&nbsp;";
                     string style = @"class=""normal""";
+                    if (includeSolution)
+                    {
+                        letterInWord = Lines[rowIndex][i].ToString().ToUpperInvariant();
+                    }
                     if (rowIndex == 0)
                     {
                         style = @"class=""bold""";

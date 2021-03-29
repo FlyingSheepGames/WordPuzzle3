@@ -89,7 +89,14 @@ namespace WordPuzzles.Puzzle
             _generator.AppendHtmlHeader(builder);
 
             builder.AppendLine($@"<h1>Puzzle Pyramid for { StartDate.ToShortDateString()} </h1>");
-            builder.AppendLine($@"""{ReplaceWordsWithMarkers(SelectedQuote, WordsToReplace)}""");
+            if (includeSolution)
+            {
+                builder.AppendLine($@"""{SelectedQuote}""");
+            }
+            else
+            {
+                builder.AppendLine($@"""{ReplaceWordsWithMarkers(SelectedQuote, WordsToReplace)}""");
+            }
 
             if (SelectedPerson != null)
             {
@@ -106,75 +113,75 @@ namespace WordPuzzles.Puzzle
 
             if (PuzzleA != null)
             {
-                builder.AppendLine($@"<h2>Puzzle A </h2>");
-                builder.AppendLine(PuzzleA.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle A </h3>");
+                builder.AppendLine(PuzzleA.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
 
             if (PuzzleB != null)
             {
-                builder.AppendLine($@"<h2>Puzzle B </h2>");
-                builder.AppendLine(PuzzleB.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle B </h3>");
+                builder.AppendLine(PuzzleB.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleC != null)
             {
-                builder.AppendLine($@"<h2>Puzzle C </h2>");
-                builder.AppendLine(PuzzleC.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle C </h3>");
+                builder.AppendLine(PuzzleC.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleD != null)
             {
-                builder.AppendLine($@"<h2>Puzzle D </h2>");
-                builder.AppendLine(PuzzleD.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle D </h3>");
+                builder.AppendLine(PuzzleD.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleE != null)
             {
-                builder.AppendLine($@"<h2>Puzzle E </h2>");
-                builder.AppendLine(PuzzleE.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle E </h3>");
+                builder.AppendLine(PuzzleE.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleF != null)
             {
-                builder.AppendLine($@"<h2>Puzzle F </h2>");
-                builder.AppendLine(PuzzleF.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle F </h3>");
+                builder.AppendLine(PuzzleF.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleG != null)
             {
-                builder.AppendLine($@"<h2>Puzzle G </h2>");
-                builder.AppendLine(PuzzleG.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle G </h3>");
+                builder.AppendLine(PuzzleG.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleH != null)
             {
-                builder.AppendLine($@"<h2>Puzzle H </h2>");
-                builder.AppendLine(PuzzleH.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle H </h3>");
+                builder.AppendLine(PuzzleH.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleI != null)
             {
-                builder.AppendLine($@"<h2>Puzzle I </h2>");
-                builder.AppendLine(PuzzleI.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle I </h3>");
+                builder.AppendLine(PuzzleI.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleJ != null)
             {
-                builder.AppendLine($@"<h2>Puzzle J </h2>");
-                builder.AppendLine(PuzzleJ.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle J </h3>");
+                builder.AppendLine(PuzzleJ.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleK != null)
             {
-                builder.AppendLine($@"<h2>Puzzle K </h2>");
-                builder.AppendLine(PuzzleK.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle K </h3>");
+                builder.AppendLine(PuzzleK.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
             if (PuzzleL != null)
             {
-                builder.AppendLine($@"<h2>Puzzle L </h2>");
-                builder.AppendLine(PuzzleL.FormatHtmlForGoogle(false, true));
+                builder.AppendLine($@"<h3>Puzzle L </h3>");
+                builder.AppendLine(PuzzleL.FormatHtmlForGoogle(includeSolution, true));
                 _generator.AppendPageBreak(builder);
             }
 

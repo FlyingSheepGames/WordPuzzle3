@@ -24,6 +24,7 @@ namespace WordPuzzles.Puzzle
 This is a word search, more or less. <p>
 Each word listed below is almost (give or take one letter) hidden in the grid. <p>
 For example if HEAR is given as a word, you might find HER in the grid, or you might find HEART. <p>
+The word may be placed in the grid horizontally, veritically, diagonally, and may be read backwards. It will not wrap around the edge of grid.<p>
 Write the letter that was added (or removed) next to the word, and then read down the column of letters to solve the puzzle.<p>
 ";
         public int RandomGeneratorSeed { get; set; } = 0;

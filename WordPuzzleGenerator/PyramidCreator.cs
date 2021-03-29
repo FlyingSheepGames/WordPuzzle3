@@ -21,11 +21,12 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 3, 15);
+            puzzlePyramid.StartDate = new DateTime(2021, 4, 23);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
 
             string fileNameForHtml =fileNameForJson.Replace(".json", ".html");
+            string fileNameWithSolutionsForHtml = fileNameForJson.Replace(".json", "-Solutions.html");
             if (File.Exists(fileNameForJson))
             {
                 puzzlePyramid = JsonConvert.DeserializeObject<PuzzlePyramid>(File.ReadAllText(fileNameForJson));
@@ -206,6 +207,7 @@ namespace WordPuzzleGenerator
             }
 
             GenerateHtmlFile(puzzlePyramid, fileNameForHtml);
+            GenerateHtmlFile(puzzlePyramid, fileNameWithSolutionsForHtml, true);
 
             WritePyramidToDisk(puzzlePyramid, fileNameForJson);
 
@@ -221,9 +223,9 @@ namespace WordPuzzleGenerator
             WordPuzzleType.WordSquare, //Technically, has some clues, but not many, if it's a single word.
         };
 
-        private void GenerateHtmlFile(PuzzlePyramid puzzlePyramid, string fileNameForHtml)
+        private void GenerateHtmlFile(PuzzlePyramid puzzlePyramid, string fileNameForHtml, bool includeSolution = false)
         {
-            string html = puzzlePyramid.FormatHtmlForGoogle(false, false);
+            string html = puzzlePyramid.FormatHtmlForGoogle(includeSolution, false);
             File.WriteAllText(fileNameForHtml, html);
         }
 

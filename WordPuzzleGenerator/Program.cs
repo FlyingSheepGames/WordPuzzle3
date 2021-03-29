@@ -1022,7 +1022,7 @@ z has 5 clue pairs.
             {
 
                 case WordPuzzleType.MultipleClues:
-                    if (3 < solutionLength && solutionLength < 11)
+                    if (3 <= solutionLength && solutionLength < 11)
                     {
                         generatedPuzzle = InteractiveFindMultipleCluesPuzzle(solution);
 
@@ -1704,8 +1704,11 @@ z has 5 clue pairs.
             //availablePuzzleTypes.Add(WordPuzzleType.MissingLetters, (10 < puzzle.FindWordsContainingLetters(solution).Count));//There must be at least 10 words containing the solution as a substring.
             //availablePuzzleTypes.Add(WordPuzzleType.PuzzleForDate, true);
             availablePuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, (3 < solutionLength && solutionLength < 11));
-            availablePuzzleTypes.Add(WordPuzzleType.MultipleClues, 3 < solutionLength && solutionLength < 10);
-            availablePuzzleTypes.Add(WordPuzzleType.TrisectedWords, true);
+            availablePuzzleTypes.Add(WordPuzzleType.MultipleClues, 
+                (3 <= solutionLength) && 
+                (solutionLength < 10) &&
+                !solution.ToLowerInvariant().Contains("y"));
+            availablePuzzleTypes.Add(WordPuzzleType.TrisectedWords, (10 <= solutionLength) && (solutionLength <= 36));
             return availablePuzzleTypes;
         }
 
