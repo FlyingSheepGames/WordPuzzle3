@@ -21,7 +21,7 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 4, 23);
+            puzzlePyramid.StartDate = new DateTime(2021, 4, 30);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
 
@@ -325,18 +325,34 @@ namespace WordPuzzleGenerator
             }
             replacementList.Add(typeOfPuzzleToMoveToTheEnd);
             SortedListOfPuzzleTypes = replacementList.ToArray();
+
+            if (CountOfPuzzleTypes.ContainsKey(typeOfPuzzleToMoveToTheEnd))
+            {
+                CountOfPuzzleTypes[typeOfPuzzleToMoveToTheEnd]++;
+            }
+            else
+            {
+                CountOfPuzzleTypes[typeOfPuzzleToMoveToTheEnd] = 1;
+            }
         }
 
         private static void InitializeSortedListOfPuzzleTypes(PuzzlePyramid puzzlePyramid)
         {
             List<WordPuzzleType> newList = new List<WordPuzzleType>();
             newList.Add(WordPuzzleType.MultipleClues);
+            CountOfPuzzleTypes.Add(WordPuzzleType.MultipleClues, 0);
             newList.Add(WordPuzzleType.WordSquare);
+            CountOfPuzzleTypes.Add(WordPuzzleType.WordSquare, 0);
             newList.Add(WordPuzzleType.TrisectedWords);
+            CountOfPuzzleTypes.Add(WordPuzzleType.TrisectedWords, 0);
             newList.Add(WordPuzzleType.Anacrostic);
+            CountOfPuzzleTypes.Add(WordPuzzleType.Anacrostic, 0);
             newList.Add(WordPuzzleType.LettersAndArrows);
+            CountOfPuzzleTypes.Add(WordPuzzleType.LettersAndArrows, 0);
             newList.Add(WordPuzzleType.ReadDownColumn);
+            CountOfPuzzleTypes.Add(WordPuzzleType.ReadDownColumn, 0);
             newList.Add(WordPuzzleType.WordSearchMoreOrLess);
+            CountOfPuzzleTypes.Add(WordPuzzleType.WordSearchMoreOrLess, 0);
             newList.Shuffle();
 
             SortedListOfPuzzleTypes = newList.ToArray();
@@ -391,7 +407,7 @@ namespace WordPuzzleGenerator
                 WordPuzzleType puzzleType = SortedListOfPuzzleTypes[index];
                 if (availableTypes.Contains(puzzleType))
                 {
-                    Console.WriteLine($"{index}: {puzzleType}");
+                    Console.WriteLine($"{index}: {puzzleType} {new string('*', CountOfPuzzleTypes[puzzleType])}");
                 }
             }
             Console.Write(">>");
@@ -408,6 +424,7 @@ namespace WordPuzzleGenerator
         }
 
         public static WordPuzzleType[] SortedListOfPuzzleTypes { get; set; } 
+        public static Dictionary<WordPuzzleType, int> CountOfPuzzleTypes = new Dictionary<WordPuzzleType, int>();
 
         private void CreatePuzzleJ(List<string> wordsToReplace, PuzzlePyramid puzzlePyramid)
         {
@@ -490,7 +507,7 @@ namespace WordPuzzleGenerator
         {
             List<string> wordsInQuote = new List<string>(
                 puzzlePyramid.SelectedQuote.Split(new[] {" ", ",", "."}, StringSplitOptions.RemoveEmptyEntries));
-            wordsInQuote = RemoveDuplicates(wordsInQuote);
+            wordsInQuote = RemoveDuplicatesAndShortWords(wordsInQuote);
             List<string> wordsToReplace = new List<string>();
             while (wordsToReplace.Count < 3)
             {
@@ -563,12 +580,13 @@ namespace WordPuzzleGenerator
             return wordsToReplace;
         }
 
-        private static List<string> RemoveDuplicates(List<string> wordsInQuote)
+        private static List<string> RemoveDuplicatesAndShortWords(List<string> wordsInQuote)
         {
             List<string> removeDuplicates = new List<string>();
             foreach (var word in wordsInQuote)
             {
                 string currentWord = word.ToLowerInvariant();
+                if (currentWord.Length < 3) continue;
                 if (removeDuplicates.Contains(currentWord)) continue;
                 removeDuplicates.Add(currentWord);
 
