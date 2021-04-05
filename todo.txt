@@ -22,6 +22,8 @@ PUZZLE TYPE		CLUES	SOLUTION (single word/phrase)
 2 WordSearch		no	phrase
 HiddenRelated		(not sure)
 
+Add support for removing puzzles (e.g. "both")
+
 April 2nd - started at 1:21, completed at... 2:34? But not with all puzzles.
 
 Change heading in puzzle pyramid from "For <Date>" to "For week <date> - <date + 6>"

@@ -35,6 +35,7 @@ namespace WordPuzzleGenerator
             }
             InitializeSortedListOfPuzzleTypes(puzzlePyramid);
 
+            InteractivelyRemoveExistingPuzzles(puzzlePyramid);
             // Then we find someone quotable that was born within a week after the start date
             if (puzzlePyramid.SelectedPerson == null)
             {
@@ -213,6 +214,154 @@ namespace WordPuzzleGenerator
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
+
+        }
+
+        private void InteractivelyRemoveExistingPuzzles(PuzzlePyramid puzzlePyramid)
+        {
+            bool atLeastOnePuzzleExists = false;
+            bool readyToExit = false;
+
+            while (!readyToExit)
+            {
+                Program.ClearConsoleInputAndOutput();
+                Console.WriteLine("Press a letter to delete the associated puzzle.");
+                if (puzzlePyramid.PuzzleA != null)
+                {
+                    Console.WriteLine($"A: {puzzlePyramid.PuzzleA.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleB != null)
+                {
+                    Console.WriteLine($"B: {puzzlePyramid.PuzzleB.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleC != null)
+                {
+                    Console.WriteLine($"C: {puzzlePyramid.PuzzleC.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleD != null)
+                {
+                    Console.WriteLine($"D: {puzzlePyramid.PuzzleD.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleE != null)
+                {
+                    Console.WriteLine($"E: {puzzlePyramid.PuzzleE.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleF != null)
+                {
+                    Console.WriteLine($"F: {puzzlePyramid.PuzzleF.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleG != null)
+                {
+                    Console.WriteLine($"G: {puzzlePyramid.PuzzleG.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleH != null)
+                {
+                    Console.WriteLine($"H: {puzzlePyramid.PuzzleH.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleI != null)
+                {
+                    Console.WriteLine($"I: {puzzlePyramid.PuzzleI.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleJ != null)
+                {
+                    Console.WriteLine($"J: {puzzlePyramid.PuzzleJ.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleK != null)
+                {
+                    Console.WriteLine($"K: {puzzlePyramid.PuzzleK.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (puzzlePyramid.PuzzleL != null)
+                {
+                    Console.WriteLine($"L: {puzzlePyramid.PuzzleL.Description}");
+                    atLeastOnePuzzleExists = true;
+                }
+
+                if (!atLeastOnePuzzleExists)
+                {
+                    Program.ClearConsoleInputAndOutput();
+                    return;
+                }
+
+                Console.WriteLine("Press the letter of the puzzle to remove, press enter to skip.");
+                Console.Write(">>");
+                var keyPress = Console.ReadKey();
+                switch (keyPress.Key)
+                {
+                    case ConsoleKey.A:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleA.Type]--;
+                        puzzlePyramid.PuzzleA = null;
+                        break;
+                    case ConsoleKey.B:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleB.Type]--;
+                        puzzlePyramid.PuzzleB = null;
+                        break;
+                    case ConsoleKey.C:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleC.Type]--;
+                        puzzlePyramid.PuzzleC = null;
+                        break;
+                    case ConsoleKey.D:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleD.Type]--;
+                        puzzlePyramid.PuzzleD = null;
+                        break;
+                    case ConsoleKey.E:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleE.Type]--;
+                        puzzlePyramid.PuzzleE = null;
+                        break;
+                    case ConsoleKey.F:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleF.Type]--;
+                        puzzlePyramid.PuzzleF = null;
+                        break;
+                    case ConsoleKey.G:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleG.Type]--;
+                        puzzlePyramid.PuzzleG = null;
+                        break;
+                    case ConsoleKey.H:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleH.Type]--;
+                        puzzlePyramid.PuzzleH = null;
+                        break;
+                    case ConsoleKey.I:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleI.Type]--;
+                        puzzlePyramid.PuzzleI = null;
+                        break;
+                    case ConsoleKey.J:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleJ.Type]--;
+                        puzzlePyramid.PuzzleJ = null;
+                        break;
+                    case ConsoleKey.K:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleK.Type]--;
+                        puzzlePyramid.PuzzleK = null;
+                        break;
+                    case ConsoleKey.L:
+                        CountOfPuzzleTypes[puzzlePyramid.PuzzleL.Type]--;
+                        puzzlePyramid.PuzzleL = null;
+                        break;
+                    default: //not a valid entry? Ready to leave;
+                        readyToExit = true;
+                        break;
+                }
+            }
 
         }
 
