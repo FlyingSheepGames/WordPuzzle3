@@ -88,14 +88,14 @@ namespace WordPuzzles.Puzzle
             StringBuilder builder = new StringBuilder();
             _generator.AppendHtmlHeader(builder);
 
-            builder.AppendLine($@"<h1>Puzzle Pyramid for { StartDate.ToShortDateString()} </h1>");
+            builder.AppendLine($@"<h1>Puzzle Pyramid for the week of { StartDate.ToShortDateString()} - { StartDate.AddDays(6).ToShortDateString()}  </h1>");
             if (includeSolution)
             {
-                builder.AppendLine($@"""{SelectedQuote}""");
+                builder.AppendLine($@"<h3>""{SelectedQuote}""</h3>");
             }
             else
             {
-                builder.AppendLine($@"""{ReplaceWordsWithMarkers(SelectedQuote, WordsToReplace)}""");
+                builder.AppendLine($@"<h3>""{ReplaceWordsWithMarkers(SelectedQuote, WordsToReplace)}""</h3>");
             }
 
             if (SelectedPerson != null)
@@ -103,7 +103,7 @@ namespace WordPuzzles.Puzzle
                 builder.AppendLine($@"<P>The above quote is attributed to {SelectedPerson.Name}, who was born on {SelectedPerson.Month}/{SelectedPerson.Day}/{SelectedPerson.Year}.");
             }
 
-            builder.AppendLine($@"<P>This is a puzzle pyramid. ");
+            builder.AppendLine($@"<p>&nbsp;<p>This is a puzzle pyramid. ");
             builder.AppendLine($@"<br>Solve puzzles A, B, and C to get the clues you need to solve puzzle J.");
             builder.AppendLine($@"<br>Solve puzzles D, E, and F to get the clues you need to solve puzzle K.");
             builder.AppendLine($@"<br>Solve puzzles G, H, and I to get the clues you need to solve puzzle L.");

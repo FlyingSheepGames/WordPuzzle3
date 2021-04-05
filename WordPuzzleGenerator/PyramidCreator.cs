@@ -21,7 +21,7 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 4, 30);
+            puzzlePyramid.StartDate = new DateTime(2021, 5, 7);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
 
@@ -348,14 +348,60 @@ namespace WordPuzzleGenerator
                     case ConsoleKey.J:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleJ.Type]--;
                         puzzlePyramid.PuzzleJ = null;
+                        if (puzzlePyramid.PuzzleA != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleA.Type]--;
+                            puzzlePyramid.PuzzleA = null;
+                        }
+                        if (puzzlePyramid.PuzzleB != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleB.Type]--;
+                            puzzlePyramid.PuzzleB = null;
+                        }
+                        if (puzzlePyramid.PuzzleC != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleC.Type]--;
+                            puzzlePyramid.PuzzleC = null;
+                        }
+
                         break;
                     case ConsoleKey.K:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleK.Type]--;
                         puzzlePyramid.PuzzleK = null;
+                        if (puzzlePyramid.PuzzleD != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleD.Type]--;
+                            puzzlePyramid.PuzzleD = null;
+                        }
+                        if (puzzlePyramid.PuzzleE != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleE.Type]--;
+                            puzzlePyramid.PuzzleE = null;
+                        }
+                        if (puzzlePyramid.PuzzleF != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleF.Type]--;
+                            puzzlePyramid.PuzzleF = null;
+                        }
                         break;
                     case ConsoleKey.L:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleL.Type]--;
                         puzzlePyramid.PuzzleL = null;
+                        if (puzzlePyramid.PuzzleG != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleG.Type]--;
+                            puzzlePyramid.PuzzleG = null;
+                        }
+                        if (puzzlePyramid.PuzzleH != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleH.Type]--;
+                            puzzlePyramid.PuzzleH = null;
+                        }
+                        if (puzzlePyramid.PuzzleI != null)
+                        {
+                            CountOfPuzzleTypes[puzzlePyramid.PuzzleI.Type]--;
+                            puzzlePyramid.PuzzleI = null;
+                        }
                         break;
                     default: //not a valid entry? Ready to leave;
                         readyToExit = true;
@@ -399,7 +445,8 @@ namespace WordPuzzleGenerator
                 for (var index = 0; index < clues.Count; index++)
                 {
                     string clue = clues[index];
-                    Console.WriteLine($"{index}: {clue}");
+                    int score = CalculateClueRating(clue);
+                    Console.WriteLine($"{index}: {clue} {score}");
                 }
 
                 string userInput = Console.ReadLine();
@@ -414,6 +461,43 @@ namespace WordPuzzleGenerator
                 }
             }
             return clueToUse;
+        }
+
+        private int CalculateClueRating(string solutionCandidate, List<WordPuzzleType> puzzleTypesToSkip = null)
+        {
+            int rating = 0;
+            if (puzzleTypesToSkip == null)
+            {
+                puzzleTypesToSkip = new List<WordPuzzleType>();
+            }
+            var iPuzzleTypes = Program.CalculateAvailableIPuzzleTypes(solutionCandidate);
+            List<WordPuzzleType> availableTypes = new List<WordPuzzleType>();
+            foreach (var key in iPuzzleTypes.Keys)
+            {
+                if (puzzleTypesToSkip.Contains(key)) continue;
+                if (iPuzzleTypes[key])
+                {
+                    availableTypes.Add(key);
+                }
+            }
+
+            foreach (var type in availableTypes)
+            {
+                if (!CountOfPuzzleTypes.ContainsKey(type)) continue;
+                if (CountOfPuzzleTypes[type] == 0)
+                {
+                    rating += 10;
+                }
+                if (CountOfPuzzleTypes[type] == 1)
+                {
+                    rating += 3;
+                }
+                if (CountOfPuzzleTypes[type] == 2)
+                {
+                    rating += 1;
+                }
+            }
+            return rating;
         }
 
         private void CreatePuzzleJAsMultipleCluesPuzzle(string solution, PuzzlePyramid puzzlePyramid)
