@@ -55,7 +55,7 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-            ProgramMode programMode = ProgramMode.PUZZLE_PYRAMID;
+            ProgramMode programMode = ProgramMode.READ_DOWN_COLUMNS_RESEARCH;
             //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {
@@ -76,6 +76,10 @@ namespace WordPuzzleGenerator
                 case ProgramMode.PUZZLE_PYRAMID:
                     PyramidCreator creator = new PyramidCreator();
                     creator.RunInPyramidMode();
+                    break;
+                case ProgramMode.READ_DOWN_COLUMNS_RESEARCH:
+                    ReadDownResearcher researcher = new ReadDownResearcher();
+                    researcher.Research();
                     break;
             }
         }
@@ -2673,5 +2677,6 @@ Enter 0 for none.");
         PATTERN_MATCH = 3, //Just get words that match a given pattern
 
         PUZZLE_PYRAMID = 4, //Create a pyramid of puzzles (12 in all)
+        READ_DOWN_COLUMNS_RESEARCH
     }
 }
