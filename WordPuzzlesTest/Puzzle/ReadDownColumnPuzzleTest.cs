@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using NUnit.Framework;
+using NUnit.Framework.Internal.Execution;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
 
@@ -307,5 +308,99 @@ namespace WordPuzzlesTest.Puzzle
             }
         }
 
+        [TestFixture]
+        public class AcceptablePatterns
+        {
+            [Test]
+            public void CommonLetters_ReturnsExpectedSet()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.Solution = "abcdeghilmnoprstw";
+                //2.If Q, J, X, Z, remove those patterns NOT in the IncludeFor<Letter> list
+                //3.If V, U, F, Y, K, remove selected patterns in the ExcludeFor<Letter> list
+                Assert.AreEqual(36, puzzle.AcceptablePatterns.Count);
+                var puzzleRepository = new WordRepository();
+                foreach (string pattern in puzzle.AcceptablePatterns)
+                {
+                    foreach (char letter in puzzle.Solution)
+                    {
+                        var patternWithLetter = pattern.Replace('1', letter);
+                        Assert.Less(0, puzzleRepository.WordsMatchingPattern(patternWithLetter).Count, $"{patternWithLetter} should have had at least one match.");
+                    }
+                }
+            }
+
+            [Test]
+            [TestCase('q', 17)]
+            [TestCase('j', 16)]
+            [TestCase('x', 21)]
+            [TestCase('z', 23)]
+            public void RareLetters_ReturnsExpectedSet(char rareLetter, int expectedNumberOfPatterns)
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.Solution = "abcdeghilmnoprstw" + rareLetter;
+                //2.If Q, J, X, Z, remove those patterns NOT in the IncludeFor<Letter> list
+                //3.If V, U, F, Y, K, remove selected patterns in the ExcludeFor<Letter> list
+                var puzzleRepository = new WordRepository();
+                foreach (string pattern in puzzle.AcceptablePatterns)
+                {
+                    foreach (char letter in puzzle.Solution)
+                    {
+                        var patternWithLetter = pattern.Replace('1', letter);
+                        Assert.Less(0, puzzleRepository.WordsMatchingPattern(patternWithLetter).Count, $"{patternWithLetter} should have had at least one match.");
+                    }
+                }
+                Assert.AreEqual(expectedNumberOfPatterns, puzzle.AcceptablePatterns.Count);
+            }
+
+
+            [Test]
+            [TestCase('v', 34)]
+            [TestCase('f', 34)]
+            [TestCase('y', 34)]
+            [TestCase('u', 35)]
+            [TestCase('k', 35)]
+            public void UncommonLetters_ReturnsExpectedSet(char uncommonLetter, int expectedNumberOfPatterns)
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.Solution = "abcdeghilmnoprstw" + uncommonLetter;
+                //2.If Q, J, X, Z, remove those patterns NOT in the IncludeFor<Letter> list
+                //3.If V, U, F, Y, K, remove selected patterns in the ExcludeFor<Letter> list
+                var puzzleRepository = new WordRepository();
+                foreach (string pattern in puzzle.AcceptablePatterns)
+                {
+                    foreach (char letter in puzzle.Solution)
+                    {
+                        var patternWithLetter = pattern.Replace('1', letter);
+                        Assert.Less(0, puzzleRepository.WordsMatchingPattern(patternWithLetter).Count, $"{patternWithLetter} should have had at least one match.");
+                    }
+                }
+                Assert.AreEqual(expectedNumberOfPatterns, puzzle.AcceptablePatterns.Count);
+            }
+
+            [Test]
+            public void FullAlphabet_ReturnsExpectedSet()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.Solution = "abcdeghilmnoprstw" + "qjxz" + "vufyk";
+                //2.If Q, J, X, Z, remove those patterns NOT in the IncludeFor<Letter> list
+                //3.If V, U, F, Y, K, remove selected patterns in the ExcludeFor<Letter> list
+                var puzzleRepository = new WordRepository();
+                foreach (string pattern in puzzle.AcceptablePatterns)
+                {
+                    foreach (char letter in puzzle.Solution)
+                    {
+                        var patternWithLetter = pattern.Replace('1', letter);
+                        Assert.Less(0, puzzleRepository.WordsMatchingPattern(patternWithLetter).Count, $"{patternWithLetter} should have had at least one match.");
+                        if (0 == puzzle.Repository.WordsMatchingPattern(patternWithLetter).Count)
+                        {
+                            Console.WriteLine($"{patternWithLetter} had zero hits");
+                        }
+                    }
+                }
+                Assert.AreEqual(1, puzzle.AcceptablePatterns.Count);
+            }
+
+        }
     }
 }

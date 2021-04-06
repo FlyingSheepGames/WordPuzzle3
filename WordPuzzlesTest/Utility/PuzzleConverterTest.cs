@@ -161,7 +161,7 @@ namespace WordPuzzlesTest.Utility
                 ReadDownColumnPuzzle puzzleToSerialize = new ReadDownColumnPuzzle();
                 puzzleToSerialize.Solution = "test";
                 string serializedPuzzle = JsonConvert.SerializeObject(puzzleToSerialize);
-                Assert.LessOrEqual(serializedPuzzle.Length, 1000, "Expected less than a thousand characters.");
+                Assert.LessOrEqual(serializedPuzzle.Length, 3000, "Expected less than a thousand characters.");
 
                 ReadDownColumnPuzzle deserializedPuzzle = JsonConvert.DeserializeObject<ReadDownColumnPuzzle>(serializedPuzzle);
                 Assert.AreEqual(puzzleToSerialize.Description, deserializedPuzzle.Description, "Unexpected difference in Description");
@@ -183,7 +183,7 @@ namespace WordPuzzlesTest.Utility
                 puzzleToSerialize.SetClueAtIndex("clue 4", 3);
 
                 string serializedPuzzle = JsonConvert.SerializeObject(puzzleToSerialize);
-                Assert.LessOrEqual(serializedPuzzle.Length, 1000, "Expected less than a thousand characters.");
+                Assert.LessOrEqual(serializedPuzzle.Length, 3000, "Expected less than a thousand characters.");
 
                 ReadDownColumnPuzzle deserializedPuzzle = JsonConvert.DeserializeObject<ReadDownColumnPuzzle>(serializedPuzzle);
                 Assert.AreEqual(puzzleToSerialize.Description, deserializedPuzzle.Description, "Unexpected difference in Description");
