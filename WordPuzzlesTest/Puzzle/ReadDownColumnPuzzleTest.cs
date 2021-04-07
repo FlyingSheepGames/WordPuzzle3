@@ -402,5 +402,24 @@ namespace WordPuzzlesTest.Puzzle
             }
 
         }
+
+        [TestFixture]
+        public class RandomizePattern
+        {
+            [Test]
+            public void CommonLetters_ResetsPattern()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle() {RandomSeed = 42};
+                puzzle.Solution = "abcd"; //all common letters.
+
+                Assert.Less(1, puzzle.AcceptablePatterns.Count, "Should be more than 1 acceptable pattern");
+
+                puzzle.RandomizePattern();
+                Assert.AreEqual("__1_____", puzzle.SelectedPattern);
+                Assert.AreEqual(8, puzzle.Size);
+                Assert.AreEqual(2, puzzle.ZeroBasedIndexOfSolution);
+            }
+        }
+
     }
 }

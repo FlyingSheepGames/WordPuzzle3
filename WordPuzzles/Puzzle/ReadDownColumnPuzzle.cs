@@ -11,9 +11,10 @@ namespace WordPuzzles.Puzzle
         // ReSharper disable once UnusedMember.Global
         public bool IsReadDownColumnPuzzle = true;
         private string _solution;
-        public int Size => 6;
+        public int Size { get; set; } = 6;
+    
         private Random _random;
-        public int ZeroBasedIndexOfSolution = 2;
+        public int ZeroBasedIndexOfSolution { get; set; } = 2;
         private readonly HtmlGenerator _generator = new HtmlGenerator();
         private char _specialCharacter;
 
@@ -420,7 +421,7 @@ namespace WordPuzzles.Puzzle
                     string style = "normal";
                     if (i == ZeroBasedIndexOfSolution)
                     {
-                        style = "bold";
+                        style = "bold grey";
                     }
 
                     string letterToDisplay = "&nbsp;";
@@ -485,6 +486,10 @@ namespace WordPuzzles.Puzzle
                 case 3: return "fourth";
                 case 4: return "fifth";
                 case 5: return "sixth";
+                case 6: return "seventh";
+                case 7: return "eighth";
+                case 8: return "ninth";
+                case 9: return "tenth";
             }
             throw new Exception("Unexpected ZeroBasedIndexOfSolution.");
         }
@@ -540,7 +545,15 @@ namespace WordPuzzles.Puzzle
 
         public string ReasonForSpecialCharacter { get; set; }
         public List<string> AcceptablePatterns { get; set; }
+        public string SelectedPattern { get; set; } = "__1___";
 
         public List<string> Words = new List<string>();
+
+        public void RandomizePattern()
+        {
+            int selectedIndex = Random1.Next(AcceptablePatterns.Count);
+            SelectedPattern = AcceptablePatterns[selectedIndex];
+            Size = SelectedPattern.Length;
+        }
     }
 }

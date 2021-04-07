@@ -55,7 +55,7 @@ namespace WordPuzzleGenerator
             ListWordsThatCanPrependALetter("i");
             Console.ReadKey();
             */
-            ProgramMode programMode = ProgramMode.READ_DOWN_COLUMNS_RESEARCH;
+            ProgramMode programMode = ProgramMode.PUZZLE_PYRAMID;
             //programMode = ProgramMode.YEAR; //TODO: Delete this line to let the user choose. 
             while (programMode == ProgramMode.UNDEFINED)
             {
@@ -1922,6 +1922,7 @@ z has 5 clue pairs.
 
             ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
             puzzle.Solution = solution;
+            puzzle.RandomizePattern();
             if (char.IsLetter(specialCharacter) && !string.IsNullOrWhiteSpace(reasonForSpecialCharacter))
             {
                 puzzle.SpecialCharacter = specialCharacter;
