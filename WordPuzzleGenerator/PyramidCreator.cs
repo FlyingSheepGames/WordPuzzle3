@@ -21,7 +21,7 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 5, 7);
+            puzzlePyramid.StartDate = new DateTime(2021, 5, 14);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
 
@@ -298,6 +298,9 @@ namespace WordPuzzleGenerator
                     atLeastOnePuzzleExists = true;
                 }
 
+                DisplayCountOfPuzzleTypes();
+
+
                 if (!atLeastOnePuzzleExists)
                 {
                     Program.ClearConsoleInputAndOutput();
@@ -409,6 +412,22 @@ namespace WordPuzzleGenerator
                 }
             }
 
+        }
+
+        private void DisplayCountOfPuzzleTypes()
+        {
+            Console.WriteLine();
+            List<string> puzzleTypeCounts = new List<string>();
+
+            foreach (var key in CountOfPuzzleTypes.Keys)
+            {
+                puzzleTypeCounts.Add($"{CountOfPuzzleTypes[key]} {key}");
+            }
+            puzzleTypeCounts.Sort();
+            foreach (string puzzleTypeSummary in puzzleTypeCounts)
+            {
+                Console.WriteLine(puzzleTypeSummary);
+            }
         }
 
         public List<WordPuzzleType> PuzzlesWithoutClues = new List<WordPuzzleType>()

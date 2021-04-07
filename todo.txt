@@ -23,6 +23,10 @@ PUZZLE TYPE		CLUES	SOLUTION (single word/phrase)
 HiddenRelated		(not sure)
 
 Add support for removing puzzles (e.g. "both")
+	After removing a puzzle, you need to reset the clue in the parent puzzle. "attach to"
+
+"(Solve Puzzle A)" does not need a score. 
+If solution contains "_", score should be zero
 
 Read Down Columns - change word length, and change letter position. 
 	Want at least 6 options for each letter
@@ -32,6 +36,7 @@ e.g. "q" can be the 2nd letter in a 5 letter word, or the 3rd letter in a 7 lett
 April 2nd - started at 1:21, completed at... 2:34? But not with all puzzles.
 
 Which puzzles don't use the standard way of getting clues for a word?  
+	Letters and Arrows
 
 Change heading in puzzle pyramid from "For <Date>" to "For week <date> - <date + 6>"
 ENHANCEMENT: Word Squares could support phrases (where each word is 5 letters or fewer) with multiple grids.

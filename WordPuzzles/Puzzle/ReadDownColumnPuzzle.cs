@@ -554,6 +554,7 @@ namespace WordPuzzles.Puzzle
             int selectedIndex = Random1.Next(AcceptablePatterns.Count);
             SelectedPattern = AcceptablePatterns[selectedIndex];
             Size = SelectedPattern.Length;
+            ZeroBasedIndexOfSolution = SelectedPattern.IndexOf('1');
         }
     }
 }

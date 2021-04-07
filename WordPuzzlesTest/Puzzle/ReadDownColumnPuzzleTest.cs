@@ -409,15 +409,15 @@ namespace WordPuzzlesTest.Puzzle
             [Test]
             public void CommonLetters_ResetsPattern()
             {
-                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle() {RandomSeed = 42};
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle() {RandomSeed = 43};
                 puzzle.Solution = "abcd"; //all common letters.
 
                 Assert.Less(1, puzzle.AcceptablePatterns.Count, "Should be more than 1 acceptable pattern");
 
                 puzzle.RandomizePattern();
-                Assert.AreEqual("__1_____", puzzle.SelectedPattern);
-                Assert.AreEqual(8, puzzle.Size);
-                Assert.AreEqual(2, puzzle.ZeroBasedIndexOfSolution);
+                Assert.AreEqual("_1___", puzzle.SelectedPattern);
+                Assert.AreEqual(5, puzzle.Size);
+                Assert.AreEqual(1, puzzle.ZeroBasedIndexOfSolution);
             }
         }
 
