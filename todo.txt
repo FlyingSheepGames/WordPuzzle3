@@ -25,8 +25,13 @@ HiddenRelated		(not sure)
 Add support for removing puzzles (e.g. "both")
 	After removing a puzzle, you need to reset the clue in the parent puzzle. "attach to"
 
+Puzzle types should show how many clues the current solution will have (approximately)
+
+Trisected words should allow user to select from possible answers
+
 "(Solve Puzzle A)" does not need a score. 
-If solution contains "_", score should be zero
+	If solution contains "_", score should be zero
+
 
 Read Down Columns - change word length, and change letter position. 
 	Want at least 6 options for each letter

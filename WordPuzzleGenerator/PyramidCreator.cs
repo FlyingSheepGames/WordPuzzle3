@@ -30,7 +30,7 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 5, 14);
+            puzzlePyramid.StartDate = new DateTime(2021, 5, 28);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
 
@@ -485,7 +485,16 @@ namespace WordPuzzleGenerator
                 {
                     string clue = clues[index];
                     int score = CalculateClueRating(clue);
+                    if (score == 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    }
                     Console.WriteLine($"{index}: {clue} {score}");
+                    Console.ForegroundColor = ConsoleColor.Gray;
                 }
 
                 string userInput = Console.ReadLine();
@@ -505,6 +514,10 @@ namespace WordPuzzleGenerator
         private int CalculateClueRating(string solutionCandidate, List<WordPuzzleType> puzzleTypesToSkip = null)
         {
             int rating = 0;
+
+            if (solutionCandidate.Contains("_")) return 0;
+            if ((new List<string> {SOLVE_PUZZLE_A, SOLVE_PUZZLE_B, SOLVE_PUZZLE_C, SOLVE_PUZZLE_D, SOLVE_PUZZLE_E, SOLVE_PUZZLE_F, SOLVE_PUZZLE_G, SOLVE_PUZZLE_H, SOLVE_PUZZLE_I}).Contains(solutionCandidate)) return 0;
+
             if (puzzleTypesToSkip == null)
             {
                 puzzleTypesToSkip = new List<WordPuzzleType>();
@@ -679,7 +692,7 @@ namespace WordPuzzleGenerator
                 WordPuzzleType puzzleType = SortedListOfPuzzleTypes[index];
                 if (availableTypes.Contains(puzzleType))
                 {
-                    Console.WriteLine($"{index}: {puzzleType} {new string('*', CountOfPuzzleTypes[puzzleType])}");
+                    Console.WriteLine($"{index}: {puzzleType} {new string('*', CountOfPuzzleTypes[puzzleType])} (~{EstimateClueCount(puzzleType, solution)} clues)");
                 }
             }
             Console.Write(">>");
@@ -693,6 +706,38 @@ namespace WordPuzzleGenerator
 
             Program.ClearConsoleInputAndOutput();
             return selectedPuzzleType;
+        }
+
+        private static int EstimateClueCount(WordPuzzleType puzzleType, string solution)
+        {
+            int lettersInSolution = 0;
+            foreach (var character in solution)
+            {
+                if (char.IsLetter(character))
+                {
+                    lettersInSolution++;
+                }
+            }
+
+            switch (puzzleType)
+            {
+                case WordPuzzleType.MultipleClues:
+                    return (int) (lettersInSolution * 2.5);
+                case WordPuzzleType.Anacrostic:
+                    return (int) lettersInSolution / 3;
+                case WordPuzzleType.LettersAndArrows:
+                    return (int) (lettersInSolution / 2) + 1;
+                case WordPuzzleType.ReadDownColumn:
+                    return lettersInSolution;
+                case WordPuzzleType.TrisectedWords:
+                    return (int) (lettersInSolution / 2.5);
+                case WordPuzzleType.WordSearchMoreOrLess:
+                    return lettersInSolution;
+                case WordPuzzleType.WordSquare:
+                    return lettersInSolution - 1;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(puzzleType), "Unexpected puzzle type.");
+            }
         }
 
         public static WordPuzzleType[] SortedListOfPuzzleTypes { get; set; } 

@@ -15,7 +15,7 @@ namespace WordPuzzles.Utility
         {
             var dictionaryOfThemes = new Dictionary<string, List<string>>();
             // ReSharper disable StringLiteralTypo
-            GoogleSheet sheet = new GoogleSheet() { GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA" };
+            GoogleSheet sheet = new GoogleSheet() { GoogleSheetKey = "1ZJmh_woTIRDW1lspRX728GdkUc81J1K_iYeOoPYNfcA", IgnoreCache = false};
             // ReSharper restore StringLiteralTypo
 
             List<Dictionary<int, string>> findRelatedWords = sheet.ExecuteQuery(@"SELECT *");
