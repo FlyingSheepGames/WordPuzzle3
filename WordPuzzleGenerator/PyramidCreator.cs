@@ -11,6 +11,15 @@ namespace WordPuzzleGenerator
 {
     internal class PyramidCreator 
     {
+        private const string SOLVE_PUZZLE_A = "(solve puzzle A)";
+        private const string SOLVE_PUZZLE_B = "(solve puzzle B)";
+        private const string SOLVE_PUZZLE_C = "(solve puzzle C)";
+        private const string SOLVE_PUZZLE_D = "(solve puzzle D)";
+        private const string SOLVE_PUZZLE_E = "(solve puzzle E)";
+        private const string SOLVE_PUZZLE_F = "(solve puzzle F)";
+        private const string SOLVE_PUZZLE_G = "(solve puzzle G)";
+        private const string SOLVE_PUZZLE_H = "(solve puzzle H)";
+        private const string SOLVE_PUZZLE_I = "(solve puzzle I)";
 
         public PyramidCreator()
         {
@@ -74,7 +83,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleA = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleA != null)
                         {
-                            puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, "(solve puzzle A)");
+                            puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, SOLVE_PUZZLE_A);
                         }
                     }
                 }
@@ -87,7 +96,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleB = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleB != null)
                         {
-                            puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, "(solve puzzle B)");
+                            puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, SOLVE_PUZZLE_B);
                         }
                     }
                 }
@@ -100,7 +109,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleC = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleC != null)
                         {
-                            puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, "(solve puzzle C)");
+                            puzzlePyramid.PuzzleJ.ReplaceClue(clueToReplace, SOLVE_PUZZLE_C);
                         }
                     }
                 }
@@ -124,7 +133,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleD = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleD != null)
                         {
-                            puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, "(solve puzzle D)");
+                            puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, SOLVE_PUZZLE_D);
                         }
                     }
                 }
@@ -137,7 +146,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleE = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleE != null)
                         {
-                            puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, "(solve puzzle E)");
+                            puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, SOLVE_PUZZLE_E);
                         }
                     }
                 }
@@ -150,7 +159,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleF = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleF != null)
                         {
-                            puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, "(solve puzzle F)");
+                            puzzlePyramid.PuzzleK.ReplaceClue(clueToReplace, SOLVE_PUZZLE_F);
                         }
                     }
                 }
@@ -174,7 +183,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleG = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleG != null)
                         {
-                            puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, "(solve puzzle G)");
+                            puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, SOLVE_PUZZLE_G);
                         }
                     }
                 }
@@ -187,7 +196,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleH = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleH != null)
                         {
-                            puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, "(solve puzzle H)");
+                            puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, SOLVE_PUZZLE_H);
                         }
                     }
                 }
@@ -200,7 +209,7 @@ namespace WordPuzzleGenerator
                         puzzlePyramid.PuzzleI = CreatePuzzleAsType(clueToReplace);
                         if (puzzlePyramid.PuzzleI != null)
                         {
-                            puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, "(solve puzzle I)");
+                            puzzlePyramid.PuzzleL.ReplaceClue(clueToReplace, SOLVE_PUZZLE_I);
                         }
                     }
                 }
@@ -314,38 +323,49 @@ namespace WordPuzzleGenerator
                 {
                     case ConsoleKey.A:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleA.Type]--;
+                        puzzlePyramid.PuzzleJ.ReplaceClue(SOLVE_PUZZLE_A, puzzlePyramid.PuzzleA.Solution);
                         puzzlePyramid.PuzzleA = null;
                         break;
                     case ConsoleKey.B:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleB.Type]--;
+                        puzzlePyramid.PuzzleJ.ReplaceClue(SOLVE_PUZZLE_B, puzzlePyramid.PuzzleB.Solution);
                         puzzlePyramid.PuzzleB = null;
                         break;
                     case ConsoleKey.C:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleC.Type]--;
+                        puzzlePyramid.PuzzleJ.ReplaceClue(SOLVE_PUZZLE_C, puzzlePyramid.PuzzleC.Solution);
                         puzzlePyramid.PuzzleC = null;
                         break;
+
                     case ConsoleKey.D:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleD.Type]--;
+                        puzzlePyramid.PuzzleK.ReplaceClue(SOLVE_PUZZLE_D, puzzlePyramid.PuzzleD.Solution);
                         puzzlePyramid.PuzzleD = null;
                         break;
                     case ConsoleKey.E:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleE.Type]--;
+                        puzzlePyramid.PuzzleK.ReplaceClue(SOLVE_PUZZLE_E, puzzlePyramid.PuzzleE.Solution);
                         puzzlePyramid.PuzzleE = null;
                         break;
                     case ConsoleKey.F:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleF.Type]--;
+                        puzzlePyramid.PuzzleK.ReplaceClue(SOLVE_PUZZLE_F, puzzlePyramid.PuzzleF.Solution);
                         puzzlePyramid.PuzzleF = null;
                         break;
+
                     case ConsoleKey.G:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleG.Type]--;
+                        puzzlePyramid.PuzzleL.ReplaceClue(SOLVE_PUZZLE_G, puzzlePyramid.PuzzleG.Solution);
                         puzzlePyramid.PuzzleG = null;
                         break;
                     case ConsoleKey.H:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleH.Type]--;
+                        puzzlePyramid.PuzzleL.ReplaceClue(SOLVE_PUZZLE_H, puzzlePyramid.PuzzleH.Solution);
                         puzzlePyramid.PuzzleH = null;
                         break;
                     case ConsoleKey.I:
                         CountOfPuzzleTypes[puzzlePyramid.PuzzleI.Type]--;
+                        puzzlePyramid.PuzzleL.ReplaceClue(SOLVE_PUZZLE_I, puzzlePyramid.PuzzleI.Solution);
                         puzzlePyramid.PuzzleI = null;
                         break;
                     case ConsoleKey.J:

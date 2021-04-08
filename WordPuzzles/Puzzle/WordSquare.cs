@@ -230,6 +230,18 @@ namespace WordPuzzles.Puzzle
         }
 
         public WordPuzzleType Type { get; } = WordPuzzleType.WordSquare;
+        public string Solution
+        {
+            get
+            {
+                if (Lines.Length > 0)
+                {
+                    return Lines[0];
+                }
+
+                return null;
+            }
+        }
 
         public List<string> GetClues()
         {

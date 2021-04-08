@@ -352,6 +352,7 @@ namespace WordPuzzles.Puzzle
 
         public string Description => "Anacrostic: " + OriginalPhrase;
         public WordPuzzleType Type { get; } = WordPuzzleType.Anacrostic;
+        public string Solution => OriginalPhrase;
 
         public List<string> GetClues()
         {

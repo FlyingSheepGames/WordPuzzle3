@@ -338,7 +338,7 @@ namespace WordPuzzles.Puzzle
         }
 
         public List<int> RowsVisited = new List<int>();
-        public string Solution = "";
+        public string Solution { get; set; } = "";
         public string[] Clues;
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {

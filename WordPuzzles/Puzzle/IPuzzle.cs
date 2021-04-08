@@ -11,6 +11,7 @@ namespace WordPuzzles.Puzzle
         string FormatHtmlForGoogle(bool includeSolution = false, bool  isFragment = false);
         string Description { get;  }
         WordPuzzleType Type { get; }
+        string Solution { get; }
         List<string> GetClues();
         void ReplaceClue(string clueToReplace, string newClue);
     }

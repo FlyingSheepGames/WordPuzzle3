@@ -254,6 +254,7 @@ Return the letters into the grid above them. The author of the quote appears at 
 
         public string Description => $"PhraseSegmentPuzzle for phrase {Phrase} ";
         public WordPuzzleType Type { get; } = WordPuzzleType.Undefined;
+        public string Solution => Phrase;
 
         public List<string> GetClues()
         {
