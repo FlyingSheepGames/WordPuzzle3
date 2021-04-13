@@ -1,0 +1,275 @@
+div.puzzle {
+	position:absolute;
+
+	transition: visibility 0s, opacity 0.5s linear;
+   -moz-transition: visibility 0s, opacity 0.5s linear;
+   -webkit-transition: visibility 0s, opacity 0.5s linear;
+   -ms-transition: visibility 0s, opacity 0.5s linear;
+}
+
+div.puzzle.visible {
+	visibility: visible;
+  	opacity: 1;
+}
+
+div.puzzle.invisible {
+	visibility: hidden;
+ 	opacity: 0;
+}
+
+div.puzzle.gone {
+	display:none;
+}
+
+table.box-traversal-table {
+	border-collapse:collapse;
+	border:1px solid black;
+}
+
+table.box-traversal-table td {
+	border:1px solid black;
+}
+
+span.box-traversal-direction {
+	font-weight: bold;
+}
+
+.box-traversal-table .pr-2 {
+	padding-right: 1.1em !important;
+}
+
+div.box-traversal-direction-div {
+	width: 30px;
+	float: right;
+	padding: 3px;
+}
+
+td.box-traversal-direction-td {
+	width: 100px;
+	vertical-align: top;
+}
+
+
+td.box-td {
+	width: 100px;
+	vertical-align: top;
+}
+
+
+table.box-table {
+	width: 50%;
+	border-collapse:collapse;
+	border:1px solid black;
+	margin: 0 auto;
+}
+
+table.box-table td {
+	border:1px solid black;
+}
+
+td.box-traversal-clue-td {
+	vertical-align:middle;
+	text-align:center;
+	min-width: 200px;
+	padding:8px;
+}
+
+table.box-table th {
+	background-color: #AF73D3;
+}
+
+table.box-table th input {
+	/*color:white;*/
+}
+
+
+input.puzzle-piece {
+	width: 40px;
+	height: 40px;
+	font-size: 16pt;
+	margin: 2px;
+	text-align: center;
+}
+
+input.puzzle-piece
+{
+	background-color:#F5F5F5;
+
+	transition: background-color 0s linear; 
+   -moz-transition: background-color 0s linear;  
+   -webkit-transition: background-color 0s linear; 
+   -ms-transition: background-color 0s linear; 
+}
+
+input.puzzle-piece:focus 
+{
+	background-color:#C3A1D8;
+}
+
+input.puzzle-piece.focused
+{
+	background-color:#C3A1D8;
+}
+
+input.puzzle-piece.correct
+{
+	background-color:lightgreen;
+
+	transition: background-color 1s linear; 
+   -moz-transition: background-color 1s linear;  
+   -webkit-transition: background-color 1s linear; 
+   -ms-transition: background-color 1s linear; 
+}
+
+input.puzzle-piece.incorrect
+{
+	background-color:pink;
+
+	transition: background-color 1s linear; 
+   -moz-transition: background-color 1s linear;  
+   -webkit-transition: background-color 1s linear; 
+   -ms-transition: background-color 1s linear; 
+}
+
+input.puzzle-piece.checked-answer
+{
+	background-color:#F5F5F5;
+
+	transition: background-color 1s linear; 
+   -moz-transition: background-color 1s linear;  
+   -webkit-transition: background-color 1s linear; 
+   -ms-transition: background-color 1s linear; 
+}
+
+div.horizontalgap {
+	overflow: hidden;
+	height: 1px;
+	padding: 5px;
+}
+
+h3 {
+	white-space:pre-wrap;
+}
+
+div.wordsearch-div {
+	display:flex;
+}
+
+div.wordsearch-div span {
+	font-size: 16pt;
+	margin: auto 0;
+}
+
+div.wordsearch-div input {
+	margin: auto 10px;
+}
+
+table.wordsearch-table {
+	border-collapse:collapse;
+	border:1px solid black;
+	margin: 0 auto;
+	height:250px;
+	text-align:center;
+	font-size: 16pt;
+}
+
+table.wordsearch-table td {
+	border:1px solid black;
+	width: 75px;
+}
+
+div.fragment-display {
+	display:flex;
+}
+
+div.fragment-display div {
+	margin:10px;
+	font-size:16pt;
+	width: 75px;
+	height:75px;
+	border:1px solid black;
+	text-align:center;
+	font-weight:bold;
+}
+
+td.box-fragment-td input {
+	margin: 10px 20px;
+}
+
+div.shaded {
+	background-color:#632E83;
+	color: white;
+}
+
+tr.shaded {
+	background-color:#632E83;
+	color: white;
+}
+
+td.shaded-light {
+	background-color:#AF73D3;
+}
+
+.nav-pills .nav-link.active
+{
+	background-color: #AF73D3;
+}
+
+a
+{
+	color: #AF73D3;
+}
+
+a:hover
+{
+	color: #632E83;
+}
+
+
+#AppHeader span
+{
+	color: #AF73D3;
+}
+
+div.puzzle-header button {
+	background-color: #AF73D3;
+	margin: auto 0 auto auto;
+	border-color: #632E83;
+}
+
+div.puzzle-header button:hover {
+	background-color: #632E83;
+	border-color: #632E83;
+}
+
+div.puzzle-header button:focus {
+	background-color: #632E83;
+	box-shadow: 0 0 0 .25rem rgba(195,161,215,.5);
+	border-color: #632E83;
+}
+
+div.puzzle-header button:active {
+	background-color: #632E83;
+	border-color: #632E83;
+}
+
+div.puzzle-header button:active:focus {
+	background-color: #632E83;
+	box-shadow: 0 0 0 .25rem rgba(195,161,215,.5);
+	border-color: #632E83;
+}
+
+#AppHeader header 
+{
+	background: linear-gradient(0deg, rgba(127,64,168,0.1) 0%, rgba(127,64,168,0.02) 10%, rgba(127,64,168,0) 20%);
+}
+
+#App header 
+{
+	background: linear-gradient(0deg, rgba(127,64,168,0.1) 0%, rgba(127,64,168,0.02) 10%, rgba(127,64,168,0) 20%);
+}
+
+input.puzzle-piece
+{
+	background-color: #F5F5F5;
+}
