@@ -467,7 +467,7 @@ class Puzzle_Fragment extends Puzzle
 					<div className="fragment-display d-flex align-items-center justify-content-center text-center">
 					{
 						this.props.data.fragments_2.map((fragment, index) => (
-							<div className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d2" + index}>
+							<div draggable="true" className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d2" + index}>
 								<span key={this.props.data.name + "p2" + index}>{fragment.toUpperCase()}</span>
 							</div>
 						))
@@ -477,7 +477,7 @@ class Puzzle_Fragment extends Puzzle
 					<div className="fragment-display d-flex align-items-center justify-content-center text-center">
 					{
 						this.props.data.fragments_3.map((fragment, index) => (
-							<div className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d3" + index}>
+							<div draggable="true" className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d3" + index}>
 								<span key={this.props.data.name + "p3" + index}>{fragment.toUpperCase()}</span>
 							</div>
 						))
@@ -780,7 +780,7 @@ class App extends React.Component
 {
 	constructor(props) {
 		super(props);
-		this.state = {currentPuzzle: 0};
+		this.state = {currentPuzzle: 4};
 		this.switchPuzzle = this.switchPuzzle.bind(this);
 	}
 
@@ -878,11 +878,22 @@ class AppHeader extends React.Component
 		return (
 			<div className="container">
 				<header className="d-flex flex-wrap justify-content-center py-3 border-bottom">
-					<a className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" href="/">
-						<img className="me-2" src="./logo.png" />
-						<span className="fs-4">{puzzle_data.puzzle_metadata.header}</span>
-					</a>
-					<span className="fs-8 d-flex align-items-center">{puzzle_data.puzzle_metadata.subheader}</span>
+					<div className="container">
+						<div className="row">
+							<div className="col-12 col-sm-12 col-md-12 col-lg-4">
+								<a className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" href="/">
+									<img className="me-2" src="./logo.png" />
+									<span className="fs-4">{puzzle_data.puzzle_metadata.header}</span>
+								</a>
+							</div>
+							<div className="col-12 col-sm-12 col-md-12 col-lg-6 d-flex">
+								<span className="align-items-center fs-8 d-flex">{puzzle_data.puzzle_metadata.quote}</span>
+							</div>
+							<div className="col-12 col-sm-12 col-md-12 col-lg-2 d-flex">
+								<span className="fs-8 d-flex justify-content-end align-items-center">{puzzle_data.puzzle_metadata.subheader}</span>
+							</div>
+						</div>
+					</div>					
 				</header>
 			</div>
 		);
