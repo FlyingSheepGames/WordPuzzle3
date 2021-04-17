@@ -1935,6 +1935,11 @@ z has 5 clue pairs.
                 Console.Clear();
                 Console.WriteLine($"Pick (or enter) a word for the {index}-indexed letter in the solution:{letter.ToString().ToUpperInvariant()}");
                 var list = puzzle.GetWordCandidatesForIndex(index);
+                if (list.Count == 0)
+                {
+                    Console.WriteLine($"Unable to find any candidates for the next word. Pattern was {puzzle.SelectedPattern }. Press any key to exit.");
+                    return null;
+                }
                 list.Shuffle();
 
                 var numberOfOptionsToDisplay = list.Count;

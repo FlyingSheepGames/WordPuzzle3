@@ -13,12 +13,27 @@ namespace WordPuzzles.Puzzle
     {
         // ReSharper disable once UnusedMember.Global
         public bool IsWordSquare = true;
-        public WordRepository Repository { get; set; } = new WordRepository();
+
+        public WordRepository Repository
+        {
+            get
+            {
+                if (_repository == null)
+                {
+                    _repository = new WordRepository();
+                }
+
+                return _repository;
+            }
+            set { _repository = value; }
+        }
+
         // ReSharper disable once InconsistentNaming
         private static readonly string BASE_DIRECTORY = ConfigurationManager.AppSettings["BaseDirectory"]; //@"E:\utilities\WordSquare\data\";
         private readonly HtmlGenerator _htmlGenerator = new HtmlGenerator();
         public string[] Lines ;
         public int Size;
+        private WordRepository _repository;
 
         public WordSquare() :this("")
         {

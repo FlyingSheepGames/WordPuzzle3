@@ -109,6 +109,51 @@ namespace WordPuzzles.Puzzle
                 patternsToRemove.AddRange(ExcludeForK);
             }
 
+            if (solution.Contains("i"))
+            {
+                patternsToRemove.AddRange(ExcludeForI);
+            }
+
+            if (solution.Contains("w"))
+            {
+                patternsToRemove.AddRange(ExcludeForW);
+            }
+
+            if (solution.Contains("e"))
+            {
+                patternsToRemove.AddRange(ExcludeForE);
+            }
+
+            if (solution.Contains("g"))
+            {
+                patternsToRemove.AddRange(ExcludeForG);
+            }
+
+            if (solution.Contains("b"))
+            {
+                patternsToRemove.AddRange(ExcludeForB);
+            }
+
+            if (solution.Contains("d"))
+            {
+                patternsToRemove.AddRange(ExcludeForD);
+            }
+
+            if (solution.Contains("c"))
+            {
+                patternsToRemove.AddRange(ExcludeForC);
+            }
+
+            if (solution.Contains("l"))
+            {
+                patternsToRemove.AddRange(ExcludeForL);
+            }
+
+            if (solution.Contains("p"))
+            {
+                patternsToRemove.AddRange(ExcludeForP);
+            }
+
             foreach (string patternToRemove in patternsToRemove)
             {
                 calculateAcceptablePatterns.Remove(patternToRemove);
@@ -224,8 +269,12 @@ namespace WordPuzzles.Puzzle
 
         public List<string> ExcludeForV = new List<string>()
         {
+            "__1",
             "____1",
             "_____1",
+            "_1____",
+            "1_________",
+            "____1_____",
         };
 
         public List<string> ExcludeForU = new List<string>()
@@ -243,11 +292,73 @@ namespace WordPuzzles.Puzzle
         {
             "_____1_",
             "1_________",
+            "_1_____",
+            "1_______",
+            "______1_",
+            "____1____",
+            "_____1___",
+            "_______1_",
+            "____1_____",
+            "_____1____",
+            "_______1__",
         };
 
         public List<string> ExcludeForK = new List<string>()
         {
             "1_________",
+            "__1_______",
+        };
+
+        public List<string> ExcludeForI = new List<string>()
+        {
+            "_____1",
+        };
+
+        public List<string> ExcludeForW = new List<string>()
+        {
+            "____1__",
+            "1_______",
+            "______1___",
+            "_______1__",
+        };
+
+        public List<string> ExcludeForE = new List<string>()
+        {
+            "1_______",
+        };
+
+        public List<string> ExcludeForG = new List<string>()
+        {
+            "_1______",
+            "______1___",
+        };
+
+
+        public List<string> ExcludeForP = new List<string>()
+        {
+            "_____1_",
+        };
+
+        public List<string> ExcludeForB = new List<string>()
+        {
+            "_____1_",
+            "______1_",
+            "______1___",
+        };
+
+        public List<string> ExcludeForD = new List<string>()
+        {
+            "_____1____",
+        };
+
+        public List<string> ExcludeForC = new List<string>()
+        {
+            "______1___",
+        };
+
+        public List<string> ExcludeForL = new List<string>()
+        {
+            "_______1__",
         };
 
         public List<string> CompleteListOfPatterns = new List<string>()
@@ -545,16 +656,26 @@ namespace WordPuzzles.Puzzle
 
         public string ReasonForSpecialCharacter { get; set; }
         public List<string> AcceptablePatterns { get; set; }
-        public string SelectedPattern { get; set; } = "__1___";
+
+        public string SelectedPattern
+        {
+            get { return _selectedPattern; }
+            set
+            {
+                _selectedPattern = value;
+                Size = _selectedPattern.Length;
+                ZeroBasedIndexOfSolution = _selectedPattern.IndexOf('1');
+            }
+
+        }
 
         public List<string> Words = new List<string>();
+        private string _selectedPattern = "__1___";
 
         public void RandomizePattern()
         {
             int selectedIndex = Random1.Next(AcceptablePatterns.Count);
             SelectedPattern = AcceptablePatterns[selectedIndex];
-            Size = SelectedPattern.Length;
-            ZeroBasedIndexOfSolution = SelectedPattern.IndexOf('1');
         }
     }
 }

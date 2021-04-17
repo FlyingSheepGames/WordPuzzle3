@@ -318,7 +318,7 @@ namespace WordPuzzlesTest.Puzzle
                 puzzle.Solution = "abcdeghilmnoprstw";
                 //2.If Q, J, X, Z, remove those patterns NOT in the IncludeFor<Letter> list
                 //3.If V, U, F, Y, K, remove selected patterns in the ExcludeFor<Letter> list
-                Assert.AreEqual(36, puzzle.AcceptablePatterns.Count);
+                Assert.AreEqual(27, puzzle.AcceptablePatterns.Count);
                 var puzzleRepository = new WordRepository();
                 foreach (string pattern in puzzle.AcceptablePatterns)
                 {
@@ -331,10 +331,10 @@ namespace WordPuzzlesTest.Puzzle
             }
 
             [Test]
-            [TestCase('q', 17)]
-            [TestCase('j', 16)]
-            [TestCase('x', 21)]
-            [TestCase('z', 23)]
+            [TestCase('q', 14)]
+            [TestCase('j', 14)]
+            [TestCase('x', 16)]
+            [TestCase('z', 18)]
             public void RareLetters_ReturnsExpectedSet(char rareLetter, int expectedNumberOfPatterns)
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
@@ -355,23 +355,27 @@ namespace WordPuzzlesTest.Puzzle
 
 
             [Test]
-            [TestCase('v', 34)]
-            [TestCase('f', 34)]
-            [TestCase('y', 34)]
-            [TestCase('u', 35)]
-            [TestCase('k', 35)]
+            [TestCase('v', 22)]
+            [TestCase('f', 26)]
+            [TestCase('y', 24)]
+            [TestCase('u', 27)]
+            [TestCase('k', 25)]
             public void UncommonLetters_ReturnsExpectedSet(char uncommonLetter, int expectedNumberOfPatterns)
             {
                 ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
                 puzzle.Solution = "abcdeghilmnoprstw" + uncommonLetter;
                 //2.If Q, J, X, Z, remove those patterns NOT in the IncludeFor<Letter> list
                 //3.If V, U, F, Y, K, remove selected patterns in the ExcludeFor<Letter> list
-                var puzzleRepository = new WordRepository();
+                var puzzleRepository = new WordRepository() {ExcludeAdvancedWords = true};
                 foreach (string pattern in puzzle.AcceptablePatterns)
                 {
                     foreach (char letter in puzzle.Solution)
                     {
                         var patternWithLetter = pattern.Replace('1', letter);
+                        if (0 == puzzleRepository.WordsMatchingPattern(patternWithLetter).Count)
+                        {
+                            Console.WriteLine($"{patternWithLetter} missing.");
+                        }
                         Assert.Less(0, puzzleRepository.WordsMatchingPattern(patternWithLetter).Count, $"{patternWithLetter} should have had at least one match.");
                     }
                 }
@@ -421,5 +425,20 @@ namespace WordPuzzlesTest.Puzzle
             }
         }
 
+
+        [TestFixture]
+        public class SpecificExamples
+        {
+
+            [Test]
+            public void KIT_DoesNotWorkWithPattern()
+            {
+                ReadDownColumnPuzzle puzzle = new ReadDownColumnPuzzle();
+                puzzle.Solution = "kit";
+                puzzle.SelectedPattern = "__1_______";
+                Assert.AreEqual(0, puzzle.GetWordCandidatesForIndex(0).Count);
+                CollectionAssert.DoesNotContain(puzzle.AcceptablePatterns, "__1_______");
+            }
+        }
     }
 }
