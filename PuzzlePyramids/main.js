@@ -54,21 +54,24 @@ class PuzzlePiece extends React.Component
 
 		if (key == 8)
 		{
-			
-			// Tab backward.
-			element_index -= 1;
-			element_index += elements.length;
-			element_index %= elements.length;
-
-			elements[element_index].focus()
-
+			e.stopPropagation();
+			e.preventDefault();
 			// On backspace, check if value is empty.
 			if (letter != null && letter != "")
 			{
 				this.setState({value: ""});
 				this.myRef.current.value = "";
 				this.updateHookBuddy("");
+
+				e.target.parentElement.dataset["bakedin"] = "false";
 			}
+
+			// Tab backward.
+			element_index -= 1;
+			element_index += elements.length;
+			element_index %= elements.length;
+
+			elements[element_index].focus()
 
 		}
 	}
@@ -94,6 +97,7 @@ class PuzzlePiece extends React.Component
 	}
 
 	handleChange(e) {
+		console.log("handleChange triggered");
 		var letter = e.target.value.slice(-1);
 		if (letter != null && letter != "") 
 		{
@@ -117,6 +121,7 @@ class PuzzlePiece extends React.Component
 
 		if (letter != null && letter != "") 
 		{
+
 			// Tab forward.
 			element_index += 1;
 			element_index += elements.length;
@@ -127,21 +132,22 @@ class PuzzlePiece extends React.Component
 		
 	}
 
+
 	render(){
 		return (
-			<input
-				ref={this.myRef}
-				className={"puzzle-piece " + "puzzle-piece-" + this.props.hook}
-				type="text"
-				value={this.state.value}
-				readOnly={this.props.readOnly == "true"}
-				onKeyDown={this.handleKeyDown}
-				onChange={this.handleChange}
-				onFocus={this.handleFocus}
-				onBlur={this.handleBlur}
-				value={this.props.value}
-			/>
-		);
+		<input
+			ref={this.myRef}
+			className={"puzzle-piece " + "puzzle-piece-" + this.props.hook}
+			type="text"
+			value={this.state.value}
+			readOnly={this.props.readOnly == "true"}
+			onKeyDown={this.handleKeyDown}
+			onChange={this.handleChange}
+			onFocus={this.handleFocus}
+			onBlur={this.handleBlur}
+			value={this.props.value}
+		/>
+		);	
 	}
 }
 
@@ -376,7 +382,7 @@ class Puzzle_Box_Simple extends Puzzle
 				<div className="py-4 col-12 col-sm-12 col-md-12 col-lg-12 border-bottom">
 					<h3 className="pb-4 border-bottom">{this.props.data.directions}</h3>
 					<h2 className="py-2">Missing Words</h2>
-					<div className="d-flex align-items-center justify-content-center">
+					<div className="d-flex align-items-center justify-content-center drag_end">
 						<table className="box-traversal-table">
 							<tbody>
 								{
@@ -426,9 +432,177 @@ class Puzzle_Fragment extends Puzzle
 
 		this.state.correct_answers += this.props.data.final_answer.replace(/\s/g, '').toUpperCase();
 
+		this.handleDragStart = this.handleDragStart.bind(this);
+		this.handleDragDrop = this.handleDragDrop.bind(this);
+		this.handleDragOver = this.handleDragOver.bind(this);
+		this.handleDragEnter = this.handleDragEnter.bind(this);
+		this.handleDragExit = this.handleDragExit.bind(this);
+		this.handleDragEnd = this.handleDragEnd.bind(this);
 	}
 
-	
+
+	handleDragStart = (e) => {
+		e.dataTransfer.setData("letters", e.target.innerText.split(''));
+	}
+
+	handleDragEnd = (e) => {
+		if (e.dataTransfer.dropEffect == "move")
+		{
+			// Dropped successfully.
+			e.target.classList.add("shaded");
+		}
+	}
+
+	handleDragDrop = (e) => {
+		e.stopPropagation();
+		e.preventDefault();
+
+		var et;
+		if (e.target.nodeName == "INPUT")
+		{
+			et = e.target.parentNode;
+		}
+		else 
+		{
+			et = e.target;
+		}
+
+
+		// Drop Event
+		var validTarget = true;
+		var letters = e.dataTransfer.getData("letters");
+
+		var e2 = document.getElementById(et.dataset["idNext"]);
+		var e3 = null;
+		if (e2 == null)
+		{
+			validTarget = false;
+		}
+		else
+		{
+			if (letters.length == 5)
+			{
+				e3 = document.getElementById(e2.dataset["idNext"]);
+			}
+
+			if (letters.length == 5 && e3 == null)
+			{
+				validTarget = false;
+			}
+		}
+
+		if (validTarget)
+		{
+			if (et.dataset["bakedin"] == "true" || e2.dataset["bakedin"] == "true" || (e3 != null && e3.dataset["bakedin"] == "true"))
+			{
+				return;
+			}
+
+			et.dataset["bakedin"] = "true";
+			e2.dataset["bakedin"] = "true";
+
+			if (e3 != null)
+			{
+				e3.dataset["bakedin"] = "true";
+			}
+			
+		}
+	}
+
+	handleDragOver = (e) => {
+		e.stopPropagation();
+		e.preventDefault();
+	}
+
+	handleDragEnter = (e) => {
+		e.stopPropagation();
+		e.preventDefault();
+		if (e.target.nodeName == "DIV" && e.relatedTarget.tagName != "INPUT")
+		{
+
+			// Drag Enter Event
+			var validTarget = true;
+			var letters = e.dataTransfer.getData("letters");
+
+			var e2 = document.getElementById(e.target.dataset["idNext"]);
+			var e3 = null;
+			if (e2 == null)
+			{
+				validTarget = false;
+			}
+			else
+			{
+				if (letters.length == 5)
+				{
+					e3 = document.getElementById(e2.dataset["idNext"]);
+				}
+
+				if (letters.length == 5 && e3 == null)
+				{
+					validTarget = false;
+				}
+			}
+
+			if (validTarget)
+			{
+				if (e.target.dataset["bakedin"] == "true" || e2.dataset["bakedin"] == "true" || (e3 != null && e3.dataset["bakedin"] == "true"))
+				{
+					return;
+				}
+
+
+				updateCharacter(e.target, letters[0]);
+				updateCharacter(e2, letters[2]);
+				updateCharacter(e3, letters[4]);
+
+			}
+		}
+	}
+
+	handleDragExit = (e) => {
+		e.stopPropagation();
+		e.preventDefault();
+		if (e.target.nodeName == "DIV" && e.relatedTarget.tagName != "INPUT")
+		{
+			// Drag Exit Event
+			var validTarget = true;
+			var letters = e.dataTransfer.getData("letters");
+			var e2 = document.getElementById(e.target.dataset["idNext"]);
+			var e3 = null;
+			if (e2 == null)
+			{
+				validTarget = false;
+			}
+			else
+			{
+				if (letters.length == 5)
+				{
+					e3 = document.getElementById(e2.dataset["idNext"]);
+				}
+
+				if (letters.length == 5 && e3 == null)
+				{
+					validTarget = false;
+				}
+			}
+
+			if (validTarget)
+			{
+				if (e.target.dataset["bakedin"] == "true" || e2.dataset["bakedin"] == "true" || (e3 != null && e3.dataset["bakedin"] == "true"))
+				{
+					return;
+				}
+
+				updateCharacter(e.target, "");
+				updateCharacter(e2, "");
+				updateCharacter(e3, "");
+
+			}
+
+		}
+
+	}
+
 
 	render() {
 		return <div className={"container puzzle " + this.props.visible + " " + this.props.puzzleId}>
@@ -447,7 +621,7 @@ class Puzzle_Fragment extends Puzzle
 										{
 											Array.from(clue.answer).map((letter, inner_index) => (
 												<td className="box-fragment-td" key={this.props.data.name+"td"+outer_index+inner_index}>
-													<div key={this.props.data.name+"div"+outer_index+inner_index}>
+													<div onDrop={this.handleDragDrop} onDragEnter={this.handleDragEnter} onDragExit={this.handleDragExit} onDragOver={this.handleDragOver} key={this.props.data.name+"div"+outer_index+inner_index} id={this.props.data.name+"div"+outer_index+inner_index} data-id-next={this.props.data.name+"div"+outer_index+(inner_index+1)} data-bakedin="false" data-hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters}>
 														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false"/>
 													</div>
 												</td>
@@ -467,7 +641,7 @@ class Puzzle_Fragment extends Puzzle
 					<div className="fragment-display d-flex align-items-center justify-content-center text-center">
 					{
 						this.props.data.fragments_2.map((fragment, index) => (
-							<div draggable="true" className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d2" + index}>
+							<div draggable="true" onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d2" + index}>
 								<span key={this.props.data.name + "p2" + index}>{fragment.toUpperCase()}</span>
 							</div>
 						))
@@ -477,7 +651,7 @@ class Puzzle_Fragment extends Puzzle
 					<div className="fragment-display d-flex align-items-center justify-content-center text-center">
 					{
 						this.props.data.fragments_3.map((fragment, index) => (
-							<div draggable="true" className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d3" + index}>
+							<div draggable="true" onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} className="d-flex align-items-center justify-content-center text-center" onClick={this.toggleShading} key={this.props.data.name + "d3" + index}>
 								<span key={this.props.data.name + "p3" + index}>{fragment.toUpperCase()}</span>
 							</div>
 						))
@@ -489,7 +663,7 @@ class Puzzle_Fragment extends Puzzle
 					<h3 className="pb-4 border-bottom">Solution</h3>
 					{
 						Array.from(this.props.data.solution_boxes).map((answer,index) => {
-							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="false" hook={this.props.puzzleId + answer}/>
+							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="true" hook={this.props.puzzleId + answer}/>
 						})
 					}
 				</div>
@@ -780,7 +954,7 @@ class App extends React.Component
 {
 	constructor(props) {
 		super(props);
-		this.state = {currentPuzzle: 4};
+		this.state = {currentPuzzle: 0};
 		this.switchPuzzle = this.switchPuzzle.bind(this);
 	}
 
@@ -911,3 +1085,25 @@ ReactDOM.render(
 	React.createElement(App),
 	document.querySelector('#App')
 );
+
+
+
+
+// Helper function for drag and drop.
+function updateCharacter(el, t) {
+
+	if (el == null) return;
+
+	el.lastChild.value = t;
+	
+	var elements = document.querySelectorAll('div.puzzle.visible input.puzzle-piece.puzzle-piece-' + el.dataset["hook"]);
+	for (var ind = 0 ; ind < elements.length ; ind ++)
+	{
+		var element = elements[ind];
+		if (element == el.lastChild) continue;
+		if (element.value != t)
+		{
+			element.value = t;
+		}
+	}
+}
