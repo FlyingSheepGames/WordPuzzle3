@@ -273,3 +273,8 @@ input.puzzle-piece
 {
 	background-color: #F5F5F5;
 }
+
+div.shaded-light {
+	background-color:#B196C1;
+	color: white;
+}
