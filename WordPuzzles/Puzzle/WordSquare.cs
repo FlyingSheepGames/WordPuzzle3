@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -274,5 +275,39 @@ namespace WordPuzzles.Puzzle
                 }
             }
         }
+
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "box";
+            generatedJObject["directions"] = "Use the clues below to fill in the grid. Each horizontal word also appears vertically (in the same order). Then read the solution to the puzzle from the highlighted squares.";
+
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
+
+            generatedJObject["first_letter"] = (string) Lines[0].ToUpperInvariant().ToCharArray()[0].ToString();
+            
+            AppendArrayOfClues(generatedJObject);
+
+            return generatedJObject;
+        }
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            var list = Lines;
+            for (var index = 1; index < list.Length; index++)
+            {
+                string clue = Clues[index];
+                var word = list[index];
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = clue;
+                clueToAdd["answer"] = word.ToLowerInvariant();
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["clues"] = jArrayOfClues;
+        }
+
     }
 }

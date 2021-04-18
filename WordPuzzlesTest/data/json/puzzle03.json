@@ -1,0 +1,25 @@
+{
+  "name": "Puzzle C",
+  "type": "box",
+  "directions": "Use the clues below to fill in the grid. Each horizontal word also appears vertically (in the same order). Then read the solution to the puzzle from the highlighted squares.",
+  "clues": [
+    {
+      "clue": "Lukewarm",
+      "answer": "tepid"
+    },
+    {
+      "clue": "Copying",
+      "answer": "aping"
+    },
+    {
+      "clue": "Bit of color",
+      "answer": "tinge"
+    },
+    {
+      "clue": "Trimmed, as a lawn",
+      "answer": "edged"
+    }
+  ],
+  "first_letter": "S",
+  "final_answer": "state"
+}
