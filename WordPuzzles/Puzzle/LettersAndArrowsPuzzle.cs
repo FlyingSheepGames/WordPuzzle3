@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -549,6 +550,78 @@ namespace WordPuzzles.Puzzle
         {
             Clues[rowIndex] = clue;
         }
+
+
+
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "box_traversal";
+            generatedJObject["directions"] = "Fill in the words below (one letter per box) based on the clues. Starting in the top left box, follow the direction (e.g. three spaces to the right to find the next letter.";
+
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
+            AppendArrayOfClues(generatedJObject);
+
+            AppendBoxStructure(generatedJObject);
+
+            return generatedJObject;
+        }
+
+        private void AppendBoxStructure(JObject generatedJObject)
+        {
+            var jArrayForBoxStructure = new JArray();
+            for (int x = 0; x < Size; x++)
+            {
+                var currentLine = new JArray();
+                for (int y = 0; y < Size; y++)
+                {
+                    var currentCell = GetCellAtCoordinates(x, y);
+                    if (currentCell.Number == 0)
+                    {
+                        currentLine.Add(new JValue(""));
+                    }
+                    else
+                    {
+                        currentLine.Add(new JValue(Math.Abs(currentCell.Number).ToString() + GetLetterForDirection(currentCell.Direction)));
+                    }
+                }
+                jArrayForBoxStructure.Add(currentLine);
+            }
+            generatedJObject["box_structure"] = jArrayForBoxStructure;
+        }
+
+        private char GetLetterForDirection(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Down: return 'd';
+                case Direction.Left: return 'l';
+                case Direction.Right: return 'r';
+                case Direction.Up: return 'u';
+                case Direction.Undefined: return ' ';
+                default: throw new ArgumentOutOfRangeException(nameof(direction));
+            }
+        }
+
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            var list = GetWords();
+            for (var index = 0; index < list.Count; index++)
+            {
+                string clue = Clues[index];
+                var word = list[index];
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = clue;
+                clueToAdd["answer"] = word.ToLowerInvariant();
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["clues"] = jArrayOfClues;
+        }
+
 
 
     }

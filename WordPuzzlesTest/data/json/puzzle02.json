@@ -1,0 +1,30 @@
+{
+  "name": "Puzzle B",
+  "type": "box_traversal",
+  "directions": "Fill in the words below (one letter per box) based on the clues. Starting in the top left box, follow the direction (e.g. three spaces to the right to find the next letter.",
+  "clues": [
+    {
+      "clue": "Highlander's family",
+      "answer": "clan"
+    },
+    {
+      "clue": "Present",
+      "answer": "gift"
+    },
+    {
+      "clue": "Broadcasts",
+      "answer": "airs"
+    },
+    {
+      "clue": "Longstanding fight, possibly between families",
+      "answer": "feud"
+    }
+  ],
+  "box_structure": [
+    [ "2d", "", "1d", "2d" ],
+    [ "2r", "1r", "2d", "1u" ],
+    [ "2r", "1u", "1u", "1l" ],
+    [ "1r", "3u", "1l", "1u" ]
+  ],
+  "final_answer": "car fuel"
+}

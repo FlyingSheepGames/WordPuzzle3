@@ -578,7 +578,7 @@ namespace WordPuzzles.Puzzle
             generatedJObject["type"] = "linked_fitb";
             generatedJObject["section_1_directions"] = "Fill in the blanks below based on the clues.";
             generatedJObject["section_2_directions"] = "Then copy the letters to the grid below.";
-            generatedJObject["final_answer"] = "marked by diversity or difference";
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
             AppendArrayOfClues(generatedJObject);
             AppendArrayOfAnswers(generatedJObject);
 

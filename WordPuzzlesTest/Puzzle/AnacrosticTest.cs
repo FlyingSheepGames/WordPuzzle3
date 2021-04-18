@@ -556,8 +556,6 @@ C10	C11	C12	C13	C14	C15
                 AssertArraysMatch(expectedJObject, actualJObject, "section_2_answers");
 
                 Assert.AreEqual((string)expectedJObject["final_answer"], (string)actualJObject["final_answer"], "Unexpected value for final_answer");
-
-
             }
 
             private static void AssertArraysMatch(JObject expectedJObject, JObject actualJObject, string arrayName)
