@@ -24,6 +24,8 @@ HiddenRelated		(not sure)
 
 Add support for removing puzzles (e.g. "both")
 	After removing a puzzle, you need to reset the clue in the parent puzzle. "attach to"
+Read Down Column
+This doesn't work "__k_______", but "__1_______" is included as a viable pattern. Read Down Column "mistake". 
 
 Puzzle types should show how many clues the current solution will have (approximately)
 
