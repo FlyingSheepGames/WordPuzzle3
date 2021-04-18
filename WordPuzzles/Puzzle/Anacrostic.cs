@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -568,6 +569,51 @@ namespace WordPuzzles.Puzzle
             builder.Append(secondLine);
             builder.Append(thirdLine);
             builder.Append(fourthLine);
+        }
+
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "linked_fitb";
+            generatedJObject["section_1_directions"] = "Fill in the blanks below based on the clues.";
+            generatedJObject["section_2_directions"] = "Then copy the letters to the grid below.";
+            generatedJObject["final_answer"] = "marked by diversity or difference";
+            AppendArrayOfClues(generatedJObject);
+            AppendArrayOfAnswers(generatedJObject);
+
+            return generatedJObject;
+        }
+
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach (var clue in Puzzle.Clues)
+            {
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = clue.CustomizedClue;
+                clueToAdd["answer"] = clue.OriginalWord;
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["section_1_clues"] = jArrayOfClues;
+        }
+        private void AppendArrayOfAnswers(JObject generatedJObject)
+        {
+            var jArrayOfAnswers = new JArray();
+
+            foreach (var puzzleLetter in EncodedPhrase.Split(new string[]{
+                "\t", Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string puzzleLetterAsString = " ";
+                puzzleLetterAsString = puzzleLetter.ToLowerInvariant();
+
+                var answerToAdd = new JValue(puzzleLetterAsString);
+                jArrayOfAnswers.Add(answerToAdd);
+            }
+
+            generatedJObject["section_2_answers"] = jArrayOfAnswers;
         }
     }
 }

@@ -1,0 +1,68 @@
+{
+  "name": "Puzzle A",
+  "type": "linked_fitb",
+  "section_1_directions": "Fill in the blanks below based on the clues.",
+  "section_1_clues": [
+    {
+      "clue": "Worm on a hook, say",
+      "answer": "bait"
+    },
+    {
+      "clue": "Title for a married woman",
+      "answer": "mrs"
+    },
+    {
+      "clue": "Bean-shaped organ",
+      "answer": "kidney"
+    },
+    {
+      "clue": "Confirm",
+      "answer": "verify"
+    },
+    {
+      "clue": "Compelled",
+      "answer": "forced"
+    },
+    {
+      "clue": "Doe or buck",
+      "answer": "deer"
+    }
+  ],
+  "section_2_directions": "Then copy the letters to the grid below.",
+  "section_2_answers": [
+    "b5",
+    "a2",
+    "b6",
+    "c8",
+    "c12",
+    "c10",
+    " ",
+    "a1",
+    "c13",
+    " ",
+    "e25",
+    "a3",
+    "d14",
+    "d15",
+    "d16",
+    "b7",
+    "c9",
+    "a4",
+    "d19",
+    " ",
+    "e21",
+    "e22",
+    " ",
+    "f26",
+    "d17",
+    "d18",
+    "e20",
+    "e24",
+    "f29",
+    "f27",
+    "c11",
+    "e23",
+    "f28"
+  ],
+  "final_answer": "marked by diversity or difference"
+}

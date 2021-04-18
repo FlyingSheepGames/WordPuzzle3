@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Utility;
@@ -528,5 +533,47 @@ C10	C11	C12	C13	C14	C15
             }
         }
 
+        [TestFixture]
+        public class GenerateJsonFileForMonty
+        {
+            [Test]
+            public void Puzzle_4_2_Generates_ExpectedFile()
+            {
+                string expectedSerializedPuzzle = File.ReadAllText(@"data\json\puzzle01.json");
+                JObject expectedJObject=  JObject.Parse(expectedSerializedPuzzle);
+                
+                PuzzlePyramid pyramid = JsonConvert.DeserializeObject<PuzzlePyramid>(File.ReadAllText(@"C:\utilities\WordSquare\data\basic\pyramids\4-2.json"));
+
+                Anacrostic puzzle = pyramid.PuzzleA as Anacrostic;
+                JObject actualJObject = puzzle.GenerateJsonFileForMonty("Puzzle A");
+                Assert.AreEqual((string) expectedJObject["name"], (string) actualJObject["name"], "Unexpected value for name");
+                Assert.AreEqual((string)expectedJObject["type"], (string)actualJObject["type"], "Unexpected value for type");
+                Assert.AreEqual((string)expectedJObject["section_1_directions"], (string)actualJObject["section_1_directions"], "Unexpected value for section_1_directions");
+                
+                AssertArraysMatch(expectedJObject, actualJObject, "section_1_clues");
+                
+                Assert.AreEqual((string)expectedJObject["section_2_directions"], (string)actualJObject["section_2_directions"], "Unexpected value for section_2_directions");
+                AssertArraysMatch(expectedJObject, actualJObject, "section_2_answers");
+
+                Assert.AreEqual((string)expectedJObject["final_answer"], (string)actualJObject["final_answer"], "Unexpected value for final_answer");
+
+
+            }
+
+            private static void AssertArraysMatch(JObject expectedJObject, JObject actualJObject, string arrayName)
+            {
+                var token = actualJObject[arrayName];
+                if (token == null)
+                {
+                    Assert.Fail("Actual list for " + arrayName + " was null.");
+                    return;
+                }
+
+                var actualList = token.ToList();
+                var expectedList = expectedJObject[arrayName].ToList();
+                CollectionAssert.AreEqual(expectedList, actualList,
+                    "Unexpected value for " + arrayName);
+            }
+        }
     }
 }
