@@ -1,0 +1,23 @@
+{
+  "name": "Puzzle E",
+  "type": "fragment",
+  "directions": "Construct the missing words by using the 2 or 3 letter fragments below. Each fragment will be used once.\nMove the letters (in order) from the shaded boxes to the solution below.",
+  "clues": [
+    {
+      "clue": "A machine for performing calculations automatically",
+      "answer": "computer"
+    },
+    {
+      "clue": "May be early",
+      "answer": "adopter"
+    },
+    {
+      "clue": "Taking the day off, possibly",
+      "answer": "relaxing"
+    }
+  ],
+  "fragments_2": [ "ax", "er", "pt", "pu" ],
+  "fragments_3": [ "ado", "com", "ing", "rel", "ter" ],
+  "final_answer": "murder",
+  "solution_boxes": [ "A3", "A5", "A8", "B10", "B14", "C16" ]
+}

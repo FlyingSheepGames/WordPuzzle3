@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -17,6 +18,10 @@ namespace WordPuzzles.Puzzle
 
         [JsonIgnore]
         public WordRepository Repository = new WordRepository();
+
+        public List<string> _twoLetterFragments;
+
+        public List<string> _threeLetterFragments;
         public string Solution { get; set; }
 
         public List<TrisectedWord> FindWordsContainingLetters(char firstLetter, char secondLetter, char thirdLetter)
@@ -271,8 +276,20 @@ namespace WordPuzzles.Puzzle
         {
             if (WordSections.Count == 0 ) CalculateWordSections();
 
-            List<string> TwoLetterFragments = new List<string>();
-            List<string> ThreeLetterFragments = new List<string>();
+            InitializeLetterFragments();
+
+            builder.AppendLine(@"<H2>Fragments</H2>");
+            builder.AppendLine("<p />");
+            builder.AppendLine($@"Length 2: {string.Join(", ", TwoLetterFragments)}");
+            builder.AppendLine("<p />");
+            builder.AppendLine($@"Length 3: {string.Join(", ", ThreeLetterFragments)}");
+
+        }
+
+        private void InitializeLetterFragments()
+        {
+            TwoLetterFragments = new List<string>();
+            ThreeLetterFragments = new List<string>();
             foreach (string fragment in WordSections)
             {
                 if (fragment.Length == 2)
@@ -286,16 +303,12 @@ namespace WordPuzzles.Puzzle
                     ThreeLetterFragments.Add(fragment.ToUpperInvariant());
                     continue;
                 }
+
                 throw new Exception($"Unexpected fragment length for {fragment}");
             }
+
             TwoLetterFragments.Sort();
             ThreeLetterFragments.Sort();
-            builder.AppendLine(@"<H2>Fragments</H2>");
-            builder.AppendLine("<p />");
-            builder.AppendLine($@"Length 2: {string.Join(", ", TwoLetterFragments)}");
-            builder.AppendLine("<p />");
-            builder.AppendLine($@"Length 3: {string.Join(", ", ThreeLetterFragments)}");
-
         }
 
         private void AppendMissingWords(StringBuilder builder, bool includeSolution)
@@ -345,6 +358,32 @@ namespace WordPuzzles.Puzzle
         public string Description => $"Trisected Word puzzle for {Solution}.";
         public WordPuzzleType Type { get; } = WordPuzzleType.TrisectedWords;
 
+        public List<string> TwoLetterFragments
+        {
+            get
+            {
+                if (_twoLetterFragments == null)
+                {
+                    InitializeLetterFragments();
+                }
+                return _twoLetterFragments;
+            }
+            set => _twoLetterFragments = value;
+        }
+
+        public List<string> ThreeLetterFragments
+        {
+            get
+            {
+                if (_threeLetterFragments == null)
+                {
+                    InitializeLetterFragments();
+                }
+                return _threeLetterFragments;
+            }
+            set => _threeLetterFragments = value;
+        }
+
         public List<string> GetClues()
         {
             var clues = new List<string>();
@@ -365,6 +404,86 @@ namespace WordPuzzles.Puzzle
                 }
             }
         }
+
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "fragment";
+            generatedJObject["directions"] = "Construct the missing words by using the 2 or 3 letter fragments below. Each fragment will be used once.\nMove the letters (in order) from the shaded boxes to the solution below.";
+
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
+
+
+            AppendArrayOfClues(generatedJObject);
+            AppendTwoLetterFragments(generatedJObject);
+            AppendThreeLetterFragments(generatedJObject);
+            AppendSolutionBoxes(generatedJObject);
+
+            return generatedJObject;
+        }
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach (var clue in Clues)
+            {
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = clue.Clue;
+                clueToAdd["answer"] = clue.Word;
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["clues"] = jArrayOfClues;
+        }
+
+        private void AppendTwoLetterFragments(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach (var fragment in TwoLetterFragments)
+            {
+                jArrayOfClues.Add(new JValue(fragment.ToLowerInvariant()));
+            }
+
+            generatedJObject["fragments_2"] = jArrayOfClues;
+        }
+
+        private void AppendThreeLetterFragments(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach (var fragment in ThreeLetterFragments)
+            {
+                jArrayOfClues.Add(new JValue(fragment.ToLowerInvariant()));
+            }
+
+            generatedJObject["fragments_3"] = jArrayOfClues;
+        }
+
+        private void AppendSolutionBoxes(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            char currentLetter = 'A';
+            int lengthOfPreviousWords = 0;
+            foreach (var clue in  Clues)
+            {
+                for (var index = 0; index < clue.Pattern.Length; index++)
+                {
+                    char letter = clue.Pattern[index];
+                    if (letter != '_')
+                    {
+                        jArrayOfClues.Add(new JValue(currentLetter + (index + 1  + lengthOfPreviousWords).ToString()));
+                    }
+                }
+                currentLetter++;
+                lengthOfPreviousWords += clue.Word.Length;
+            }
+
+            generatedJObject["solution_boxes"] = jArrayOfClues;
+        }
+
     }
 
     public class PatternAndTemplate 
