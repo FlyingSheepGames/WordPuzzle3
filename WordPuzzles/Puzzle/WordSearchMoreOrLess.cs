@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -546,6 +547,48 @@ Write the letter that was added (or removed) next to the word, and then read dow
                 if (!char.IsLetter(letter)) continue;
                 ProcessLetter(letter);
             }
+        }
+
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "wordsearch";
+            generatedJObject["directions"] = "This is a word search, more or less.\n\nEach word listed below is almost (give or take one letter hidden in the grid.\n\nFor example, if HEAR is given as a word, you might find HER in the grid, or you might find HEART.\n\nWrite the letter that was added (or removed) next to the word, and then read down the column of letters to solve the puzzle.";
+
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
+
+            
+            AppendArrayOfClues(generatedJObject);
+            AppendGrid(generatedJObject);
+
+            return generatedJObject;
+        }
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach(var hiddenWord in HiddenWords)
+            {
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = hiddenWord.DisplayedWord;
+                clueToAdd["answer"] = hiddenWord.LetterAddedOrRemoved.ToString();
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["clues"] = jArrayOfClues;
+        }
+
+        private void AppendGrid(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach (var line in Grid)
+            {
+                jArrayOfClues.Add(new JValue(line));
+            }
+
+            generatedJObject["grid"] = jArrayOfClues;
         }
     }
 

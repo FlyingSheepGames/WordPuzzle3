@@ -1,0 +1,30 @@
+{
+  "name": "Puzzle D",
+  "type": "wordsearch",
+  "directions": "This is a word search, more or less.\n\nEach word listed below is almost (give or take one letter hidden in the grid.\n\nFor example, if HEAR is given as a word, you might find HER in the grid, or you might find HEART.\n\nWrite the letter that was added (or removed) next to the word, and then read down the column of letters to solve the puzzle.",
+  "clues": [
+    {
+      "clue": "rim",
+      "answer": "t"
+    },
+    {
+      "clue": "bar",
+      "answer": "o"
+    },
+    {
+      "clue": "wad",
+      "answer": "n"
+    },
+    {
+      "clue": "ruby",
+      "answer": "y"
+    }
+  ],
+  "grid": [
+    "buru",
+    "mirt",
+    "dnaw",
+    "boar"
+  ],
+  "final_answer": "tony"
+}
