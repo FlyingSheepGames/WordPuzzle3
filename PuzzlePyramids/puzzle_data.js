@@ -105,12 +105,12 @@ const puzzle_data = {
 				{"clue": "Any epidemic disease with a high death rate", "answer": "plague"},
 				{"clue": "Opposite of danger", "answer": "safety"},
 				{"clue": "Marked by injustice", "answer": "unfair"},
-				{"clue": "Drizzled or poured", "answer": "abcdef"},
+				{"clue": "Drizzled or poured", "answer": "rained"},
 				{"clue": "Small rodent", "answer": "gerbil"},
 				{"clue": "Temporary tent dweller", "answer": "camper"},
 			],
 			"solution_column": 3,
-			"final_answer": "abcdef"
+			"final_answer": "affirm"
 		},
 		{
 			"name": "Puzzle G",
@@ -176,13 +176,13 @@ const puzzle_data = {
 			"directions": "Construct the missing words by using the 2 or 3 letter fragments below. Each fragment will be used once.\nMove the letters (in order) from the shaded boxes to the solution below.",
 			"clues":
 			[
-				{"clue": "(Solve Puzzle C)", "answer": "aaaaaaaa"},
-				{"clue": "(Solve Puzzle A)", "answer": "aaaaaaa"},
-				{"clue": "(Solve Puzzle B)", "answer": "aaaaaaaa"}
+				{"clue": "(Solve Puzzle C)", "answer": "proclaim"},
+				{"clue": "(Solve Puzzle A)", "answer": "varying"},
+				{"clue": "(Solve Puzzle B)", "answer": "gasoline"}
 			],
 			"fragments_2": ["ga", "ng", "pr", "va"],
 			"fragments_3": ["aim", "ine", "ocl", "ryi", "sol"],
-			"final_answer": "aaaaaa",
+			"final_answer": "living",
 			"solution_boxes": ["A5", "A7", "B9", "B13", "B14", "C16"]
 		},
 		{
@@ -204,8 +204,8 @@ const puzzle_data = {
 			],
 			"solution_lengths":[9,13,22,11],
 			"solution_column": 2,
-			"answers":["aaaaa","aaaaa","aaaa","aaaaa"],
-			"final_answer": "aaaa",
+			"answers":["award","reeds","slay","claim"],
+			"final_answer": "well",
 			"solution_boxes": ["A2", "B7", "C12", "D16"]
 		},
 		{
@@ -214,16 +214,16 @@ const puzzle_data = {
 			"directions": "Fill in the clues below, and then read the solution down the shaded column.",
 			"clues":
 			[
-				{"clue": "(Solve Puzzle G)", "answer": "abcdef"},
-				{"clue": "With stealth", "answer": "abcdef"},
-				{"clue": "Eat", "answer": "abcdef"},
-				{"clue": "(Solve Puzzle H)", "answer": "abcdef"},
-				{"clue": "Small boat", "answer": "abcdef"},
-				{"clue": "(Solve Puzzle I)", "answer": "abcdef"},
-				{"clue": "Satisfy (thirst)", "answer": "abcdef"}
+				{"clue": "(Solve Puzzle G)", "answer": "parole"},
+				{"clue": "With stealth", "answer": "sneaky"},
+				{"clue": "Eat", "answer": "devour"},
+				{"clue": "(Solve Puzzle H)", "answer": "uneasy"},
+				{"clue": "Small boat", "answer": "dinghy"},
+				{"clue": "(Solve Puzzle I)", "answer": "signed"},
+				{"clue": "Satisfy (thirst)", "answer": "quench"}
 			],
 			"solution_column": 3,
-			"final_answer": "abcdefg"
+			"final_answer": "revenge"
 		}
 	]
 }
