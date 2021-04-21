@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -677,5 +678,36 @@ namespace WordPuzzles.Puzzle
             int selectedIndex = Random1.Next(AcceptablePatterns.Count);
             SelectedPattern = AcceptablePatterns[selectedIndex];
         }
+
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "box_simple";
+            generatedJObject["directions"] = "Fill in the clues below, and then read the solution down the shaded column.";
+            generatedJObject["solution_column"] = ZeroBasedIndexOfSolution + 1;
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
+
+
+            AppendArrayOfClues(generatedJObject);
+
+            return generatedJObject;
+        }
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            for (var index = 0; index < Clues.Count; index++)
+            {
+                var clue = Clues[index];
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = clue;
+                clueToAdd["answer"] = Words[index];
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["clues"] = jArrayOfClues;
+        }
+
     }
 }

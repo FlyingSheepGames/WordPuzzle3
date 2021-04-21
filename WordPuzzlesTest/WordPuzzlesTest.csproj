@@ -321,6 +321,9 @@
     <None Include="data\example7.puz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="data\json\puzzle06.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="data\json\puzzle05.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

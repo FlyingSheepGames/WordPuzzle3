@@ -1,0 +1,33 @@
+{
+  "name": "Puzzle F",
+  "type": "box_simple",
+  "directions": "Fill in the clues below, and then read the solution down the shaded column.",
+  "clues": [
+    {
+      "clue": "Any epidemic disease with a high death rate",
+      "answer": "plague"
+    },
+    {
+      "clue": "Opposite of danger",
+      "answer": "safety"
+    },
+    {
+      "clue": "Marked by injustice",
+      "answer": "unfair"
+    },
+    {
+      "clue": "Drizzled or poured",
+      "answer": "rained"
+    },
+    {
+      "clue": "Small rodent",
+      "answer": "gerbil"
+    },
+    {
+      "clue": "Temporary tent dweller",
+      "answer": "camper"
+    }
+  ],
+  "solution_column": 3,
+  "final_answer": "affirm"
+}
