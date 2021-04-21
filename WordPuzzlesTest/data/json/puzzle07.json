@@ -1,0 +1,52 @@
+{
+  "name": "Puzzle K",
+  "type": "box_sum",
+  "directions": "Each word below matches at least two numbered clues. The number next to each word is the total of all of the clues to that word.\n\nFor example, it clues 1 and 4 describe the same word, that word will appear next to the number 5.\n\nAfter you have filled in all the words, read down the column of letters to get the solution.",
+  "clues": [
+    {
+      "clue": "Opposite of forfeit",
+      "value": 1
+    },
+    {
+      "clue": "(solve puzzle D)",
+      "value": 2
+    },
+    {
+      "clue": "Give as judged due or on the basis of merit",
+      "value": 3
+    },
+    {
+      "clue": "Oscar",
+      "value": 4
+    },
+    {
+      "clue": "Marsh plants",
+      "value": 5
+    },
+    {
+      "clue": "(solve puzzle E)",
+      "value": 6
+    },
+    {
+      "clue": "Off",
+      "value": 7
+    },
+    {
+      "clue": "Oboe bits",
+      "value": 8
+    },
+    {
+      "clue": "Leave laughing in the aisles",
+      "value": 9
+    },
+    {
+      "clue": "(solve puzzle F)",
+      "value": 10
+    }
+  ],
+  "solution_lengths": [ 9, 13, 22, 11 ],
+  "solution_column": 2,
+  "answers": [ "award", "reeds", "slay", "claim" ],
+  "final_answer": "well",
+  "solution_boxes": [ "A2", "B7", "C12", "D16" ]
+}

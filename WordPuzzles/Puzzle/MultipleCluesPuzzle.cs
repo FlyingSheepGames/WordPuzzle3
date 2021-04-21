@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -175,6 +176,16 @@ After you have filled in all the words, read down the second column to get the s
 
         private void DisplayListOfClues(bool includeSolution, StringBuilder builder)
         {
+            var cluesInOrder = GetCluesInOrder();
+
+            for (int i = 1; i < NextClueOrder; i++)
+            {
+                builder.AppendLine($@"  <tr><td width=""30"">{i}.</td><td width=""250"">{cluesInOrder[i]}</td></tr>");
+            }
+        }
+
+        private string[] GetCluesInOrder()
+        {
             string[] cluesInOrder = new string[NextClueOrder];
             foreach (var word in WordsWithClues)
             {
@@ -184,10 +195,7 @@ After you have filled in all the words, read down the second column to get the s
                 }
             }
 
-            for (int i = 1; i < NextClueOrder; i++)
-            {
-                builder.AppendLine($@"  <tr><td width=""30"">{i}.</td><td width=""250"">{cluesInOrder[i]}</td></tr>");
-            }
+            return cluesInOrder;
         }
 
         public string Description => $"Multiple Clues Puzzle with {Solution}";
@@ -223,6 +231,79 @@ After you have filled in all the words, read down the second column to get the s
 
         public string Solution { get; set; }
 
+        public JObject GenerateJsonFileForMonty(string name)
+        {
+            var generatedJObject = new JObject();
+            generatedJObject["name"] = name;
+            generatedJObject["type"] = "box_sum";
+            generatedJObject["directions"] = "Each word below matches at least two numbered clues. The number next to each word is the total of all of the clues to that word.\n\nFor example, it clues 1 and 4 describe the same word, that word will appear next to the number 5.\n\nAfter you have filled in all the words, read down the column of letters to get the solution.";
+
+            generatedJObject["final_answer"] = Solution.ToLowerInvariant();
+            generatedJObject["solution_column"] = 2; //TODO: Make this variable. 
+
+
+            AppendArrayOfClues(generatedJObject);
+            AppendArrayOfSolutionLengths(generatedJObject);
+            AppendArrayOfAnswers(generatedJObject);
+            AppendSolutionBoxes(generatedJObject);
+
+            return generatedJObject;
+        }
+        private void AppendArrayOfClues(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            var order = GetCluesInOrder();
+            for (var index = 1; index < order.Length; index++)
+            {
+                var clue = order[index];
+                var clueToAdd = new JObject();
+                clueToAdd["clue"] = clue;
+                clueToAdd["value"] = index;
+                jArrayOfClues.Add(clueToAdd);
+            }
+
+            generatedJObject["clues"] = jArrayOfClues;
+        }
+
+        private void AppendArrayOfSolutionLengths(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach(var wordWithClues in WordsWithClues)
+            {
+                jArrayOfClues.Add(new JValue(wordWithClues.SumOfClueOrders));
+            }
+
+            generatedJObject["solution_lengths"] = jArrayOfClues;
+        }
+        private void AppendArrayOfAnswers(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            foreach (var wordWithClues in WordsWithClues)
+            {
+                jArrayOfClues.Add(new JValue(wordWithClues.WordText));
+            }
+
+            generatedJObject["answers"] = jArrayOfClues;
+        }
+
+        private void AppendSolutionBoxes(JObject generatedJObject)
+        {
+            var jArrayOfClues = new JArray();
+
+            char currentCharacter = 'A';
+            int sumOfWordLengths = 0;
+            foreach (var wordWithClues in WordsWithClues)
+            {
+                jArrayOfClues.Add(new JValue(currentCharacter + (sumOfWordLengths + 2).ToString()));
+                currentCharacter++;
+                sumOfWordLengths += wordWithClues.WordText.Length;
+            }
+
+            generatedJObject["solution_boxes"] = jArrayOfClues;
+        }
     }
 
     public class OrderedClue
