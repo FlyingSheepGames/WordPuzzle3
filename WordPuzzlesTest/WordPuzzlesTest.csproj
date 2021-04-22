@@ -91,6 +91,7 @@
     <Compile Include="Utility\DataFromStackOverflowParserTest.cs" />
     <Compile Include="Puzzle\HiddenRelatedWordsPuzzleTest.cs" />
     <Compile Include="Puzzle\Legacy\HiddenWordPuzzleTest.cs" />
+    <Compile Include="Utility\FtpHelperTest.cs" />
     <Compile Include="Utility\HtmlGeneratorTest.cs" />
     <Compile Include="Puzzle\LettersAndArrowsPuzzleTest.cs" />
     <Compile Include="Puzzle\Legacy\MissingLettersPuzzleTest.cs" />
