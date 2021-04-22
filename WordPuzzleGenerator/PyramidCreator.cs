@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
@@ -30,9 +31,11 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 5, 28);
+            puzzlePyramid.StartDate = new DateTime(2021, 5, 21);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
+            string directoryNameForWebFiles =
+                $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
 
             string fileNameForHtml =fileNameForJson.Replace(".json", ".html");
             string fileNameWithSolutionsForHtml = fileNameForJson.Replace(".json", "-Solutions.html");
@@ -220,10 +223,66 @@ namespace WordPuzzleGenerator
             GenerateHtmlFile(puzzlePyramid, fileNameWithSolutionsForHtml, true);
 
             WritePyramidToDisk(puzzlePyramid, fileNameForJson);
+            PopulateWebFiles(puzzlePyramid, directoryNameForWebFiles);
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
 
+        }
+
+        private void PopulateWebFiles(PuzzlePyramid puzzlePyramid, string directory)
+        {
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            //Create json file
+            JObject puzzles = new JObject();
+            JObject metaData = new JObject();
+            metaData["header"] =
+                $"Puzzle Pyramid: {puzzlePyramid.StartDate.ToShortDateString()} - {puzzlePyramid.StartDate.AddDays(6).ToShortDateString()}";
+            metaData["subheader"] = "By Chip Beauvais and Chester Monty © 2021";
+            metaData["quote"] = puzzlePyramid.SelectedQuoteWithReplacedWords;
+            puzzles["puzzle_metadata"] = metaData;
+            var puzzleArray = new JArray();
+            char currentCharacter = 'A';
+            foreach (var puzzle in new IPuzzle[]
+            {
+                puzzlePyramid.PuzzleA, 
+                puzzlePyramid.PuzzleB, 
+                puzzlePyramid.PuzzleC, 
+                puzzlePyramid.PuzzleD, 
+                puzzlePyramid.PuzzleE, 
+                puzzlePyramid.PuzzleF, 
+                puzzlePyramid.PuzzleG, 
+                puzzlePyramid.PuzzleH, 
+                puzzlePyramid.PuzzleI, 
+                puzzlePyramid.PuzzleJ, 
+                puzzlePyramid.PuzzleK, 
+                puzzlePyramid.PuzzleL,
+            })
+            {
+                if (puzzle != null)
+                {
+                    puzzleArray.Add(puzzle.GenerateJsonFileForMonty($"Puzzle {currentCharacter++}"));
+                }
+            }
+            puzzles["puzzles"] = puzzleArray;
+
+            File.WriteAllText($@"{directory}\puzzle_data.js", $"const puzzle_data = {puzzles.ToString()}");
+
+            //Copy other files. 
+            string relativePathOfSourceFiles = @"..\..\..\PuzzlePyramids";
+            foreach (string path in Directory.GetFiles(relativePathOfSourceFiles))
+            {
+                Console.WriteLine(path);
+                string fileName = Path.GetFileName(path);
+                if (fileName == "puzzle_data.js") continue;
+                File.Copy(path, $@"{directory}\{fileName}", true);
+            }
+            Console.WriteLine("Those are files  in a parent directory. Hit any key to continue. ");
+            Console.ReadKey();
         }
 
         private void InteractivelyRemoveExistingPuzzles(PuzzlePyramid puzzlePyramid)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -14,5 +15,6 @@ namespace WordPuzzles.Puzzle
         string Solution { get; }
         List<string> GetClues();
         void ReplaceClue(string clueToReplace, string newClue);
+        JObject GenerateJsonFileForMonty(string name);
     }
 }

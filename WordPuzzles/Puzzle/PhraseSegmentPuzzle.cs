@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -262,6 +263,11 @@ Return the letters into the grid above them. The author of the quote appears at 
         }
 
         public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public JObject GenerateJsonFileForMonty(string name)
         {
             throw new NotImplementedException();
         }

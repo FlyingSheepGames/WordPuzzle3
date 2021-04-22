@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
@@ -140,6 +141,11 @@ The hidden word will be made of consecutive letters in two or more adjacent word
         }
 
         public void ReplaceClue(string clueToReplace, string newClue)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public JObject GenerateJsonFileForMonty(string name)
         {
             throw new System.NotImplementedException();
         }
