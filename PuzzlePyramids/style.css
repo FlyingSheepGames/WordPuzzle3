@@ -278,3 +278,12 @@ div.shaded-light {
 	background-color:#B196C1;
 	color: white;
 }
+
+.shaded-orange {
+	background-color:#ffdfa5 !important;
+}
+
+/* Prevent Issues with Children Elements in Drag and Drop */
+td.box-fragment-td input{
+	pointer-events: none;
+}

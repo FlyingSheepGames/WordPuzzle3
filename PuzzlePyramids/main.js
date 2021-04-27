@@ -1,4 +1,9 @@
 
+// Command to handle node babel build:
+// npx babel main.js --presets @babel/preset-react --presets minify --plugins @babel/plugin-proposal-class-properties --watch --out-file main-compiled.js
+// npx babel main.js --presets @babel/preset-react --presets minify --plugins @babel/plugin-proposal-class-properties --out-file main-compiled.js
+
+
 class PuzzlePiece extends React.Component 
 {
 	constructor(props) {
@@ -159,6 +164,7 @@ class Puzzle extends React.Component
 		super(props);
 		this.state = {"number_of_letters": 1, "checking_answers": 0, "correct_answers": ""}
 		this.check_answers = this.check_answers.bind(this);
+		this.reveal_letter = this.reveal_letter.bind(this);
 		this.common_render = this.common_render.bind(this);
 		this.toggleShading = this.toggleShading.bind(this);
 	}
@@ -181,17 +187,59 @@ class Puzzle extends React.Component
 		}
 	}
 
-	common_render() {
+	common_render(fragment=false) {
 		return (
 			<div className="puzzle-header row d-flex justify-content-center py-3 border-bottom">
 				<div className="d-flex col-8 align-self-start">
 					<h2>{this.props.data.name}</h2>
 				</div>
 				<div className="col-4 align-items-end d-flex">
+					{}
+					{!fragment && <button className="btn btn-primary" onClick={this.reveal_letter} type="button">Reveal a Letter</button>}
 					<button className="btn btn-primary" onClick={this.check_answers} type="button">Check My Answers</button>		
 				</div>
 			</div>
 		);
+	}
+
+	reveal_letter() {
+		var elements = document.querySelectorAll('div.puzzle.visible input.puzzle-piece.checkanswers');
+
+
+		for (var ind = 0; ind < elements.length; ind ++)
+		{
+			if (elements[ind].value != this.state.correct_answers[ind])
+			{
+				var el = elements[ind];
+				var t = this.state.correct_answers[ind];
+
+				el.value = t;
+
+				el.classList.add("shaded-orange");
+
+				var hook = undefined;
+				for (var i = 0 ; i < el.classList.length; i++)
+				{
+					if (el.classList[i].startsWith('puzzle-piece-'))
+					{
+						hook = el.classList[i];
+						break;
+					}
+				}
+
+				var elements2 = document.querySelectorAll('div.puzzle.visible input.puzzle-piece.' + hook);
+				for (var ind = 0 ; ind < elements2.length ; ind ++)
+				{
+					var element = elements2[ind];
+					if (element == el) continue;
+					if (element.value != t)
+					{
+						element.value = t;
+					}
+				}
+				return;
+			}
+		}
 	}
 
 	check_answers() {
@@ -446,16 +494,23 @@ class Puzzle_Fragment extends Puzzle
 
 
 	handleDragStart = (e) => {
-		e.dataTransfer.setData("letters", e.target.innerText.split(''));
-		e.dataTransfer.setData("sourceID", e.target.id);
+
+		if (e.target.classList.contains("shaded"))
+		{
+			e.preventDefault();
+			return;
+		}
+
+		e.dataTransfer.setData(encodeUpperCase(JSON.stringify(e.target.innerText + "::" + e.target.id)), '');
 		e.target.classList.add("shaded-light");
+
 	}
 
 	handleDragEnd = (e) => {
 
 		e.target.classList.remove("shaded-light");
 
-		if (e.dataTransfer.dropEffect == "move")
+		if (e.dataTransfer.dropEffect == "move"  || e.dataTransfer.dropEffect == "copy")
 		{
 			// Dropped successfully.
 			e.target.classList.add("shaded");
@@ -480,7 +535,13 @@ class Puzzle_Fragment extends Puzzle
 
 		// Drop Event
 		var validTarget = true;
-		var letters = e.dataTransfer.getData("letters");
+
+		var dt = JSON.parse(decodeUpperCase(e.dataTransfer.types[0]));
+		var dt_parts = dt.split("::");
+		var letters = dt_parts[0].split("");
+		var elID = dt_parts[1];
+
+		
 
 		var e2 = document.getElementById(et.dataset["idNext"]);
 		var e3 = null;
@@ -490,12 +551,12 @@ class Puzzle_Fragment extends Puzzle
 		}
 		else
 		{
-			if (letters.length == 5)
+			if (letters.length == 3)
 			{
 				e3 = document.getElementById(e2.dataset["idNext"]);
 			}
 
-			if (letters.length == 5 && e3 == null)
+			if (letters.length == 3 && e3 == null)
 			{
 				validTarget = false;
 			}
@@ -523,7 +584,7 @@ class Puzzle_Fragment extends Puzzle
 				e3.classList.remove("shaded");
 			}
 
-			et.dataset["sourceid"] = e.dataTransfer.getData("sourceID")
+			et.dataset["sourceid"] = elID;
 			
 		}
 	}
@@ -541,7 +602,12 @@ class Puzzle_Fragment extends Puzzle
 
 			// Drag Enter Event
 			var validTarget = true;
-			var letters = e.dataTransfer.getData("letters");
+			var dt = JSON.parse(decodeUpperCase(e.dataTransfer.types[0]));
+			var dt_parts = dt.split("::");
+			var letters = dt_parts[0].split("");
+			var elID = dt_parts[1];
+
+			
 
 			var e2 = document.getElementById(e.target.dataset["idNext"]);
 			var e3 = null;
@@ -551,12 +617,12 @@ class Puzzle_Fragment extends Puzzle
 			}
 			else
 			{
-				if (letters.length == 5)
+				if (letters.length == 3)
 				{
 					e3 = document.getElementById(e2.dataset["idNext"]);
 				}
 
-				if (letters.length == 5 && e3 == null)
+				if (letters.length == 3 && e3 == null)
 				{
 					validTarget = false;
 				}
@@ -571,8 +637,8 @@ class Puzzle_Fragment extends Puzzle
 
 
 				updateCharacter(e.target, letters[0]);
-				updateCharacter(e2, letters[2]);
-				updateCharacter(e3, letters[4]);
+				updateCharacter(e2, letters[1]);
+				updateCharacter(e3, letters[2]);
 
 				e.target.classList.add("shaded");
 				e2.classList.add("shaded");
@@ -588,11 +654,16 @@ class Puzzle_Fragment extends Puzzle
 	handleDragExit = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
+
 		if (e.target.nodeName == "DIV" && e.relatedTarget.tagName != "INPUT")
 		{
+
 			// Drag Exit Event
 			var validTarget = true;
-			var letters = e.dataTransfer.getData("letters");
+			var dt = JSON.parse(decodeUpperCase(e.dataTransfer.types[0]));
+			var dt_parts = dt.split("::");
+			var letters = dt_parts[0].split("");
+			var elID = dt_parts[1];
 			var e2 = document.getElementById(e.target.dataset["idNext"]);
 			var e3 = null;
 			if (e2 == null)
@@ -601,12 +672,12 @@ class Puzzle_Fragment extends Puzzle
 			}
 			else
 			{
-				if (letters.length == 5)
+				if (letters.length == 3)
 				{
 					e3 = document.getElementById(e2.dataset["idNext"]);
 				}
 
-				if (letters.length == 5 && e3 == null)
+				if (letters.length == 3 && e3 == null)
 				{
 					validTarget = false;
 				}
@@ -641,16 +712,24 @@ class Puzzle_Fragment extends Puzzle
 	{
 		console.log("fragmentToggleShading start");
 
-		if (!e.target.classList.contains("shaded"))
+		console.log(e);
+
+		var target = e.target;
+		if (target.nodeName == "SPAN")
+		{
+			target = target.parentNode;
+		}
+
+		if (!target.classList.contains("shaded"))
 		{
 			console.log("fragmentToggleShading not shaded, returning...");
 			return;
 		}
 
 		// Find the corresponding boxes to empty.
-		var el = document.querySelector('div.fragment-div[data-sourceid="' + e.target.id + '"]');
+		var el = document.querySelector('div.fragment-div[data-sourceid="' + target.id + '"]');
 
-		console.log("looking for : " + 'div.fragment-div[data-sourceid="' + e.target.id + '"]');
+		console.log("looking for : " + 'div.fragment-div[data-sourceid="' + target.id + '"]');
 
 		if (el != null)
 		{
@@ -659,14 +738,17 @@ class Puzzle_Fragment extends Puzzle
 
 			updateCharacter(el, "");
 			el.dataset["bakedin"] = "false";
+			el.classList.remove("shaded");
 			var e2 = document.getElementById(el.dataset["idNext"]);
 			updateCharacter(e2, "");
 			e2.dataset["bakedin"] = "false";
-			if (e.target.innerText.length == 3)
+			e2.classList.remove("shaded");
+			if (target.innerText.length == 3)
 			{
 				var e3 = document.getElementById(e2.dataset["idNext"]);
 				updateCharacter(e3, "");
 				e3.dataset["bakedin"] = "false";
+				e3.classList.remove("shaded");
 			}
 			el.dataset['sourceid'] = "";			
 		}
@@ -675,14 +757,14 @@ class Puzzle_Fragment extends Puzzle
 			console.log("fragmentToggleShading did not find el");
 		}
 
-		e.target.classList.remove("shaded");
+		target.classList.remove("shaded");
 
 	}
 
 
 	render() {
 		return <div className={"container puzzle " + this.props.visible + " " + this.props.puzzleId}>
-			{this.common_render()}
+			{this.common_render(true)}
 			
 			<div className="row py-4">
 				<h3 className="pb-4 border-bottom">{this.props.data.directions}</h3>
@@ -697,7 +779,7 @@ class Puzzle_Fragment extends Puzzle
 										{
 											Array.from(clue.answer).map((letter, inner_index) => (
 												<td className="box-fragment-td" key={this.props.data.name+"td"+outer_index+inner_index}>
-													<div className="fragment-div" onDrop={this.handleDragDrop} onDragEnter={this.handleDragEnter} onDragExit={this.handleDragExit} onDragOver={this.handleDragOver} key={this.props.data.name+"div"+outer_index+inner_index} id={this.props.data.name+"div"+outer_index+inner_index} data-id-next={this.props.data.name+"div"+outer_index+(inner_index+1)} data-bakedin="false" data-hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters}>
+													<div className="fragment-div" onDrop={this.handleDragDrop} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragExit} onDragOver={this.handleDragOver} key={this.props.data.name+"div"+outer_index+inner_index} id={this.props.data.name+"div"+outer_index+inner_index} data-id-next={this.props.data.name+"div"+outer_index+(inner_index+1)} data-bakedin="false" data-hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters}>
 														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="true" checkAnswers="true"/>
 													</div>
 												</td>
@@ -1030,7 +1112,7 @@ class App extends React.Component
 {
 	constructor(props) {
 		super(props);
-		this.state = {currentPuzzle: 4};
+		this.state = {currentPuzzle: 0};
 		this.switchPuzzle = this.switchPuzzle.bind(this);
 	}
 
@@ -1182,4 +1264,22 @@ function updateCharacter(el, t) {
 			element.value = t;
 		}
 	}
+}
+
+
+
+const UPPERCASE_PREFIX = '^{';
+const UPPERCASE_SUFFIX = '}^';
+
+function encodeUpperCase(str)  {
+	return str.replace(/([A-Z]+)/g, `${UPPERCASE_PREFIX}$1${UPPERCASE_SUFFIX}`);
+}
+
+function decodeUpperCase(str)  {
+	const escapeRegExp = (escape) => ['', ...escape.split('')].join('\\');
+
+	return str.replace(
+	  new RegExp(`${escapeRegExp(UPPERCASE_PREFIX)}(.*?)${escapeRegExp(UPPERCASE_SUFFIX)}`, 'g'),
+	  (_, p1) => p1.toUpperCase()
+	);
 }
