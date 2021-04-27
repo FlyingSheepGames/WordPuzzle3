@@ -6,7 +6,7 @@ using System.Text;
 
 namespace WordPuzzles.Utility
 {
-    class FtpHelper
+    public class FtpHelper
     {
         public string Username;
         public string Password;
@@ -44,16 +44,25 @@ namespace WordPuzzles.Utility
             }
         }
 
-        public void UploadFile(string sourceFile, string targetFile)
+        public void UploadFile(string sourceFile, string targetFile, bool binaryFile=false)
         {
             byte[] fileContents;
-            using (StreamReader sourceStream = new StreamReader(sourceFile))
+            if (binaryFile)
             {
-                fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                using (BinaryReader sourceBinaryReader = new BinaryReader(File.OpenRead(sourceFile)))
+                {
+                    fileContents = ReadAllBytes(sourceBinaryReader);
+                }
+            }
+                else {
+                using (StreamReader sourceStream = new StreamReader(sourceFile))
+                {
+                    fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                }
             }
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://flyingsheep.com/" + targetFile);
             request.Method = WebRequestMethods.Ftp.UploadFile;
-
+            request.UseBinary = true;
             request.Credentials = new NetworkCredential(Username, Password);
 
             request.ContentLength = fileContents.Length;
@@ -67,6 +76,38 @@ namespace WordPuzzles.Utility
             {
                 Console.WriteLine($"Upload File Complete, status {response.StatusDescription}");
             }
+        }
+
+        public static byte[] ReadAllBytes(BinaryReader reader)
+        {
+            const int bufferSize = 4096;
+            using (var ms = new MemoryStream())
+            {
+                byte[] buffer = new byte[bufferSize];
+                int count;
+                while ((count = reader.Read(buffer, 0, buffer.Length)) != 0)
+                    ms.Write(buffer, 0, count);
+                return ms.ToArray();
+            }
+        }
+        public bool CreateDirectory(string path)
+        {
+            bool isCreated = true;
+            try
+            {
+                WebRequest request = WebRequest.Create("ftp://flyingsheep.com/" + path);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential(Username, Password);
+                using (var resp = (FtpWebResponse)request.GetResponse())
+                {
+                    Console.WriteLine(resp.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                isCreated = false;
+            }
+            return isCreated;
         }
     }
 }

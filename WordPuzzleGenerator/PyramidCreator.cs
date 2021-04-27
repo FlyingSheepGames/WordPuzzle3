@@ -31,11 +31,13 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 5, 21);
+            puzzlePyramid.StartDate = new DateTime(2021, 5, 28);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
             string directoryNameForWebFiles =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
+            string ftpDirectory =
+                $@"pptest/v2/{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
 
             string fileNameForHtml =fileNameForJson.Replace(".json", ".html");
             string fileNameWithSolutionsForHtml = fileNameForJson.Replace(".json", "-Solutions.html");
@@ -223,15 +225,18 @@ namespace WordPuzzleGenerator
             GenerateHtmlFile(puzzlePyramid, fileNameWithSolutionsForHtml, true);
 
             WritePyramidToDisk(puzzlePyramid, fileNameForJson);
-            PopulateWebFiles(puzzlePyramid, directoryNameForWebFiles);
+            PopulateWebFiles(puzzlePyramid, directoryNameForWebFiles, ftpDirectory);
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
 
         }
 
-        private void PopulateWebFiles(PuzzlePyramid puzzlePyramid, string directory)
+        private void PopulateWebFiles(PuzzlePyramid puzzlePyramid, string directory, string remoteDirectory)
         {
+            FtpHelper ftpHelper = new FtpHelper();
+            ftpHelper.ReadCredentialsFromFile();
+            ftpHelper.CreateDirectory(remoteDirectory);
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
@@ -270,7 +275,8 @@ namespace WordPuzzleGenerator
             }
             puzzles["puzzles"] = puzzleArray;
 
-            File.WriteAllText($@"{directory}\puzzle_data.js", $"const puzzle_data = {puzzles.ToString()}");
+            File.WriteAllText($@"{directory}\puzzle_data.js", $"const puzzle_data = {puzzles}");
+            ftpHelper.UploadFile($@"{directory}\puzzle_data.js", $@"{remoteDirectory}/puzzle_data.js");
 
             //Copy other files. 
             string relativePathOfSourceFiles = @"..\..\..\PuzzlePyramids";
@@ -280,6 +286,7 @@ namespace WordPuzzleGenerator
                 string fileName = Path.GetFileName(path);
                 if (fileName == "puzzle_data.js") continue;
                 File.Copy(path, $@"{directory}\{fileName}", true);
+                ftpHelper.UploadFile($@"{directory}\{fileName}", $@"{remoteDirectory}/{fileName}", fileName.ToLowerInvariant().Contains("png"));
             }
             Console.WriteLine("Those are files  in a parent directory. Hit any key to continue. ");
             Console.ReadKey();
