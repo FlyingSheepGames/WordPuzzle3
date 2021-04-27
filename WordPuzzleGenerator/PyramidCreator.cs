@@ -12,6 +12,9 @@ namespace WordPuzzleGenerator
 {
     internal class PyramidCreator 
     {
+        private const int MONTH = 5;
+        private const int DAY = 28;
+
         private const string SOLVE_PUZZLE_A = "(solve puzzle A)";
         private const string SOLVE_PUZZLE_B = "(solve puzzle B)";
         private const string SOLVE_PUZZLE_C = "(solve puzzle C)";
@@ -31,7 +34,8 @@ namespace WordPuzzleGenerator
 
             PuzzlePyramid puzzlePyramid = new PuzzlePyramid();
             // First, we select a start date
-            puzzlePyramid.StartDate = new DateTime(2021, 5, 28);
+            puzzlePyramid.StartDate = new DateTime(2021, MONTH, DAY, 
+                _random.Next(1, 10), _random.Next(10, 60), 0);
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
             string directoryNameForWebFiles =
@@ -47,6 +51,11 @@ namespace WordPuzzleGenerator
                 Console.WriteLine($"Loaded pyramid from file {fileNameForJson}. Press any key to continue.");
                 Console.ReadKey();
             }
+            if ((puzzlePyramid.StartDate.Hour != 0) && (puzzlePyramid.StartDate.Minute != 0))
+            {
+                ftpDirectory += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
+            }
+
             InitializeSortedListOfPuzzleTypes(puzzlePyramid);
 
             InteractivelyRemoveExistingPuzzles(puzzlePyramid);
@@ -808,6 +817,7 @@ namespace WordPuzzleGenerator
 
         public static WordPuzzleType[] SortedListOfPuzzleTypes { get; set; } 
         public static Dictionary<WordPuzzleType, int> CountOfPuzzleTypes = new Dictionary<WordPuzzleType, int>();
+        private Random _random = new Random();
 
         private void CreatePuzzleJ(List<string> wordsToReplace, PuzzlePyramid puzzlePyramid)
         {

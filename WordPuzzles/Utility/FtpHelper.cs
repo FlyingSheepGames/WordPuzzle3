@@ -54,12 +54,14 @@ namespace WordPuzzles.Utility
                     fileContents = ReadAllBytes(sourceBinaryReader);
                 }
             }
-                else {
+            else
+            {
                 using (StreamReader sourceStream = new StreamReader(sourceFile))
                 {
                     fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
                 }
             }
+
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://flyingsheep.com/" + targetFile);
             request.Method = WebRequestMethods.Ftp.UploadFile;
             request.UseBinary = true;
