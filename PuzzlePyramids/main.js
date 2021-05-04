@@ -1,6 +1,6 @@
 
 // Command to handle node babel build:
-// npx babel main.js --presets @babel/preset-react --presets minify --plugins @babel/plugin-proposal-class-properties --watch --out-file main-compiled.js
+// npx babel main.js --presets @babel/preset-react --plugins @babel/plugin-proposal-class-properties --watch --out-file main-compiled.js
 // npx babel main.js --presets @babel/preset-react --presets minify --plugins @babel/plugin-proposal-class-properties --out-file main-compiled.js
 
 
@@ -85,6 +85,7 @@ class PuzzlePiece extends React.Component
 	}
 
 	handleFocus(e) {
+		console.log("handleFocus");
 		var elements = document.querySelectorAll('div.puzzle.visible input.puzzle-piece.puzzle-piece-' + this.props.hook);
 		for (var ind = 0 ; ind < elements.length ; ind ++)
 		{
@@ -126,7 +127,9 @@ class PuzzlePiece extends React.Component
 		var element_index = values[0];
 		var elements = values[1];
 
-		if (letter != null && letter != "") 
+		var are_all_correct = this.props.check_puzzle();
+
+		if (letter != null && letter != "" && !are_all_correct) 
 		{
 
 			// Tab forward.
@@ -167,6 +170,8 @@ class Puzzle extends React.Component
 		this.reveal_letter = this.reveal_letter.bind(this);
 		this.common_render = this.common_render.bind(this);
 		this.toggleShading = this.toggleShading.bind(this);
+		this.are_all_correct = this.are_all_correct.bind(this);
+		this.check_puzzle = this.check_puzzle.bind(this);
 	}
 
 	toggleShading(e) {
@@ -242,9 +247,33 @@ class Puzzle extends React.Component
 		}
 	}
 
-	check_answers() {
-		if (this.state.checking_answers == 1) return;
+	// Called automatically on button presses
+	check_puzzle() {
+		var result = this.are_all_correct();
+		// Replace text for correction here.
+		if (result[0])
+		{
+			var tdElements = document.getElementsByTagName("td");
+			var found;
 
+			for (var i = 0; i < tdElements.length; i++) {
+				if (tdElements[i].textContent == "(Solve " + this.props.data.name + ")") {
+					found = tdElements[i];
+					found.textContent = this.props.data.final_answer.toUpperCase();
+					break;
+				}
+			}
+
+			var quoteElement = document.getElementById("puzzle-quote");
+			quoteElement.textContent = quoteElement.textContent.replace("(Solve " + this.props.data.name + ")" , this.props.data.final_answer.toUpperCase());
+
+			this.check_answers();
+		}
+
+		return result[0];
+	}
+
+	are_all_correct() {
 		var allCorrect = true;
 		var elements = document.querySelectorAll('div.puzzle.visible input.puzzle-piece.checkanswers');
 
@@ -267,29 +296,25 @@ class Puzzle extends React.Component
 			}
 		}
 
-		if (allCorrect)
-		{
-			var tdElements = document.getElementsByTagName("td");
-			var found;
+		return [allCorrect, correct, incorrect]
+	}
 
-			for (var i = 0; i < tdElements.length; i++) {
-				if (tdElements[i].textContent == "(Solve " + this.props.data.name + ")") {
-					found = tdElements[i];
-					break;
-				}
-			}
+	check_answers() {
+		if (this.state.checking_answers == 1) return;
 
-
-			if (found != undefined)
-			{
-				found.textContent = this.props.data.final_answer.toUpperCase();
-			}
-		}
-
+		var result = this.are_all_correct();
+		var allCorrect = result[0];
+		var correct = result[1];
+		var incorrect = result[2];
 
 		for (var ind = 0; ind < correct.length; ind ++)
 		{
 			correct[ind].classList.add("correct");
+			if (allCorrect)
+			{
+				correct[ind].readOnly = true;
+				correct[ind].blur();
+			}
 		}
 
 		for (var ind = 0; ind < incorrect.length; ind ++)
@@ -297,38 +322,41 @@ class Puzzle extends React.Component
 			incorrect[ind].classList.add("incorrect");
 		}
 
-		this.state.checking_answers = 1;
+		if (!allCorrect)
+		{
+			this.state.checking_answers = 1;
 
-		setTimeout(function(){
-			
-			var elements = document.querySelectorAll('div.puzzle input.puzzle-piece.checkanswers');
-			for (var ind = 0; ind < elements.length; ind ++)
-			{
-				var element = elements[ind];
-
-				if (element.classList.contains("correct") || element.classList.contains("incorrect"))
-				{
-					element.classList.add("checked-answer");
-				}
-
-				element.classList.remove("correct");
-				element.classList.remove("incorrect");
-
-
-			}
 			setTimeout(function(){
-
-				this.state.checking_answers = 0;
 				
 				var elements = document.querySelectorAll('div.puzzle input.puzzle-piece.checkanswers');
 				for (var ind = 0; ind < elements.length; ind ++)
 				{
 					var element = elements[ind];
 
-					element.classList.remove("checked-answer");
+					if (element.classList.contains("correct") || element.classList.contains("incorrect"))
+					{
+						element.classList.add("checked-answer");
+					}
+
+					element.classList.remove("correct");
+					element.classList.remove("incorrect");
+
+
 				}
-			}.bind(this), 1000);
-		}.bind(this), 2500);
+				setTimeout(function(){
+
+					this.state.checking_answers = 0;
+					
+					var elements = document.querySelectorAll('div.puzzle input.puzzle-piece.checkanswers');
+					for (var ind = 0; ind < elements.length; ind ++)
+					{
+						var element = elements[ind];
+
+						element.classList.remove("checked-answer");
+					}
+				}.bind(this), 1000);
+			}.bind(this), 2500);
+		}
 	}
 }
 
@@ -384,9 +412,9 @@ class Puzzle_Box_Sum extends Puzzle
 										<td className="box-traversal-clue-td" key={this.props.data.name+"td"+outer_index}>{length}</td>
 										{
 											Array.from(this.props.data.answers[outer_index]).map((letter, inner_index) => (
-												<td className="box-fragment-td" key={this.props.data.name+"td"+outer_index+inner_index}>
+												<td className="box-sum-td" key={this.props.data.name+"td"+outer_index+inner_index}>
 													<div key={this.props.data.name+"div"+outer_index+inner_index}>
-														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true"/>
+														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true" check_puzzle={this.check_puzzle} />
 													</div>
 												</td>
 											))
@@ -399,7 +427,7 @@ class Puzzle_Box_Sum extends Puzzle
 					<h3 className="pt-4">Solution</h3>
 					{
 						Array.from(this.props.data.solution_boxes).map((solution,index) => {
-							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="false" checkAnswers="true" hook={this.props.puzzleId + solution}/>
+							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="false" checkAnswers="true" hook={this.props.puzzleId + solution} check_puzzle={this.check_puzzle}/>
 						})
 					}
 				</div>
@@ -441,9 +469,9 @@ class Puzzle_Box_Simple extends Puzzle
 											<td className="box-traversal-clue-td" key={this.props.data.name+"td"+outer_index}>{clue.clue}</td>
 											{
 												Array.from(clue.answer).map((letter, inner_index) => (
-													<td className={"box-fragment-td " + ((inner_index + 1 == this.props.data.solution_column) ? "shaded-light" : "") } key={this.props.data.name+"td"+outer_index+inner_index}>
+													<td className={"box-sum-td " + ((inner_index + 1 == this.props.data.solution_column) ? "shaded-light" : "") } key={this.props.data.name+"td"+outer_index+inner_index}>
 														<div key={this.props.data.name+"div"+outer_index+inner_index}>
-															<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true"/>
+															<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true" check_puzzle={this.check_puzzle}/>
 														</div>
 													</td>
 												))
@@ -459,7 +487,7 @@ class Puzzle_Box_Simple extends Puzzle
 					<h3 className="py-4 border-bottom">Solution</h3>
 					{
 						Array.from(this.props.data.final_answer).map((character,index) => {
-							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="true" hook={this.props.puzzleId + String.fromCharCode(65 + index) + (this.props.data.solution_column + this.props.data.clues[0].answer.length * index).toString()}/>
+							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="true" hook={this.props.puzzleId + String.fromCharCode(65 + index) + (this.props.data.solution_column + this.props.data.clues[0].answer.length * index).toString()} check_puzzle={this.check_puzzle}/>
 						})
 					}
 				</div>
@@ -514,7 +542,19 @@ class Puzzle_Fragment extends Puzzle
 		{
 			// Dropped successfully.
 			e.target.classList.add("shaded");
+			var all_good = this.check_puzzle();
+
+			if (all_good)
+			{
+				var elements = document.querySelectorAll('div.puzzle.visible div.fragment-display div');
+				for (var i = 0 ; i < elements.length; i++)
+				{
+					var el = elements[i];
+					el.classList.add('disable-pointer');
+				}
+			}
 		}
+
 
 	}
 
@@ -712,7 +752,7 @@ class Puzzle_Fragment extends Puzzle
 	{
 		console.log("fragmentToggleShading start");
 
-		console.log(e);
+		//console.log(e);
 
 		var target = e.target;
 		if (target.nodeName == "SPAN")
@@ -722,7 +762,98 @@ class Puzzle_Fragment extends Puzzle
 
 		if (!target.classList.contains("shaded"))
 		{
-			console.log("fragmentToggleShading not shaded, returning...");
+			//console.log("fragmentToggleShading not shaded, returning...");
+
+			// Fragment Toggle Shading
+			var validTarget = true;
+			
+			var letters = e.target.innerText.split("");
+
+			// Find an unclaimed textbox here.
+			var et = undefined;
+			
+			var elements = document.querySelectorAll('div.puzzle.visible div.fragment-div');
+			for (var i = 0; i < elements.length; i++)
+			{
+				var _element = elements[i];
+				if (_element.dataset["bakedin"] != "true")
+				{
+					et = _element;
+					break;
+				}
+			}
+
+			if (et == undefined)
+			{
+				return;
+			}
+
+			var e2 = document.getElementById(et.dataset["idNext"]);
+			var e3 = null;
+			if (e2 == null)
+			{
+				validTarget = false;
+			}
+			else
+			{
+				if (letters.length == 3)
+				{
+					e3 = document.getElementById(e2.dataset["idNext"]);
+				}
+
+				if (letters.length == 3 && e3 == null)
+				{
+					validTarget = false;
+				}
+			}
+
+
+			if (validTarget)
+			{
+
+				if (e.target.dataset["bakedin"] == "true" || e2.dataset["bakedin"] == "true" || (e3 != null && e3.dataset["bakedin"] == "true"))
+				{
+					return;
+				}
+
+				updateCharacter(et, letters[0]);
+				updateCharacter(e2, letters[1]);
+				updateCharacter(e3, letters[2]);
+
+				// et.classList.add("shaded");
+				// e2.classList.add("shaded");
+				// if (e3 != null)
+				// {
+				// 	e3.classList.add("shaded");
+				// }
+
+				et.dataset["bakedin"] = "true";
+				e2.dataset["bakedin"] = "true";
+
+				if (e3 != null)
+				{
+					e3.dataset["bakedin"] = "true";
+				}
+
+				et.dataset["sourceid"] = target.id;
+
+				// Dropped successfully.
+				target.classList.add("shaded");
+				var all_good = this.check_puzzle();
+
+				if (all_good)
+				{
+					var elements = document.querySelectorAll('div.puzzle.visible div.fragment-display div');
+					for (var i = 0 ; i < elements.length; i++)
+					{
+						var el = elements[i];
+						el.classList.add('disable-pointer');
+					}
+				}
+
+
+			}
+
 			return;
 		}
 
@@ -780,7 +911,7 @@ class Puzzle_Fragment extends Puzzle
 											Array.from(clue.answer).map((letter, inner_index) => (
 												<td className="box-fragment-td" key={this.props.data.name+"td"+outer_index+inner_index}>
 													<div className="fragment-div" onDrop={this.handleDragDrop} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragExit} onDragOver={this.handleDragOver} key={this.props.data.name+"div"+outer_index+inner_index} id={this.props.data.name+"div"+outer_index+inner_index} data-id-next={this.props.data.name+"div"+outer_index+(inner_index+1)} data-bakedin="false" data-hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters}>
-														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="true" checkAnswers="true"/>
+														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="true" checkAnswers="true" check_puzzle={this.check_puzzle}/>
 													</div>
 												</td>
 											))
@@ -821,7 +952,7 @@ class Puzzle_Fragment extends Puzzle
 					<h3 className="pb-4 border-bottom">Solution</h3>
 					{
 						Array.from(this.props.data.solution_boxes).map((answer,index) => {
-							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="true" hook={this.props.puzzleId + answer}/>
+							return <PuzzlePiece key={this.props.data.name + "sol" + index} puzzleId={this.props.puzzleId} readOnly="true" hook={this.props.puzzleId + answer} check_puzzle={this.check_puzzle} />
 						})
 					}
 				</div>
@@ -854,7 +985,7 @@ class Puzzle_WordSearch extends Puzzle
 					{
 						this.props.data.clues.map((clue, index) => (
 							<div className="wordsearch-div" key={this.props.data.name + "div" + index}>
-								<PuzzlePiece key={this.props.data.name + "cl" + index} puzzleId={this.props.puzzleId} readOnly="false" checkAnswers="true" hook={this.props.puzzleId + String.fromCharCode(65 + index) + this.state.number_of_letters++}/>
+								<PuzzlePiece key={this.props.data.name + "cl" + index} puzzleId={this.props.puzzleId} readOnly="false" checkAnswers="true" hook={this.props.puzzleId + String.fromCharCode(65 + index) + this.state.number_of_letters++} check_puzzle={this.check_puzzle}/>
 								<span key={this.props.data.name + "p" + index}>{clue.clue.toUpperCase()}</span>
 							</div>
 						))
@@ -884,7 +1015,7 @@ class Puzzle_WordSearch extends Puzzle
 					<h3 className="py-4 border-bottom">Solution</h3>
 					{
 						this.props.data.clues.map((clue, index) => {
-							return <PuzzlePiece key={this.props.data.name + "ans" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + index) + (index + 1).toString()} readOnly="true"/>
+							return <PuzzlePiece key={this.props.data.name + "ans" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + index) + (index + 1).toString()} readOnly="true" check_puzzle={this.check_puzzle} />
 						})
 					}
 
@@ -922,8 +1053,8 @@ class Puzzle_Box extends Puzzle
 									Array.from(this.props.data.clues[0].answer).map((letter, index) => (
 										<th key={this.props.data.name+"th"+index}>
 											<div className="h-100 d-flex align-items-center justify-content-center">
-											{index == 0 && <PuzzlePiece key={this.props.data.name + "ans" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(60 + index) + (1 + index * this.props.data.clues[0].answer.length).toString()} readOnly="true" value={this.props.data.first_letter.toUpperCase()}/>}
-											{index > 0 && <PuzzlePiece key={this.props.data.name + "ans" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + index - 1) + (1 + (index - 1) * this.props.data.clues[0].answer.length).toString()} readOnly="true"/>}
+											{index == 0 && <PuzzlePiece key={this.props.data.name + "ans" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(60 + index) + (1 + index * this.props.data.clues[0].answer.length).toString()} readOnly="true" value={this.props.data.first_letter.toUpperCase()} check_puzzle={this.check_puzzle} />}
+											{index > 0 && <PuzzlePiece key={this.props.data.name + "ans" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + index - 1) + (1 + (index - 1) * this.props.data.clues[0].answer.length).toString()} readOnly="true" check_puzzle={this.check_puzzle} />}
 											</div>
 										</th>
 									))
@@ -939,7 +1070,7 @@ class Puzzle_Box extends Puzzle
 											Array.from(clue.answer).map((letter, inner_index) => (
 												<td className="h-100 box-td" key={this.props.data.name+"td"+outer_index+inner_index}>
 													<div className="h-100 d-flex align-items-center justify-content-center" key={this.props.data.name+"div"+outer_index+inner_index}>
-														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true"/>
+														<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true" check_puzzle={this.check_puzzle} />
 													</div>
 												</td>
 											))
@@ -987,7 +1118,7 @@ class Puzzle_Box_Traversal extends Puzzle
 												<td className="h-100 box-traversal-direction-td" key={this.props.data.name+"td"+outer_index+inner_index}>
 													<div className="row h-100 justify-content-center align-items-center" key={this.props.data.name+"div"+outer_index+inner_index}>
 														<div className="h-100 d-flex align-items-center col-6">
-															<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true"/>
+															<PuzzlePiece key={this.props.data.name + "p" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true" check_puzzle={this.check_puzzle} />
 														</div>
 
 														<div className="d-flex align-items-center justify-content-center col-6">
@@ -1043,7 +1174,7 @@ class Puzzle_Box_Traversal extends Puzzle
 							}	
 							else
 							{
-								return <PuzzlePiece key={this.props.data.name + "ca" + index} puzzleId={this.props.puzzleId} readOnly="false" checkAnswers="true" hook={this.props.puzzleId + String.fromCharCode(65 + index) + this.state.number_of_letters++}/>
+								return <PuzzlePiece key={this.props.data.name + "ca" + index} puzzleId={this.props.puzzleId} readOnly="false" checkAnswers="true" hook={this.props.puzzleId + String.fromCharCode(65 + index) + this.state.number_of_letters++} check_puzzle={this.check_puzzle} />
 							}
 						})
 					}
@@ -1078,7 +1209,7 @@ class Puzzle_Linked_FITB extends Puzzle
 								<h4 key={this.props.data.name + "c" + outer_index}>{clue.clue}</h4>
 								{
 									Array.from(clue.answer).map((letter, inner_index) => (
-										<PuzzlePiece key={this.props.data.name + "c" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true"/>
+										<PuzzlePiece key={this.props.data.name + "c" + outer_index + inner_index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + String.fromCharCode(65 + outer_index) + this.state.number_of_letters++} readOnly="false" checkAnswers="true" check_puzzle={this.check_puzzle} />
 									))
 								}
 							</div>
@@ -1096,7 +1227,7 @@ class Puzzle_Linked_FITB extends Puzzle
 							}	
 							else
 							{
-								return <PuzzlePiece key={this.props.data.name + "ca" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + answer.toUpperCase()} readOnly="true"/>
+								return <PuzzlePiece key={this.props.data.name + "ca" + index} puzzleId={this.props.puzzleId} hook={this.props.puzzleId + answer.toUpperCase()} readOnly="true" check_puzzle={this.check_puzzle} />
 							}
 						})
 					}
@@ -1219,7 +1350,7 @@ class AppHeader extends React.Component
 								</a>
 							</div>
 							<div className="col-12 col-sm-12 col-md-12 col-lg-6 d-flex">
-								<span className="align-items-center fs-8 d-flex">{puzzle_data.puzzle_metadata.quote}</span>
+								<span className="align-items-center fs-8 d-flex" id="puzzle-quote">{puzzle_data.puzzle_metadata.quote}</span>
 							</div>
 							<div className="col-12 col-sm-12 col-md-12 col-lg-2 d-flex">
 								<span className="fs-8 d-flex justify-content-end align-items-center">{puzzle_data.puzzle_metadata.subheader}</span>

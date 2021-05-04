@@ -192,7 +192,13 @@ div.fragment-display div {
 	font-weight:bold;
 }
 
+/* Prevent Issues with Children Elements in Drag and Drop */
 td.box-fragment-td input {
+	margin: 10px 20px;
+	pointer-events: none;
+}
+
+td.box-sum-td input {
 	margin: 10px 20px;
 }
 
@@ -283,7 +289,6 @@ div.shaded-light {
 	background-color:#ffdfa5 !important;
 }
 
-/* Prevent Issues with Children Elements in Drag and Drop */
-td.box-fragment-td input{
+.disable-pointer {
 	pointer-events: none;
 }

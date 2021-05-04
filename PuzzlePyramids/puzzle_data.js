@@ -3,7 +3,7 @@ const puzzle_data = {
 	{
 		"header":"Puzzle Pyramid: 4/2/2021",
 		"subheader":"By Chip Beauvais © 2021",
-		"quote": "(solve puzzle J) (solve puzzle K) is the best (solve puzzle L). -George Herbert"
+		"quote": "(Solve Puzzle J) (Solve Puzzle K) is the best (Solve Puzzle L). -George Herbert"
 	},
 	"puzzles":	
 	[
