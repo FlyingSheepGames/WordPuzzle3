@@ -257,7 +257,7 @@ class Puzzle extends React.Component
 			var found;
 
 			for (var i = 0; i < tdElements.length; i++) {
-				if (tdElements[i].textContent == "(Solve " + this.props.data.name + ")") {
+				if (tdElements[i].textContent.toLowerCase() == ("(Solve " + this.props.data.name + ")").toLowerCase()) {
 					found = tdElements[i];
 					found.textContent = this.props.data.final_answer.toUpperCase();
 					break;
@@ -265,7 +265,12 @@ class Puzzle extends React.Component
 			}
 
 			var quoteElement = document.getElementById("puzzle-quote");
-			quoteElement.textContent = quoteElement.textContent.replace("(Solve " + this.props.data.name + ")" , this.props.data.final_answer.toUpperCase());
+			
+			var searchMask = "\\(Solve " + this.props.data.name + "\\)";
+			var regEx = new RegExp(searchMask, "ig");
+			var replaceMask = this.props.data.final_answer.toUpperCase();
+
+			quoteElement.textContent = quoteElement.textContent.replace(regEx , replaceMask);
 
 			this.check_answers();
 		}
@@ -1352,8 +1357,9 @@ class AppHeader extends React.Component
 							<div className="col-12 col-sm-12 col-md-12 col-lg-6 d-flex">
 								<span className="align-items-center fs-8 d-flex" id="puzzle-quote">{puzzle_data.puzzle_metadata.quote}</span>
 							</div>
-							<div className="col-12 col-sm-12 col-md-12 col-lg-2 d-flex">
+							<div className="col-12 col-sm-12 col-md-12 col-lg-2 d-flex flex-column">
 								<span className="fs-8 d-flex justify-content-end align-items-center">{puzzle_data.puzzle_metadata.subheader}</span>
+								<span className="fs-8 d-flex justify-content-end align-items-center">v.0.0.1</span>
 							</div>
 						</div>
 					</div>					
