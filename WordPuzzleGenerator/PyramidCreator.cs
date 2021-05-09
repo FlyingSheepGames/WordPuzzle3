@@ -8,12 +8,12 @@ using WordPuzzles.Puzzle;
 using WordPuzzles.Puzzle.Legacy;
 using WordPuzzles.Utility;
 
-namespace WordPuzzleGenerator
+namespace WordPuzzleGenerator 
 {
     internal class PyramidCreator 
     {
-        private const int MONTH = 5;
-        private const int DAY = 28;
+        private const int MONTH = 6;
+        private const int DAY = 25;
 
         private const string SOLVE_PUZZLE_A = "(solve puzzle A)";
         private const string SOLVE_PUZZLE_B = "(solve puzzle B)";
@@ -36,6 +36,10 @@ namespace WordPuzzleGenerator
             // First, we select a start date
             puzzlePyramid.StartDate = new DateTime(2021, MONTH, DAY, 
                 _random.Next(1, 10), _random.Next(10, 60), 0);
+            if (puzzlePyramid.StartDate.DayOfWeek != DayOfWeek.Friday)
+            {
+                throw new Exception("Date should be a friday. ");
+            }
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
             string directoryNameForWebFiles =
@@ -54,6 +58,7 @@ namespace WordPuzzleGenerator
             if ((puzzlePyramid.StartDate.Hour != 0) && (puzzlePyramid.StartDate.Minute != 0))
             {
                 ftpDirectory += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
+                directoryNameForWebFiles += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
             }
 
             InitializeSortedListOfPuzzleTypes(puzzlePyramid);
@@ -294,6 +299,7 @@ namespace WordPuzzleGenerator
                 Console.WriteLine(path);
                 string fileName = Path.GetFileName(path);
                 if (fileName == "puzzle_data.js") continue;
+                if (fileName == "package-lock.json") continue;
                 File.Copy(path, $@"{directory}\{fileName}", true);
                 ftpHelper.UploadFile($@"{directory}\{fileName}", $@"{remoteDirectory}/{fileName}", fileName.ToLowerInvariant().Contains("png"));
             }

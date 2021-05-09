@@ -1145,7 +1145,7 @@ z has 5 clue pairs.
                     break;
 
                 case WordPuzzleType.LettersAndArrows:
-                    if (7 < solutionLength && solutionLength < 30)
+                    if (6 < solutionLength && solutionLength < 30)
                     {
                         Console.Clear();
                         Console.WriteLine("Creating a letters and arrows puzzle for you.");
@@ -1294,7 +1294,7 @@ z has 5 clue pairs.
             {
                 Solution = solution
             };
-            foreach (char letter in solution)
+            foreach (char letter in solution.ToLowerInvariant())
             {
                 ClearConsoleInputAndOutput();
                 var candidates = multipleCluesPuzzle.GetCandidatesForLetter(letter);
@@ -1700,7 +1700,7 @@ z has 5 clue pairs.
             //availablePuzzleTypes.Add(WordPuzzleType.Sudoku, !WordSudoku.ContainsDuplicateLetters(solution));
             availablePuzzleTypes.Add(WordPuzzleType.Anacrostic, (7 < solutionLength && solutionLength < 57));
             //availablePuzzleTypes.Add(WordPuzzleType.WordLadder, (2 < solutionLength && solutionLength < 7));
-            availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (7 < solutionLength && solutionLength < 30));
+            availablePuzzleTypes.Add(WordPuzzleType.LettersAndArrows, (6 < solutionLength && solutionLength < 30));
             availablePuzzleTypes.Add(WordPuzzleType.ReadDownColumn, (3 < solutionLength && solutionLength < 30) && (!solution.Contains('h')));
             availablePuzzleTypes.Add(WordPuzzleType.HiddenRelatedWords, (!solution.ToLower().Contains('x')));
             //availablePuzzleTypes.Add(WordPuzzleType.BuildingBlocks, (!solution.Contains(' ')));//TODO: Support phrases as well as single words.
