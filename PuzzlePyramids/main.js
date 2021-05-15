@@ -655,12 +655,7 @@ class Puzzle_Fragment extends Puzzle
 			var elID = dt_parts[1];
 
 
-
-			console.log(letters);
-
-			console.log(letters[letters.length - 1].charCodeAt(0));
-
-			if (letters[letters.length - 1] == '\r')
+			if (letters[letters.length - 1].charCodeAt(0) == 10)
 			{
 				letters.pop();
 			}
@@ -722,9 +717,7 @@ class Puzzle_Fragment extends Puzzle
 			var dt_parts = dt.split("::");
 			var letters = dt_parts[0].split("");
 
-			console.log(letters);
-
-			if (letters[letters.length - 1] == '\r')
+			if (letters[letters.length - 1].charCodeAt(0) == 10)
 			{
 				letters.pop();
 			}
