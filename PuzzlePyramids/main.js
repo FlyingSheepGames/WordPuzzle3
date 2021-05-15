@@ -644,7 +644,7 @@ class Puzzle_Fragment extends Puzzle
 	handleDragEnter = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
-		if (e.target.nodeName == "DIV" && e.relatedTarget.tagName != "INPUT")
+		if (e.target.nodeName == "DIV") // && e.relatedTarget.tagName != "INPUT")
 		{
 
 			// Drag Enter Event
@@ -702,7 +702,7 @@ class Puzzle_Fragment extends Puzzle
 		e.stopPropagation();
 		e.preventDefault();
 
-		if (e.target.nodeName == "DIV" && e.relatedTarget.tagName != "INPUT")
+		if (e.target.nodeName == "DIV") // && e.relatedTarget.tagName != "INPUT")
 		{
 
 			// Drag Exit Event
