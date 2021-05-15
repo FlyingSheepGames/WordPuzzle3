@@ -654,6 +654,15 @@ class Puzzle_Fragment extends Puzzle
 			var letters = dt_parts[0].split("");
 			var elID = dt_parts[1];
 
+
+
+			console.log(letters);
+
+			if (letters[letters.length - 1] == '\r')
+			{
+				letters.pop();
+			}
+
 			console.log(letters);
 
 			var e2 = document.getElementById(e.target.dataset["idNext"]);
@@ -710,6 +719,16 @@ class Puzzle_Fragment extends Puzzle
 			var dt = JSON.parse(decodeUpperCase(e.dataTransfer.types[0]));
 			var dt_parts = dt.split("::");
 			var letters = dt_parts[0].split("");
+
+			console.log(letters);
+
+			if (letters[letters.length - 1] == '\r')
+			{
+				letters.pop();
+			}
+
+			console.log(letters);
+
 			var elID = dt_parts[1];
 			var e2 = document.getElementById(e.target.dataset["idNext"]);
 			var e3 = null;
