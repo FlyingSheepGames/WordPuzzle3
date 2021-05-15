@@ -222,6 +222,8 @@ class Puzzle extends React.Component
 
 				el.classList.add("shaded-orange");
 
+				this.check_puzzle();
+
 				var hook = undefined;
 				for (var i = 0 ; i < el.classList.length; i++)
 				{
