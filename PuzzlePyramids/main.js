@@ -588,7 +588,10 @@ class Puzzle_Fragment extends Puzzle
 		var letters = dt_parts[0].split("");
 		var elID = dt_parts[1];
 
-		
+		if (letters[letters.length - 1].charCodeAt(0) == 10)
+		{
+			letters.pop();
+		}
 
 		var e2 = document.getElementById(et.dataset["idNext"]);
 		var e3 = null;
@@ -789,6 +792,11 @@ class Puzzle_Fragment extends Puzzle
 			var validTarget = true;
 			
 			var letters = e.target.innerText.split("");
+
+			if (letters[letters.length - 1].charCodeAt(0) == 10)
+			{
+				letters.pop();
+			}
 
 			// Find an unclaimed textbox here.
 			var et = undefined;
