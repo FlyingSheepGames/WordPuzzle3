@@ -654,7 +654,7 @@ class Puzzle_Fragment extends Puzzle
 			var letters = dt_parts[0].split("");
 			var elID = dt_parts[1];
 
-			
+			console.log(letters);
 
 			var e2 = document.getElementById(e.target.dataset["idNext"]);
 			var e3 = null;
