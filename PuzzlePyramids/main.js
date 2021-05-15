@@ -658,6 +658,8 @@ class Puzzle_Fragment extends Puzzle
 
 			console.log(letters);
 
+			console.log(letters[letters.length - 1].charCodeAt(0));
+
 			if (letters[letters.length - 1] == '\r')
 			{
 				letters.pop();
