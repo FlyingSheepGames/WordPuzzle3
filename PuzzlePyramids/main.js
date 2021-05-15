@@ -798,6 +798,8 @@ class Puzzle_Fragment extends Puzzle
 				letters.pop();
 			}
 
+			console.log(letters);
+
 			// Find an unclaimed textbox here.
 			var et = undefined;
 			
