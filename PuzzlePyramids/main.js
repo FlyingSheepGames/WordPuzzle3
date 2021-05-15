@@ -905,7 +905,8 @@ class Puzzle_Fragment extends Puzzle
 			updateCharacter(e2, "");
 			e2.dataset["bakedin"] = "false";
 			e2.classList.remove("shaded");
-			if (target.innerText.length == 3)
+
+			if (target.innerText.length == 3 || (target.innerText.length == 4 && target.innerText.charCodeAt(3) == 10))
 			{
 				var e3 = document.getElementById(e2.dataset["idNext"]);
 				updateCharacter(e3, "");
