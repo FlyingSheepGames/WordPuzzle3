@@ -2048,7 +2048,7 @@ z has 5 clue pairs.
             return puzzle;
         }
 
-        private static void InteractiveSetCluesForLettersAndArrowsPuzzle(LettersAndArrowsPuzzle puzzle)
+        private static void InteractiveSetCluesForLettersAndArrowsPuzzleOriginal(LettersAndArrowsPuzzle puzzle)
         {
             List<string> wordsInGrid = puzzle.GetWords();
             for (int i = 0; i < puzzle.Size; i++)
@@ -2088,6 +2088,24 @@ z has 5 clue pairs.
                     }
                 }
                 puzzle.SetClueForRowIndex(i, clueToUse);
+            }
+        }
+
+        private static void InteractiveSetCluesForLettersAndArrowsPuzzle(LettersAndArrowsPuzzle puzzle)
+        {
+            List<string> wordsInGrid = puzzle.GetWords();
+            for (int i = 0; i < puzzle.Size; i++)
+            {
+                string currentWord = wordsInGrid[i];
+                string clueToUse = InteractiveGetClueForWord(currentWord);
+                if (!string.IsNullOrWhiteSpace( clueToUse))
+                {
+                    puzzle.SetClueForRowIndex(i, clueToUse);
+                }
+                else
+                {
+                    puzzle.SetClueForRowIndex(i, "NO CLUE");
+                }
             }
         }
 
