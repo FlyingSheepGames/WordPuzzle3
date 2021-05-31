@@ -65,10 +65,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IdiomParser.cs" />
+    <Compile Include="PatternMatcher.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgramMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PyramidCreator.cs" />
     <Compile Include="ReadDownResearcher.cs" />
+    <Compile Include="StatisticsCalculator.cs" />
+    <Compile Include="WordLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
