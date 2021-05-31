@@ -77,6 +77,10 @@ namespace WordPuzzleGenerator
                     PyramidCreator creator = new PyramidCreator();
                     creator.RunInPyramidMode();
                     break;
+                case ProgramMode.PUZZLE_PYRAMID_RERUN:
+                    PyramidCreator creatorForRerun = new PyramidCreator();
+                    creatorForRerun.ReprocessExistingFiles();
+                    break;
                 case ProgramMode.READ_DOWN_COLUMNS_RESEARCH:
                     ReadDownResearcher researcher = new ReadDownResearcher();
                     researcher.Research();
@@ -424,6 +428,7 @@ namespace WordPuzzleGenerator
             Console.WriteLine($"{ProgramMode.YEAR}: Work with a year of puzzles. ");
             Console.WriteLine($"{ProgramMode.PATTERN_MATCH}: Match some arbitrary patterns. ");
             Console.WriteLine($"{ProgramMode.PUZZLE_PYRAMID}: Work with a puzzle pyramid. ");
+            Console.WriteLine($"{ProgramMode.PUZZLE_PYRAMID_RERUN}: Re-upload all puzzle pyramids. ");
             string userInputAsString =  Console.ReadLine();
             int userInput;
             if (int.TryParse(userInputAsString, out userInput))
@@ -2683,6 +2688,7 @@ Enter 0 for none.");
         PATTERN_MATCH = 3, //Just get words that match a given pattern
 
         PUZZLE_PYRAMID = 4, //Create a pyramid of puzzles (12 in all)
-        READ_DOWN_COLUMNS_RESEARCH
+        READ_DOWN_COLUMNS_RESEARCH,
+        PUZZLE_PYRAMID_RERUN
     }
 }

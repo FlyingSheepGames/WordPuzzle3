@@ -12,8 +12,8 @@ namespace WordPuzzleGenerator
 {
     internal class PyramidCreator 
     {
-        private const int MONTH = 6;
-        private const int DAY = 25;
+        private const int MONTH = 7;
+        private const int DAY = 16;
 
         private const string SOLVE_PUZZLE_A = "(solve puzzle A)";
         private const string SOLVE_PUZZLE_B = "(solve puzzle B)";
@@ -42,10 +42,6 @@ namespace WordPuzzleGenerator
             }
             string fileNameForJson =
                 $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}.json";
-            string directoryNameForWebFiles =
-                $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
-            string ftpDirectory =
-                $@"pptest/v2/{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
 
             string fileNameForHtml =fileNameForJson.Replace(".json", ".html");
             string fileNameWithSolutionsForHtml = fileNameForJson.Replace(".json", "-Solutions.html");
@@ -54,11 +50,6 @@ namespace WordPuzzleGenerator
                 puzzlePyramid = JsonConvert.DeserializeObject<PuzzlePyramid>(File.ReadAllText(fileNameForJson));
                 Console.WriteLine($"Loaded pyramid from file {fileNameForJson}. Press any key to continue.");
                 Console.ReadKey();
-            }
-            if ((puzzlePyramid.StartDate.Hour != 0) && (puzzlePyramid.StartDate.Minute != 0))
-            {
-                ftpDirectory += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
-                directoryNameForWebFiles += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
             }
 
             InitializeSortedListOfPuzzleTypes(puzzlePyramid);
@@ -239,15 +230,42 @@ namespace WordPuzzleGenerator
             GenerateHtmlFile(puzzlePyramid, fileNameWithSolutionsForHtml, true);
 
             WritePyramidToDisk(puzzlePyramid, fileNameForJson);
-            PopulateWebFiles(puzzlePyramid, directoryNameForWebFiles, ftpDirectory);
+            PopulateWebFiles(puzzlePyramid);
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
 
         }
 
-        private void PopulateWebFiles(PuzzlePyramid puzzlePyramid, string directory, string remoteDirectory)
+        private static string CalculateFtpDirectory(PuzzlePyramid puzzlePyramid)
         {
+            string ftpDirectory2 =
+                $@"pptest/v2/{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
+            if ((puzzlePyramid.StartDate.Hour != 0) && (puzzlePyramid.StartDate.Minute != 0))
+            {
+                ftpDirectory2 += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
+            }
+
+            return ftpDirectory2;
+        }
+
+        private static string CalculateDirectoryNameForWebFiles(PuzzlePyramid puzzlePyramid)
+        {
+            string directoryNameForWebFiles2 =
+                $@"{Program.BASE_DIRECTORY}\pyramids\{puzzlePyramid.StartDate.Month}-{puzzlePyramid.StartDate.Day}";
+            if ((puzzlePyramid.StartDate.Hour != 0) && (puzzlePyramid.StartDate.Minute != 0))
+            {
+                directoryNameForWebFiles2 += $"-{puzzlePyramid.StartDate.Hour}{puzzlePyramid.StartDate.Minute}";
+            }
+
+            return directoryNameForWebFiles2;
+        }
+
+
+        private void PopulateWebFiles(PuzzlePyramid puzzlePyramid)
+        {
+            string directory = CalculateDirectoryNameForWebFiles(puzzlePyramid);
+            string remoteDirectory = CalculateFtpDirectory(puzzlePyramid);
             FtpHelper ftpHelper = new FtpHelper();
             ftpHelper.ReadCredentialsFromFile();
             ftpHelper.CreateDirectory(remoteDirectory);
@@ -1023,6 +1041,18 @@ namespace WordPuzzleGenerator
                 }
             }
             return builder.ToString();
+        }
+
+        public void ReprocessExistingFiles()
+        {
+            foreach (string fileNameForJson in Directory.EnumerateFiles(Program.BASE_DIRECTORY + @"/pyramids/", "*.json"))
+            {
+                var puzzlePyramid = JsonConvert.DeserializeObject<PuzzlePyramid>(File.ReadAllText(fileNameForJson));
+                Console.WriteLine($"Loaded pyramid from file {fileNameForJson}.");
+                PopulateWebFiles(puzzlePyramid);
+            }
+            Console.WriteLine("Done. Press any key to exit.");
+            Console.ReadKey();
         }
     }
 }
