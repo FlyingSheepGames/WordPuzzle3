@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using WordPuzzles.Puzzle;
 
@@ -49,6 +50,29 @@ namespace WordPuzzlesTest.Puzzle
                     Assert.LessOrEqual(currentYear, person.Year, "Expected years to be increasing.");
                 }
 
+            }
+
+        }
+
+        [TestFixture]
+        public class ReplaceWordsWithMarkers
+        {
+
+            //Suspicion is the cancer of friendship.
+            //Replace lower case "suspicion, cancer, friendship
+            [Test]
+            public void ReplaceFirstWord()
+            {
+                string result = PuzzlePyramid.ReplaceWordsWithMarkers("Suspicion is the cancer of friendship.",
+                    new List<string>() {"suspicion", "cancer", "friendship"});
+                Assert.AreEqual("(solve puzzle J) is the (solve puzzle K) of (solve puzzle L).", result);
+            }
+            [Test]
+            public void ReplaceSecondWord()
+            {
+                string result = PuzzlePyramid.ReplaceWordsWithMarkers("Deep suspicion is the cancer of friendship.",
+                    new List<string>() { "suspicion", "cancer", "friendship" });
+                Assert.AreEqual("Deep (solve puzzle J) is the (solve puzzle K) of (solve puzzle L).", result);
             }
 
         }

@@ -358,6 +358,7 @@ namespace WordPuzzles.Puzzle
         public string Description => $"Trisected Word puzzle for {Solution}.";
         public WordPuzzleType Type { get; } = WordPuzzleType.TrisectedWords;
 
+        [JsonIgnore]
         public List<string> TwoLetterFragments
         {
             get
@@ -371,6 +372,7 @@ namespace WordPuzzles.Puzzle
             set => _twoLetterFragments = value;
         }
 
+        [JsonIgnore]
         public List<string> ThreeLetterFragments
         {
             get

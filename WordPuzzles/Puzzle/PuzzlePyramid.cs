@@ -77,9 +77,20 @@ namespace WordPuzzles.Puzzle
                 replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[0], "(solve puzzle J)");
                 replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[1], "(solve puzzle K)");
                 replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(wordsToReplace[2], "(solve puzzle L)");
+                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(UpperCaseFirstLetter(wordsToReplace[0]), "(solve puzzle J)");
+                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(UpperCaseFirstLetter(wordsToReplace[1]), "(solve puzzle K)");
+                replaceWordsWithMarkers = replaceWordsWithMarkers.Replace(UpperCaseFirstLetter(wordsToReplace[2]), "(solve puzzle L)");
+
             }
             return replaceWordsWithMarkers;
         }
+
+        private static string UpperCaseFirstLetter(string word)
+        {
+            if (string.IsNullOrWhiteSpace(word)) return word;
+            return char.ToUpperInvariant(word[0]) + word.Substring(1);
+        }
+
         public string FormatHtmlForGoogle(bool includeSolution = false, bool isFragment = false)
         {
             HtmlGenerator _generator = new HtmlGenerator();
