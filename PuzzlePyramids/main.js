@@ -85,7 +85,6 @@ class PuzzlePiece extends React.Component
 	}
 
 	handleFocus(e) {
-		console.log("handleFocus");
 		var elements = document.querySelectorAll('div.puzzle.visible input.puzzle-piece.puzzle-piece-' + this.props.hook);
 		for (var ind = 0 ; ind < elements.length ; ind ++)
 		{
@@ -172,6 +171,9 @@ class Puzzle extends React.Component
 		this.toggleShading = this.toggleShading.bind(this);
 		this.are_all_correct = this.are_all_correct.bind(this);
 		this.check_puzzle = this.check_puzzle.bind(this);
+		this.is_everything_correct = this.is_everything_correct.bind(this);
+
+		this.debug_solve = this.debug_solve.bind(this);
 	}
 
 	toggleShading(e) {
@@ -201,10 +203,22 @@ class Puzzle extends React.Component
 				<div className="col-4 align-items-end d-flex">
 					{}
 					{!fragment && <button className="btn btn-primary" onClick={this.reveal_letter} type="button">Reveal a Letter</button>}
-					<button className="btn btn-primary" onClick={this.check_answers} type="button">Check My Answers</button>		
+					<button className="btn btn-primary" onClick={this.check_answers} type="button">Check My Answers</button>
 				</div>
 			</div>
 		);
+	}
+
+	debug_solve() {
+		console.log("solved!");
+
+		var elements = document.querySelectorAll('div.puzzle input.puzzle-piece.checkanswers');
+
+		for (var ind = 0; ind < elements.length; ind ++)
+		{
+			var _el = elements[ind];
+			_el.classList.add("correct");
+		}
 	}
 
 	reveal_letter() {
@@ -306,6 +320,36 @@ class Puzzle extends React.Component
 		return [allCorrect, correct, incorrect]
 	}
 
+	is_everything_correct() {
+
+		var elements = document.querySelectorAll('div.puzzle input.puzzle-piece.checkanswers');
+		for (var ind = 0; ind < elements.length; ind ++)
+		{
+			var _el = elements[ind];
+			if (!_el.classList.contains('correct'))
+			{
+				return false;
+			}
+		}
+
+		this.state.checking_answers = 0;
+
+		setTimeout(function()
+		{
+
+			var finish_time = Date.now();
+			var seconds = Math.floor((finish_time - start_time) / 1000);
+			var minutes = Math.floor(seconds / 60);
+			seconds = seconds % 60;
+
+			alert('Congratulations! It took you ' + minutes + ' ' + (minutes == 1 ? "minute" : "minutes") + ' and ' + seconds + ' ' + (seconds == 1 ? "second" : "seconds") +' to complete this Puzzle Pyramid!');
+	
+		}.bind(this), 500);
+
+
+		return true;
+	}
+
 	check_answers() {
 		if (this.state.checking_answers == 1) return;
 
@@ -363,6 +407,10 @@ class Puzzle extends React.Component
 					}
 				}.bind(this), 1000);
 			}.bind(this), 2500);
+		}
+		else
+		{
+			this.is_everything_correct();
 		}
 	}
 }
@@ -1396,6 +1444,8 @@ class AppHeader extends React.Component
 	}
 };
 
+
+var start_time = Date.now();
 
 ReactDOM.render(
 	React.createElement(AppHeader),
