@@ -109,8 +109,10 @@ class PuzzlePiece extends React.Component
 		if (letter != null && letter != "") 
 		{
 			// Return here if the input is not actually a letter.
-			if (! /^[a-zA-Z]$/.test(letter))
+			if (! /^[a-zA-Z,]$/.test(letter))
 			{
+				// Set the value to null here.
+				this.myRef.current.value = "";
 				return;
 			}
 
